@@ -76,7 +76,21 @@ export const CommonEnvSchemas = Object.freeze({
  */
 export function createNextEnvSchema<T extends z.ZodRawShape>(
   additionalSchema: T = {} as T
-) {
+): Result<
+  z.infer<
+    z.ZodObject<
+      T & {
+        NODE_ENV: z.ZodDefault<
+          z.ZodEnum<['development', 'production', 'test']>
+        >;
+        PORT: z.ZodDefault<z.ZodNumber>;
+        NEXTAUTH_SECRET: z.ZodOptional<z.ZodString>;
+        NEXTAUTH_URL: z.ZodOptional<z.ZodString>;
+      }
+    >
+  >,
+  AppError
+> {
   return createEnvSchema({
     NODE_ENV: CommonEnvSchemas.NODE_ENV,
     PORT: CommonEnvSchemas.PORT,
@@ -94,7 +108,20 @@ export function createNextEnvSchema<T extends z.ZodRawShape>(
  */
 export function createNodeEnvSchema<T extends z.ZodRawShape>(
   additionalSchema: T = {} as T
-) {
+): Result<
+  z.infer<
+    z.ZodObject<
+      T & {
+        NODE_ENV: z.ZodDefault<
+          z.ZodEnum<['development', 'production', 'test']>
+        >;
+        PORT: z.ZodDefault<z.ZodNumber>;
+        LOG_LEVEL: z.ZodDefault<z.ZodEnum<['debug', 'info', 'warn', 'error']>>;
+      }
+    >
+  >,
+  AppError
+> {
   return createEnvSchema({
     NODE_ENV: CommonEnvSchemas.NODE_ENV,
     PORT: CommonEnvSchemas.PORT,

@@ -2,7 +2,7 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { equipCommand } from './commands/equip-refactored.js';
+import { equipCommand } from './commands/equip.js';
 import { fieldguidesCommand } from './commands/fieldguides.js';
 
 const program = new Command();
@@ -23,10 +23,14 @@ program.exitOverride();
 
 try {
   await program.parseAsync(process.argv);
-} catch (error: any) {
-  if (error.code === 'commander.help') {
-    process.exit(0);
+} catch (error) {
+  if (error instanceof Error) {
+    if ('code' in error && error.code === 'commander.help') {
+      process.exit(0);
+    }
+    console.error(chalk.red('Error:'), error.message);
+  } else {
+    console.error(chalk.red('Error:'), String(error));
   }
-  console.error(chalk.red('Error:'), error.message);
   process.exit(1);
 }

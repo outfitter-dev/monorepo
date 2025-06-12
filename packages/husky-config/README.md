@@ -29,7 +29,7 @@ npx @outfitter/husky-config setup
 npx husky init
 ```
 
-2. Copy the hooks from this package:
+1. Copy the hooks from this package:
 
 ```bash
 cp -r node_modules/@outfitter/husky-config/hooks/* .husky/

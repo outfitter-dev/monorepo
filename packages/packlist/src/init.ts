@@ -10,6 +10,11 @@ interface InitOptions {
   utils?: boolean;
 }
 
+interface PackageJson {
+  scripts?: Record<string, string>;
+  [key: string]: unknown;
+}
+
 /**
  * Initializes Outfitter Packlist in the current Node.js project.
  *
@@ -39,9 +44,9 @@ export async function init(options: InitOptions = {}): Promise<void> {
   }
 
   // Read package.json
-  const packageJson: any = JSON.parse(
+  const packageJson = JSON.parse(
     await fs.readFile(packageJsonPath, 'utf8')
-  );
+  ) as PackageJson;
 
   // Detect package manager
   const packageManager = await detectPackageManager();
@@ -80,9 +85,7 @@ export async function init(options: InitOptions = {}): Promise<void> {
   }
 
   // Add scripts if they don't exist
-  if (!packageJson.scripts) {
-    packageJson.scripts = {};
-  }
+  packageJson.scripts ??= {};
 
   const scripts = {
     lint: 'eslint . --max-warnings 0',
@@ -92,9 +95,7 @@ export async function init(options: InitOptions = {}): Promise<void> {
   };
 
   for (const [name, command] of Object.entries(scripts)) {
-    if (!packageJson.scripts[name]) {
-      packageJson.scripts[name] = command;
-    }
+    packageJson.scripts[name] ??= command;
   }
 
   // Write updated package.json

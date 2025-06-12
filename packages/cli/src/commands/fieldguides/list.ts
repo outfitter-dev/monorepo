@@ -33,8 +33,11 @@ export async function listFieldguides(options: {
 
   try {
     if (await pathExists(configPath)) {
-      const config = await readJSON(configPath);
-      installedFieldguides = config.fieldguides || config.supplies || []; // Support old 'supplies' key for backwards compatibility
+      const config = (await readJSON(configPath)) as {
+        fieldguides?: Array<string>;
+        supplies?: Array<string>;
+      };
+      installedFieldguides = config.fieldguides ?? config.supplies ?? []; // Support old 'supplies' key for backwards compatibility
     }
   } catch (e) {
     console.error(

@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { readJSON, writeJSON, pathExists } from 'fs-extra';
 import { join } from 'path';
+import type { OutfitterConfig, FieldguideConfig } from '../../types/config.js';
 
 interface ExportOptions {
   output: string;
@@ -41,12 +42,12 @@ export async function manageFieldguideConfig(
       process.exit(1);
     }
 
-    const config = await readJSON(configPath);
+    const config = (await readJSON(configPath)) as OutfitterConfig;
 
     const exportConfig = {
       name: 'Custom Fieldguide Configuration',
       version: '1.0.0',
-      fieldguides: config.fieldguides || config.supplies || [], // Support old 'supplies' key
+      fieldguides: config.fieldguides ?? config.supplies ?? [], // Support old 'supplies' key
       created: new Date().toISOString(),
     };
 
@@ -66,13 +67,13 @@ export async function manageFieldguideConfig(
       process.exit(1);
     }
 
-    const importConfig = await readJSON(importPath);
+    const importConfig = (await readJSON(importPath)) as FieldguideConfig;
 
-    if (
-      !(importConfig.fieldguides || importConfig.supplies) ||
-      !Array.isArray(importConfig.fieldguides || importConfig.supplies)
-    ) {
-      console.error(chalk.red('Invalid configuration format'));
+    const fieldguides = importConfig.files ?? [];
+    if (!Array.isArray(fieldguides)) {
+      console.error(
+        chalk.red('Invalid configuration format: fieldguides must be an array')
+      );
       process.exit(1);
     }
 
@@ -84,7 +85,7 @@ export async function manageFieldguideConfig(
 
     console.log(
       chalk.green('✓') +
-        ` Imported ${(importConfig.fieldguides || importConfig.supplies).length} fieldguides from ${chalk.cyan(importConfig.name)}`
+        ` Imported ${fieldguides.length} fieldguides from ${chalk.cyan(importConfig.name ?? 'config')}`
     );
   }
 }

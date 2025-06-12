@@ -129,19 +129,19 @@ export async function init(
 
 ### 1. Command Execution
 
-```
+```text
 User Input → CLI Command → Packlist API → Config Packages → File System
 ```
 
 ### 2. Error Handling
 
-```
+```text
 Config Error → Result.failure() → CLI formats error → User sees message
 ```
 
 ### 3. Configuration Resolution
 
-```
+```text
 Preset Selection → Feature Flags → Dependency Graph → Installation Order
 ```
 

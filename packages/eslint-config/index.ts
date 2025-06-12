@@ -100,7 +100,7 @@ export const legacyConfig: Linter.Config = {
         jest: true,
       },
       rules: {
-        '@typescript-eslint/no-explicit-any': 'off',
+        // Keep test files strict too - no exceptions for any
         'no-console': 'off',
       },
     },

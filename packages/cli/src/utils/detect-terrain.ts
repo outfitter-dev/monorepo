@@ -60,7 +60,13 @@ async function hasPackage(
   try {
     const packageJsonPath = join(cwd, 'package.json');
     if (await pathExists(packageJsonPath)) {
-      const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf-8'));
+      const packageJson = JSON.parse(
+        await readFile(packageJsonPath, 'utf-8')
+      ) as {
+        dependencies?: Record<string, string>;
+        devDependencies?: Record<string, string>;
+        peerDependencies?: Record<string, string>;
+      };
       const deps = {
         ...(packageJson.dependencies ?? {}),
         ...(packageJson.devDependencies ?? {}),

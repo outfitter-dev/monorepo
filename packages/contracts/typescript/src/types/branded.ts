@@ -234,10 +234,10 @@ export function createTimestamp(value: number): Result<Timestamp, AppError> {
  * @param errorMessage Error message for validation failure
  * @returns A constructor function for the branded type
  */
-export function createBrandedType<T, B>(
+export function createBrandedType<T, TBrand>(
   validator: (value: T) => boolean,
   errorMessage: string
-): (value: T) => Result<Brand<T, B>, AppError> {
+): (value: T) => Result<Brand<T, TBrand>, AppError> {
   return (value: T) => {
     if (!validator(value)) {
       return failure(
@@ -246,7 +246,7 @@ export function createBrandedType<T, B>(
         })
       );
     }
-    return success(value as Brand<T, B>);
+    return success(value as Brand<T, TBrand>);
   };
 }
 

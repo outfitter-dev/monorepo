@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import fetch from 'node-fetch';
 import consola from 'consola';
 import ora from 'ora';
-import { update } from '../update';
+import { update } from '../update.js';
 
 vi.mock('fs/promises', () => ({
   readFile: vi.fn(),

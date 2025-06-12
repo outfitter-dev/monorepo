@@ -9,7 +9,7 @@ import {
 import fs from 'fs-extra';
 import path from 'path';
 import { CliUx } from '@oclif/core';
-import create from '../create';
+import create from '../create.js';
 
 jest.mock('fs-extra');
 jest.mock('@oclif/core');

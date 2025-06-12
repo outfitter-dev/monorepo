@@ -376,7 +376,7 @@ request_changes_workflow: true
 
 tools: gitleaks: { enabled: true } semgrep: { enabled: true }
 
-````
+````yaml
 
 ### Project-Specific Templates
 

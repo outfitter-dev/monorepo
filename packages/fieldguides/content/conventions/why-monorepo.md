@@ -205,7 +205,7 @@ Teams must think differently:
 
 ## Making the Decision
 
-### Choose monorepo when you have:
+### Choose monorepo when you have
 
 ✅ **Tight coupling between projects** - Changes frequently span boundaries
 
@@ -217,7 +217,7 @@ Teams must think differently:
 
 ✅ **Complex dependency graph** - Many shared libraries
 
-### Choose multi-repo when you have:
+### Choose multi-repo when you have
 
 ❌ **Strong autonomy needs** - Teams want full control
 

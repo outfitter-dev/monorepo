@@ -12,6 +12,11 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+interface PackageJson {
+  scripts?: Record<string, string>;
+  [key: string]: unknown;
+}
+
 export interface HuskyInitOptions {
   cwd?: string;
   hooks?: Array<'pre-commit' | 'commit-msg'>;
@@ -52,14 +57,12 @@ export function initHusky(options: HuskyInitOptions = {}): void {
 }
 
 export function addPrepareScript(packageJsonPath?: string): void {
-  const pkgPath = packageJsonPath || join(process.cwd(), 'package.json');
+  const pkgPath = packageJsonPath ?? join(process.cwd(), 'package.json');
 
   try {
-    const pkg: any = JSON.parse(readFileSync(pkgPath, 'utf8'));
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as PackageJson;
 
-    if (!pkg.scripts) {
-      pkg.scripts = {};
-    }
+    pkg.scripts ??= {};
 
     if (!pkg.scripts.prepare) {
       pkg.scripts.prepare = 'husky';

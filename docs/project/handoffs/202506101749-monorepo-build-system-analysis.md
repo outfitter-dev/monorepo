@@ -34,7 +34,7 @@ The core problem is a three-way incompatibility between:
 
 **Specific manifestation:**
 
-```
+```text
 error TS6307: File 'src/zod/env.ts' is not listed within the file list of project ''.
 Projects must list all files or use an 'include' pattern.
 ```
@@ -105,7 +105,7 @@ Multiple path resolution systems compete:
 
 The `contracts` package attempts this structure:
 
-```
+```text
 @outfitter/contracts/          → src/index.ts
 @outfitter/contracts/zod       → src/zod/index.ts
 ```

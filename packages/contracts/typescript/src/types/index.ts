@@ -58,13 +58,13 @@ export type ValueOf<T> = T[keyof T];
 /**
  * Create a type that requires at least one of the given keys
  */
-export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
+export type RequireAtLeastOne<T, TKeys extends keyof T = keyof T> = Pick<
   T,
-  Exclude<keyof T, Keys>
+  Exclude<keyof T, TKeys>
 > &
   {
-    [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
-  }[Keys];
+    [K in TKeys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<TKeys, K>>>;
+  }[TKeys];
 
 /**
  * JSON-serializable type

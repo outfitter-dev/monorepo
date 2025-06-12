@@ -108,9 +108,7 @@ async function validateCrossReferences() {
     const groupedByFile = brokenLinks.reduce(
       (acc, link) => {
         const relativeFile = link.file.replace(fieldguidesDir + '/', '');
-        if (!acc[relativeFile]) {
-          acc[relativeFile] = [];
-        }
+        acc[relativeFile] ??= [];
         acc[relativeFile].push(link);
         return acc;
       },
@@ -150,7 +148,10 @@ async function validateCrossReferences() {
     if (!fileReferences.has(source)) {
       fileReferences.set(source, new Set());
     }
-    fileReferences.get(source)!.add(target);
+    const sourceRefs = fileReferences.get(source);
+    if (sourceRefs) {
+      sourceRefs.add(target);
+    }
   }
 
   // Check for missing reverse references
@@ -159,7 +160,7 @@ async function validateCrossReferences() {
   for (const [source, targets] of fileReferences.entries()) {
     for (const target of targets) {
       const targetRefs = fileReferences.get(target);
-      if (!targetRefs || !targetRefs.has(source)) {
+      if (!targetRefs?.has(source)) {
         // Only suggest bidirectional refs for files in same directory level
         const sourceDir = dirname(source).split('/')[0];
         const targetDir = dirname(target).split('/')[0];

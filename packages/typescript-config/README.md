@@ -99,7 +99,7 @@ for:
 - Node.js applications
 - General TypeScript projects
 
-### Next.js Configuration
+### Next.js Specific Configuration
 
 Extends base with Next.js-specific settings:
 
@@ -107,7 +107,7 @@ Extends base with Next.js-specific settings:
 - Next.js module resolution
 - Optimized for Next.js build system
 
-### Vite Configuration
+### Vite Specific Configuration
 
 Extends base with Vite-specific settings:
 

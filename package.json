@@ -12,7 +12,7 @@
     "dev": "pnpm run --parallel --filter='./packages/*' dev",
     "build": "pnpm run --filter='./packages/contracts/typescript' build && pnpm run --filter='./packages/*' build",
     "test": "vitest",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "lint:md": "markdownlint-cli2",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",

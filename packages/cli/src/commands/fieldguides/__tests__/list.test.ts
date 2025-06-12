@@ -1,4 +1,4 @@
-import { listFieldguides } from '../../list';
+import { listFieldguides } from '../list.js';
 import { readJSON, pathExists } from 'fs-extra';
 
 jest.mock('fs-extra', () => ({

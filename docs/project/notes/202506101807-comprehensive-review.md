@@ -45,6 +45,7 @@ Severity legend
 - **Fix** – Add `.github/workflows/ci.yml` running `pnpm run ci` on matrix
   `{ node: [20, 22], os: ubuntu-latest }`.
 - **Code Sketch**
+
   ```yaml
   name: CI
   on: [push, pull_request]

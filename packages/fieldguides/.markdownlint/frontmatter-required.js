@@ -60,7 +60,7 @@ export default {
     } catch (error) {
       onError({
         lineNumber: 1,
-        detail: `Invalid frontmatter: ${error.message}`,
+        detail: `Invalid frontmatter: ${error instanceof Error ? error.message : String(error)}`,
       });
     }
   },

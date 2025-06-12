@@ -3,6 +3,12 @@ import ora from 'ora';
 import { readJSON, writeJSON, pathExists } from 'fs-extra';
 import { join } from 'path';
 
+interface OutfitterConfig {
+  fieldguides?: Array<string>;
+  supplies?: Array<string>; // Legacy field
+  [key: string]: unknown;
+}
+
 /**
  * Adds the specified fieldguides to the local configuration file, avoiding duplicates.
  *
@@ -30,7 +36,7 @@ export async function addFieldguides(
 
   try {
     // Read current config
-    const config = await readJSON(configPath);
+    const config = (await readJSON(configPath)) as OutfitterConfig;
 
     // Get existing fieldguides (support old 'supplies' key)
     const existingFieldguides = Array.isArray(config.fieldguides)

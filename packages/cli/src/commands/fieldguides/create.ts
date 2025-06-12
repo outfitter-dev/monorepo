@@ -3,11 +3,16 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { ensureDir, writeJSON, pathExists } from 'fs-extra';
 import { join } from 'path';
+import type { OutfitterConfig } from '../../types/config.js';
 
 interface CreateOptions {
   preset?: string;
   withClaude?: boolean;
   force?: boolean;
+}
+
+interface CreateAnswers {
+  preset: keyof typeof presets;
 }
 
 const presets = {
@@ -53,7 +58,7 @@ export async function createFieldguideConfig(
   // Interactive setup if no preset
   let selectedPreset = options.preset;
   if (!selectedPreset || !presets[selectedPreset as keyof typeof presets]) {
-    const answers = await inquirer.prompt([
+    const answers = await inquirer.prompt<CreateAnswers>([
       {
         type: 'list',
         name: 'preset',
@@ -66,7 +71,7 @@ export async function createFieldguideConfig(
         ],
       },
     ]);
-    selectedPreset = answers.preset;
+    selectedPreset = answers.preset as string;
   }
 
   const spinner = ora('Creating fieldguide configuration...').start();
@@ -76,7 +81,7 @@ export async function createFieldguideConfig(
     await ensureDir(outfitterDir);
 
     // Create config
-    const config = {
+    const config: OutfitterConfig = {
       version: '0.1.0', // CLI package version
       preset: selectedPreset,
       fieldguides: presets[selectedPreset as keyof typeof presets],

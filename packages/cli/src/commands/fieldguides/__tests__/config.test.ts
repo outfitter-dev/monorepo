@@ -5,7 +5,7 @@
 
 import path from 'node:path';
 import * as fs from 'node:fs';
-import * as configModule from '../config';
+import * as configModule from '../config.js';
 const { loadConfig, validateConfig, findConfigPath } = configModule;
 
 describe('config utilities', () => {

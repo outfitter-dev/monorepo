@@ -1,6 +1,6 @@
 import type { z } from 'zod';
 
-import { ErrorCode, makeError, type AppError } from '@outfitter/contracts';
+import { makeError, ErrorCode, type AppError } from '@outfitter/contracts';
 
 /**
  * Converts a Zod validation error into a standardized application error.

@@ -245,7 +245,7 @@ function validateFile(filePath: string): FileValidationResult {
 
     // Check slug matches filename
     const expectedSlug = path.basename(fileName, '.md');
-    const dataSlug = parsed.data['slug'];
+    const dataSlug = parsed.data['slug'] as string | undefined;
     if (dataSlug && dataSlug !== expectedSlug) {
       errors.push({
         field: 'slug',

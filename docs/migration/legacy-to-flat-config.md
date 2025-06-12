@@ -249,7 +249,7 @@ export default [
 
 **Legacy `.eslintignore`:**
 
-```
+```text
 node_modules/
 dist/
 build/

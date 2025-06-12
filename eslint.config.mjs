@@ -4,8 +4,9 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
   eslint.configs.recommended,
 
-  // Use recommended configs instead of strict for initial setup
-  tseslint.configs.recommended,
+  // Use strict configs for full type safety
+  ...tseslint.configs.strict,
+  ...tseslint.configs.stylistic,
 
   {
     languageOptions: {
@@ -30,17 +31,21 @@ export default tseslint.config(
 
   {
     rules: {
-      // Type Safety Enforcement (relaxed for initial setup)
-      '@typescript-eslint/no-unsafe-assignment': 'warn',
-      '@typescript-eslint/no-unsafe-member-access': 'warn',
-      '@typescript-eslint/no-unsafe-call': 'warn',
-      '@typescript-eslint/no-unsafe-return': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
+      // Type Safety Enforcement - STRICT
+      '@typescript-eslint/no-unsafe-assignment': 'error',
+      '@typescript-eslint/no-unsafe-member-access': 'error',
+      '@typescript-eslint/no-unsafe-call': 'error',
+      '@typescript-eslint/no-unsafe-return': 'error',
+      '@typescript-eslint/no-unsafe-argument': 'error',
 
-      // Modern Best Practices (warnings for now)
-      '@typescript-eslint/explicit-module-boundary-types': 'warn',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-non-null-assertion': 'warn',
+      // Modern Best Practices - STRICT
+      '@typescript-eslint/explicit-module-boundary-types': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/prefer-readonly': 'error',
+      '@typescript-eslint/prefer-as-const': 'error',
 
       // Type Import Consistency
       '@typescript-eslint/consistent-type-imports': [
@@ -53,8 +58,8 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/array-type': ['error', { default: 'generic' }],
 
-      // Temporarily allow require() for compatibility
-      '@typescript-eslint/no-require-imports': 'warn',
+      // Disallow require() - use ES modules
+      '@typescript-eslint/no-require-imports': 'error',
 
       // Allow empty catch blocks with comments (common for file existence checks)
       'no-empty': ['error', { allowEmptyCatch: true }],
@@ -87,6 +92,30 @@ export default tseslint.config(
     },
   },
 
+  // Test file configuration
+  {
+    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.test.js', '**/__tests__/**'],
+    languageOptions: {
+      globals: {
+        // Jest/Vitest globals
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeAll: 'readonly',
+        beforeEach: 'readonly',
+        afterAll: 'readonly',
+        afterEach: 'readonly',
+        jest: 'readonly',
+        vi: 'readonly',
+        // Browser globals for testing
+        document: 'readonly',
+        window: 'readonly',
+        HTMLElement: 'readonly',
+      },
+    },
+  },
+
   // Disable type checking on JS files
   {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
@@ -104,6 +133,9 @@ export default tseslint.config(
       '**/outfitter/**',
       '**/*.test.ts',
       '**/*.test.tsx',
+      '**/__tests__/**',
+      '**/templates/**',
+      '**/fieldguides/.markdownlint/**',
     ],
   }
 );

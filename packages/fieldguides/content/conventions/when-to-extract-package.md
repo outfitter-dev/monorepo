@@ -17,7 +17,7 @@ patterns for making these decisions.
 
 ### 1. The Rule of Three
 
-**Don't extract until you have three consumers**
+#### Don't extract until you have three consumers
 
 The most common mistake is premature extraction. Wait until:
 
@@ -39,7 +39,7 @@ packages/
 
 ### 2. Clear Domain Boundaries
 
-**Extract when code represents a distinct domain**
+#### Extract when code represents a distinct domain
 
 Good candidates:
 
@@ -56,7 +56,7 @@ Poor candidates:
 
 ### 3. Independent Release Cycles
 
-**Extract when version independence matters**
+#### Extract when version independence matters
 
 Consider extraction when:
 
@@ -81,7 +81,7 @@ apps and legacy systems that can't upgrade immediately.
 
 **Structure**:
 
-```
+```text
 packages/ui/
   src/
     components/

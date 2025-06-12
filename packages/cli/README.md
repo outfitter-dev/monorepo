@@ -90,7 +90,7 @@ outfitter pack import team-standard.json
 
 Projects initialized with Outfitter have a `.outfitter/` directory containing:
 
-```
+```text
 .outfitter/
 ├── config.json      # Project configuration and installed supplies
 ├── supplies/        # Local copies of installed supplies

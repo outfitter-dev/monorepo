@@ -73,7 +73,7 @@ The CLI uses Commander.js and follows this pattern:
 
 Projects using the CLI have a `.outfitter/` directory:
 
-```
+```text
 .outfitter/
 ├── config.json      # Project configuration
 ├── supplies/        # Local copies of installed supplies

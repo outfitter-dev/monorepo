@@ -7,7 +7,7 @@ important architectural decisions made in the project.
 
 ADRs follow this naming convention:
 
-```
+```text
 NNN-title-with-dashes.md
 ```
 

@@ -44,6 +44,5 @@
       "path": "./packages/contracts-zod"
     }
   ],
-  "exclude": ["**/node_modules", "**/dist", "**/*.config.ts", "**/*.config.mjs", "prettier.config.ts"],
-  "files": []
+  "exclude": ["**/node_modules", "**/dist", "**/*.config.ts", "**/*.config.mjs", "prettier.config.ts"]
 }

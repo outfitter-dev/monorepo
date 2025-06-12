@@ -50,7 +50,7 @@ export const fieldguidesCommand = new Command('fieldguides')
             'Output file',
             'fieldguide-config.json'
           )
-          .action(async options => {
+          .action(async (options: { output: string }) => {
             await manageFieldguideConfig('export', options);
           })
       )

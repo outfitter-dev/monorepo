@@ -4,6 +4,22 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+interface ChangesetConfig {
+  changelog: unknown;
+  commit: boolean;
+  fixed: Array<unknown>;
+  linked: Array<unknown>;
+  access: 'public' | 'restricted';
+  baseBranch: string;
+  updateInternalDependencies: 'patch' | 'minor';
+  ignore: Array<string>;
+}
+
+interface PackageJson {
+  scripts?: Record<string, string>;
+  [key: string]: unknown;
+}
+
 export interface ChangesetInitOptions {
   cwd?: string;
   access?: 'public' | 'restricted';
@@ -30,7 +46,9 @@ export function initChangesets(options: ChangesetInitOptions = {}): void {
 
     if (!existsSync(configTarget)) {
       // Read and modify config based on options
-      const config: any = JSON.parse(readFileSync(configSource, 'utf8'));
+      const config = JSON.parse(
+        readFileSync(configSource, 'utf8')
+      ) as ChangesetConfig;
       config.access = access;
       config.baseBranch = baseBranch;
 
@@ -62,14 +80,12 @@ We have a quick list of common questions to get you started engaging with this p
 }
 
 export function addChangesetScripts(packageJsonPath?: string): void {
-  const pkgPath = packageJsonPath || join(process.cwd(), 'package.json');
+  const pkgPath = packageJsonPath ?? join(process.cwd(), 'package.json');
 
   try {
-    const pkg: any = JSON.parse(readFileSync(pkgPath, 'utf8'));
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as PackageJson;
 
-    if (!pkg.scripts) {
-      pkg.scripts = {};
-    }
+    pkg.scripts ??= {};
 
     const scripts = {
       changeset: 'changeset',
@@ -86,7 +102,7 @@ export function addChangesetScripts(packageJsonPath?: string): void {
     }
 
     if (added) {
-      require('fs').writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+      writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
       console.log('✓ Added changeset scripts to package.json');
     } else {
       console.log('ℹ Changeset scripts already exist');
