@@ -1,5 +1,6 @@
 import chalk from 'chalk';
-import { readJSON, writeJSON, pathExists } from 'fs-extra';
+import fsExtra from 'fs-extra';
+const { readJSON, writeJSON, pathExists } = fsExtra;
 import { join } from 'path';
 
 interface ExportOptions {
@@ -8,6 +9,13 @@ interface ExportOptions {
 
 interface ImportOptions {
   file: string;
+}
+
+interface OutfitterConfig {
+  fieldguides?: Array<string>;
+  supplies?: Array<string>; // Legacy support
+  name?: string;
+  version?: string;
 }
 
 /**
@@ -41,7 +49,7 @@ export async function manageFieldguideConfig(
       process.exit(1);
     }
 
-    const config = await readJSON(configPath);
+    const config = (await readJSON(configPath)) as OutfitterConfig;
 
     const exportConfig = {
       name: 'Custom Fieldguide Configuration',
@@ -66,7 +74,7 @@ export async function manageFieldguideConfig(
       process.exit(1);
     }
 
-    const importConfig = await readJSON(importPath);
+    const importConfig = (await readJSON(importPath)) as OutfitterConfig;
 
     if (
       !(importConfig.fieldguides || importConfig.supplies) ||

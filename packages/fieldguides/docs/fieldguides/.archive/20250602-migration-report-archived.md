@@ -1,8 +1,7 @@
 ---
 slug: migration-report
 title: Documentation restructure migration report
-description:
-  Summary of fieldguides restructure from nested to flat organization.
+description: Summary of fieldguides restructure from nested to flat organization.
 type: reference
 ---
 

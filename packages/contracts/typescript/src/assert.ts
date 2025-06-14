@@ -44,9 +44,9 @@ export function assertNever(value: never): never {
  * }
  * ```
  */
-export function exhaustiveCheck<T>(value: never, defaultValue: T): T {
+export function exhaustiveCheck<T>(_value: never, defaultValue: T): T {
   // In production, you might want to log this to an error tracking service
-  // console.warn(`Unhandled case: ${JSON.stringify(value)}`);
+  // console.warn(`Unhandled case: ${JSON.stringify(_value)}`);
   return defaultValue;
 }
 

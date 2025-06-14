@@ -11,6 +11,5 @@
     "declarationMap": true
   },
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "**/*.test.ts"],
-  "files": ["src/index.ts", "src/result.ts", "src/error.ts", "src/assert.ts", "src/types.ts", "src/errors/index.ts"]
+  "exclude": ["dist", "node_modules", "**/*.test.ts"]
 }

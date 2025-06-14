@@ -1,8 +1,7 @@
 ---
 slug: ui-toast-feedback
 title: Display toast notifications with Sonner and Result patterns
-description:
-  Type-safe toast notifications with Sonner for consistent user feedback.
+description: Type-safe toast notifications with Sonner for consistent user feedback.
 type: pattern
 ---
 

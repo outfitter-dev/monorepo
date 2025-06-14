@@ -2,7 +2,7 @@
  * Result pattern for type-safe error handling without exceptions
  */
 
-import type { DeepReadonly } from './types';
+import type { DeepReadonly } from './types/index';
 import { toAppError, type AppError } from './error';
 
 /**
@@ -151,7 +151,7 @@ export function getOrElse<T, E>(result: Result<T, E>, defaultValue: T): T {
  */
 export function getOrElseWith<T, E>(
   result: Result<T, E>,
-  fn: (error: E) => T
+  fn: (error: DeepReadonly<E>) => T
 ): T {
   return result.success ? result.data : fn(result.error);
 }
@@ -180,7 +180,7 @@ export function tap<T, E>(
  */
 export function tapError<T, E>(
   result: Result<T, E>,
-  fn: (error: E) => void
+  fn: (error: DeepReadonly<E>) => void
 ): Result<T, E> {
   if (!result.success) {
     fn(result.error);

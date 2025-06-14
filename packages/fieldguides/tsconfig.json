@@ -36,7 +36,10 @@
     // Interop
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+
+    // Project References
+    "composite": true
   },
   "include": ["scripts/**/*.ts", "src/**/*.ts"],
   "exclude": ["node_modules", "scripts/**/*.js", "content/templates/**/*"]

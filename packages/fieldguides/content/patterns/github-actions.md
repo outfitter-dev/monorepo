@@ -35,8 +35,7 @@ on:
 
 # Cancel in-progress runs for the same PR/branch
 concurrency:
-  group:
-    ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 # Restrict permissions for security
@@ -359,8 +358,7 @@ jobs:
           path: |
             ~/.npm
             ~/.cache
-          key:
-            ${{ runner.os }}-node-${{ matrix.node }}-${{
+          key: ${{ runner.os }}-node-${{ matrix.node }}-${{
             hashFiles('**/package-lock.json') }}
 
       - name: Install and test
@@ -553,8 +551,7 @@ runs:
           ${{ steps.cache-dir.outputs.path }}
           node_modules
           .next/cache
-        key:
-          ${{ runner.os }}-${{ steps.detect-pm.outputs.manager }}-${{
+        key: ${{ runner.os }}-${{ steps.detect-pm.outputs.manager }}-${{
           hashFiles(format('**/{0}', steps.detect-pm.outputs.lockfile)) }}
         restore-keys: |
           ${{ runner.os }}-${{ steps.detect-pm.outputs.manager }}-
@@ -602,8 +599,7 @@ jobs:
             .next/cache
             .turbo
             .eslintcache
-          key:
-            ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}-${{
+          key: ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}-${{
             hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ hashFiles('**/pnpm-lock.yaml') }}-
@@ -685,8 +681,7 @@ jobs:
           path: |
             node_modules
             .build-cache
-          key:
-            cache-${{ steps.cache-keys.outputs.deps-hash }}-${{
+          key: cache-${{ steps.cache-keys.outputs.deps-hash }}-${{
             steps.cache-keys.outputs.src-hash }}
           restore-keys: |
             cache-${{ steps.cache-keys.outputs.deps-hash }}-

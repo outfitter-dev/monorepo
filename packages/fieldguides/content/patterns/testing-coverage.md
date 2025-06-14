@@ -1,8 +1,7 @@
 ---
 slug: testing-coverage
 title: Configure test coverage thresholds and reporting
-description:
-  Modern coverage strategies for Vitest and Jest with actionable metrics.
+description: Modern coverage strategies for Vitest and Jest with actionable metrics.
 type: pattern
 ---
 

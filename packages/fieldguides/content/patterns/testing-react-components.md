@@ -1,8 +1,7 @@
 ---
 slug: testing-react-components
 title: Test React components from the user's perspective
-description:
-  Testing React components focusing on user behavior and accessibility.
+description: Testing React components focusing on user behavior and accessibility.
 type: pattern
 ---
 

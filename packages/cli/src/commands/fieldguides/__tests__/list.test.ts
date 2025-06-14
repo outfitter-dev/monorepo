@@ -1,34 +1,42 @@
-import { listFieldguides } from '../../list';
-import { readJSON, pathExists } from 'fs-extra';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { listFieldguides } from '../list';
+import fsExtra from 'fs-extra';
+const { readJSON, pathExists } = fsExtra;
 
-jest.mock('fs-extra', () => ({
-  readJSON: jest.fn(),
-  pathExists: jest.fn(),
+vi.mock('fs-extra', () => ({
+  default: {
+    readJSON: vi.fn(),
+    pathExists: vi.fn(),
+  },
+  readJSON: vi.fn(),
+  pathExists: vi.fn(),
 }));
 
-jest.mock('chalk', () => ({
-  cyan: (s: string) => s,
-  green: (s: string) => s,
-  yellow: (s: string) => s,
-  gray: (s: string) => s,
+vi.mock('chalk', () => ({
+  default: {
+    cyan: (s: string) => s,
+    green: (s: string) => s,
+    yellow: (s: string) => s,
+    gray: (s: string) => s,
+  },
 }));
 
 describe('listFieldguides', () => {
-  let logSpy: jest.SpyInstance;
+  let logSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   afterEach(() => {
     logSpy.mockRestore();
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it('should list all fieldguides when no flags provided', async () => {
     // Arrange
-    (pathExists as jest.Mock).mockResolvedValue(true);
-    (readJSON as jest.Mock).mockResolvedValue({
+    vi.mocked(pathExists).mockResolvedValue(true);
+    vi.mocked(readJSON).mockResolvedValue({
       fieldguides: ['typescript-standards'],
     });
 
@@ -43,8 +51,8 @@ describe('listFieldguides', () => {
 
   it('should list only installed fieldguides when installed flag is true', async () => {
     // Arrange
-    (pathExists as jest.Mock).mockResolvedValue(true);
-    (readJSON as jest.Mock).mockResolvedValue({
+    vi.mocked(pathExists).mockResolvedValue(true);
+    vi.mocked(readJSON).mockResolvedValue({
       fieldguides: ['typescript-standards', 'react-patterns'],
     });
 
@@ -62,7 +70,7 @@ describe('listFieldguides', () => {
 
   it('should log message when no config file present', async () => {
     // Arrange
-    (pathExists as jest.Mock).mockResolvedValue(false);
+    vi.mocked(pathExists).mockResolvedValue(false);
 
     // Act
     await listFieldguides({});
@@ -75,8 +83,8 @@ describe('listFieldguides', () => {
 
   it('should warn when installed list is empty and installed flag is true', async () => {
     // Arrange
-    (pathExists as jest.Mock).mockResolvedValue(true);
-    (readJSON as jest.Mock).mockResolvedValue({ fieldguides: [] });
+    vi.mocked(pathExists).mockResolvedValue(true);
+    vi.mocked(readJSON).mockResolvedValue({ fieldguides: [] });
 
     // Act
     await listFieldguides({ installed: true });
@@ -89,8 +97,8 @@ describe('listFieldguides', () => {
 
   it('should support legacy supplies key', async () => {
     // Arrange
-    (pathExists as jest.Mock).mockResolvedValue(true);
-    (readJSON as jest.Mock).mockResolvedValue({ supplies: ['react-patterns'] });
+    vi.mocked(pathExists).mockResolvedValue(true);
+    vi.mocked(readJSON).mockResolvedValue({ supplies: ['react-patterns'] });
 
     // Act
     await listFieldguides({ installed: true });
@@ -103,8 +111,8 @@ describe('listFieldguides', () => {
 
   it('should filter out duplicate fieldguides', async () => {
     // Arrange
-    (pathExists as jest.Mock).mockResolvedValue(true);
-    (readJSON as jest.Mock).mockResolvedValue({
+    vi.mocked(pathExists).mockResolvedValue(true);
+    vi.mocked(readJSON).mockResolvedValue({
       fieldguides: ['dup-guide', 'unique-guide', 'dup-guide'],
     });
 

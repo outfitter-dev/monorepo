@@ -83,7 +83,7 @@ export const equipCommand = new Command('equip')
         const hooksSpinner = ui.createSpinner('Setting up git hooks...');
         hooksSpinner.start();
         try {
-          await configApplier.initializeHusky();
+          await configApplier.initializeHusky(process.cwd());
           hooksSpinner.succeed('Git hooks initialized');
         } catch {
           hooksSpinner.fail('Failed to initialize git hooks');

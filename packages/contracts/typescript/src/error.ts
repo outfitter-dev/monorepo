@@ -1,4 +1,4 @@
-import type { DeepReadonly } from './types';
+import type { DeepReadonly } from './types/index';
 
 /**
  * Standard error codes for application errors
@@ -87,10 +87,10 @@ export function makeError(
     name: 'AppError',
     code,
     message,
-    details,
-    originalError,
+    ...(details !== undefined && { details }),
+    ...(originalError !== undefined && { originalError }),
     stack: originalError?.stack ?? new Error(message).stack,
-  };
+  } as AppError;
 }
 
 /**

@@ -473,8 +473,7 @@ reviews:
 
     # Package-specific rules
     - path: 'packages/ui/**'
-      instructions:
-        'Focus: Accessibility, responsive design, component API stability'
+      instructions: 'Focus: Accessibility, responsive design, component API stability'
 
     - path: 'packages/utils/**'
       instructions: 'Focus: Type safety, tree shaking, zero dependencies'

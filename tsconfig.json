@@ -13,8 +13,10 @@
     "declaration": true,
     "declarationMap": true,
     "composite": true,
-    "incremental": true
+    "incremental": true,
+    "noEmit": true
   },
+  "files": [],
   "references": [
     {
       "path": "./packages/typescript-config"
@@ -44,6 +46,14 @@
       "path": "./packages/contracts-zod"
     }
   ],
-  "exclude": ["**/node_modules", "**/dist", "**/*.config.ts", "**/*.config.mjs", "prettier.config.ts"],
-  "files": []
+  "exclude": [
+    "**/node_modules",
+    "**/dist",
+    "**/*.config.ts",
+    "**/*.config.mjs",
+    "prettier.config.ts",
+    "packages/*/dist/**/*",
+    "packages/fieldguides/scripts/**/*.js",
+    "packages/fieldguides/scripts/**/*.d.ts"
+  ]
 }

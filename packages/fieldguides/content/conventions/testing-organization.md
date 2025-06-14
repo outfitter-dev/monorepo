@@ -1,8 +1,7 @@
 ---
 slug: testing-organization
 title: Organize tests alongside source with clear naming
-description:
-  Standard patterns for organizing test files, utilities, and test data.
+description: Standard patterns for organizing test files, utilities, and test data.
 type: convention
 ---
 

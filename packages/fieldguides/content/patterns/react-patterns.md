@@ -1,8 +1,7 @@
 ---
 slug: react-patterns
 title: Build React apps with compound components and custom hooks
-description:
-  Component patterns, hooks, and best practices for React applications.
+description: Component patterns, hooks, and best practices for React applications.
 type: guide
 ---
 

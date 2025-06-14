@@ -9,7 +9,7 @@ pnpm test              # Run tests in watch mode
 pnpm test --run        # Single test run
 pnpm test packages/contracts/typescript/src/__tests__/result.test.ts  # Single test file
 pnpm test --filter @outfitter/contracts  # Test specific package
-pnpm build             # Build all packages (typescript-utils builds first)
+pnpm build             # Build all packages (contracts/typescript builds first)
 pnpm lint              # ESLint check
 pnpm format:fix        # Auto-fix formatting
 ```

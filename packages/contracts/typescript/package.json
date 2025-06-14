@@ -23,7 +23,7 @@
     "vitest.config.ts"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc --emitDeclarationOnly",
     "dev": "tsup --watch",
     "test": "vitest",
     "test:ui": "vitest --ui",

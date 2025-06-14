@@ -1,13 +1,18 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import ora from 'ora';
-import { ensureDir, writeJSON, pathExists } from 'fs-extra';
+import fsExtra from 'fs-extra';
+const { ensureDir, writeJSON, pathExists } = fsExtra;
 import { join } from 'path';
 
 interface CreateOptions {
   preset?: string;
   withClaude?: boolean;
   force?: boolean;
+}
+
+interface InquirerAnswers {
+  preset: string;
 }
 
 const presets = {
@@ -53,7 +58,7 @@ export async function createFieldguideConfig(
   // Interactive setup if no preset
   let selectedPreset = options.preset;
   if (!selectedPreset || !presets[selectedPreset as keyof typeof presets]) {
-    const answers = await inquirer.prompt([
+    const answers = (await inquirer.prompt([
       {
         type: 'list',
         name: 'preset',
@@ -65,7 +70,7 @@ export async function createFieldguideConfig(
           { name: 'Minimal (TypeScript only)', value: 'minimal' },
         ],
       },
-    ]);
+    ])) as InquirerAnswers;
     selectedPreset = answers.preset;
   }
 

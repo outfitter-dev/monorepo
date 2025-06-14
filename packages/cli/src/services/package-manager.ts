@@ -1,4 +1,5 @@
-import { pathExists } from 'fs-extra';
+import fsExtra from 'fs-extra';
+const { pathExists } = fsExtra;
 import { execa } from 'execa';
 import type { PackageManager, InstallCommand } from '../types/index.js';
 

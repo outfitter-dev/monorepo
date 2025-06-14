@@ -1,8 +1,7 @@
 ---
 slug: standards-index
 title: Standards
-description:
-  Core standards that define consistent approaches across all projects
+description: Core standards that define consistent approaches across all projects
 type: index
 ---
 

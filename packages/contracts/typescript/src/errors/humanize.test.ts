@@ -101,31 +101,31 @@ describe('formatForDevelopers', () => {
   });
 
   it('should include cause when present', () => {
-    const cause = new Error('Original error');
+    const originalError = new Error('Original error');
     const error = makeError(
       ErrorCode.INTERNAL_ERROR,
       'Wrapper error',
       {},
-      cause
+      originalError
     );
     const formatted = formatForDevelopers(error);
     expect(formatted).toContain('Cause: Original error');
   });
 
   it('should handle non-Error causes', () => {
-    // makeError only accepts Error instances as causes, so we test the formatter directly
+    // makeError only accepts Error instances as originalError, so we test the formatter directly
     const error = {
       code: ErrorCode.INTERNAL_ERROR,
       message: 'Wrapper error',
       details: {},
-      cause: 'String cause' as any,
+      originalError: new Error('String cause'),
     };
     const formatted = formatForDevelopers(error as AppError);
     expect(formatted).toContain('Cause: String cause');
   });
 
   it('should format complex errors with all fields', () => {
-    const cause = new Error('Database connection failed');
+    const originalError = new Error('Database connection failed');
     const error = makeError(
       ErrorCode.INTERNAL_ERROR,
       'Failed to fetch user',
@@ -134,7 +134,7 @@ describe('formatForDevelopers', () => {
         operation: 'findById',
         timestamp: '2024-01-01T00:00:00Z',
       },
-      cause
+      originalError
     );
     const formatted = formatForDevelopers(error);
 

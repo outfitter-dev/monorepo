@@ -1,8 +1,7 @@
 ---
 slug: testing-unit
 title: Write fast, isolated unit tests with AAA pattern
-description:
-  Best practices for unit tests that are fast, isolated, and maintainable.
+description: Best practices for unit tests that are fast, isolated, and maintainable.
 type: pattern
 ---
 

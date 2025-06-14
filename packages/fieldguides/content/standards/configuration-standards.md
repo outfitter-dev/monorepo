@@ -1,8 +1,7 @@
 ---
 slug: configuration-standards
 title: Manage configuration with Zod validation and env hierarchy
-description:
-  Environment configuration patterns for secure, validated app settings.
+description: Environment configuration patterns for secure, validated app settings.
 type: convention
 ---
 

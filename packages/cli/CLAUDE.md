@@ -5,10 +5,10 @@ code in this repository.
 
 ## Overview
 
-This is the `@outfitter/cli` package - a command-line tool for managing
-Outfitter supplies (development standards, patterns, and guides) in projects.
-It's part of the `@outfitter/monorepo` and provides commands to initialize
-projects, add/update supplies, and manage supply configurations (packlists).
+This is the `outfitter` CLI package - a command-line tool for managing Outfitter
+supplies (development standards, patterns, and guides) in projects. It's part of
+the `@outfitter/monorepo` and provides commands to initialize projects,
+add/update supplies, and manage supply configurations (packlists).
 
 ## Key Commands
 
@@ -128,7 +128,7 @@ The CLI uses TypeScript with ES modules:
 
 ## Important Notes
 
-- The CLI will be globally installable via `npm install -g @outfitter/cli`
+- The CLI will be globally installable via `npm install -g outfitter`
 - The `templates/` directory (currently empty) is intended for future file
   templates
 - All file paths should use Node.js `path.join()` for cross-platform

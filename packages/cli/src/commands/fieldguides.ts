@@ -7,6 +7,14 @@ import { updateFieldguides } from './fieldguides/update.js';
 import { createFieldguideConfig } from './fieldguides/create.js';
 import { manageFieldguideConfig } from './fieldguides/config.js';
 
+interface ExportOptions {
+  output: string;
+}
+
+interface ImportOptions {
+  file: string;
+}
+
 export const fieldguidesCommand = new Command('fieldguides')
   .alias('fg')
   .description('Manage project fieldguides (documentation & patterns)')
@@ -50,7 +58,7 @@ export const fieldguidesCommand = new Command('fieldguides')
             'Output file',
             'fieldguide-config.json'
           )
-          .action(async options => {
+          .action(async (options: ExportOptions) => {
             await manageFieldguideConfig('export', options);
           })
       )
@@ -59,7 +67,7 @@ export const fieldguidesCommand = new Command('fieldguides')
           .description('Import a configuration')
           .argument('<file>', 'Configuration file to import')
           .action(async (file: string) => {
-            await manageFieldguideConfig('import', { file });
+            await manageFieldguideConfig('import', { file } as ImportOptions);
           })
       )
   );

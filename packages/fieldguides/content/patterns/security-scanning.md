@@ -276,8 +276,7 @@ jobs:
         continue-on-error: true
 
       - name: Aggregate results
-        if:
-          steps.trufflehog.outcome == 'failure' || steps.gitleaks.outcome ==
+        if: steps.trufflehog.outcome == 'failure' || steps.gitleaks.outcome ==
           'failure' || steps.detect-secrets.outcome == 'failure'
         run: |
           echo "::error::Secrets detected! Please review and remove them."
@@ -728,8 +727,7 @@ jobs:
             licenses.json
 
       - name: Comment on PR
-        if:
-          github.event_name == 'pull_request' && (env.LICENSE_ISSUES == 'true'
+        if: github.event_name == 'pull_request' && (env.LICENSE_ISSUES == 'true'
           || env.LICENSED_ISSUES == 'true')
         uses: actions/github-script@v7
         with:

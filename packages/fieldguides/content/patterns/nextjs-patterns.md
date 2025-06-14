@@ -1,8 +1,7 @@
 ---
 slug: nextjs-patterns
 title: Build Next.js apps with App Router and server components
-description:
-  Server-side rendering, routing, and deployment patterns for Next.js.
+description: Server-side rendering, routing, and deployment patterns for Next.js.
 type: guide
 ---
 

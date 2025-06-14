@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import ora from 'ora';
-import { pathExists } from 'fs-extra';
+import fsExtra from 'fs-extra';
+const { pathExists } = fsExtra;
 import { join } from 'path';
 
 /**

@@ -1,8 +1,7 @@
 ---
 slug: patterns-index
 title: Patterns
-description:
-  Reusable solutions to recurring problems. Problem-focused, not rule-focused
+description: Reusable solutions to recurring problems. Problem-focused, not rule-focused
 type: index
 ---
 

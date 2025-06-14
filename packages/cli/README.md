@@ -1,42 +1,41 @@
-# @outfitter/cli
+# outfitter
 
-> Command-line tool for managing development standards, patterns, and project
-> setup
+> Command-line tool for equipping your development journey with configurations
+> and fieldguides
 
 ## Installation
 
 ```bash
-npm install -g @outfitter/cli
+npm install -g outfitter
 # or
-pnpm add -g @outfitter/cli
+pnpm add -g outfitter
+# or
+yarn global add outfitter
 ```
 
 ## Quick Start
 
 ```bash
-# Initialize a new project with supplies
-outfitter init
+# Initialize a new project with Outfitter configurations
+outfitter equip
 
-# Add specific supplies to your project
-outfitter add react-patterns typescript-standards
+# Manage fieldguides (documentation & patterns)
+outfitter fieldguides list
+outfitter fieldguides add react-patterns typescript-standards
 
-# See what's available
-outfitter list
-
-# Update to latest versions
-outfitter update
+# View help
+outfitter --help
 ```
 
 ## Commands
 
-### `outfitter init`
+### `outfitter equip` (alias: `init`)
 
-Initialize a project with Outfitter supplies.
+Interactively install Outfitter configurations and utilities to your project.
 
 ```bash
-outfitter init                    # Interactive setup
-outfitter init --preset nextjs    # Use Next.js preset
-outfitter init --with-claude      # Include CLAUDE.md for AI assistance
+outfitter equip                   # Interactive setup
+outfitter equip --preset nextjs   # Use Next.js preset
 ```
 
 **Available presets:**
@@ -46,45 +45,52 @@ outfitter init --with-claude      # Include CLAUDE.md for AI assistance
 - `node` - Node.js backend services
 - `minimal` - Just TypeScript standards
 
-### `outfitter add`
+### `outfitter fieldguides` (alias: `fg`)
 
-Add specific supplies to your project.
-
-```bash
-outfitter add react-patterns
-outfitter add typescript-standards testing-standards
-```
-
-### `outfitter list`
-
-List available supplies.
+Manage project fieldguides - living documentation and patterns for your team.
 
 ```bash
-outfitter list              # Show all available supplies
-outfitter list --installed  # Show only installed supplies
+# List available fieldguides
+outfitter fieldguides list
+
+# Add fieldguides to your project
+outfitter fieldguides add react-patterns typescript-standards
+
+# Update existing fieldguides
+outfitter fieldguides update
+
+# Create a new fieldguide
+outfitter fieldguides create
+
+# Configure fieldguide settings
+outfitter fieldguides config
 ```
 
-### `outfitter update`
+## Terrain Detection
 
-Update supplies to their latest versions.
+Outfitter automatically detects your project's technology stack to provide tailored recommendations and configurations. This "terrain detection" analyzes your project for:
 
-```bash
-outfitter update          # Update all supplies
-outfitter update --check  # Check for updates without installing
-```
+### Detected Frameworks
+- **Frontend**: Next.js, React, Vue, Svelte, Angular
+- **Build Tools**: Vite, Webpack
+- **Languages**: TypeScript, JavaScript, Python
 
-### `outfitter pack`
+### Detected Tools
+- **Testing**: Vitest, Jest, Playwright, Cypress
+- **State Management**: Zustand, Redux, MobX
+- **Package Managers**: pnpm, yarn, npm, bun
+- **CI/CD**: GitHub Actions, GitLab CI
+- **Containerization**: Docker
 
-Manage supply configurations (packlists).
+### Detected Project Types
+- Monorepo structures (pnpm workspaces, Lerna, Nx, Rush)
+- TypeScript projects
+- Python projects
 
-```bash
-# Export current configuration
-outfitter pack export
-outfitter pack export --output team-standard.json
-
-# Import a configuration
-outfitter pack import team-standard.json
-```
+The terrain detection runs automatically when you use commands like `outfitter equip` or `outfitter fieldguides add`, ensuring that:
+- Recommended configurations match your tech stack
+- Fieldguides are relevant to your frameworks
+- Installation commands use your preferred package manager
 
 ## Configuration
 
@@ -182,7 +188,7 @@ standards and patterns.
 ## Development
 
 This package is part of the
-[@outfitter/monorepo](https://github.com/outfitter-dev/monorepo).
+[Outfitter monorepo](https://github.com/outfitter-dev/monorepo).
 
 See the [Development Guide](../../docs/contributing/development.md) for
 instructions on building, testing, and contributing to this package.

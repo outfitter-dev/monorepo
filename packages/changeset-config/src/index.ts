@@ -10,6 +10,22 @@ export interface ChangesetInitOptions {
   baseBranch?: string;
 }
 
+interface ChangesetConfig {
+  access: 'public' | 'restricted';
+  baseBranch: string;
+  changelog?: string | Array<string> | false | [string, Record<string, any>];
+  commit?: boolean;
+  fixed?: Array<Array<string>>;
+  linked?: Array<Array<string>>;
+  updateInternalDependencies?: 'patch' | 'minor';
+  ignore?: Array<string>;
+}
+
+interface PackageJson {
+  scripts?: Record<string, string>;
+  [key: string]: unknown;
+}
+
 export function initChangesets(options: ChangesetInitOptions = {}): void {
   const {
     cwd = process.cwd(),
@@ -30,9 +46,14 @@ export function initChangesets(options: ChangesetInitOptions = {}): void {
 
     if (!existsSync(configTarget)) {
       // Read and modify config based on options
-      const config: any = JSON.parse(readFileSync(configSource, 'utf8'));
-      config.access = access;
-      config.baseBranch = baseBranch;
+      const configData = JSON.parse(
+        readFileSync(configSource, 'utf8')
+      ) as ChangesetConfig;
+      const config: ChangesetConfig = {
+        ...configData,
+        access,
+        baseBranch,
+      };
 
       writeFileSync(configTarget, JSON.stringify(config, null, 2) + '\n');
       console.log('✓ Created changeset config');
@@ -65,7 +86,7 @@ export function addChangesetScripts(packageJsonPath?: string): void {
   const pkgPath = packageJsonPath || join(process.cwd(), 'package.json');
 
   try {
-    const pkg: any = JSON.parse(readFileSync(pkgPath, 'utf8'));
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as PackageJson;
 
     if (!pkg.scripts) {
       pkg.scripts = {};
@@ -86,7 +107,7 @@ export function addChangesetScripts(packageJsonPath?: string): void {
     }
 
     if (added) {
-      require('fs').writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+      writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
       console.log('✓ Added changeset scripts to package.json');
     } else {
       console.log('ℹ Changeset scripts already exist');

@@ -1,6 +1,6 @@
 {
-  "name": "@outfitter/cli",
-  "version": "0.1.0",
+  "name": "outfitter",
+  "version": "1.0.2",
   "description": "Command-line tool for equipping your development journey with configurations and fieldguides",
   "type": "module",
   "bin": {
@@ -13,13 +13,12 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
-    "prepare": "pnpm build",
+    "lint": "eslint .",
+    "prepare": "npm run build",
     "test": "vitest",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@outfitter/packlist": "workspace:*",
-    "@outfitter/fieldguides": "workspace:*",
     "@inquirer/prompts": "^3.3.0",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",

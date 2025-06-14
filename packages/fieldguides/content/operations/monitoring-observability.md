@@ -403,8 +403,7 @@ groups:
           severity: critical
         annotations:
           summary: 'High error rate detected'
-          description:
-            'Error rate is {{ $value | humanizePercentage }} for {{
+          description: 'Error rate is {{ $value | humanizePercentage }} for {{
             $labels.route }}'
 
       - alert: HighLatency

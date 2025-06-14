@@ -1,8 +1,7 @@
 ---
 slug: react-component-standards
 title: Build scalable components with clear APIs and composition
-description:
-  Framework-agnostic patterns for maintainable component architecture.
+description: Framework-agnostic patterns for maintainable component architecture.
 type: convention
 ---
 

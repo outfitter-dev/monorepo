@@ -54,7 +54,7 @@ export function createEnvSchema<T extends z.ZodRawShape>(
 /**
  * Common environment variable schemas for reuse
  */
-export const CommonEnvSchemas = Object.freeze({
+export const CommonEnvSchemas = {
   NODE_ENV: z
     .enum(['development', 'production', 'test'])
     .default('development'),
@@ -66,7 +66,7 @@ export const CommonEnvSchemas = Object.freeze({
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   CORS_ORIGIN: z.string().url().optional(),
   SESSION_SECRET: z.string().min(32).optional(),
-}) as const;
+} as const;
 
 /**
  * Creates a type-safe environment schema for Next.js applications by combining common variables and Next.js-specific variables with any additional schema provided.

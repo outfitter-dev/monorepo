@@ -67,10 +67,8 @@ export function formatForDevelopers(error: AppError): string {
     parts.push(`Details: ${JSON.stringify(error.details, null, 2)}`);
   }
 
-  if (error.cause) {
-    parts.push(
-      `Cause: ${error.cause instanceof Error ? error.cause.message : String(error.cause)}`
-    );
+  if (error.originalError) {
+    parts.push(`Cause: ${error.originalError.message}`);
   }
 
   return parts.join('\n');

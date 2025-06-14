@@ -1,8 +1,8 @@
 export * from './result';
 export * from './error';
-export * from './types';
-export * from './errors';
+export * from './types/index';
+export * from './errors/index';
 export * from './assert';
 
 // Re-export types namespace for convenience
-export * as Types from './types';
+export * as Types from './types/index';
