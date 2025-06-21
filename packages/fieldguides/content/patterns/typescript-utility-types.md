@@ -7,8 +7,7 @@ type: pattern
 
 # TypeScript Utility Type Patterns
 
-Advanced patterns for type manipulation and composition using TypeScript 5.7+
-built-in utilities, custom utility types, and modern type features.
+Advanced patterns for type manipulation and composition using TypeScript 5.7+ built-in utilities, custom utility types, and modern type features.
 
 ## Core Utility Types Reference
 
@@ -485,16 +484,12 @@ const config = createBuilder<Config>()
 
 ## Common Pitfalls
 
-1. **Shallow vs Deep**: Built-in utilities like `Partial` and `Readonly` are
-   shallow
+1. **Shallow vs Deep**: Built-in utilities like `Partial` and `Readonly` are shallow
 2. **Union Distribution**: Conditional types distribute over unions
 3. **Type Inference Limits**: Complex recursive types may hit depth limits
 4. **Performance**: Overly complex utility types can slow down compilation
 5. **any Propagation**: Avoid `any` in utility types as it defeats type safety
-6. **NoInfer Overuse**: Use `NoInfer` sparingly, only when inference causes
-   issues
+6. **NoInfer Overuse**: Use `NoInfer` sparingly, only when inference causes issues
 7. **Const Assertions**: Remember `as const` for literal preservation
 
-Always prefer built-in utility types when available, leverage TypeScript 5.7+
-features for better type safety, and create custom utilities only when necessary
-for your specific use case.
+Always prefer built-in utility types when available, leverage TypeScript 5.7+ features for better type safety, and create custom utilities only when necessary for your specific use case.

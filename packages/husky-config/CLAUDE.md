@@ -1,14 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
 
-This is the `@outfitter/husky-config` package - a configuration and
-initialization utility for Husky Git hooks in Outfitter projects. It provides
-standard Git hooks for code quality enforcement, including commit message
-linting and pre-commit checks.
+This is the `@outfitter/husky-config` package - a configuration and initialization utility for Husky Git hooks in Outfitter projects. It provides standard Git hooks for code quality enforcement, including commit message linting and pre-commit checks.
 
 ## Key Commands
 
@@ -40,16 +36,13 @@ pnpm typecheck
   - Runs `npx husky init`
   - Copies selected hooks to `.husky` directory
   - Sets proper permissions on hook scripts
-- `addPrepareScript(packageJsonPath)` - Adds the `prepare` script to
-  package.json
+- `addPrepareScript(packageJsonPath)` - Adds the `prepare` script to package.json
   - Ensures Husky is installed on `npm install`
 
 ### Hook Scripts
 
-1. **pre-commit**: Executes `lint-staged` to run formatters and linters on
-   staged files
-2. **commit-msg**: Executes `commitlint` to ensure commit messages follow
-   conventional format
+1. **pre-commit**: Executes `lint-staged` to run formatters and linters on staged files
+2. **commit-msg**: Executes `commitlint` to ensure commit messages follow conventional format
 
 ## Usage Pattern
 
@@ -79,7 +72,6 @@ Uses `tsup` to build:
 ## Important Notes
 
 - This package standardizes Git hooks across Outfitter projects
-- Requires `lint-staged` and `commitlint` to be configured separately in the
-  target project
+- Requires `lint-staged` and `commitlint` to be configured separately in the target project
 - The `prepare` script ensures Husky is installed when developers clone the repo
 - Hook scripts must be executable (chmod +x is handled by the init function)

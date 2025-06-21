@@ -1,12 +1,10 @@
 # Homebrew Formula for Outfitter CLI
 
-This directory contains the Homebrew formula for installing the Outfitter CLI
-via Homebrew.
+This directory contains the Homebrew formula for installing the Outfitter CLI via Homebrew.
 
 ## Installation
 
-Once the formula is published to a Homebrew tap, users will be able to install
-with:
+Once the formula is published to a Homebrew tap, users will be able to install with:
 
 ```bash
 brew tap outfitter-dev/tap

@@ -7,8 +7,7 @@ type: convention
 
 # Testing Philosophy
 
-Modern testing principles for JavaScript/TypeScript applications in 2025,
-emphasizing speed, isolation, and developer experience.
+Modern testing principles for JavaScript/TypeScript applications in 2025, emphasizing speed, isolation, and developer experience.
 
 ## Test-Driven Development (TDD) - Modern Workflow
 
@@ -355,10 +354,7 @@ it('handles API response', async () => {
 ## Related Documentation
 
 - [Test Organization](./testing-organization.md) - Modern file structure
-- [Testing Standards](../standards/testing-standards.md) - Comprehensive
-  methodology
-- [Testing React Components](../patterns/testing-react-components.md) -
-  Component testing
+- [Testing Standards](../standards/testing-standards.md) - Comprehensive methodology
+- [Testing React Components](../patterns/testing-react-components.md) - Component testing
 - [Testing Unit](../patterns/testing-unit.md) - Unit testing patterns
-- [Framework-Agnostic Testing](../patterns/framework-agnostic-testing.md) -
-  Portable patterns
+- [Framework-Agnostic Testing](../patterns/framework-agnostic-testing.md) - Portable patterns

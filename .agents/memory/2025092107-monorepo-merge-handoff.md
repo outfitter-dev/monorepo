@@ -2,10 +2,7 @@
 
 ## Overview
 
-Successfully consolidated three separate repositories (packlist, cli, supplies)
-into a unified camp monorepo with 8 publishable packages, modern tooling, and
-comprehensive documentation system. This establishes camp as the core dependency
-for all future Outfitter projects.
+Successfully consolidated three separate repositories (packlist, cli, supplies) into a unified camp monorepo with 8 publishable packages, modern tooling, and a comprehensive documentation system. This establishes camp as the core dependency for all future Outfitter projects.
 
 ## Context
 
@@ -15,10 +12,7 @@ The original architecture had fragmented codebases:
 - `cli/` - Standalone CLI tool
 - `supplies/` - Documentation system with validation tools
 
-This fragmentation created maintenance overhead, version conflicts, and
-inconsistent tooling across projects. The goal was to create a single source of
-truth for Outfitter's core utilities while maintaining independent package
-publishing.
+This fragmentation created maintenance overhead, version conflicts, and inconsistent tooling across projects. The goal was to create a single source of truth for Outfitter's core utilities while maintaining independent package publishing.
 
 ## Key Changes
 
@@ -42,10 +36,8 @@ publishing.
 
 **Packages migrated:**
 
-- `@outfitter/packlist` - Configuration manager (from
-  packlist/packages/packlist)
-- `@outfitter/cli` - Command-line tool (from cli/, now consumes packlist +
-  fieldguides)
+- `@outfitter/packlist` - Configuration manager (from packlist/packages/packlist)
+- `@outfitter/cli` - Command-line tool (from cli/, now consumes packlist + fieldguides)
 - `@outfitter/fieldguides` - Documentation system (from supplies/, restructured)
 - `@outfitter/eslint-config` - ESLint configurations
 - `@outfitter/typescript-config` - TypeScript configurations
@@ -55,8 +47,7 @@ publishing.
 
 **Key restructuring:**
 
-- CLI now properly consumes `@outfitter/packlist` as library instead of
-  standalone
+- CLI now properly consumes `@outfitter/packlist` as a library instead of standalone
 - Fieldguides reorganized with `content/` subdirectory for guidelines
 - All packages updated with consistent repository metadata
 
@@ -64,12 +55,10 @@ publishing.
 
 **What changed:**
 
-- Merged `supplies/guidebooks/` and `packlist/outfitter/fieldguides/` into
-  unified content
+- Merged `supplies/guidebooks/` and `packlist/outfitter/fieldguides/` into unified content
 - Organized as `@outfitter/fieldguides` package with validation tools
 - Preserved all validation scripts and TypeScript utilities from supplies
-- Maintained both internal (expedition-themed) and external (professional)
-  documentation styles
+- Maintained both internal (expedition-themed) and external (professional) documentation styles
 
 **Structure:**
 
@@ -103,8 +92,7 @@ packages/fieldguides/
 **Workspace Dependencies:**
 
 - Used `workspace:*` pattern for internal package dependencies
-- CLI package now depends on both `@outfitter/packlist` and
-  `@outfitter/fieldguides`
+- CLI package now depends on both `@outfitter/packlist` and `@outfitter/fieldguides`
 - Eliminates version drift between packages
 
 **Build Strategy:**
@@ -130,8 +118,7 @@ packages/fieldguides/
 **Content Organization:**
 
 - Preserved all existing documentation content without modification
-- Used `content/` subdirectory to clearly separate package code from delivered
-  guidelines
+- Used `content/` subdirectory to clearly separate package code from delivered guidelines
 - Maintained frontmatter validation and all existing scripts
 
 **Git Configuration:**
@@ -182,8 +169,7 @@ packages/fieldguides/
 
 **Long-term:**
 
-1. Create `@outfitter/prettier-config` and `@outfitter/markdownlint-config`
-   packages
+1. Create `@outfitter/prettier-config` and `@outfitter/markdownlint-config` packages
 2. Add automated dependency updates workflow
 3. Consider creating `@outfitter/create-app` scaffolding tool
 4. Implement MCP server integration for real-time agent guidance

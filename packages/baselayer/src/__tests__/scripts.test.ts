@@ -16,7 +16,7 @@ describe('package.json scripts generation', () => {
     await rm(tempDir, { recursive: true, force: true });
   });
 
-  it('should include markdown-medic in lint scripts when markdown tool is markdown-medic', async () => {
+  it('should include rightdown in lint scripts when markdown tool is rightdown', async () => {
     // Create package.json
     const packageJson = {
       name: 'test-package',
@@ -30,7 +30,7 @@ describe('package.json scripts generation', () => {
       baselayer: {
         tools: {
           typescript: 'biome',
-          markdown: 'markdown-medic',
+          markdown: 'rightdown',
         },
       },
     };
@@ -47,14 +47,14 @@ describe('package.json scripts generation', () => {
     if (result.success) {
       expect(result.data.generatedFiles).toContain('package.json (scripts updated)');
 
-      // Check that package.json was updated with markdown-medic scripts
+      // Check that package.json was updated with rightdown scripts
       const updatedPackageJson = JSON.parse(await readFile(join(tempDir, 'package.json'), 'utf-8'));
-      expect(updatedPackageJson.scripts.lint).toContain('mdmedic');
-      expect(updatedPackageJson.scripts['lint:fix']).toContain('mdmedic --fix');
+      expect(updatedPackageJson.scripts.lint).toContain('rightdown');
+      expect(updatedPackageJson.scripts['lint:fix']).toContain('rightdown --fix');
     }
   });
 
-  it('should not include markdown-medic in scripts when markdown tool is prettier', async () => {
+  it('should not include rightdown in scripts when markdown tool is prettier', async () => {
     // Create package.json
     const packageJson = {
       name: 'test-package',
@@ -83,14 +83,14 @@ describe('package.json scripts generation', () => {
 
     expect(result.success).toBe(true);
     if (result.success) {
-      // Check that package.json was updated but without markdown-medic
+      // Check that package.json was updated but without rightdown
       const updatedPackageJson = JSON.parse(await readFile(join(tempDir, 'package.json'), 'utf-8'));
-      expect(updatedPackageJson.scripts.lint).not.toContain('mdmedic');
-      expect(updatedPackageJson.scripts['lint:fix']).not.toContain('mdmedic');
+      expect(updatedPackageJson.scripts.lint).not.toContain('rightdown');
+      expect(updatedPackageJson.scripts['lint:fix']).not.toContain('rightdown');
     }
   });
 
-  it('should include markdown-medic in ESLint-based scripts', async () => {
+  it('should include rightdown in ESLint-based scripts', async () => {
     // Create package.json
     const packageJson = {
       name: 'test-package',
@@ -104,7 +104,7 @@ describe('package.json scripts generation', () => {
       baselayer: {
         tools: {
           typescript: 'eslint',
-          markdown: 'markdown-medic',
+          markdown: 'rightdown',
         },
       },
     };
@@ -119,12 +119,12 @@ describe('package.json scripts generation', () => {
 
     expect(result.success).toBe(true);
     if (result.success) {
-      // Check that package.json was updated with ESLint + markdown-medic scripts
+      // Check that package.json was updated with ESLint + rightdown scripts
       const updatedPackageJson = JSON.parse(await readFile(join(tempDir, 'package.json'), 'utf-8'));
       expect(updatedPackageJson.scripts.lint).toContain('eslint');
-      expect(updatedPackageJson.scripts.lint).toContain('mdmedic');
+      expect(updatedPackageJson.scripts.lint).toContain('rightdown');
       expect(updatedPackageJson.scripts['lint:fix']).toContain('eslint');
-      expect(updatedPackageJson.scripts['lint:fix']).toContain('mdmedic --fix');
+      expect(updatedPackageJson.scripts['lint:fix']).toContain('rightdown --fix');
     }
   });
 });

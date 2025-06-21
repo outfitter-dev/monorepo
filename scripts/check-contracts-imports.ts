@@ -22,6 +22,11 @@ interface ImportIssue {
   import: string;
 }
 
+/**
+ * Scans source files for barrel imports from `@outfitter/contracts` and reports any occurrences.
+ *
+ * If barrel imports are found, logs detailed error messages with file locations and suggests using sub-path imports instead. Exits the process with a non-zero status code if issues are detected.
+ */
 function checkImports(): void {
   const files = globSync('**/*.{ts,tsx,js,jsx,mjs,cjs}', {
     ignore: IGNORE_PATTERNS,
@@ -29,16 +34,16 @@ function checkImports(): void {
   });
 
   let foundIssues = false;
-  const issues: ImportIssue[] = [];
+  const issues: Array<ImportIssue> = [];
 
   for (const file of files) {
     const content = readFileSync(file, 'utf-8');
     const matches = content.match(IMPORT_PATTERN);
-    
+
     if (matches) {
       const lines = content.split('\n');
-      matches.forEach(match => {
-        const lineNum = lines.findIndex(line => line.includes(match)) + 1;
+      matches.forEach((match) => {
+        const lineNum = lines.findIndex((line) => line.includes(match)) + 1;
         issues.push({
           file,
           line: lineNum,

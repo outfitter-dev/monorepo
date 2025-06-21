@@ -2,16 +2,13 @@
 
 ## Overview
 
-The Outfitter monorepo is structured as a monorepo containing shared development
-configurations, utilities, and tools for Outfitter projects. This document
-outlines the architectural decisions behind this structure.
+The Outfitter monorepo is structured as a monorepo containing shared development configurations, utilities, and tools for Outfitter projects. This document outlines the architectural decisions behind this structure.
 
 ## Design Principles
 
 ### 1. Zero-Dependency Core
 
-The `@outfitter/contracts` package maintains zero runtime dependencies, serving
-as the foundational error handling layer for all other packages.
+The `@outfitter/contracts` package maintains zero runtime dependencies, serving as the foundational error handling layer for all other packages.
 
 ### 2. Clear Build Order
 
@@ -55,21 +52,16 @@ Command-line tools and utilities:
 
 For Camp specifically, monorepo architecture provides:
 
-1. **Atomic Configuration Updates**: When standards change, all configs update
-   together
+1. **Atomic Configuration Updates**: When standards change, all configs update together
 2. **Shared Testing**: Test utilities and patterns consistent across packages
-3. **Single Source of Truth**: One location for all Outfitter development
-   standards
-4. **Efficient Development**: Changes to core utilities immediately available
-   everywhere
+3. **Single Source of Truth**: One location for all Outfitter development standards
+4. **Efficient Development**: Changes to core utilities immediately available everywhere
 
 ## Future Considerations
 
 ### Apps Directory
 
-When Camp grows to include end-user applications (web dashboards, etc.), they
-will live in an `apps/` directory at the root level, separate from library
-packages.
+When Camp grows to include end-user applications (web dashboards, etc.), they will live in an `apps/` directory at the root level, separate from library packages.
 
 ### Package Extraction
 

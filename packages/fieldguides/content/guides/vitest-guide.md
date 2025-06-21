@@ -7,14 +7,11 @@ type: guide
 
 # Vitest Guide
 
-Blazing fast unit testing framework powered by Vite with first-class TypeScript
-support.
+Blazing fast unit testing framework powered by Vite with first-class TypeScript support.
 
 ## Overview
 
-Vitest provides a modern testing experience with native ESM support, in-source
-testing, and seamless integration with Vite projects. It's Jest-compatible while
-being significantly faster.
+Vitest provides a modern testing experience with native ESM support, in-source testing, and seamless integration with Vite projects. It's Jest-compatible while being significantly faster.
 
 ## Installation
 

@@ -1,5 +1,14 @@
 # @outfitter/contracts-zod
 
+## 1.1.0
+
+_2025-06-20_
+
+### Patch Changes
+
+- Updated dependencies [475b9aa]
+  - @outfitter/contracts@1.1.0
+
 ## 1.0.4
 
 ### Patch Changes

@@ -7,18 +7,14 @@ type: pattern
 
 # Unit Testing Patterns
 
-Best practices for writing effective unit tests that are fast, isolated, and
-maintainable.
+Best practices for writing effective unit tests that are fast, isolated, and maintainable.
 
 ## Related Documentation
 
 - [Testing Standards](../standards/testing-standards.md) - Testing fundamentals
-- [TypeScript Standards](../standards/typescript-standards.md) - Type-safe
-  testing
-- [TypeScript Error Handling](./typescript-error-handling.md) - Testing error
-  scenarios
-- [Integration Testing](./testing-integration.md) - Testing component
-  interactions
+- [TypeScript Standards](../standards/typescript-standards.md) - Type-safe testing
+- [TypeScript Error Handling](./typescript-error-handling.md) - Testing error scenarios
+- [Integration Testing](./testing-integration.md) - Testing component interactions
 
 ## Framework Choice
 

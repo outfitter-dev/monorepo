@@ -16,22 +16,15 @@ pnpm format:fix        # Auto-fix formatting
 
 ## Architecture
 
-Monorepo with 8 packages using pnpm workspaces. Build order:
-`contracts/typescript` first (zero deps), then others. Core packages:
-`contracts/typescript` (Result pattern utilities), `packlist` (config manager),
-`cli` (globally installable tool). Configuration packages: `eslint-config`,
-`typescript-config`, `husky-config`, `changeset-config`. Documentation:
-`fieldguides`.
+Monorepo with 8 packages using pnpm workspaces. Build order: `contracts/typescript` first (zero deps), then others. Core packages: `contracts/typescript` (Result pattern utilities), `packlist` (config manager), `cli` (globally installable tool). Configuration packages: `eslint-config`, `typescript-config`, `husky-config`, `changeset-config`. Documentation: `fieldguides`.
 
 ## Code Style
 
 - Always use pnpm, never npm/yarn
 - Result pattern mandatory for error handling:
-  `import { Result, success, failure, makeError } from '@outfitter/contracts'`
-- TypeScript strict mode, prefer `Array<T>` over `T[]`, no `I` prefix on
-  interfaces
+`import { Result, success, failure, makeError } from '@outfitter/contracts'`
+- TypeScript strict mode, prefer `Array<T>` over `T[]`, no `I` prefix on interfaces
 - Workspace dependencies use `workspace:*` protocol
 - Conventional commits: `type(scope): subject` (feat, fix, docs, etc.)
 - Tests in `src/__tests__/` directories, 80% coverage target (90% for critical)
-- Zero runtime dependencies in core libs, parse boundaries with proven libraries
-  (Zod/Joi/Yup), TSDoc for documentation
+- Zero runtime dependencies in core libs, parse boundaries with proven libraries (Zod/Joi/Yup), TSDoc for documentation

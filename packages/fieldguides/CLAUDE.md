@@ -1,7 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## About You
 
@@ -9,16 +8,11 @@ code in this repository.
 
 ## Project Overview
 
-Agent Outfitter (supplies) is a living documentation system that equips AI
-agents with consistent development practices across projects. Think of it as an
-outfitter preparing explorers for expeditions - providing guidebooks, templates,
-and wisdom (standards) for successful software development journeys.
+Agent Outfitter (supplies) is a living documentation system that equips AI agents with consistent development practices across projects. Think of it as an outfitter preparing explorers for expeditions - providing guidebooks, templates, and wisdom (standards) for successful software development journeys.
 
 ## Core Mission
 
-When working on this repository, you are the "outfitter" - responsible for
-maintaining and expanding the supplies that ensure AI agents operate with a
-unified vision across all projects. The documentation should be:
+When working on this repository, you are the "outfitter" - responsible for maintaining and expanding the supplies that ensure AI agents operate with a unified vision across all projects. The documentation should be:
 
 - **Highly opinionated** with strong defaults
 - **Living and evolving** based on real-world discoveries
@@ -66,18 +60,15 @@ When creating or updating guidebooks that will be used in external projects:
 
 When working on README, CLAUDE.md, or files in `docs/outfitter/`:
 
-1. Use adventure/exploration metaphors consistently (trails, expeditions, gear,
-   terrain, etc.)
+1. Use adventure/exploration metaphors consistently (trails, expeditions, gear, terrain, etc.)
 2. Maintain the outfitter persona - knowledgeable and encouraging
 3. Follow the guidelines in @docs/outfitter/LANGUAGE.md
 
-See @guidebooks/standards/documentation-standards.md for detailed documentation
-standards.
+See @guidebooks/standards/documentation-standards.md for detailed documentation standards.
 
 ## Current Documentation
 
-The guidebooks have been restructured with a flattened organization for better
-discoverability:
+The guidebooks have been restructured with a flattened organization for better discoverability:
 
 ### Universal Standards (Top Level)
 
@@ -87,63 +78,44 @@ discoverability:
 
 ### Standards Directory
 
-- **[TypeScript Standards](guidebooks/standards/typescript-standards.md)**: Core
-  TypeScript patterns and conventions
-- **[Testing Standards](guidebooks/standards/testing-standards.md)**:
-  Comprehensive testing methodology
-- **[Configuration Standards](guidebooks/standards/configuration-standards.md)**:
-  Environment and config patterns
-- **[Documentation Standards](guidebooks/standards/documentation-standards.md)**:
-  Writing clear documentation
-- **[React Component Standards](guidebooks/standards/react-component-standards.md)**:
-  Component design patterns
-- **[Monorepo Standards](guidebooks/standards/monorepo-standards.md)**: Monorepo
-  patterns
-- **[Deployment Standards](guidebooks/standards/deployment-standards.md)**:
-  CI/CD patterns
+- **[TypeScript Standards](guidebooks/standards/typescript-standards.md)**: Core TypeScript patterns and conventions
+- **[Testing Standards](guidebooks/standards/testing-standards.md)**: Comprehensive testing methodology
+- **[Configuration Standards](guidebooks/standards/configuration-standards.md)**: Environment and config patterns
+- **[Documentation Standards](guidebooks/standards/documentation-standards.md)**: Writing clear documentation
+- **[React Component Standards](guidebooks/standards/react-component-standards.md)**: Component design patterns
+- **[Monorepo Standards](guidebooks/standards/monorepo-standards.md)**: Monorepo patterns
+- **[Deployment Standards](guidebooks/standards/deployment-standards.md)**: CI/CD patterns
 
 ### Patterns Directory
 
-- **[React Patterns](guidebooks/patterns/react-patterns.md)**: React component
-  and hook patterns
-- **[Next.js Patterns](guidebooks/patterns/nextjs-patterns.md)**: Next.js
-  specific patterns
-- **[TypeScript Error Handling](guidebooks/patterns/typescript-error-handling.md)**:
-  Error handling patterns
-- **[TypeScript Validation](guidebooks/patterns/typescript-validation.md)**:
-  Validation patterns
-- **[TypeScript Utility Types](guidebooks/patterns/typescript-utility-types.md)**:
-  Advanced type patterns
-- **[Testing Patterns](guidebooks/patterns/testing-*.md)**: Various testing
-  pattern files
+- **[React Patterns](guidebooks/patterns/react-patterns.md)**: React component and hook patterns
+- **[Next.js Patterns](guidebooks/patterns/nextjs-patterns.md)**: Next.js specific patterns
+- **[TypeScript Error Handling](guidebooks/patterns/typescript-error-handling.md)**: Error handling patterns
+- **[TypeScript Validation](guidebooks/patterns/typescript-validation.md)**: Validation patterns
+- **[TypeScript Utility Types](guidebooks/patterns/typescript-utility-types.md)**: Advanced type patterns
+- **[Testing Patterns](guidebooks/patterns/testing-*.md)**: Various testing pattern files
 
 ### Guides Directory
 
-- **[React Hook Form](guidebooks/guides/react-hook-form.md)**: Form handling
-  guide
+- **[React Hook Form](guidebooks/guides/react-hook-form.md)**: Form handling guide
 - **[React Query](guidebooks/guides/react-query.md)**: Data fetching guide
 
 ### Operations Directory
 
-- **[Monitoring & Observability](guidebooks/operations/monitoring-observability.md)**:
-  Observability patterns
+- **[Monitoring & Observability](guidebooks/operations/monitoring-observability.md)**: Observability patterns
 
 ### Internal Guides
 
-- **Outfitter Language Guide** (`docs/outfitter/LANGUAGE.md`): Style guide for
-  expedition-themed internal documentation
+- **Outfitter Language Guide** (`docs/outfitter/LANGUAGE.md`): Style guide for expedition-themed internal documentation
 
 ## Development Workflow
 
 ### Version Control
 
 - **Never commit directly to main** - always use feature branches
-- **ALWAYS use conventional commits**: `<type>(<scope>): <subject>` (e.g.,
-  `feat(guidebooks): add Python standards`)
-  - **Required types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`,
-    `test`, `chore`
-  - **Scope**: Use specific area affected (e.g., `guidebooks`, `commands`,
-    `outfitter`)
+- **ALWAYS use conventional commits**: `<type>(<scope>): <subject>` (e.g., `feat(guidebooks): add Python standards`)
+  - **Required types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
+  - **Scope**: Use specific area affected (e.g., `guidebooks`, `commands`, `outfitter`)
   - **Subject**: Present tense, imperative mood, no capitalization, no period
   - **Examples**:
     - ✅ `feat(guidebooks): add Python conventions guide`
@@ -156,20 +128,17 @@ discoverability:
   - Write smaller, focused commits
   - Commit often, commit early
   - If `commit` fails, consider unsigned commits
-- **Before creating new branches**: Check for existing PRs or relevant feature
-  branches
+- **Before creating new branches**: Check for existing PRs or relevant feature branches
 
 ### Documentation Standards
 
 When updating guidebooks:
 
-- **Synchronize with reality**: Documentation must reflect actual patterns in
-  use
+- **Synchronize with reality**: Documentation must reflect actual patterns in use
 - **Include executable examples**: Code snippets should be tested and working
 - **Maintain consistency**: Follow existing heading hierarchies and formats
 - **Explain technical terms**: Link to canonical definitions when needed
-- **Structure**: Each guide should include purpose, usage, parameters, and
-  examples
+- **Structure**: Each guide should include purpose, usage, parameters, and examples
 
 ### Markdown Formatting
 
@@ -193,8 +162,7 @@ Key formatting rules:
 
 ### Code Principles
 
-You MUST follow the code principles in
-`@.claude/partials/principled-eng.partial.md`
+You MUST follow the code principles in `@.claude/partials/principled-eng.partial.md`
 
 When adding code examples or templates:
 
@@ -215,11 +183,7 @@ When adding code examples or templates:
 
 When documenting significant changes:
 
-- **Check for existing handoffs**: Look in `docs/project/handoffs/` for recent
-  related work
-- **Update existing handoffs**: If working on similar areas, update the existing
-  handoff rather than creating a new one
-- **Create new handoffs**: For distinct major changes, follow the naming
-  convention in @docs/project/handoffs/README.md
-- **See formatting guide**: @docs/project/handoffs/CLAUDE.md for detailed
-  handoff structure
+- **Check for existing handoffs**: Look in `docs/project/handoffs/` for recent related work
+- **Update existing handoffs**: If working on similar areas, update the existing handoff rather than creating a new one
+- **Create new handoffs**: For distinct major changes, follow the naming convention in @docs/project/handoffs/README.md
+- **See formatting guide**: @docs/project/handoffs/CLAUDE.md for detailed handoff structure

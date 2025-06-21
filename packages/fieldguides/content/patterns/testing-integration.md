@@ -11,8 +11,7 @@ Testing how multiple components work together, including external dependencies.
 
 ## Framework Choice
 
-Integration tests work with both Jest and Vitest. The main differences are in
-setup and mock handling.
+Integration tests work with both Jest and Vitest. The main differences are in setup and mock handling.
 
 ### Jest Setup
 

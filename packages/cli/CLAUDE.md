@@ -1,14 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
 
-This is the `outfitter` CLI package - a command-line tool for managing Outfitter
-supplies (development standards, patterns, and guides) in projects. It's part of
-the `@outfitter/monorepo` and provides commands to initialize projects,
-add/update supplies, and manage supply configurations (packlists).
+This is the `outfitter` CLI package - a command-line tool for managing Outfitter supplies (development standards, patterns, and guides) in projects. It's part of the `@outfitter/monorepo` and provides commands to initialize projects, add/update supplies, and manage supply configurations (packlists).
 
 ## Key Commands
 
@@ -51,8 +47,7 @@ pnpm dev list
 The CLI uses Commander.js and follows this pattern:
 
 - Entry point: `src/index.ts` - Sets up the main program and registers commands
-- Commands: `src/commands/` - Each command is a separate module exporting a
-  Command instance
+- Commands: `src/commands/` - Each command is a separate module exporting a Command instance
   - `init.ts` - Initialize projects with supplies
   - `add.ts` - Add supplies to existing projects
   - `list.ts` - List available/installed supplies
@@ -82,11 +77,9 @@ Projects using the CLI have a `.outfitter/` directory:
 
 ### Integration Points
 
-- The CLI consumes `@outfitter/packlist` as a library for core supply management
-  logic
+- The CLI consumes `@outfitter/packlist` as a library for core supply management logic
 - It references `@outfitter/fieldguides` for supply content and documentation
-- All packages use `@outfitter/contracts` for error handling with the Result
-  pattern
+- All packages use `@outfitter/contracts` for error handling with the Result pattern
 
 ## Development Patterns
 
@@ -106,8 +99,7 @@ try {
 ### User Feedback
 
 - Use `ora` for operations that might take time
-- Use `chalk` for colored output (red for errors, green for success, yellow for
-  warnings)
+- Use `chalk` for colored output (red for errors, green for success, yellow for warnings)
 - Use `inquirer` for interactive prompts when user input is needed
 
 ### Command Options
@@ -129,11 +121,7 @@ The CLI uses TypeScript with ES modules:
 ## Important Notes
 
 - The CLI will be globally installable via `npm install -g outfitter`
-- The `templates/` directory (currently empty) is intended for future file
-  templates
-- All file paths should use Node.js `path.join()` for cross-platform
-  compatibility
-- The CLI should work in any directory and manage its own `.outfitter/`
-  structure
-- Commands should provide clear error messages when prerequisites aren't met
-  (e.g., not initialized)
+- The `templates/` directory (currently empty) is intended for future file templates
+- All file paths should use Node.js `path.join()` for cross-platform compatibility
+- The CLI should work in any directory and manage its own `.outfitter/` structure
+- Commands should provide clear error messages when prerequisites aren't met (e.g., not initialized)

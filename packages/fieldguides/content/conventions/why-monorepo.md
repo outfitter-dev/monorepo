@@ -1,16 +1,13 @@
 ---
 slug: why-monorepo
 title: Why choose a monorepo architecture
-description:
-  Deep dive into the reasoning and benefits of monorepo architecture for modern
-  development teams.
+description: Deep dive into the reasoning and benefits of monorepo architecture for modern development teams.
 type: convention
 ---
 
 # Why Monorepo
 
-A deep exploration of when and why to choose monorepo architecture, based on
-real-world experience across various project scales.
+A deep exploration of when and why to choose monorepo architecture, based on real-world experience across various project scales.
 
 ## The Core Value Proposition
 
@@ -102,8 +99,7 @@ packages/
 - Updates to core affect all tools atomically
 - Single deployment pipeline for all tools
 
-**Real benefit**: When you fix a bug in the auth library, every tool gets the
-fix immediately - no waiting for downstream updates.
+**Real benefit**: When you fix a bug in the auth library, every tool gets the fix immediately - no waiting for downstream updates.
 
 ### Microservices with Shared Libraries
 
@@ -116,8 +112,7 @@ fix immediately - no waiting for downstream updates.
 - Service boundaries remain clear
 - Deployment can still be independent
 
-**Key insight**: Monorepo ≠ monolith. Services can deploy independently while
-sharing code at build time.
+**Key insight**: Monorepo ≠ monolith. Services can deploy independently while sharing code at build time.
 
 ## When Monorepo Struggles
 
@@ -132,13 +127,11 @@ sharing code at build time.
 - Permissions become all-or-nothing
 - Fork management is complex
 
-**Better approach**: Separate repos with clear boundaries and simple
-contribution paths.
+**Better approach**: Separate repos with clear boundaries and simple contribution paths.
 
 ### Radically Different Tech Stacks
 
-**Challenge**: iOS app (Swift), Android app (Kotlin), Backend (Go), Frontend
-(TypeScript)
+**Challenge**: iOS app (Swift), Android app (Kotlin), Backend (Go), Frontend (TypeScript)
 
 **Why it's hard**:
 
@@ -147,8 +140,7 @@ contribution paths.
 - CI complexity explodes
 - Developers rarely work across boundaries
 
-**Better approach**: Separate repos by tech stack, share via published packages
-or APIs.
+**Better approach**: Separate repos by tech stack, share via published packages or APIs.
 
 ### Regulated or Compliance-Heavy Code
 
@@ -161,8 +153,7 @@ or APIs.
 - Compliance tools may scan everything
 - Legal review of all code changes
 
-**Better approach**: Separate regulated services with strict access control and
-audit trails.
+**Better approach**: Separate regulated services with strict access control and audit trails.
 
 ## The Hidden Costs
 
@@ -221,8 +212,7 @@ Teams must think differently:
 
 ❌ **Strong autonomy needs** - Teams want full control
 
-❌ **Different deployment cadences** - Some projects release hourly, others
-quarterly
+❌ **Different deployment cadences** - Some projects release hourly, others quarterly
 
 ❌ **Security boundaries** - Some code needs restricted access
 
@@ -270,9 +260,7 @@ Track metrics that matter:
 
 ## Conclusion
 
-Monorepos are not universally better - they're a tool that excels in specific
-situations. The key is understanding whether your situation matches their
-strengths.
+Monorepos are not universally better - they're a tool that excels in specific situations. The key is understanding whether your situation matches their strengths.
 
 The best monorepo is one where:
 

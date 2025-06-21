@@ -14,16 +14,12 @@ Secure, reliable deployment practices for continuous delivery.
 - [GitHub Actions Patterns](../patterns/github-actions.md) - CI/CD workflows
 - [Security Scanning](../patterns/security-scanning.md) - Security in CI/CD
 - [Git Hooks](../patterns/git-hooks.md) - Pre-deployment checks
-- [Configuration Standards](./configuration-standards.md) - Environment
-  management
-- [Monitoring Standards](../operations/monitoring-observability.md) -
-  Post-deployment monitoring
+- [Configuration Standards](./configuration-standards.md) - Environment management
+- [Monitoring Standards](../operations/monitoring-observability.md) - Post-deployment monitoring
 - [Testing Standards](./testing-standards.md) - Testing in deployment pipelines
-- [Documentation Standards](./documentation-standards.md) - Deployment
-  documentation
+- [Documentation Standards](./documentation-standards.md) - Deployment documentation
 - [Monorepo Standards](./monorepo-standards.md) - Deploying from monorepos
-- [TypeScript Standards](./typescript-standards.md) - TypeScript build
-  configuration
+- [TypeScript Standards](./typescript-standards.md) - TypeScript build configuration
 
 ## Version Compatibility
 

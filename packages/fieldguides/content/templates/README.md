@@ -1,16 +1,13 @@
 ---
 slug: templates-index
 title: Templates
-description:
-  Copy, paste, and fill in the blanks. Opinionated starting points for common
-  needs
+description: Copy, paste, and fill in the blanks. Opinionated starting points for common needs.
 type: index
 ---
 
 # Templates
 
-Copy, paste, and fill in the blanks. Opinionated starting points for common
-needs.
+Copy, paste, and fill in the blanks. Opinionated starting points for common needs.
 
 ## What belongs here?
 

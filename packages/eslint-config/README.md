@@ -1,7 +1,6 @@
 # @outfitter/eslint-config
 
-> Shared ESLint configuration for consistent code quality across Outfitter
-> projects
+> Shared ESLint configuration for consistent code quality across Outfitter projects
 
 ## Installation
 
@@ -84,17 +83,13 @@ export default [
 
 ## Migration Guide
 
-For detailed instructions on migrating from legacy ESLint configuration to flat
-config, see the
-[ESLint Migration Guide](../../docs/migration/legacy-to-flat-config.md).
+For detailed instructions on migrating from legacy ESLint configuration to flat config, see the [ESLint Migration Guide](../../docs/migration/legacy-to-flat-config.md).
 
 ## Development
 
-This package is part of the
-[@outfitter/monorepo](https://github.com/outfitter-dev/monorepo) monorepo.
+This package is part of the [@outfitter/monorepo](https://github.com/outfitter-dev/monorepo) monorepo.
 
-See the [Development Guide](../../docs/contributing/development.md) for
-instructions on building, testing, and contributing to this package.
+See the [Development Guide](../../docs/contributing/development.md) for instructions on building, testing, and contributing to this package.
 
 ## License
 

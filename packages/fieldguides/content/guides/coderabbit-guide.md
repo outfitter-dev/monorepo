@@ -1,22 +1,17 @@
 ---
 slug: coderabbit-guide
 title: CodeRabbit Configuration Guide
-description:
-  Configure AI-powered code reviews that enforce your team's standards and catch
-  issues before they reach production.
+description: Configure AI-powered code reviews that enforce your team's standards and catch issues before they reach production.
 type: guide
 ---
 
 # CodeRabbit Configuration Guide
 
-Configure AI-powered code reviews that enforce your team's standards and catch
-issues before they reach production.
+Configure AI-powered code reviews that enforce your team's standards and catch issues before they reach production.
 
 ## OVERVIEW
 
-CodeRabbit = AI code reviewer → Automated PR feedback → Enforces standards →
-Catches issues early. This guide provides **actionable configurations** for
-different project types with structured output for AI implementation.
+CodeRabbit = AI code reviewer → Automated PR feedback → Enforces standards → Catches issues early. This guide provides **actionable configurations** for different project types with structured output for AI implementation.
 
 ## CONFIGURATION DECISION TREE
 
@@ -356,7 +351,7 @@ tone_instructions: |
   ### SEC-001 Fix:
   ```python
   # Replace line 45 in user.py
-  cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
 ````
 
   </details>

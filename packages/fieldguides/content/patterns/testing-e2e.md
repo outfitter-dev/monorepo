@@ -7,15 +7,12 @@ type: pattern
 
 # End-to-End Testing Patterns
 
-Modern end-to-end testing with Playwright for reliable, maintainable user
-workflow validation.
+Modern end-to-end testing with Playwright for reliable, maintainable user workflow validation.
 
 ## Related Documentation
 
-- [Playwright Guide](../guides/playwright-guide.md) - Comprehensive Playwright
-  setup
-- [Testing Standards](../standards/testing-standards.md) - Core testing
-  principles
+- [Playwright Guide](../guides/playwright-guide.md) - Comprehensive Playwright setup
+- [Testing Standards](../standards/testing-standards.md) - Core testing principles
 - [Testing Philosophy](../conventions/testing-philosophy.md) - Testing approach
 - [CI/CD Patterns](./github-actions.md) - E2E tests in pipelines
 

@@ -14,4 +14,4 @@ In any package within the monorepo, create a `biome.json` file and extend this s
 }
 ```
 
-This package also includes an ESLint "bridge" configuration for critical rules not yet covered by Biome. Scripts in the root `package.json` will automatically use this bridge. 
+This package also includes an ESLint "bridge" configuration for critical rules not yet covered by Biome. Scripts in the root `package.json` will automatically use this bridge.

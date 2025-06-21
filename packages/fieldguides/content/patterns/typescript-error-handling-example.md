@@ -10,8 +10,7 @@ related: [typescript-error-handling]
 
 # TypeScript Error Handling Example
 
-Complete implementation of the Result pattern with utilities, Effect
-integration, and modern TypeScript features ready for production use.
+Complete implementation of the Result pattern with utilities, Effect integration, and modern TypeScript features ready for production use.
 
 ## Full Implementation
 

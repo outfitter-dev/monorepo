@@ -1,15 +1,12 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 About you: @.agents/prompts/mode-max-eng.md
 
 ## Repository Overview
 
-This is the `@outfitter/monorepo` - a collection of shared configurations and
-utilities for Outfitter projects. It uses pnpm workspaces and contains 8
-packages that provide development tools, configurations, and coding standards.
+This is the `@outfitter/monorepo` - a collection of shared configurations and utilities for Outfitter projects. It uses pnpm workspaces and contains 8 packages that provide development tools, configurations, and coding standards.
 
 ## Key Commands
 
@@ -83,8 +80,7 @@ The monorepo follows a clear separation of concerns:
 
 1. **Core Libraries** (must build first):
 
-   - `contracts/typescript`: Zero-dependency utilities using Result pattern for
-     error handling (renamed from typescript-utils)
+   - `contracts/typescript`: Zero-dependency utilities using Result pattern for error handling (renamed from typescript-utils)
    - `packlist`: Configuration manager that orchestrates development setup
 
 2. **Configuration Packages** (shared configs):
@@ -95,10 +91,8 @@ The monorepo follows a clear separation of concerns:
    - `changeset-config`: Release management configuration
 
 3. **Tools & Documentation**:
-   - `cli`: Command-line tool (globally installable as `outfitter`) that
-     consumes packlist as a library
-   - `fieldguides`: Living documentation system with content in `content/`
-     subdirectory
+   - `cli`: Command-line tool (globally installable as `outfitter`) that consumes packlist as a library
+   - `fieldguides`: Living documentation system with content in `content/` subdirectory
 
 ### Build Order
 
@@ -157,8 +151,7 @@ The root `tsconfig.json` uses project references for incremental builds:
 Use conventional commits (enforced by commitlint):
 
 - Format: `type(scope): subject`
-- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`,
-  `ci`, `build`, `revert`
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
 - Example: `feat(cli): add update command for supplies`
 
 ### Code Style
@@ -179,16 +172,14 @@ Use conventional commits (enforced by commitlint):
 ### Package Publishing
 
 - All packages are published to npm under `@outfitter/` scope
-- Packages use `tsup` for building (except `cli` and `fieldguides` which use
-  `tsc`)
+- Packages use `tsup` for building (except `cli` and `fieldguides` which use `tsc`)
 - Both CJS and ESM formats are built for maximum compatibility
 
 ## Known Issues & Workarounds
 
 ### ESLint Warnings
 
-The project currently has ~200 ESLint warnings (mostly type safety warnings).
-These don't block functionality but should be addressed:
+The project currently has ~200 ESLint warnings (mostly type safety warnings). These don't block functionality but should be addressed:
 
 - Many `@typescript-eslint/no-unsafe-*` warnings due to `any` types
 - Array type syntax needs updating in some files
@@ -196,8 +187,7 @@ These don't block functionality but should be addressed:
 
 ### CJS/ESM Compatibility
 
-Some packages show warnings about `import.meta` in CJS builds. This is expected
-and doesn't affect functionality.
+Some packages show warnings about `import.meta` in CJS builds. This is expected and doesn't affect functionality.
 
 ## Package-Specific Notes
 

@@ -1,7 +1,12 @@
 import type { BiomeConfig, OutfitterConfig } from '../types/index.js';
 
 /**
- * Generates Biome configuration from OutfitterConfig
+ * Creates a Biome configuration object based on the provided OutfitterConfig.
+ *
+ * The generated configuration incorporates code style and strictness preferences, and applies any Biome-specific overrides from the input. Nested configuration objects such as formatter, linter, and JavaScript settings are merged to ensure that overrides are applied safely and correctly.
+ *
+ * @param config - The OutfitterConfig containing code style, strictness, and optional overrides
+ * @returns A BiomeConfig object reflecting the merged preferences and overrides
  */
 export function generateBiomeConfig(config: OutfitterConfig): BiomeConfig {
   const { codeStyle, strictness, overrides } = config;
@@ -73,11 +78,21 @@ export function generateBiomeConfig(config: OutfitterConfig): BiomeConfig {
       },
     },
     javascript: {
-      ...baseConfig.javascript,
-      ...biomeOverrides.javascript,
+      ...(baseConfig.javascript ?? {}),
+      ...(biomeOverrides.javascript ?? {}),
       formatter: {
-        ...(baseConfig.javascript?.formatter ?? {}),
-        ...(biomeOverrides.javascript?.formatter ?? {}),
+        ...(typeof baseConfig.javascript === 'object' &&
+        baseConfig.javascript !== null &&
+        'formatter' in baseConfig.javascript &&
+        typeof baseConfig.javascript.formatter === 'object'
+          ? baseConfig.javascript.formatter
+          : {}),
+        ...(typeof biomeOverrides.javascript === 'object' &&
+        biomeOverrides.javascript !== null &&
+        'formatter' in biomeOverrides.javascript &&
+        typeof biomeOverrides.javascript.formatter === 'object'
+          ? biomeOverrides.javascript.formatter
+          : {}),
       },
     },
   };

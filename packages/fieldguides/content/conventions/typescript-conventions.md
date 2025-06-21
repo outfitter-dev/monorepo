@@ -5,35 +5,28 @@ description: TypeScript configuration and coding conventions for all projects.
 type: convention
 category: typescript
 tags: [typescript, configuration, type-safety]
-related:
-  [typescript-error-handling, typescript-utility-types, typescript-validation]
+related: [typescript-error-handling, typescript-utility-types, typescript-validation]
 ---
 
 # TypeScript Conventions
 
-Essential TypeScript 5.7+ patterns, configuration, and best practices for
-maximum type safety and developer experience in 2025.
+Essential TypeScript 5.7+ patterns, configuration, and best practices for maximum type safety and developer experience in 2025.
 
 ## Related Documentation
 
-- [Error Handling Patterns](../patterns/typescript-error-handling.md) - Result
-  type and error management
-- [Utility Types](../patterns/typescript-utility-types.md) - Advanced type
-  manipulation
-- [Validation Patterns](../patterns/typescript-validation.md) - Runtime
-  validation with Zod
+- [Error Handling Patterns](../patterns/typescript-error-handling.md) - Result type and error management
+- [Utility Types](../patterns/typescript-utility-types.md) - Advanced type manipulation
+- [Validation Patterns](../patterns/typescript-validation.md) - Runtime validation with Zod
 
 ## Core Principles
 
 ### Type System Philosophy
 
-- **Derive types rather than duplicate** - Use TypeScript's utility types and
-  inference
+- **Derive types rather than duplicate** - Use TypeScript's utility types and inference
 - **Be explicit at boundaries** - Input/output types should be clearly defined
 - **Leverage type narrowing** - Use guards and predicates over casting
 - **Fail at compile time** - Catch errors before runtime
-- **Embrace strictness** - Every compiler flag that adds safety should be
-  enabled
+- **Embrace strictness** - Every compiler flag that adds safety should be enabled
 - **Types as documentation** - Well-named types are better than comments
 
 ### Quick Heuristics
@@ -811,8 +804,7 @@ setState(42); // Error: not assignable to string
 
 ## Summary
 
-These TypeScript conventions leverage 2025's cutting-edge features for maximum
-type safety:
+These TypeScript conventions leverage 2025's cutting-edge features for maximum type safety:
 
 - **TypeScript 5.7+** with all strict flags enabled
 - **Resource management** with `using` declarations

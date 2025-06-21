@@ -4,7 +4,7 @@ import { z } from 'zod';
  * Configuration schema for @outfitter/baselayer
  */
 
-export type SupportedTool = 'biome' | 'eslint' | 'prettier' | 'markdown-medic';
+export type SupportedTool = 'biome' | 'eslint' | 'prettier' | 'rightdown';
 
 export type FileType = 'typescript' | 'javascript' | 'json' | 'markdown' | 'css' | 'yaml';
 
@@ -53,8 +53,8 @@ export interface ToolOverrides {
   eslint?: ESLintConfig;
   /** Prettier-specific overrides using exact .prettierrc syntax */
   prettier?: PrettierConfig;
-  /** markdown-medic-specific overrides */
-  'markdown-medic'?: MdMedicConfig;
+  /** rightdown-specific overrides */
+  rightdown?: RightdownConfig;
 }
 
 // Tool-specific configuration types (simplified for now)
@@ -94,7 +94,7 @@ export interface PrettierConfig {
   [key: string]: unknown;
 }
 
-export interface MdMedicConfig {
+export interface RightdownConfig {
   /** Base preset to extend from */
   preset?: 'standard' | 'strict' | 'relaxed';
   /** Custom terminology corrections */
@@ -135,7 +135,7 @@ export const OutfitterConfigSchema = z
             typescript: z.enum(['biome', 'eslint']),
             javascript: z.enum(['biome', 'eslint']),
             json: z.enum(['biome', 'prettier']),
-            markdown: z.enum(['markdown-medic', 'prettier']),
+            markdown: z.enum(['rightdown', 'prettier']),
             css: z.literal('prettier'),
             yaml: z.literal('prettier'),
           })
@@ -175,7 +175,7 @@ export const OutfitterConfigSchema = z
         biome: z.record(z.unknown()),
         eslint: z.record(z.unknown()),
         prettier: z.record(z.unknown()),
-        'markdown-medic': z.record(z.unknown()),
+        rightdown: z.record(z.unknown()),
       })
       .partial()
       .optional(),
@@ -193,7 +193,7 @@ export const DEFAULT_CONFIG: OutfitterConfig = {
       typescript: 'biome',
       javascript: 'biome',
       json: 'biome',
-      markdown: 'markdown-medic',
+      markdown: 'rightdown',
       css: 'prettier',
       yaml: 'prettier',
     },

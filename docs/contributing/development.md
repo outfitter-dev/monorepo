@@ -1,7 +1,6 @@
 # Development Guide
 
-This guide covers development workflows for the Outfitter monorepo and all its
-packages.
+This guide covers development workflows for the Outfitter monorepo and all its packages.
 
 ## Prerequisites
 
@@ -276,9 +275,7 @@ pnpm changeset:publish
 
 ## Tips
 
-1. **Use workspace protocol**: Always use `workspace:*` for internal
-   dependencies
-2. **Run targeted commands**: Use `--filter` to run commands for specific
-   packages
+1. **Use the workspace protocol**: Always use `workspace:*` for internal dependencies
+2. **Run targeted commands**: Use `--filter` to run commands for specific packages
 3. **Leverage Turbo cache**: Build outputs are cached automatically
 4. **Check before pushing**: Always run `pnpm ci:local` before pushing

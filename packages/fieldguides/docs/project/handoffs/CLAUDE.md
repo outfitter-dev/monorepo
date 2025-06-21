@@ -1,7 +1,6 @@
 # Handoff Formatting Guide
 
-This guide provides the structure and formatting conventions for creating
-project handoff documents.
+This guide provides the structure and formatting conventions for creating project handoff documents.
 
 ## Template Structure
 
@@ -16,8 +15,7 @@ Every handoff should follow this structure:
 
 ## Context
 
-[Background information that led to this work] [Problem statement or
-requirements] [Links to related issues/PRs if applicable]
+[Background information that led to this work] [Problem statement or requirements] [Links to related issues/PRs if applicable]
 
 ## Key Changes
 
@@ -65,8 +63,7 @@ requirements] [Links to related issues/PRs if applicable]
 
 1. **Be Specific**: Include file paths, function names, and concrete examples
 2. **Explain Why**: Document not just what changed, but why decisions were made
-3. **Think Future**: Write for someone (including yourself) reading this months
-   later
+3. **Think Future**: Write for someone (including yourself) reading this months later
 4. **Include Examples**: Show code snippets for complex changes
 5. **List Commands**: Include any commands needed for migration or testing
 

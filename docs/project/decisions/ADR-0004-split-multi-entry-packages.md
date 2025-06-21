@@ -4,18 +4,9 @@ Date: 2025-06-10 Status: **Accepted**
 
 ## Context
 
-The original `@outfitter/contracts` package exposed a secondary export path
-`@outfitter/contracts/zod` to keep the core dependency-free while offering
-optional Zod utilities.  
-During our build-system investigation we learned that multi-entry packages
-conflict with TypeScript **project references** and complicate declaration
-generation with **tsup**. The additional indirection also confused consumers and
-hindered tree-shaking.
+The original `@outfitter/contracts` package exposed a secondary export path `@outfitter/contracts/zod` to keep the core dependency-free while offering optional Zod utilities. During our build-system investigation we learned that multi-entry packages conflict with TypeScript **project references** and complicate declaration generation with **tsup**. The additional indirection also confused consumers and hindered tree-shaking.
 
-Relevant analysis:
-[202506101749-monorepo-build-system-analysis](../handoffs/202506101749-monorepo-build-system-analysis.md)
-(§Multi-Entry Point Complexity) and the
-[Comprehensive Repository Review](../notes/202506101807-comprehensive-review.md).
+Relevant analysis: [202506101749-monorepo-build-system-analysis](../handoffs/202506101749-monorepo-build-system-analysis.md) (§Multi-Entry Point Complexity) and the [Comprehensive Repository Review](../notes/202506101807-comprehensive-review.md).
 
 ## Decision
 
@@ -24,20 +15,16 @@ We **split each secondary entry into its own first-class package**.
 - `@outfitter/contracts` → zero-dependency core (Result, AppError, types).
 - `@outfitter/contracts-zod` → Zod helpers that depend on the core.
 
-Future optional extensions (e.g., io-ts helpers) will use the same pattern:
-**one responsibility per npm package**.
+Future optional extensions (e.g., io-ts helpers) will use the same pattern: **one responsibility per npm package**.
 
 ## Consequences
 
 ### Positive
 
-1. **Simpler builds** – TypeScript project references no longer need to model
-   multi-entry output; `tsup` stays trivial.
-2. **Clear dependencies** – Consumers explicitly opt into Zod by installing
-   `@outfitter/contracts-zod`.
+1. **Simpler builds** – TypeScript project references no longer need to model multi-entry output; `tsup` stays trivial.
+2. **Clear dependencies** – Consumers explicitly opt into Zod by installing `@outfitter/contracts-zod`.
 3. **Better tree-shaking** – No accidental inclusion of Zod in core bundles.
-4. **Peer-dependency confusion eliminated** – Core remains zero-dep; extension
-   owns its deps.
+4. **Peer-dependency confusion eliminated** – Core remains zero-dep; extension owns its deps.
 
 ### Negative / Mitigations
 

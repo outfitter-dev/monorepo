@@ -1,7 +1,6 @@
 # @outfitter/packlist
 
-> Unified development configuration manager that orchestrates all Outfitter
-> development tools
+> Unified development configuration manager that orchestrates all Outfitter development tools
 
 ## Installation
 
@@ -13,16 +12,12 @@ pnpm add -D @outfitter/packlist
 
 ## Overview
 
-Packlist is the central configuration manager for Outfitter projects. It brings
-together all the individual configuration packages (`eslint-config`,
-`typescript-config`, `husky-config`, etc.) and provides a unified interface for
-managing your development environment.
+Packlist is the central configuration manager for Outfitter projects. It brings together all the individual configuration packages (`eslint-config`, `typescript-config`, `husky-config`, etc.) and provides a unified interface for managing your development environment.
 
 ## Features
 
 - **Unified Setup**: Single command to configure all development tools
-- **Configuration Discovery**: Automatically detects and manages config
-  dependencies
+- **Configuration Discovery**: Automatically detects and manages config dependencies
 - **CLI Interface**: Command-line tool for easy project initialization
 - **Programmatic API**: Use as a library in your build scripts
 - **Result Pattern**: Built on `@outfitter/contracts` for robust error handling
@@ -133,15 +128,11 @@ Packlist creates a `.packlist.json` file to track your project's configuration:
 
 ## Development
 
-This package is part of the
-[@outfitter/monorepo](https://github.com/outfitter-dev/monorepo) monorepo.
+This package is part of the [@outfitter/monorepo](https://github.com/outfitter-dev/monorepo) monorepo.
 
-See the [Development Guide](../../docs/contributing/development.md) for
-instructions on building, testing, and contributing to this package.
+See the [Development Guide](../../docs/contributing/development.md) for instructions on building, testing, and contributing to this package.
 
-For architectural details about how this package relates to `@outfitter/cli`,
-see
-[CLI and Packlist Architecture](../../docs/architecture/cli-and-packlist.md).
+For architectural details about how this package relates to `@outfitter/cli`, see [CLI and Packlist Architecture](../../docs/architecture/cli-and-packlist.md).
 
 ## License
 

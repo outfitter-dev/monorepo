@@ -4,7 +4,7 @@ export type {
   CodeStyle,
   ESLintConfig,
   FileType,
-  MdMedicConfig,
+  RightdownConfig,
   OutfitterConfig,
   PartialOutfitterConfig,
   PrettierConfig,

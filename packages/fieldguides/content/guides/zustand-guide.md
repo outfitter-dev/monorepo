@@ -7,14 +7,11 @@ type: guide
 
 # Zustand Guide
 
-Modern, lightweight state management with TypeScript-first patterns and minimal
-boilerplate.
+Modern, lightweight state management with TypeScript-first patterns and minimal boilerplate.
 
 ## Overview
 
-Zustand provides a small, fast, and scalable state management solution that
-doesn't wrap your app in providers. It's TypeScript-ready out of the box with
-excellent inference.
+Zustand provides a small, fast, and scalable state management solution that doesn't wrap your app in providers. It's TypeScript-ready out of the box with excellent inference.
 
 ## Installation
 

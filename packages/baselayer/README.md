@@ -48,7 +48,7 @@ pnpm add -D @biomejs/biome eslint prettier
       "typescript": "biome",
       "javascript": "biome", 
       "json": "biome",
-      "markdown": "markdown-medic",
+      "markdown": "rightdown",
       "css": "prettier",
       "yaml": "prettier"
     },
@@ -103,7 +103,7 @@ Choose which tool handles which file types:
       "typescript": "biome",   // or "eslint"
       "javascript": "biome",   // or "eslint" 
       "json": "biome",         // or "prettier"
-      "markdown": "markdown-medic",  // or "prettier"
+      "markdown": "rightdown",  // or "prettier"
       "css": "prettier",       // only prettier supported
       "yaml": "prettier"       // only prettier supported
     }
@@ -159,7 +159,7 @@ Based on your configuration, baselayer generates:
 - `biome.json` - Biome configuration
 - `eslint.config.js` - ESLint bridge for gap coverage
 - `.prettierrc` - Prettier configuration (when needed)
-- `.mdmedic.config.jsonc` - markdown-medic configuration (when needed)
+- `.rightdown.config.jsonc` - rightdown configuration (when needed)
 - `.vscode/settings.json` - VS Code/Cursor settings
 - Updates `package.json` scripts
 
@@ -213,7 +213,7 @@ outfitter equip --baselayer
 After setup, use the generated scripts:
 
 ```bash
-pnpm lint      # Biome + ESLint bridge + markdown-medic (as configured)
+pnpm lint      # Biome + ESLint bridge + rightdown (as configured)
 pnpm format    # Biome + Prettier (as needed)
 pnpm lint:fix  # Auto-fix all issues (including markdown)
 ```

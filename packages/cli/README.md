@@ -1,7 +1,6 @@
 # Outfitter
 
-> Command-line tool for equipping your development journey with configurations
-> and fieldguides.
+> Command-line tool for equipping your development journey with configurations and fieldguides.
 
 ## Installation
 
@@ -185,23 +184,19 @@ outfitter pack import frontend-standard.json
 
 ## Integration with AI Assistants
 
-Use the `--with-claude` flag during initialization to create a `CLAUDE.md` file
-that references your installed supplies:
+Use the `--with-claude` flag during initialization to create a `CLAUDE.md` file that references your installed supplies:
 
 ```bash
 outfitter init --preset react --with-claude
 ```
 
-This creates a CLAUDE.md that helps AI assistants understand your project's
-standards and patterns.
+This creates a CLAUDE.md that helps AI assistants understand your project's standards and patterns.
 
 ## Development
 
-This package is part of the
-[Outfitter monorepo](https://github.com/outfitter-dev/monorepo).
+This package is part of the [Outfitter monorepo](https://github.com/outfitter-dev/monorepo).
 
-See the [Development Guide](../../docs/contributing/development.md) for
-instructions on building, testing, and contributing to this package.
+See the [Development Guide](../../docs/contributing/development.md) for instructions on building, testing, and contributing to this package.
 
 ## Roadmap
 

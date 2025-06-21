@@ -7,49 +7,37 @@ type: convention
 
 # TypeScript Standards
 
-Essential TypeScript patterns, configuration, and best practices for type-safe
-development.
+Essential TypeScript patterns, configuration, and best practices for type-safe development.
 
 ## Related Documentation
 
-- [Error Handling Patterns](../patterns/typescript-error-handling.md) - Result
-  type and error management
-- [Utility Types](../patterns/typescript-utility-types.md) - Advanced type
-  manipulation
-- [Validation Patterns](../patterns/typescript-validation.md) - Runtime
-  validation with Zod
-- [Configuration Standards](./configuration-standards.md) - TypeScript in
-  environment configs
-- [React Component Standards](./react-component-standards.md) - TypeScript with
-  React components
+- [Error Handling Patterns](../patterns/typescript-error-handling.md) - Result type and error management
+- [Utility Types](../patterns/typescript-utility-types.md) - Advanced type manipulation
+- [Validation Patterns](../patterns/typescript-validation.md) - Runtime validation with Zod
+- [Configuration Standards](./configuration-standards.md) - TypeScript in environment configs
+- [React Component Standards](./react-component-standards.md) - TypeScript with React components
 - [Testing Standards](./testing-standards.md) - Type-safe testing patterns
 - [Monorepo Standards](./monorepo-standards.md) - TypeScript in monorepos
-- [Documentation Standards](./documentation-standards.md) - TypeScript code
-  documentation
+- [Documentation Standards](./documentation-standards.md) - TypeScript code documentation
 
 ## Version Compatibility
 
 This guide requires:
 
 - TypeScript: 5.7+ (for const type parameters, satisfies operator, NoInfer
-  utility, and import attributes)
+utility, and import attributes)
 - Node.js: 18+ (for ES2022 features)
 - ESLint: 9.0+ (for flat config format)
 
 **Features by TypeScript version**:
 
-- 4.9+: `satisfies` operator
-- 5.0+: Const type parameters, `allowImportingTsExtensions`
-- 5.3+: Import attributes
-- 5.4+: `NoInfer` utility type
-- 5.7+: `moduleResolution: "bundler"`, improved const generics
+- TypeScript: 5.7+ (for const type parameters, satisfies operator, NoInfer utility, and import attributes)
 
 ## Core Principles
 
 ### Type System Philosophy
 
-- **Derive types rather than duplicate** - Use TypeScript's utility types and
-  inference
+- **Derive types rather than duplicate** - Use TypeScript's utility types and inference
 - **Be explicit at boundaries** - Input/output types should be clearly defined
 - **Leverage type narrowing** - Use guards over casting
 - **Fail at compile time** - Catch errors before runtime
@@ -780,8 +768,7 @@ function legacy(data: any) { // eslint-disable-line @typescript-eslint/no-explic
 
 ## Summary
 
-These TypeScript standards ensure type safety, maintainability, and developer
-productivity. Key principles:
+These TypeScript standards ensure type safety, maintainability, and developer productivity. Key principles:
 
 - **Maximum strictness** in configuration for new projects
 - **Security-first** patterns with opaque types and validation
@@ -791,5 +778,4 @@ productivity. Key principles:
 - **Leverage TypeScript's type system** fully
 - **Consistent patterns** across the codebase
 
-Remember: The goal is to catch errors at compile time, not runtime, while
-maintaining flexibility for different project needs and TypeScript versions.
+Remember: The goal is to catch errors at compile time, not runtime, while maintaining flexibility for different project needs and TypeScript versions.

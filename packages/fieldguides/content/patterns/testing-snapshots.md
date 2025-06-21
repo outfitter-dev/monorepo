@@ -7,8 +7,7 @@ type: pattern
 
 # Snapshot Testing Patterns
 
-Strategic snapshot testing that balances UI consistency checks with
-maintainability.
+Strategic snapshot testing that balances UI consistency checks with maintainability.
 
 ## Related Documentation
 

@@ -1,20 +1,14 @@
 # AGENTS.md
 
-This file provides guidance to OpenAI Codex Agent when working with code in this
-repository.
+This file provides guidance to OpenAI Codex Agent when working with code in this repository.
 
 ## Project Overview
 
-Agent Outfitter (mg-outfitter) is a living documentation system that equips AI
-agents with consistent development practices across projects. It provides
-comprehensive fieldguides, templates, and standards to ensure all agents operate
-with unified patterns.
+Agent Outfitter (mg-outfitter) is a living documentation system that equips AI agents with consistent development practices across projects. It provides comprehensive fieldguides, templates, and standards to ensure all agents operate with unified patterns.
 
 ## Core Mission
 
-You are working on a documentation system that helps AI agents maintain
-consistency across software projects. The fieldguides you help maintain are used
-by other AI agents in their development work.
+You are working on a documentation system that helps AI agents maintain consistency across software projects. The fieldguides you help maintain are used by other AI agents in their development work.
 
 ## Repository Structure
 

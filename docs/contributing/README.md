@@ -4,8 +4,7 @@ Welcome to the Outfitter monorepo contributing guide!
 
 ## Guides
 
-- [Development Guide](development.md) - Setup, building, testing, and
-  development workflow
+- [Development Guide](development.md) - Setup, building, testing, and development workflow
 
 ## Quick Links
 

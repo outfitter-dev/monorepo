@@ -2,8 +2,7 @@
 
 ## Overview
 
-This document defines how packages in the Outfitter monorepo are organized,
-their responsibilities, and their interaction patterns.
+This document defines how packages in the Outfitter monorepo are organized, their responsibilities, and their interaction patterns.
 
 ## Package Categories
 
@@ -156,15 +155,12 @@ Consider consolidating packages when:
 
 ### The "Common" Package
 
-Avoid creating generic packages like `@outfitter/common` or `@outfitter/shared`
-that become dumping grounds for unrelated utilities.
+Avoid creating generic packages like `@outfitter/common` or `@outfitter/shared` that become dumping grounds for unrelated utilities.
 
 ### Over-Extraction
 
-Don't extract packages for single functions or utilities used by only one
-consumer. Keep code where it's used until extraction criteria are met.
+Don't extract packages for single functions or utilities used by only one consumer. Keep code where it's used until extraction criteria are met.
 
 ### Tech-Stack Packages
 
-Avoid organizing by technology (`@outfitter/react-stuff`,
-`@outfitter/node-stuff`). Organize by domain and purpose instead.
+Avoid organizing by technology (`@outfitter/react-stuff`, `@outfitter/node-stuff`). Organize by domain and purpose instead.

@@ -7,18 +7,14 @@ type: guide
 
 # Next.js Patterns
 
-Server-side rendering, routing, and deployment patterns for Next.js 15
-applications with App Router, Server Components, and modern features.
+Server-side rendering, routing, and deployment patterns for Next.js 15 applications with App Router, Server Components, and modern features.
 
 ## Related Documentation
 
 - [React Patterns](./react-patterns.md) - Modern React patterns
-- [TypeScript Standards](../standards/typescript-standards.md) - Type-safe
-  Next.js
-- [Performance Optimization](./performance-optimization.md) - Next.js
-  performance
-- [Deployment Standards](../standards/deployment-standards.md) - Deployment best
-  practices
+- [TypeScript Standards](../standards/typescript-standards.md) - Type-safe Next.js
+- [Performance Optimization](./performance-optimization.md) - Next.js performance
+- [Deployment Standards](../standards/deployment-standards.md) - Deployment best practices
 
 ## App Router Patterns
 

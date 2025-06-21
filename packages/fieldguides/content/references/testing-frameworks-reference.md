@@ -7,8 +7,7 @@ type: reference
 
 # Testing Frameworks Reference
 
-Comprehensive guide for selecting and configuring JavaScript/TypeScript testing
-frameworks with detailed comparisons and migration strategies.
+Comprehensive guide for selecting and configuring JavaScript/TypeScript testing frameworks with detailed comparisons and migration strategies.
 
 ## Framework Comparison Matrix
 
@@ -33,8 +32,7 @@ frameworks with detailed comparisons and migration strategies.
 
 ### Vitest (Recommended for New Projects)
 
-Fast, TypeScript-first testing framework built on Vite with excellent developer
-experience.
+Fast, TypeScript-first testing framework built on Vite with excellent developer experience.
 
 **Pros:**
 
@@ -401,13 +399,9 @@ export default {
 
 ## Related Documentation
 
-- [Testing Philosophy](../conventions/testing-philosophy.md) - Core testing
-  principles
-- [Test Organization](../conventions/testing-organization.md) - Structuring test
-  files
+- [Testing Philosophy](../conventions/testing-philosophy.md) - Core testing principles
+- [Test Organization](../conventions/testing-organization.md) - Structuring test files
 - [Unit Testing Patterns](../patterns/testing-unit.md) - Writing unit tests
-- [Framework Agnostic Testing](../patterns/framework-agnostic-testing.md) -
-  Cross-framework patterns
+- [Framework Agnostic Testing](../patterns/framework-agnostic-testing.md) - Cross-framework patterns
 - [Vitest Guide](../guides/vitest-guide.md) - Complete Vitest setup
-- [Testing Standards](../standards/testing-standards.md) - Testing best
-  practices
+- [Testing Standards](../standards/testing-standards.md) - Testing best practices

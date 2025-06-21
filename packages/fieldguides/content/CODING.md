@@ -1,17 +1,13 @@
 # Universal Coding Standards
 
-Core principles and practices that apply across all languages, frameworks, and
-projects. These standards establish a foundation for maintainable, secure, and
-performant software development in 2025 and beyond.
+Core principles and practices that apply across all languages, frameworks, and projects. These standards establish a foundation for maintainable, secure, and performant software development in 2025 and beyond.
 
 ## Related Standards
 
 - [Testing Standards](./TESTING.md) - Test-driven development practices
 - [Security Standards](./SECURITY.md) - Security-first development
-- [TypeScript Standards](./standards/typescript-standards.md) - Type safety
-  patterns
-- [Documentation Standards](./standards/documentation-standards.md) - Clear
-  documentation
+- [TypeScript Standards](./standards/typescript-standards.md) - Type safety patterns
+- [Documentation Standards](./standards/documentation-standards.md) - Clear documentation
 
 ## Foundational Design Principles
 
@@ -401,8 +397,7 @@ See [Security Standards](./SECURITY.md) for comprehensive security practices.
 
 ## Summary
 
-These universal coding standards provide a foundation for building high-quality
-software in 2025 and beyond. They emphasize:
+These universal coding standards provide a foundation for building high-quality software in 2025 and beyond. They emphasize:
 
 - **Security and reliability** as fundamental requirements
 - **AI collaboration** as a force multiplier for development
@@ -410,5 +405,4 @@ software in 2025 and beyond. They emphasize:
 - **Performance and user experience** as key metrics
 - **Continuous improvement** through automation and monitoring
 
-Apply these principles thoughtfully, adapting them to your specific context
-while maintaining the core values of simplicity, security, and maintainability.
+Apply these principles thoughtfully, adapting them to your specific context while maintaining the core values of simplicity, security, and maintainability.

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -6,10 +7,24 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "allowJs": true,
+
+    // Strict type checking options
     "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    // Module resolution and interop
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+
+    // Declaration and output options
     "declaration": true,
     "declarationMap": true,
     "composite": true,
@@ -19,7 +34,7 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"],
+  "exclude": ["dist", "node_modules", "src/**/*.test.ts", "src/**/*.test.tsx"],
   "references": [
     {
       "path": "../contracts/typescript"

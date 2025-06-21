@@ -7,28 +7,19 @@ type: guide
 
 # TanStack Query v5 Integration
 
-Type-safe data fetching and state management with @tanstack/react-query v5 and
-the Result pattern.
+Type-safe data fetching and state management with @tanstack/react-query v5 and the Result pattern.
 
 ## Related Documentation
 
-- [Error Handling Patterns](../patterns/typescript-error-handling.md) - Result
-  type integration
-- [React Standards](../patterns/react-patterns.md) - React patterns and best
-  practices
-- [Testing React Components](../patterns/testing-react-components.md) - Testing
-  data fetching
-- [TypeScript Standards](../standards/typescript-standards.md) - Type safety
-  patterns
-- [React Component Standards](../standards/react-component-standards.md) -
-  Component integration
+- [Error Handling Patterns](../patterns/typescript-error-handling.md) - Result type integration
+- [React Standards](../patterns/react-patterns.md) - React patterns and best practices
+- [Testing React Components](../patterns/testing-react-components.md) - Testing data fetching
+- [TypeScript Standards](../standards/typescript-standards.md) - Type safety patterns
+- [React Component Standards](../standards/react-component-standards.md) - Component integration
 
 ## Overview
 
-TanStack Query v5 provides powerful asynchronous state management for React
-applications. When combined with the Result pattern, it creates a robust,
-type-safe data fetching layer that handles loading states, errors, and caching
-elegantly.
+TanStack Query v5 provides powerful asynchronous state management for React applications. When combined with the Result pattern, it creates a robust, type-safe data fetching layer that handles loading states, errors, and caching elegantly.
 
 ## Setup
 
@@ -44,13 +35,11 @@ npm install @tanstack/react-query@^5
 - `useErrorBoundary` renamed to `throwOnError`
 - Query functions now receive a single object parameter
 - `isLoading` split into `isLoading` and `isFetching`
-- `placeholderData` identity function receives `previousData` and `query` as
-  parameters
+- `placeholderData` identity function receives `previousData` and `query` as parameters
 
 ## Query Key Factory
 
-Consistent, type-safe query keys prevent cache conflicts and enable precise
-invalidation:
+Consistent, type-safe query keys prevent cache conflicts and enable precise invalidation:
 
 ```typescript
 // Query key factory for consistency and type safety

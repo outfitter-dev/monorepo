@@ -2,14 +2,11 @@
 
 ## Summary
 
-Create "quick start" minimal guides in the `/guides` directory that provide
-entry points to deeper documentation. These guides should be named
-`<subject>-guide.md` and serve as concise starting points for developers.
+Create "quick start" minimal guides in the `/guides` directory that provide entry points to deeper documentation. These guides should be named `<subject>-guide.md` and serve as concise starting points for developers.
 
 ## Background
 
-Currently, the `/guides` directory contains library-specific implementation
-guides (React Hook Form, React Query, etc.). We need to add minimal guides that:
+Currently, the `/guides` directory contains library-specific implementation guides (React Hook Form, React Query, etc.). We need to add minimal guides that:
 
 - Provide quick-start information for common topics
 - Link out to more detailed patterns, standards, and conventions

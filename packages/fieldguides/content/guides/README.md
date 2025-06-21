@@ -1,16 +1,13 @@
 ---
 slug: guides-index
 title: Guides
-description:
-  Terse, comprehensive, opinionated, and prescriptive guides. If you only read
-  ONE document about a topic, read these
+description: Terse, comprehensive, opinionated, and prescriptive guides. If you only read ONE document about a topic, read these
 type: index
 ---
 
 # Guides
 
-If you only read ONE document about a topic, read these. Terse, comprehensive,
-opinionated, and prescriptive.
+If you only read ONE document about a topic, read these. Terse, comprehensive, opinionated, and prescriptive.
 
 ## What belongs here?
 

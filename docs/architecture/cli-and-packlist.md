@@ -1,16 +1,12 @@
 # CLI and Packlist Architecture
 
-This document explains the relationship between `@outfitter/cli` and
-`@outfitter/packlist`, and how they work together to provide a complete
-configuration management system.
+This document explains the relationship between `@outfitter/cli` and `@outfitter/packlist`, and how they work together to provide a complete configuration management system.
 
 ## Overview
 
-The Outfitter monorepo contains two complementary packages for configuration
-management:
+The Outfitter monorepo contains two complementary packages for configuration management:
 
-- **`@outfitter/cli`**: User-facing command-line interface (the `outfitter`
-  command)
+- **`@outfitter/cli`**: User-facing command-line interface (the `outfitter` command)
 - **`@outfitter/packlist`**: Core configuration engine and programmatic API
 
 ## Architecture Design
@@ -150,8 +146,7 @@ Preset Selection → Feature Flags → Dependency Graph → Installation Order
 ### CLI Design Principles
 
 1. **Thin command layer**: Commands should be simple orchestrators
-2. **Rich user experience**: Interactive prompts, progress indicators, colored
-   output
+2. **Rich user experience**: Interactive prompts, progress indicators, colored output
 3. **Graceful degradation**: Work in various terminal environments
 4. **Global installation**: Must work when installed globally
 
@@ -266,5 +261,4 @@ The separation between CLI and Packlist provides:
 4. **Flexibility**: CLI can be replaced without changing core logic
 5. **Type safety**: Result pattern ensures error handling
 
-This architecture allows the Outfitter monorepo to provide both an excellent
-user experience through the CLI and a robust programmatic API through Packlist.
+This architecture allows the Outfitter monorepo to provide both an excellent user experience through the CLI and a robust programmatic API through Packlist.

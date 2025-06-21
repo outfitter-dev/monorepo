@@ -1,14 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
 
-This is the `@outfitter/packlist` package - a unified development configuration
-manager for Outfitter projects. It orchestrates the installation and
-configuration of other Outfitter packages (ESLint, TypeScript, utilities) and
-provides both a CLI and programmatic API for project setup.
+This is the `@outfitter/packlist` package - a unified development configuration manager for Outfitter projects. It orchestrates the installation and configuration of other Outfitter packages (ESLint, TypeScript, utilities) and provides both a CLI and programmatic API for project setup.
 
 ## Key Commands
 
@@ -50,8 +46,7 @@ packlist init --force --no-eslint
 
 ### Core Functionality
 
-- **Project Initialization**: Sets up ESLint, TypeScript, and other
-  configurations
+- **Project Initialization**: Sets up ESLint, TypeScript, and other configurations
 - **Package Manager Detection**: Automatically detects npm, yarn, or pnpm
 - **Configuration Generation**: Creates config files for various tools
 - **Dependency Management**: Installs required Outfitter packages

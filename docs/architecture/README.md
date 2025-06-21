@@ -5,13 +5,11 @@ This directory contains architectural documentation for the Outfitter monorepo.
 ## Contents
 
 - [Monorepo Design](monorepo-design.md) - Core monorepo architecture decisions
-- [Package Boundaries](package-boundaries.md) - How packages are organized and
-  interact
+- [Package Boundaries](package-boundaries.md) - How packages are organized and interact
 
 ## Purpose
 
-Architecture documents capture the "why" behind our technical decisions. They
-differ from standards and conventions by focusing on:
+Architecture documents capture the "why" behind our technical decisions. They differ from standards and conventions by focusing on:
 
 - System design rationale
 - Trade-off analysis

@@ -1,18 +1,13 @@
 # Universal Security Standards
 
-Essential security principles and practices that apply across all projects and
-technologies. These standards establish a security-first development mindset for
-2025 and beyond, addressing modern threats and leveraging contemporary security
-tools.
+Essential security principles and practices that apply across all projects and technologies. These standards establish a security-first development mindset for 2025 and beyond, addressing modern threats and leveraging contemporary security tools.
 
 ## Related Standards
 
 - [Coding Standards](./CODING.md) - Secure coding practices
 - [Testing Standards](./TESTING.md) - Security testing requirements
-- [TypeScript Standards](./standards/typescript-standards.md) - Type-safe
-  security patterns
-- [Configuration Standards](./standards/configuration-standards.md) - Secure
-  configuration
+- [TypeScript Standards](./standards/typescript-standards.md) - Type-safe security patterns
+- [Configuration Standards](./standards/configuration-standards.md) - Secure configuration
 
 ## Foundational Security Principles
 
@@ -114,8 +109,7 @@ tools.
 ### Storage Practices
 
 - Never commit secrets to version control (use pre-commit hooks)
-- Use dedicated secret management tools (HashiCorp Vault, AWS Secrets Manager,
-  1Password)
+- Use dedicated secret management tools (HashiCorp Vault, AWS Secrets Manager, 1Password)
 - Encrypt secrets at rest and in transit
 - Separate secrets by environment and principle of least access
 - Use secret scanning tools in CI/CD (GitGuardian, TruffleHog)
@@ -397,10 +391,7 @@ tools.
 
 ## Summary
 
-Security is not a feature but a fundamental requirement that must be integrated
-into every aspect of modern software development. These standards provide a
-comprehensive baseline for secure software development and operations in 2025
-and beyond.
+Security is not a feature but a fundamental requirement that must be integrated into every aspect of modern software development. These standards provide a comprehensive baseline for secure software development and operations in 2025 and beyond.
 
 Key principles for modern security:
 
@@ -408,12 +399,8 @@ Key principles for modern security:
 - **Zero trust**: Never trust, always verify at every layer
 - **Continuous monitoring**: Security is an ongoing process, not a checkpoint
 - **Automation first**: Automate security wherever possible for consistency
-- **Shared responsibility**: Security is everyone's responsibility, not just the
-  security team
+- **Shared responsibility**: Security is everyone's responsibility, not just the security team
 - **Adaptive defense**: Security must evolve with threats and new attack vectors
 - **Defense in depth**: Multiple layers of security controls at every level
 
-Remember: Security requires constant vigilance, continuous learning, and
-proactive adaptation to emerging threats and technologies. The goal is not
-perfect security but resilient systems that can detect, respond to, and recover
-from security incidents quickly.
+Remember: Security requires constant vigilance, continuous learning, and proactive adaptation to emerging threats and technologies. The goal is not perfect security but resilient systems that can detect, respond to, and recover from security incidents quickly.

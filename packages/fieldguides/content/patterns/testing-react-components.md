@@ -7,24 +7,18 @@ type: pattern
 
 # React Testing Library Patterns
 
-Testing React components with @testing-library/react, focusing on user behavior
-and accessibility.
+Testing React components with @testing-library/react, focusing on user behavior and accessibility.
 
 ## Related Documentation
 
-- [React Component Standards](../standards/react-component-standards.md) -
-  Component architecture
+- [React Component Standards](../standards/react-component-standards.md) - Component architecture
 - [Testing Standards](../standards/testing-standards.md) - Testing fundamentals
 - [React Patterns](./react-patterns.md) - Component patterns
-- [TypeScript Standards](../standards/typescript-standards.md) - Type-safe
-  testing
+- [TypeScript Standards](../standards/typescript-standards.md) - Type-safe testing
 
 ## Overview
 
-React Testing Library encourages testing components the way users interact with
-them, rather than testing implementation details. This approach leads to more
-maintainable tests that give confidence your components work correctly from a
-user's perspective.
+React Testing Library encourages testing components the way users interact with them, rather than testing implementation details. This approach leads to more maintainable tests that give confidence your components work correctly from a user's perspective.
 
 ## Framework Setup
 
@@ -887,10 +881,8 @@ describe('Optimistic Updates', () => {
 1. **Query by Accessibility**: Use roles, labels, and text that users see
 2. **Avoid Implementation Details**: Don't test state, test behavior
 3. **Use userEvent**: Simulates real user interactions more accurately than
-   fireEvent
+fireEvent
 4. **Wait for Async**: Use waitFor and find\* queries for async operations
-5. **Test User Flows**: Write tests that mirror how users actually use the
-   component
-6. **Mock at Boundaries**: Mock API calls and external dependencies, not
-   internal functions
+5. **Test User Flows**: Write tests that mirror how users actually use the component
+6. **Mock at Boundaries**: Mock API calls and external dependencies, not internal functions
 7. **Maintain Test Utilities**: Create helpers for common test scenarios

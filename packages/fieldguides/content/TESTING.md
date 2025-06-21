@@ -1,17 +1,13 @@
 # Universal Testing Standards
 
-Core testing principles and requirements that apply across all projects,
-languages, and frameworks. These standards ensure comprehensive test coverage
-while supporting modern development practices including AI agent collaboration.
+Core testing principles and requirements that apply across all projects, languages, and frameworks. These standards ensure comprehensive test coverage while supporting modern development practices including AI agent collaboration.
 
 ## Related Standards
 
 - [Coding Standards](./CODING.md) - Test-driven development integration
 - [Security Standards](./SECURITY.md) - Security testing practices
-- [TypeScript Standards](./standards/typescript-standards.md) - Type-safe
-  testing
-- [Testing Standards](./standards/testing-standards.md) - Detailed testing
-  methodology
+- [TypeScript Standards](./standards/typescript-standards.md) - Type-safe testing
+- [Testing Standards](./standards/testing-standards.md) - Detailed testing methodology
 
 ## Core Testing Philosophy
 
@@ -486,9 +482,7 @@ See our framework-specific guides:
 
 ## Summary
 
-Effective testing is essential for maintaining software quality and enabling
-confident changes. These universal standards ensure consistent, reliable testing
-practices across all projects in 2025 and beyond.
+Effective testing is essential for maintaining software quality and enabling confident changes. These universal standards ensure consistent, reliable testing practices across all projects in 2025 and beyond.
 
 Key principles:
 
@@ -499,5 +493,4 @@ Key principles:
 - **Continuous testing** catches issues early
 - **Framework flexibility** supports diverse projects
 
-Remember: Tests are not just about finding bugs; they're about designing better
-software, documenting behavior, and enabling fearless refactoring.
+Remember: Tests are not just about finding bugs; they're about designing better software, documenting behavior, and enabling fearless refactoring.

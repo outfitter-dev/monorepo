@@ -1,7 +1,6 @@
 # Architecture Decision Records (ADRs)
 
-This directory contains Architecture Decision Records - documents that capture
-important architectural decisions made in the project.
+This directory contains Architecture Decision Records - documents that capture important architectural decisions made in the project.
 
 ## Format
 
@@ -26,8 +25,7 @@ Each ADR should include:
 
 ## Current ADRs
 
-- [001: Keep CLI as Package](001-keep-cli-as-package.md) - CLI remains in
-  packages/ not apps/
+- [001: Keep CLI as Package](001-keep-cli-as-package.md) - CLI remains in packages/ not apps/
 
 ## Creating New ADRs
 

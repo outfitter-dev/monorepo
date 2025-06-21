@@ -7,8 +7,7 @@ type: convention
 
 # Documentation Standards
 
-Clear, consistent documentation that serves both human developers and AI agents
-effectively.
+Clear, consistent documentation that serves both human developers and AI agents effectively.
 
 ## Related Documentation
 
@@ -201,9 +200,9 @@ Always document:
 1. **Update with code**: Documentation changes must accompany code changes
 2. **Review regularly**: Audit documentation quarterly for accuracy
 3. **Remove outdated content**: Delete obsolete information rather than marking
-   as deprecated
+as deprecated
 4. **Version appropriately**: Clearly document breaking changes and migration
-   paths
+paths
 5. **Test examples**: Verify all code examples work with current versions
 
 ### Documentation Tests

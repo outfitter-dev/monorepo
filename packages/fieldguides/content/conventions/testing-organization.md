@@ -7,8 +7,7 @@ type: convention
 
 # Test Organization
 
-Modern patterns for organizing test files in JavaScript/TypeScript projects,
-supporting both Vitest (preferred) and Jest for legacy compatibility.
+Modern patterns for organizing test files in JavaScript/TypeScript projects, supporting both Vitest (preferred) and Jest for legacy compatibility.
 
 ## File Structure (2025 Best Practices)
 
@@ -46,12 +45,10 @@ src/
 ### Test Files
 
 - **Unit tests**: `[name].test.ts(x)` - Colocated with source (both frameworks)
-- **Integration tests**: `[name].integration.test.ts` - For multi-component
-  tests
+- **Integration tests**: `[name].integration.test.ts` - For multi-component tests
 - **Benchmark tests**: `[name].bench.ts` - Performance testing (Vitest only)
 - **E2E tests**: `[feature].spec.ts` - In separate e2e directory (Playwright)
-- **In-source tests**: For pure functions, embed tests in source files (Vitest
-  only)
+- **In-source tests**: For pure functions, embed tests in source files (Vitest only)
 - **Visual tests**: `[name].visual.test.ts` - Visual regression tests
 
 ### Test Suites
@@ -467,10 +464,7 @@ vi.useFakeTimers();
 ## Related Documentation
 
 - [Testing Philosophy](./testing-philosophy.md) - Core testing principles
-- [Testing Standards](../standards/testing-standards.md) - Comprehensive testing
-  methodology
+- [Testing Standards](../standards/testing-standards.md) - Comprehensive testing methodology
 - [Testing Unit](../patterns/testing-unit.md) - Unit testing patterns
-- [Testing React Components](../patterns/testing-react-components.md) -
-  Component testing
-- [Framework-Agnostic Testing](../patterns/framework-agnostic-testing.md) -
-  Portable test patterns
+- [Testing React Components](../patterns/testing-react-components.md) - Component testing
+- [Framework-Agnostic Testing](../patterns/framework-agnostic-testing.md) - Portable test patterns

@@ -7,24 +7,18 @@ type: pattern
 
 # TypeScript Validation Patterns
 
-Runtime validation patterns using Zod, Valibot, and other modern libraries for
-type-safe data validation, schema composition, and error handling.
+Runtime validation patterns using Zod, Valibot, and other modern libraries for type-safe data validation, schema composition, and error handling.
 
 ## Related Documentation
 
-- [Error Handling Patterns](./typescript-error-handling.md) - Handling
-  validation errors
-- [Configuration Standards](../standards/configuration-standards.md) -
-  Validating config
+- [Error Handling Patterns](./typescript-error-handling.md) - Handling validation errors
+- [Configuration Standards](../standards/configuration-standards.md) - Validating config
 - [React Hook Form Guide](../guides/react-hook-form.md) - Form validation
-- [TypeScript Standards](../standards/typescript-standards.md) - Type safety
-  fundamentals
+- [TypeScript Standards](../standards/typescript-standards.md) - Type safety fundamentals
 
 ## Overview
 
-Runtime validation ensures data integrity by validating inputs, configurations,
-and API responses against defined schemas. Modern validation libraries provide
-TypeScript-first approaches with automatic type inference.
+Runtime validation ensures data integrity by validating inputs, configurations, and API responses against defined schemas. Modern validation libraries provide TypeScript-first approaches with automatic type inference.
 
 ### Library Comparison
 
@@ -677,11 +671,9 @@ describe('User Validation', () => {
 Modern validation principles:
 
 1. **Choose the right tool** - Balance features, performance, and bundle size
-2. **Define schemas at boundaries** - Validate at API endpoints and service
-   interfaces
+2. **Define schemas at boundaries** - Validate at API endpoints and service interfaces
 3. **Use type inference** - Let validation libraries generate TypeScript types
 4. **Compose schemas** - Build complex schemas from simpler ones
-5. **Optimize performance** - Use lazy evaluation and caching for complex
-   schemas
+5. **Optimize performance** - Use lazy evaluation and caching for complex schemas
 6. **Version schemas** - Plan for API evolution with schema versioning
 7. **Test thoroughly** - Ensure validation handles all edge cases

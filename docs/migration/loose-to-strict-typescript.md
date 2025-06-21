@@ -1,12 +1,10 @@
 # TypeScript: Loose to Strict Configuration Migration
 
-This guide helps you migrate from a permissive TypeScript configuration to the
-strict settings used in @outfitter/typescript-config.
+This guide helps you migrate from a permissive TypeScript configuration to the strict settings used in @outfitter/typescript-config.
 
 ## Why Strict TypeScript?
 
-Strict TypeScript catches bugs at compile time that would otherwise surface at
-runtime:
+Strict TypeScript catches bugs at compile time that would otherwise surface at runtime:
 
 - Null pointer exceptions
 - Undefined property access
@@ -76,8 +74,7 @@ const processData = <T extends { value: unknown }>(data: T[]): unknown[] =>
 
 ### Step 3: Handle Null and Undefined
 
-With `strictNullChecks`, TypeScript distinguishes between `null`, `undefined`,
-and other types.
+With `strictNullChecks`, TypeScript distinguishes between `null`, `undefined`, and other types.
 
 **Before:**
 
@@ -113,8 +110,7 @@ console.log(config!.apiUrl); // Use sparingly!
 
 ### Step 4: Fix Optional Property Access
 
-With `exactOptionalPropertyTypes`, optional properties can't be explicitly set
-to `undefined`.
+With `exactOptionalPropertyTypes`, optional properties can't be explicitly set to `undefined`.
 
 **Before:**
 
@@ -143,8 +139,7 @@ interface Options {
 
 ### Step 5: Enable noUncheckedIndexedAccess
 
-This is often the most challenging flag. It makes array and object index access
-return `T | undefined`.
+This is often the most challenging flag. It makes array and object index access return `T | undefined`.
 
 **Before:**
 

@@ -7,17 +7,14 @@ type: pattern
 
 # Performance Optimization
 
-Patterns for optimizing React application performance through bundle size
-reduction, efficient rendering, and strategic loading.
+Patterns for optimizing React application performance through bundle size reduction, efficient rendering, and strategic loading.
 
 ## Related Documentation
 
 - [React Patterns](./react-patterns.md) - Core React patterns
-- [React Component Standards](../standards/react-component-standards.md) -
-  Component design
+- [React Component Standards](../standards/react-component-standards.md) - Component design
 - [Next.js Patterns](./nextjs-patterns.md) - Framework-specific optimizations
-- [Testing React Components](./testing-react-components.md) - Performance
-  testing
+- [Testing React Components](./testing-react-components.md) - Performance testing
 
 ## Bundle Size Optimization
 

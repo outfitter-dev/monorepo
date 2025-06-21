@@ -7,22 +7,17 @@ type: pattern
 
 # React State Derivation
 
-Calculate dependent values during render instead of storing them in separate
-state variables to avoid synchronization bugs and reduce complexity.
+Calculate dependent values during render instead of storing them in separate state variables to avoid synchronization bugs and reduce complexity.
 
 ## Related Documentation
 
 - [React Patterns](./react-patterns.md) - Component architecture patterns
-- [React Component Standards](../standards/react-component-standards.md) -
-  Component design standards
-- [TypeScript Error Handling](./typescript-error-handling.md) - Error state
-  patterns
+- [React Component Standards](../standards/react-component-standards.md) - Component design standards
+- [TypeScript Error Handling](./typescript-error-handling.md) - Error state patterns
 
 ## Core Principle
 
-When values can be calculated from existing state, derive them during render
-instead of storing them in additional state variables. This prevents
-synchronization bugs and simplifies state management.
+When values can be calculated from existing state, derive them during render instead of storing them in additional state variables. This prevents synchronization bugs and simplifies state management.
 
 ## The Problem: State Synchronization
 
@@ -118,9 +113,9 @@ function GameBoard() {
 
 1. **No synchronization bugs**: Impossible for derived values to be out of sync
 2. **Simpler code**: Only manage source state, derived values update
-   automatically
+automatically
 3. **Easier feature additions**: New functionality doesn't require complex state
-   updates
+updates
 4. **Better maintainability**: Single source of truth for state logic
 
 ## Common Patterns
@@ -246,8 +241,7 @@ function ShoppingCartSummary({ cart }: { cart: ShoppingCart }) {
 
 ### JavaScript Performance
 
-Modern JavaScript is extremely fast. Most calculations are not performance
-bottlenecks:
+Modern JavaScript is extremely fast. Most calculations are not performance bottlenecks:
 
 - **Typical calculations**: 15+ million operations per second
 - **Mobile devices**: 4+ million operations per second
@@ -456,5 +450,4 @@ describe('GameBoard derived state', () => {
 });
 ```
 
-Remember: Derive state when possible, store state when necessary. This approach
-leads to simpler, more maintainable components with fewer bugs.
+Remember: Derive state when possible, store state when necessary. This approach leads to simpler, more maintainable components with fewer bugs.

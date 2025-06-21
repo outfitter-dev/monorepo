@@ -53,7 +53,13 @@ export async function readConfig(
 }
 
 /**
- * Deep merge configuration objects, with user config taking precedence
+ * Deeply merges the default configuration with a user-provided partial configuration, giving precedence to user values.
+ *
+ * Merges nested objects for `baselayer`, `codeStyle`, and `overrides` (including `biome`, `eslint`, `prettier`, and `rightdown`), ensuring user-specified settings override defaults where provided.
+ *
+ * @param defaultConfig - The base configuration object to merge into
+ * @param userConfig - The user-supplied partial configuration to merge
+ * @returns The resulting configuration object after merging
  */
 function mergeConfigs(
   defaultConfig: OutfitterConfig,
@@ -93,9 +99,9 @@ function mergeConfigs(
         ...(defaultConfig.overrides?.prettier ?? {}),
         ...(userConfig.overrides?.prettier ?? {}),
       },
-      'markdown-medic': {
-        ...(defaultConfig.overrides?.['markdown-medic'] ?? {}),
-        ...(userConfig.overrides?.['markdown-medic'] ?? {}),
+      rightdown: {
+        ...(defaultConfig.overrides?.rightdown ?? {}),
+        ...(userConfig.overrides?.rightdown ?? {}),
       },
     },
   };

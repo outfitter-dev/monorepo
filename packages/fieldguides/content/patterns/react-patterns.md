@@ -7,22 +7,17 @@ type: guide
 
 # React Patterns
 
-Component patterns, hooks, and best practices for building React applications
-with React 19 and modern tooling.
+Component patterns, hooks, and best practices for building React applications with React 19 and modern tooling.
 
 ## Related Documentation
 
-- [React State Derivation](./react-state-derivation.md) - Derive state instead
-  of syncing it
-- [Testing React Components](./testing-react-components.md) - Testing React
-  components
+- [React State Derivation](./react-state-derivation.md) - Derive state instead of syncing it
+- [Testing React Components](./testing-react-components.md) - Testing React components
 - [React Query](../guides/react-query.md) - Data fetching patterns
 - [React Hook Form](../guides/react-hook-form.md) - Form handling
-- [Component Architecture](../standards/react-component-standards.md) -
-  Component design patterns
+- [Component Architecture](../standards/react-component-standards.md) - Component design patterns
 - [TypeScript Standards](../standards/typescript-standards.md) - Type-safe React
-- [Performance Optimization](./performance-optimization.md) - React performance
-  patterns
+- [Performance Optimization](./performance-optimization.md) - React performance patterns
 
 ## Modern React Features (React 19+)
 
@@ -490,8 +485,7 @@ function SearchInterface() {
 
 ## State Management
 
-For comprehensive guidance on React state patterns, see
-[React State Derivation](./react-state-derivation.md).
+For comprehensive guidance on React state patterns, see [React State Derivation](./react-state-derivation.md).
 
 ### Context with Reducer
 
@@ -941,12 +935,12 @@ function Modal({ isOpen, onClose, children }: ModalProps) {
 ## Best Practices Summary
 
 1. **Use React 19 Features**: Leverage Server Components, Actions, and the use()
-   hook
+hook
 2. **Minimize Manual Optimization**: Let React Compiler handle memoization
 3. **Embrace Concurrent Features**: Use Suspense, transitions, and streaming
 4. **Prefer Composition**: Build with compound components and render props
 5. **Handle Errors Gracefully**: Use error boundaries for both sync and async
-   errors
+errors
 6. **Focus on Accessibility**: Manage focus, ARIA attributes, and keyboard
-   navigation
+navigation
 7. **Type Everything**: Leverage TypeScript for props, hooks, and components

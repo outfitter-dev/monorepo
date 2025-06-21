@@ -7,13 +7,11 @@ type: pattern
 
 # Test Coverage Patterns
 
-Modern coverage strategies and configuration for maintaining quality metrics
-across Vitest and Jest projects.
+Modern coverage strategies and configuration for maintaining quality metrics across Vitest and Jest projects.
 
 ## Related Documentation
 
-- [Testing Standards](../standards/testing-standards.md) - Core testing
-  principles
+- [Testing Standards](../standards/testing-standards.md) - Core testing principles
 - [Testing Philosophy](../conventions/testing-philosophy.md) - Testing approach
 - [Vitest Guide](../guides/vitest-guide.md) - Vitest configuration
 - [CI/CD Patterns](./github-actions.md) - Coverage in pipelines

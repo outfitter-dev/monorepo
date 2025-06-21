@@ -7,14 +7,11 @@ type: guide
 
 # Playwright Guide
 
-Reliable end-to-end testing for modern web applications with auto-waiting and
-cross-browser support.
+Reliable end-to-end testing for modern web applications with auto-waiting and cross-browser support.
 
 ## Overview
 
-Playwright enables reliable end-to-end testing across all modern browsers with a
-single API. It provides auto-waiting, web-first assertions, and powerful
-debugging capabilities.
+Playwright enables reliable end-to-end testing across all modern browsers with a single API. It provides auto-waiting, web-first assertions, and powerful debugging capabilities.
 
 ## Installation
 

@@ -7,7 +7,7 @@ import { parse } from 'comment-json';
 import {
   generateBiomeConfig,
   generateESLintConfig,
-  generateMarkdownMedicConfigContent,
+  generateRightdownConfigContent,
   generatePrettierConfig,
   generateVSCodeSettings,
 } from './generators/index.js';
@@ -34,8 +34,11 @@ export interface SetupResult {
 }
 
 /**
- * Main entry point for baselayer setup
- * Reads configuration and generates all tool configs
+ * Sets up the development baselayer by reading configuration and generating tool config files and package.json scripts.
+ *
+ * Reads the configuration from the specified working directory, conditionally generates configuration files for supported tools (Biome, ESLint, Prettier, Rightdown, VS Code), and updates package.json scripts as needed. Supports dry run mode to simulate changes without writing files.
+ *
+ * @returns A result containing the used configuration and a list of generated files, or an error if setup fails.
  */
 export async function setup(options: SetupOptions = {}): Promise<Result<SetupResult, Error>> {
   const { cwd = process.cwd(), dryRun = false } = options;
@@ -82,18 +85,18 @@ export async function setup(options: SetupOptions = {}): Promise<Result<SetupRes
     generatedFiles.push('.prettierrc');
   }
 
-  // Generate markdown-medic config if needed
-  if (shouldGenerateMarkdownMedicConfig(config)) {
-    const markdownMedicConfig = generateMarkdownMedicConfigContent(config);
-    const markdownMedicResult = await writeConfigFile(
-      join(cwd, '.mdmedic.config.jsonc'),
-      markdownMedicConfig,
+  // Generate rightdown config if needed
+  if (shouldGenerateRightdownConfig(config)) {
+    const rightdownConfig = generateRightdownConfigContent(config);
+    const rightdownResult = await writeConfigFile(
+      join(cwd, '.rightdown.config.jsonc'),
+      rightdownConfig,
       dryRun,
     );
-    if (isFailure(markdownMedicResult)) {
-      return failure(markdownMedicResult.error);
+    if (isFailure(rightdownResult)) {
+      return failure(rightdownResult.error);
     }
-    generatedFiles.push('.mdmedic.config.jsonc');
+    generatedFiles.push('.rightdown.config.jsonc');
   }
 
   // Generate VS Code settings if enabled
@@ -134,7 +137,10 @@ function shouldGenerateBiomeConfig(config: OutfitterConfig): boolean {
 }
 
 /**
- * Determines if Prettier config should be generated
+ * Returns true if a Prettier configuration file should be generated based on the baselayer tool settings.
+ *
+ * @param config - The Outfitter configuration object to evaluate
+ * @returns True if Prettier is selected for CSS, YAML, or Markdown tools
  */
 function shouldGeneratePrettierConfig(config: OutfitterConfig): boolean {
   const { tools } = config.baselayer;
@@ -142,11 +148,13 @@ function shouldGeneratePrettierConfig(config: OutfitterConfig): boolean {
 }
 
 /**
- * Determines if markdown-medic config should be generated
+ * Returns true if the configuration specifies 'rightdown' as the markdown tool.
+ *
+ * @returns Whether a rightdown configuration file should be generated
  */
-function shouldGenerateMarkdownMedicConfig(config: OutfitterConfig): boolean {
+function shouldGenerateRightdownConfig(config: OutfitterConfig): boolean {
   const { tools } = config.baselayer;
-  return tools.markdown === 'markdown-medic';
+  return tools.markdown === 'rightdown';
 }
 
 /**
@@ -186,7 +194,14 @@ async function writeConfigFile(
 }
 
 /**
- * Generates package.json scripts based on tool configuration
+ * Updates or adds lint and format scripts in package.json based on the provided tool configuration.
+ *
+ * Modifies scripts to use Biome, ESLint, Prettier, and Rightdown commands as appropriate for the configured tools. If dry run is enabled, simulates changes without writing to disk.
+ *
+ * @param config - The baselayer tool configuration
+ * @param cwd - The working directory containing package.json
+ * @param dryRun - If true, no files are written and changes are only simulated
+ * @returns A result indicating whether scripts were updated
  */
 async function generatePackageScripts(
   config: OutfitterConfig,
@@ -212,10 +227,10 @@ async function generatePackageScripts(
 
     if (tools.typescript === 'biome' || tools.javascript === 'biome') {
       if (!scripts.lint || !scripts.lint.includes('biome')) {
-        const markdownLint = tools.markdown === 'markdown-medic' ? ' && mdmedic "**/*.md"' : '';
+        const markdownLint = tools.markdown === 'rightdown' ? ' && rightdown "**/*.md"' : '';
         scripts.lint = `biome lint . && eslint . --config=./eslint.config.js --max-warnings 0${markdownLint}`;
         scripts['lint:fix'] =
-          `biome lint . --write && eslint . --fix --config=./eslint.config.js${tools.markdown === 'markdown-medic' ? ' && mdmedic --fix "**/*.md"' : ''}`;
+          `biome lint . --write && eslint . --fix --config=./eslint.config.js${tools.markdown === 'rightdown' ? ' && rightdown --fix "**/*.md"' : ''}`;
         updated = true;
       }
 
@@ -232,10 +247,10 @@ async function generatePackageScripts(
       }
     } else if (tools.typescript === 'eslint' || tools.javascript === 'eslint') {
       if (!scripts.lint || !scripts.lint.includes('eslint')) {
-        const markdownLint = tools.markdown === 'markdown-medic' ? ' && mdmedic "**/*.md"' : '';
+        const markdownLint = tools.markdown === 'rightdown' ? ' && rightdown "**/*.md"' : '';
         scripts.lint = `eslint . --max-warnings 0${markdownLint}`;
         scripts['lint:fix'] =
-          `eslint . --fix${tools.markdown === 'markdown-medic' ? ' && mdmedic --fix "**/*.md"' : ''}`;
+          `eslint . --fix${tools.markdown === 'rightdown' ? ' && rightdown --fix "**/*.md"' : ''}`;
         updated = true;
       }
       if (!scripts.format || !scripts.format.includes('prettier')) {

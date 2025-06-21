@@ -7,8 +7,7 @@ type: index
 
 # Standards
 
-Core standards that define consistent approaches across all projects. These are
-our strongest opinions and most proven practices.
+Core standards that define consistent approaches across all projects. These are our strongest opinions and most proven practices.
 
 ## What belongs here?
 

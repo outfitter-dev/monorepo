@@ -1,13 +1,10 @@
 # ESLint: Legacy to Flat Config Migration
 
-This guide helps you migrate from ESLint's legacy configuration format to the
-new flat config format.
+This guide helps you migrate from ESLint's legacy configuration format to the new flat config format.
 
 ## Overview
 
-ESLint 9.0 introduced a new "flat config" format that replaces the traditional
-`.eslintrc.*` files with `eslint.config.js` (or `.mjs`). This new format is more
-explicit, powerful, and easier to understand.
+ESLint 9.0 introduced a new "flat config" format that replaces the traditional `.eslintrc.*` files with `eslint.config.js` (or `.mjs`). This new format is more explicit, powerful, and easier to understand.
 
 ## Key Differences
 

@@ -15,10 +15,8 @@ Comprehensive security scanning patterns for CI/CD pipelines.
 - [Git Hooks](./git-hooks.md) - Pre-commit security checks
 - [Security Standards](../SECURITY.md) - Security baseline
 - [Testing Standards](../standards/testing-standards.md) - Security testing
-- [Configuration Standards](../standards/configuration-standards.md) - Secure
-  configuration
-- [Deployment Standards](../standards/deployment-standards.md) - Security in
-  deployment
+- [Configuration Standards](../standards/configuration-standards.md) - Secure configuration
+- [Deployment Standards](../standards/deployment-standards.md) - Security in deployment
 
 ## Code Security Analysis
 

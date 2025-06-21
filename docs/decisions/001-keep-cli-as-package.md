@@ -6,10 +6,7 @@
 
 ## Context
 
-The `@outfitter/cli` currently resides in `packages/cli/` and provides the
-`outfitter` command for managing development configurations. As the monorepo
-evolves, we need to decide whether it should remain a package or move to an
-`apps/` directory.
+The `@outfitter/cli` currently resides in `packages/cli/` and provides the `outfitter` command for managing development configurations. As the monorepo evolves, we need to decide whether it should remain a package or move to an `apps/` directory.
 
 This decision affects:
 
@@ -19,8 +16,7 @@ This decision affects:
 
 ## Decision
 
-We will keep `@outfitter/cli` in the `packages/` directory for now, structured
-to support both CLI and potential programmatic usage.
+We will keep `@outfitter/cli` in the `packages/` directory for now, structured to support both CLI and potential programmatic usage.
 
 The CLI will:
 
@@ -78,8 +74,7 @@ Keep library code in `packages/cli-core/` and CLI in `apps/cli/`.
 
 ## Implementation
 
-No changes required - this ADR documents the decision to maintain the current
-structure.
+No changes required - this ADR documents the decision to maintain the current structure.
 
 Future CLIs should evaluate their specific needs:
 

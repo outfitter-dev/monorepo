@@ -2,40 +2,25 @@
 
 ## Summary
 
-This proposal outlines the creation of `@outfitter/agents-config`, a package
-that provides standardized, reusable configurations for AI development agents
-(CodeRabbit, GitHub Copilot, Cursor, etc.). This package would serve as the
-first "supply" in the Outfitter ecosystem, demonstrating the value proposition
-of standardized development configurations.
+This proposal outlines the creation of `@outfitter/agents-config`, a package that provides standardized, reusable configurations for AI development agents (CodeRabbit, GitHub Copilot, Cursor, etc.). This package would serve as the first "supply" in the Outfitter ecosystem, demonstrating the value proposition of standardized development configurations.
 
 ## Problem Statement
 
 ### Current Pain Points
 
-1. **Configuration Fragmentation**: Each project requires manual setup of AI
-   agent configurations, leading to inconsistency across teams and repositories.
+1. **Configuration Fragmentation**: Each project requires manual setup of AI agent configurations, leading to inconsistency across teams and repositories.
 
-2. **Complex Configuration Learning Curve**: Tools like CodeRabbit have
-   extensive configuration options (profiles, tools, path instructions, tone
-   instructions) that require deep understanding to optimize.
+2. **Complex Configuration Learning Curve**: Tools like CodeRabbit have extensive configuration options (profiles, tools, path instructions, tone instructions) that require deep understanding to optimize.
 
-3. **Monorepo Complexity**: Large codebases with multiple project types need
-   sophisticated path-based configurations that are time-consuming to create and
-   maintain.
+3. **Monorepo Complexity**: Large codebases with multiple project types need sophisticated path-based configurations that are time-consuming to create and maintain.
 
-4. **Team Standardization**: No easy way to share and enforce consistent AI
-   agent configurations across an organization.
+4. **Team Standardization**: No easy way to share and enforce consistent AI agent configurations across an organization.
 
-5. **Configuration Drift**: Projects start with good configurations but degrade
-   over time without centralized maintenance.
+5. **Configuration Drift**: Projects start with good configurations but degrade over time without centralized maintenance.
 
 ### Opportunity
 
-The comprehensive
-[CodeRabbit Configuration Guide](../fieldguides/content/guides/coderabbit-guide.md)
-demonstrates proven patterns that could benefit every project. Rather than each
-team recreating these configurations, we can package them as reusable,
-maintainable supplies.
+The comprehensive [CodeRabbit Configuration Guide](../fieldguides/content/guides/coderabbit-guide.md) demonstrates proven patterns that could benefit every project. Rather than each team recreating these configurations, we can package them as reusable, maintainable supplies.
 
 ## Proposed Solution
 
@@ -44,8 +29,7 @@ maintainable supplies.
 Create `@outfitter/agents-config` as a TypeScript package that:
 
 - **Provides Templates**: Pre-built configurations for common project types
-- **Generates Configurations**: Smart configuration generation based on project
-  detection
+- **Generates Configurations**: Smart configuration generation based on project detection
 - **Supports Monorepos**: Automatic path-based instruction generation
 - **Enables Customization**: Extensible template system for team-specific needs
 - **Maintains Standards**: Centralized updates to configuration best practices
@@ -368,14 +352,18 @@ tone_instructions: |
   --- FIXES ---
   ID: <issue_id>
   ```{{language}}
-  <replacement code>
+<replacement code>
 ````
 
-reviews: profile: 'assertive' poem: false high_level_summary: true
-request_changes_workflow: true
+reviews:
+  profile: 'assertive'
+  poem: false
+  high_level_summary: true
+  request_changes_workflow: true
 
-tools: gitleaks: { enabled: true } semgrep: { enabled: true }
-
+tools:
+  gitleaks: { enabled: true }
+  semgrep: { enabled: true }
 ````
 
 ### Project-Specific Templates
@@ -698,9 +686,9 @@ if (project.isMonorepo) {
 ### Validation Tests
 
 - **Schema Compliance**: All generated configs validate against CodeRabbit
-  schema
+schema
 - **Functional Testing**: Generated configs work with actual CodeRabbit
-  instances
+instances
 - **Performance Testing**: Large monorepo configuration generation times
 
 ### Test Fixtures
@@ -780,8 +768,7 @@ __tests__/fixtures/
 
 ### Quality Metrics
 
-- **Validation Rate**: Percentage of generated configs that validate
-  successfully
+- **Validation Rate**: Percentage of generated configs that validate successfully
 - **User Satisfaction**: Survey feedback on generated configuration quality
 - **Issue Reports**: Bug reports related to generated configurations
 
@@ -818,10 +805,7 @@ __tests__/fixtures/
 
 ## Conclusion
 
-The `@outfitter/agents-config` package addresses a clear need for standardized
-AI agent configurations while demonstrating the value of the Outfitter supply
-system. Starting with CodeRabbit provides a concrete, high-value use case that
-can be expanded to other agents over time.
+The `@outfitter/agents-config` package addresses a clear need for standardized AI agent configurations while demonstrating the value of the Outfitter supply system. Starting with CodeRabbit provides a concrete, high-value use case that can be expanded to other agents over time.
 
 The package design emphasizes:
 
@@ -830,9 +814,7 @@ The package design emphasizes:
 - **Maintainability** through clear separation of concerns
 - **Community contribution** through template sharing
 
-This package would serve as an excellent proof-of-concept for the broader
-Outfitter ecosystem while solving real problems that development teams face
-today.
+This package would serve as an excellent proof-of-concept for the broader Outfitter ecosystem while solving real problems that development teams face today.
 
 ## Appendix
 

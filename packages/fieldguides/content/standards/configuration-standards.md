@@ -7,21 +7,17 @@ type: convention
 
 # Configuration Standards
 
-Environment configuration, validation, and management patterns for robust
-applications.
+Environment configuration, validation, and management patterns for robust applications.
 
 ## Related Documentation
 
-- [Validation Patterns](../patterns/typescript-validation.md) - Schema
-  validation with Zod
-- [Security Scanning](../patterns/security-scanning.md) - Scanning for exposed
-  secrets
+- [Validation Patterns](../patterns/typescript-validation.md) - Schema validation with Zod
+- [Security Scanning](../patterns/security-scanning.md) - Scanning for exposed secrets
 - [Testing Standards](./testing-standards.md) - Testing configuration
 - [Deployment Standards](./deployment-standards.md) - Environment management
 - [TypeScript Standards](./typescript-standards.md) - Type-safe configuration
 - [Monorepo Standards](./monorepo-standards.md) - Shared configurations
-- [Documentation Standards](./documentation-standards.md) - Documenting
-  configuration
+- [Documentation Standards](./documentation-standards.md) - Documenting configuration
 
 ## Version Compatibility
 

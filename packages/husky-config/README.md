@@ -1,7 +1,6 @@
 # @outfitter/husky-config
 
-> Shared Git hooks configuration for consistent development workflows across
-> Outfitter projects
+> Shared Git hooks configuration for consistent development workflows across Outfitter projects
 
 ## Installation
 
@@ -50,8 +49,7 @@ npx lint-staged
 
 ### Commit-msg Hook
 
-Validates commit messages using `commitlint` to ensure they follow conventional
-commit format:
+Validates commit messages using `commitlint` to ensure they follow conventional commit format:
 
 ```bash
 #!/usr/bin/env sh
@@ -119,16 +117,13 @@ chmod +x .husky/*
 git commit --no-verify -m "emergency: bypass hooks"
 ```
 
-**Note**: This should only be used in emergencies. Always ensure your code meets
-quality standards.
+**Note**: This should only be used in emergencies. Always ensure your code meets quality standards.
 
 ## Development
 
-This package is part of the
-[@outfitter/monorepo](https://github.com/outfitter-dev/monorepo) monorepo.
+This package is part of the [@outfitter/monorepo](https://github.com/outfitter-dev/monorepo) monorepo.
 
-See the [Development Guide](../../docs/contributing/development.md) for
-instructions on building, testing, and contributing to this package.
+See the [Development Guide](../../docs/contributing/development.md) for instructions on building, testing, and contributing to this package.
 
 ## License
 

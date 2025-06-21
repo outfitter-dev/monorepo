@@ -11,21 +11,16 @@ Modern React patterns for building scalable, type-safe component systems.
 
 ## Related Documentation
 
-- [React State Derivation](../patterns/react-state-derivation.md) - State
-  management patterns
+- [React State Derivation](../patterns/react-state-derivation.md) - State management patterns
 - [React Patterns](../patterns/react-patterns.md) - Advanced React patterns
-- [Testing React Components](../patterns/testing-react-components.md) -
-  Component testing
+- [Testing React Components](../patterns/testing-react-components.md) - Component testing
 - [TypeScript Standards](./typescript-standards.md) - TypeScript with React
 - [Testing Standards](./testing-standards.md) - Testing component behavior
-- [Documentation Standards](./documentation-standards.md) - Documenting
-  components
+- [Documentation Standards](./documentation-standards.md) - Documenting components
 
 ## Overview
 
-React component architecture has evolved significantly with React 19, Server
-Components, and modern TypeScript patterns. This guide provides authoritative
-standards while acknowledging the ecosystem's rapid evolution.
+React component architecture has evolved significantly with React 19, Server Components, and modern TypeScript patterns. This guide provides authoritative standards while acknowledging the ecosystem's rapid evolution.
 
 ## Version Compatibility
 
@@ -36,30 +31,25 @@ This guide assumes:
 - Next.js: 13+ (for App Router and Server Components)
 - Node.js: 18+ (for modern JavaScript features)
 
-**Note**: Many patterns work with React 18.x, but React 19 features (Server
-Components, use() hook, useOptimistic) require React 19.0+.
+**Note**: Many patterns work with React 18.x, but React 19 features (Server Components, use() hook, useOptimistic) require React 19.0+.
 
 ## Core Principles
 
 ### Single Responsibility
 
-Each component should have one clear purpose and do it well. Split complex
-components into smaller, focused pieces.
+Each component should have one clear purpose and do it well. Split complex components into smaller, focused pieces.
 
 ### Composition Over Inheritance
 
-Build complex UIs by combining simple components rather than creating deeply
-nested hierarchies.
+Build complex UIs by combining simple components rather than creating deeply nested hierarchies.
 
 ### Props as API
 
-Component props form the public API. Design them carefully for clarity,
-flexibility, and stability.
+Component props form the public API. Design them carefully for clarity, flexibility, and stability.
 
 ### Isolation
 
-Components should work independently without relying on external state or
-specific contexts unless explicitly designed to do so.
+Components should work independently without relying on external state or specific contexts unless explicitly designed to do so.
 
 ## Component Design Patterns
 
@@ -154,8 +144,7 @@ const createComponent = (deps: { logger: Logger; analytics: Analytics }) => {
 
 ## State Management Patterns
 
-For comprehensive state patterns including derived state, see
-[React State Derivation](../patterns/react-state-derivation.md).
+For comprehensive state patterns including derived state, see [React State Derivation](../patterns/react-state-derivation.md).
 
 ### Modern Hook Patterns
 

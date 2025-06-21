@@ -1,14 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
 
-This is the `@outfitter/eslint-config` package - a shared ESLint configuration
-for Outfitter projects. It provides a comprehensive set of linting rules for
-TypeScript and React projects, including accessibility and import organization
-rules.
+This is the `@outfitter/eslint-config` package - a shared ESLint configuration for Outfitter projects. It provides a comprehensive set of linting rules for TypeScript and React projects, including accessibility and import organization rules.
 
 ## Key Commands
 
@@ -29,8 +25,7 @@ pnpm type-check
 
 ### Configuration Structure
 
-The package exports a legacy ESLint configuration (for ESLint 8.x compatibility)
-that includes:
+The package exports a legacy ESLint configuration (for ESLint 8.x compatibility) that includes:
 
 - TypeScript parsing and rules via `@typescript-eslint`
 - React and React Hooks linting

@@ -1,17 +1,13 @@
 ---
 slug: when-to-extract-package
 title: When to extract code into a package
-description:
-  Guidelines for identifying when code should be extracted into a standalone
-  package in a monorepo.
+description: Guidelines for identifying when code should be extracted into a standalone package in a monorepo.
 type: convention
 ---
 
 # When to Extract a Package
 
-Knowing when to extract code into a separate package is crucial for maintaining
-a healthy monorepo architecture. This guide provides concrete criteria and
-patterns for making these decisions.
+Knowing when to extract code into a separate package is crucial for maintaining a healthy monorepo architecture. This guide provides concrete criteria and patterns for making these decisions.
 
 ## The Extraction Decision Framework
 
@@ -65,8 +61,7 @@ Consider extraction when:
 - Breaking changes need careful management
 - Multiple major versions must be supported
 
-**Example scenario**: Your date formatting library is used by both your current
-apps and legacy systems that can't upgrade immediately.
+**Example scenario**: Your date formatting library is used by both your current apps and legacy systems that can't upgrade immediately.
 
 ## Extraction Patterns
 
@@ -380,8 +375,7 @@ If you answered "no" to any of these, reconsider extraction.
 
 ## Conclusion
 
-Package extraction is a powerful tool for code organization, but it's not free.
-Every package adds complexity, maintenance burden, and cognitive overhead.
+Package extraction is a powerful tool for code organization, but it's not free. Every package adds complexity, maintenance burden, and cognitive overhead.
 
 Extract packages when:
 

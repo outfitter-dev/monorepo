@@ -11,13 +11,10 @@ Comprehensive monitoring patterns for production systems.
 
 ## Related Documentation
 
-- [Deployment Standards](../standards/deployment-standards.md) - Post-deployment
-  monitoring
-- [Configuration Standards](../standards/configuration-standards.md) -
-  Monitoring configuration
+- [Deployment Standards](../standards/deployment-standards.md) - Post-deployment monitoring
+- [Configuration Standards](../standards/configuration-standards.md) - Monitoring configuration
 - [Testing Standards](../standards/testing-standards.md) - Performance testing
-- [TypeScript Standards](../standards/typescript-standards.md) - Type-safe
-  metrics
+- [TypeScript Standards](../standards/typescript-standards.md) - Type-safe metrics
 
 ## Core Principles
 
@@ -403,8 +400,7 @@ groups:
           severity: critical
         annotations:
           summary: 'High error rate detected'
-          description: 'Error rate is {{ $value | humanizePercentage }} for {{
-            $labels.route }}'
+          description: 'Error rate is {{ $value | humanizePercentage }} for {{ $labels.route }}'
 
       - alert: HighLatency
         expr: |

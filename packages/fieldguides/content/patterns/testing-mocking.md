@@ -11,8 +11,7 @@ Effective strategies for mocking dependencies in JavaScript/TypeScript tests.
 
 ## Framework Choice
 
-Both Jest and Vitest provide comprehensive mocking capabilities with similar
-APIs.
+Both Jest and Vitest provide comprehensive mocking capabilities with similar APIs.
 
 ### Mock API Comparison
 
@@ -448,6 +447,5 @@ const mockLogger = {
 ## Related Documentation
 
 - [Unit Testing Patterns](./testing-unit.md) - Writing isolated tests
-- [Integration Testing](./testing-integration.md) - Testing with real
-  dependencies
+- [Integration Testing](./testing-integration.md) - Testing with real dependencies
 - [Test Organization](../conventions/testing-organization.md) - Organizing mocks

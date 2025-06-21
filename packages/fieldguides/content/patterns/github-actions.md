@@ -14,8 +14,7 @@ Production-ready CI/CD workflows for GitHub Actions.
 - [Git Hooks](./git-hooks.md) - Local automation
 - [Security Scanning](./security-scanning.md) - Security integration
 - [Testing Standards](../standards/testing-standards.md) - Test automation
-- [Deployment Standards](../standards/deployment-standards.md) - Deployment
-  practices
+- [Deployment Standards](../standards/deployment-standards.md) - Deployment practices
 
 ## Core Workflow Structure
 

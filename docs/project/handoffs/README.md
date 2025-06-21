@@ -1,7 +1,6 @@
 # Project Handoffs
 
-This directory contains handoff documents that capture significant changes,
-migrations, or feature implementations in the Outfitter monorepo.
+This directory contains handoff documents that capture significant changes, migrations, or feature implementations in the Outfitter monorepo.
 
 ## Naming Convention
 
@@ -22,8 +21,7 @@ Where:
 
 ## Current Handoffs
 
-- `202506101749-monorepo-build-system-analysis.md` - Analysis of TypeScript
-  monorepo build system issues and solution strategies
+- `202506101749-monorepo-build-system-analysis.md` - Analysis of TypeScript monorepo build system issues and solution strategies
 
 ## Purpose
 
@@ -52,8 +50,7 @@ When creating a new handoff document:
 
 ## Guidelines
 
-- **Be thorough**: Future developers will use these to understand complex
-  decisions
+- **Be thorough**: Future developers will use these to understand complex decisions
 - **Explore alternatives**: Document the paths not taken and why
 - **Include context**: Explain the business and technical drivers
 - **Provide actionable steps**: Clear next steps for implementation
