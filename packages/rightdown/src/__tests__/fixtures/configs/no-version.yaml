@@ -1,0 +1,24 @@
+# Config without version field
+# This should fail validation as version field is required
+
+# Built-in preset
+preset: standard
+
+# Custom rule overrides
+rules:
+  line-length: false
+  list-marker-space: false
+  no-duplicate-heading: false
+
+# Ignore patterns
+ignores:
+  - 'node_modules/**'
+  - 'dist/**'
+  - 'build/**'
+
+# Custom terminology
+terminology:
+  - incorrect: 'javascript'
+    correct: 'JavaScript'
+  - incorrect: 'Github'
+    correct: 'GitHub'

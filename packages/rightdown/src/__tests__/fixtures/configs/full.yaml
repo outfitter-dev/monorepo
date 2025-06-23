@@ -1,0 +1,135 @@
+# Full-featured v2 config
+version: 2
+preset: strict
+
+# Markdown structure rules (markdownlint)
+rules:
+  # Headings
+  heading-increment: true
+  first-line-heading: true
+
+  # Lists
+  list-indent: true
+  ul-style:
+    style: dash
+
+  # Line length
+  line-length: false # Handled by Prettier
+
+  # Code blocks
+  code-block-style:
+    style: fenced
+
+  # Whitespace
+  no-trailing-spaces: true
+  single-trailing-newline: true
+  blanks-around-headings: true
+  blanks-around-lists: true
+
+# Code block formatting configuration
+formatters:
+  # Default formatter for unspecified languages
+  default: prettier
+
+  # Language-specific formatters
+  languages:
+    # JavaScript/TypeScript ecosystem - use Biome
+    javascript: biome
+    typescript: biome
+    jsx: biome
+    tsx: biome
+    json: biome
+    jsonc: biome
+
+    # Web technologies - use Prettier
+    html: prettier
+    css: prettier
+    scss: prettier
+    less: prettier
+
+    # Config files - use Prettier
+    yaml: prettier
+    yml: prettier
+    toml: prettier
+
+    # Other languages
+    python: prettier # With prettier-plugin-python if available
+    rust: none # Don't format Rust blocks
+    go: none # Don't format Go blocks
+
+    # Markdown in code blocks
+    markdown: prettier
+    md: prettier
+
+# Formatter-specific options
+formatterOptions:
+  prettier:
+    printWidth: 80
+    tabWidth: 2
+    useTabs: false
+    semi: true
+    singleQuote: true
+    quoteProps: 'as-needed'
+    jsxSingleQuote: false
+    trailingComma: 'es5'
+    bracketSpacing: true
+    jsxBracketSameLine: false
+    arrowParens: 'always'
+    proseWrap: 'preserve'
+    htmlWhitespaceSensitivity: 'css'
+    endOfLine: 'lf'
+    embeddedLanguageFormatting: 'auto'
+
+  biome:
+    indentStyle: space
+    indentWidth: 2
+    lineWidth: 80
+    formatter:
+      quoteStyle: single
+      jsxQuoteStyle: double
+      semicolons: always
+      trailingComma: es5
+      arrowParentheses: always
+
+# Output configuration
+output:
+  # Write diagnostic information
+  diagnostics: true
+
+  # Show progress for large files
+  progress: true
+
+  # Color output
+  color: true
+
+# Files to ignore
+ignores:
+  - '**/node_modules/**'
+  - '**/dist/**'
+  - '**/build/**'
+  - '**/coverage/**'
+  - '**/.git/**'
+  - '**/.next/**'
+  - '**/.turbo/**'
+  - '*.min.js'
+  - '*.min.css'
+  - 'vendor/**'
+  - 'public/assets/**'
+
+# Custom terminology rules
+terminology:
+  - incorrect: 'javascript'
+    correct: 'JavaScript'
+  - incorrect: 'typescript'
+    correct: 'TypeScript'
+  - incorrect: 'Github'
+    correct: 'GitHub'
+  - incorrect: 'npm'
+    correct: 'npm'
+    caseSensitive: true
+  - incorrect: 'NPM'
+    correct: 'npm'
+  - incorrect: 'NodeJS'
+    correct: 'Node.js'
+  - incorrect: 'VSCode'
+    correct: 'VS Code'

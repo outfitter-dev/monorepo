@@ -1,0 +1,34 @@
+# Invalid v2 config for error testing
+version: 2
+preset: not-a-real-preset # Invalid preset
+
+# Invalid rules
+rules:
+  made-up-rule: true
+  line-length: 'should be number or false' # Wrong type
+
+# Invalid formatter configuration
+formatters:
+  default: not-a-formatter
+  languages:
+    javascript: 123 # Should be string
+    typescript: [biome, prettier] # Should be single formatter
+
+# Missing required fields in formatterOptions
+formatterOptions:
+  prettier:
+    invalidOption: true
+    printWidth: 'eighty' # Should be number
+
+  # Formatter that wasn't declared above
+  eslint:
+    rules: {}
+
+# Wrong type for ignores (should be array)
+ignores: 'node_modules/**'
+
+# Invalid terminology format
+terminology:
+  - wrong: 'format' # Should be 'incorrect', not 'wrong'
+  - incorrect: 'test'
+    # Missing 'correct' field

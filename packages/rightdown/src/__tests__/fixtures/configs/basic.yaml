@@ -1,0 +1,10 @@
+# Basic v2 config
+version: 2
+preset: standard
+
+# Simple formatter configuration
+formatters:
+  default: prettier
+  languages:
+    javascript: biome
+    typescript: biome

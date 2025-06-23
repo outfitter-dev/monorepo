@@ -1,213 +1,223 @@
-# rightdown
+# @outfitter/rightdown
 
-> Opinionated Markdown linting and formatting powered by markdownlint-cli2
+> A unified Markdown formatter that orchestrates code block formatting tools
 
 ## Overview
 
-Rightdown is a thin wrapper around the excellent `markdownlint-cli2` that provides:
+Rightdown is a powerful Markdown formatter that goes beyond traditional linting. It orchestrates multiple code formatters (Prettier, Biome, etc.) to format code blocks within your Markdown files, ensuring your documentation stays as clean and consistent as your code.
 
-- 🎯 **Opinionated presets** - Strict, standard, and relaxed configurations
-- 📝 **Smart defaults** - Sensible rules for technical documentation
-- 🔧 **Custom rules** - Extended functionality like terminology enforcement
-- ⚡ **Zero config** - Works out of the box with built-in presets
-- ✅ **Auto-correction** - Fix issues automatically with `--fix`
+## Features
+
+- 🎯 **Unified formatting** - One tool to format both Markdown structure and embedded code
+- 🔧 **Multiple formatter support** - Use Prettier, Biome, or other formatters for different languages
+- 🎨 **Language-specific routing** - Configure different formatters for different languages
+- 🚀 **Fast and efficient** - Parallel processing with minimal overhead
+- 📝 **Preserves fence styles** - Maintains your preferred ``` or ~~~ style
+- 🔌 **Extensible** - Easy to add new formatters
 
 ## Installation
 
 ```bash
-# Install globally
-npm install -g @outfitter/rightdown
+# Install the package
+pnpm add -D @outfitter/rightdown
 
-# Or as a dev dependency
-npm install -D @outfitter/rightdown
+# Install peer dependencies (choose what you need)
+pnpm add -D prettier @biomejs/biome
 ```
 
-## Usage
+## Quick Start
 
-### CLI
-
-The `rightdown` command is available:
+1. Initialize a configuration file:
 
 ```bash
-# Check all Markdown files (uses standard preset by default)
+rightdown init
+```
+
+2. Format your Markdown files:
+
+```bash
+# Dry run (see what would change)
 rightdown
 
-# Fix auto-fixable issues
-rightdown --fix
+# Format in place
+rightdown --write
 
-# Check specific files or patterns
-rightdown "docs/**/*.md" README.md
+# Format specific files
+rightdown README.md docs/**/*.md --write
 
-# Use a specific preset
-rightdown --preset strict
-rightdown --preset relaxed
-
-# Create a config file
-rightdown --init
-rightdown --init strict  # Initialize with strict preset
-
-# Use custom config
-rightdown --config .rightdown.config.yaml
+# Check if files are formatted
+rightdown --check
 ```
 
-### Configuration
+## Configuration
 
-When you run `rightdown --init`, it creates a `.rightdown.config.yaml` file:
+Create a `.rightdown.config.yaml` file in your project root:
 
 ```yaml
-# Rightdown - Standard Preset
-# Balanced rules for technical documentation
+# Required version field
+version: 2
 
-# Extend base markdownlint rules
-extends: null
+# Preset for base rules (strict, standard, or relaxed)
+preset: standard
 
-# Default state for all rules
-default: true
+# Formatter configuration
+formatters:
+  # Default formatter for unlisted languages
+  default: prettier
+  
+  # Language-specific formatters
+  languages:
+    javascript: biome
+    typescript: biome
+    jsx: biome
+    tsx: biome
+    json: biome
+    css: prettier
+    html: prettier
+    yaml: prettier
 
-# Rule overrides
-MD003:
-  style: atx
-MD004:
-  style: dash
-# ... more rules ...
+# Formatter-specific options
+formatterOptions:
+  prettier:
+    printWidth: 80
+    tabWidth: 2
+    semi: true
+    singleQuote: true
+    
+  biome:
+    indentWidth: 2
+    lineWidth: 80
 
-# Terminology enforcement
-terminology:
-  - { incorrect: 'NPM', correct: 'npm' }
-  - { incorrect: 'Javascript', correct: 'JavaScript' }
-  - { incorrect: 'Typescript', correct: 'TypeScript' }
-  # ... more terms ...
+# Markdown structure rules (passed to markdownlint)
+rules:
+  line-length: 80
+  code-block-style: fenced
 
-# Custom rules
-customRules:
-  - ./node_modules/@outfitter/rightdown/dist/rules/consistent-terminology.js
-
-# Ignore patterns
+# Files to ignore
 ignores:
   - node_modules/**
-  - CHANGELOG.md
+  - dist/**
+  - "*.min.js"
+
+# Custom terminology rules
+terminology:
+  - incorrect: Javascript
+    correct: JavaScript
+  - incorrect: NPM
+    correct: npm
 ```
+
+## Language Support
+
+Rightdown can format any language that your configured formatters support. Common examples:
+
+### JavaScript/TypeScript (via Biome or Prettier)
+- `javascript`, `js`
+- `typescript`, `ts` 
+- `jsx`, `tsx`
+- `json`, `jsonc`
+
+### Web Languages (via Prettier)
+- `html`
+- `css`, `scss`, `less`
+- `yaml`, `yml`
+- `markdown`, `md`
+
+### Other Languages
+Configure additional formatters for:
+- Python (via Black)
+- Rust (via rustfmt)
+- Go (via gofmt)
+- And many more...
 
 ## Presets
 
-### Strict
+Rightdown includes three built-in presets:
 
-- Line length: 80 characters
-- All markdownlint rules enabled
-- No inline HTML
-- Strict heading hierarchy
-- Enforces consistent formatting
+- **`strict`** - Enforces consistent style with tight rules
+- **`standard`** - Balanced rules for most projects (default)
+- **`relaxed`** - Minimal rules for maximum flexibility
 
-### Standard (default)
+## CLI Options
 
-- Line length: Ignored (use Prettier)
-- Balanced ruleset for technical docs
-- Inline HTML allowed
-- Flexible but consistent
+```bash
+rightdown [files...] [options]
 
-### Relaxed
+Options:
+  --write, -w       Write formatted output to files
+  --check, -c       Check if files are formatted
+  --fix             Auto-fix issues found during formatting
+  --dry-run         Show what changes would be made without writing
+  --write-configs   Write tool-specific configuration files
+  --check-drift     Check if configurations are out of sync
+  --config          Path to config file (default: .rightdown.config.yaml)
+  --help, -h        Show help
+  --version, -v     Show version
+```
 
-- Minimal rules enabled
-- Focus on basic consistency
-- Very permissive
-- Good for legacy codebases
+## Programmatic Usage
 
-## Features
+```typescript
+import { Orchestrator, ConfigReader } from '@outfitter/rightdown';
+import { PrettierFormatter, BiomeFormatter } from '@outfitter/rightdown';
 
-### Built on markdownlint-cli2
+// Read configuration
+const configReader = new ConfigReader();
+const configResult = await configReader.read('.rightdown.config.yaml');
 
-This package leverages all the features of `markdownlint-cli2`:
+if (!configResult.success) {
+  console.error('Failed to read config:', configResult.error);
+  process.exit(1);
+}
 
-- ⚡ Fast parallel processing
-- 📁 Glob pattern support
-- 🔍 Configuration file discovery
-- 💾 Caching for performance
-- 🎯 Targeted fixes
-- 📊 Multiple output formats
-- 🔌 Plugin support
+// Set up formatters
+const formatters = new Map([
+  ['prettier', new PrettierFormatter()],
+  ['biome', new BiomeFormatter()],
+]);
 
-### Custom Rules
+// Create orchestrator
+const orchestrator = new Orchestrator({
+  config: configResult.data,
+  formatters,
+});
 
-#### Consistent Terminology
+// Format markdown content
+const markdown = `# Example
 
-Automatically fixes common terminology issues:
+\`\`\`javascript
+const   x={y:1}
+\`\`\`
+`;
 
-- `NPM` → `npm`
-- `Javascript` → `JavaScript`
-- `VSCode` → `VS Code`
-- And many more...
-
-## Integration
-
-### package.json Scripts
-
-```json
-{
-  "scripts": {
-    "lint:md": "rightdown",
-    "lint:md:fix": "rightdown --fix"
-  }
+const result = await orchestrator.format(markdown);
+if (result.success) {
+  console.log(result.data.content);
+  console.log('Stats:', result.data.stats);
 }
 ```
 
-### VS Code
+## How It Works
 
-The config files work seamlessly with the [markdownlint VS Code extension](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint).
+1. **Parse** - Rightdown uses an AST-based approach to reliably extract code blocks
+2. **Route** - Each code block is routed to the appropriate formatter based on language
+3. **Format** - Formatters process the code and return formatted results
+4. **Replace** - Formatted code is carefully placed back, preserving fence styles
+5. **Validate** - Optional terminology and structure rules are applied
 
-### GitHub Actions
+## Differences from markdownlint
 
-```yaml
-- name: Lint Markdown
-  run: |
-    npm install -g @outfitter/rightdown
-    rightdown
-```
+While markdownlint focuses on Markdown structure and style rules, Rightdown goes further by:
 
-### Pre-commit Hook
+- Actually formatting code blocks (not just linting)
+- Orchestrating multiple formatters
+- Providing a unified configuration for all formatting needs
+- Offering language-specific formatter routing
 
-```yaml
-repos:
-  - repo: local
-    hooks:
-      - id: rightdown
-        name: Lint Markdown
-        entry: rightdown
-        language: system
-        types: [markdown]
-```
+## Contributing
 
-## Why Another Markdown Linter?
-
-`markdownlint-cli2` is fantastic, but:
-
-1. **Configuration is complex** - Many options and rules to understand
-2. **No built-in presets** - You need to build your config from scratch
-3. **Missing common rules** - Like terminology enforcement
-
-Rightdown provides:
-
-- **Immediate value** - Sensible presets that just work
-- **Easy adoption** - One command to get started
-- **Extended functionality** - Custom rules for common needs
-- **Full compatibility** - It's just markdownlint under the hood
-
-## Advanced Usage
-
-Since this is built on `markdownlint-cli2`, you can use all its features:
-
-```bash
-# Use markdownlint-cli2 options
-rightdown --no-globs docs/api.md
-
-# Multiple config files
-rightdown --config .markdownlint.yaml --config .markdownlint.local.yaml
-
-# Output formats
-rightdown --output results.json
-```
-
-See the [markdownlint-cli2 documentation](https://github.com/DavidAnson/markdownlint-cli2) for all available options.
+We welcome contributions! Please see our [Contributing Guide](../../CONTRIBUTING.md) for details.
 
 ## License
 
-MIT
+MIT © Outfitter

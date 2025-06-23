@@ -1,0 +1,6 @@
+# Invalid YAML syntax
+invalid:
+  - missing closing bracket
+  [ item1
+item2:
+  nested: value

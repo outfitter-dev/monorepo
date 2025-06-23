@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is the `rightdown` package - an opinionated wrapper around `markdownlint-cli2` that provides presets and custom rules for Markdown linting and formatting. The CLI command is `rightdown`.
+This is the `rightdown` package - a unified Markdown formatter that orchestrates code block formatting tools (Prettier, Biome) within markdown files. The CLI command is `rightdown`.
 
 ## Key Commands
 
@@ -28,64 +28,91 @@ pnpm type-check
 pnpm build
 
 # Test commands (or use 'rightdown' after global install)
-node dist/cli.js --init                    # Create config (.rightdown.config.yaml)
-node dist/cli.js README.md                 # Check a file
-node dist/cli.js --fix "**/*.md"          # Fix all markdown
-node dist/cli.js --preset strict          # Use strict preset
+node dist/cli.js init                      # Create config (.rightdown.config.yaml)
+node dist/cli.js                          # Format all markdown files (dry run)
+node dist/cli.js --write                  # Format all markdown files in place
+node dist/cli.js README.md --write        # Format specific file
+node dist/cli.js --check                  # Check if files are formatted
 ```
 
 ## Architecture
 
 ### Package Structure
 
-- `src/cli.ts` - CLI wrapper that configures and calls markdownlint-cli2
-- `src/presets.ts` - Built-in presets (strict, standard, relaxed) as YAML strings
-- `src/config-generator.ts` - Helper to generate configs with custom rules
-- `src/rules/consistent-terminology.js` - Custom markdownlint rule (CommonJS)
-- `src/index.ts` - Library exports
+- `src/cli.ts` - CLI entry point with format and init commands
+- `src/core/` - Core functionality
+  - `config-reader.ts` - Reads and validates .rightdown.config.yaml
+  - `config-compiler.ts` - Generates tool-specific configs
+  - `orchestrator.ts` - Coordinates formatters
+  - `types.ts` - TypeScript types and interfaces
+- `src/formatters/` - Formatter integrations
+  - `base.ts` - IFormatter interface
+  - `prettier.ts` - Prettier integration
+  - `biome.ts` - Biome integration
+- `src/processors/` - Markdown processing
+  - `ast.ts` - AST-based code block extraction/replacement
+- `src/commands/` - CLI commands
+  - `format.ts` - Format command implementation
+  - `init.ts` - Init command implementation
 
 ### Key Design Decisions
 
-1. **Built on markdownlint-cli2** - We don't reinvent the wheel, just add value
-2. **Presets as YAML** - Direct compatibility with markdownlint config format
-3. **Custom rules as CommonJS** - Required by markdownlint's rule loader
-4. **Thin wrapper** - Minimal code, maximum compatibility
-5. **Zero config default** - Works immediately with sensible defaults
+1. **Unified formatter orchestrator** - Coordinates multiple code formatters
+2. **AST-based processing** - Uses remark/unified for reliable code block handling
+3. **Peer dependencies** - Prettier and Biome are optional peer deps
+4. **Result pattern** - All functions use Result<T, AppError> for error handling
+5. **Language routing** - Different formatters for different languages
 
 ### How It Works
 
-1. CLI parses arguments and determines if a preset should be used
-2. If no config exists, creates a temporary one from the preset
-3. Passes everything to markdownlint-cli2
-4. Cleans up temporary files on exit
+1. CLI parses arguments (format command by default, or init)
+2. Config reader loads and validates .rightdown.config.yaml
+3. AST processor extracts code blocks from markdown
+4. Orchestrator routes each block to appropriate formatter
+5. Formatted code blocks are replaced back in the markdown
+6. Result is written back to file (if --write) or stdout
 
-### Custom Rules
+### Configuration Format
 
-Custom rules follow markdownlint's format:
+```yaml
+# .rightdown.config.yaml
+version: 2
+preset: standard  # or strict, relaxed
 
-```javascript
-module.exports = {
-  names: ['MD100', 'rule-name'],
-  description: 'Rule description',
-  tags: ['category'],
-  function: function rule(params, onError) {
-    // Rule implementation
-  },
-};
+# Language routing
+formatters:
+  default: prettier
+  languages:
+    javascript: biome
+    typescript: biome
+    json: biome
+
+# Formatter options
+formatterOptions:
+  prettier:
+    printWidth: 80
+  biome:
+    indentWidth: 2
 ```
 
 ## Usage Patterns
 
 ### As a CLI Tool
 
-The primary use case - provides immediate value with zero config:
+The primary use case:
 
 ```bash
-# Just works
-npx @outfitter/rightdown
+# Initialize config
+rightdown init
 
-# With options
-npx @outfitter/rightdown --fix --preset strict
+# Format files (dry run)
+rightdown
+
+# Format in place
+rightdown --write
+
+# Check formatting
+rightdown --check
 ```
 
 ### As a Library
@@ -93,30 +120,41 @@ npx @outfitter/rightdown --fix --preset strict
 For programmatic usage:
 
 ```typescript
-import { markdownlintCli2 } from '@outfitter/rightdown';
-import { generateConfig } from '@outfitter/rightdown';
+import { Orchestrator, ConfigReader } from '@outfitter/rightdown';
+import { PrettierFormatter, BiomeFormatter } from '@outfitter/rightdown';
 
-// Generate a config
-const config = generateConfig({
-  preset: 'strict',
-  terminology: [{ incorrect: 'NPM', correct: 'npm' }],
+// Read config
+const configReader = new ConfigReader();
+const configResult = await configReader.read('.rightdown.config.yaml');
+
+// Set up formatters
+const formatters = new Map([
+  ['prettier', new PrettierFormatter()],
+  ['biome', new BiomeFormatter()],
+]);
+
+// Create orchestrator
+const orchestrator = new Orchestrator({
+  config: configResult.data,
+  formatters,
 });
 
-// Run markdownlint-cli2
-await markdownlintCli2({ config, fix: true });
+// Format markdown
+const result = await orchestrator.format(markdownContent);
 ```
 
 ## Important Notes
 
-- The package is a thin wrapper - most functionality comes from markdownlint-cli2
-- Custom rules must be CommonJS modules for compatibility
-- Presets are just YAML strings that get written to temp files if needed
-- All markdownlint-cli2 options are supported
-- Config files are compatible with VS Code's markdownlint extension
+- Version 2.0 is a unified formatter orchestrator for code blocks in markdown
+- Prettier and Biome are peer dependencies - install only what you need
+- All functions use the Result pattern for error handling
+- Code blocks with unsupported languages fall back to default formatter
+- Fence style (``` vs ~~~) and length are preserved during formatting
 
 ## Future Enhancements
 
-- More custom rules (spell check, inclusive language, etc.)
+- Additional formatter integrations (ESLint, dprint, etc.)
+- Parallel processing for large files
+- Watch mode for development
+- VSCode extension integration
 - GitHub Action wrapper
-- Integration with other Outfitter tools
-- Config migration tool from other linters

@@ -21,6 +21,7 @@ Transform Rightdown into a meta-tool that orchestrates multiple best-in-class to
 
 ```yaml
 # .rightdown.config.yaml - Single source of truth
+version: 2
 preset: standard
 
 # Markdown structure rules (markdownlint)
@@ -30,40 +31,47 @@ rules:
   # ... other rules
 
 # Code block formatting
-codeFormatters:
-  # Use Biome for JS/TS ecosystem
-  javascript: biome
-  typescript: biome
-  jsx: biome
-  tsx: biome
-  json: biome
-  jsonc: biome
+formatters:
+  # Default formatter for unknown languages
+  default: prettier
   
-  # Use Prettier for everything else
-  yaml: prettier
-  markdown: prettier  # For nested markdown
-  html: prettier
-  css: prettier
-  scss: prettier
-  graphql: prettier
-  python: prettier  # If prettier-python plugin available
-  
-  # Future: could add language-specific formatters
-  # rust: rustfmt
-  # go: gofmt
+  # Language-specific formatters
+  languages:
+    javascript: biome
+    typescript: biome
+    jsx: biome
+    tsx: biome
+    json: biome
+    jsonc: biome
+    yaml: prettier
+    markdown: prettier  # For nested markdown
+    html: prettier
+    css: prettier
+    scss: prettier
+    graphql: prettier
+    python: prettier  # If prettier-python plugin available
+    
+    # Future: could add language-specific formatters
+    # rust: rustfmt
+    # go: gofmt
 
-# Prose processing (future)
-prose:
-  # Remark plugins for advanced processing
-  plugins:
-    - remark-gfm
-    - remark-frontmatter
-  
-# Output formats for each tool
+# Formatter-specific options
+formatterOptions:
+  prettier:
+    printWidth: 80
+    tabWidth: 2
+    semi: true
+  biome:
+    indentStyle: space
+    indentWidth: 2
+
+# Output configuration
 output:
-  markdownlint: jsonc  # or yaml
-  prettier: json
-  biome: json
+  # Where to write generated configs (optional)
+  configs:
+    markdownlint: .markdownlint-cli2.jsonc
+    prettier: false  # Don't generate, use API
+    biome: false     # Don't generate, use API
 ```
 
 ### Implementation Details
@@ -93,9 +101,15 @@ output:
 
 3. **Single Command Interface**:
    ```bash
-   rightdown              # Lint and check
+   rightdown              # Lint/format all Markdown files
    rightdown --fix        # Fix everything (structure + code blocks)
+   rightdown --check      # CI mode: no writes, exit 1 on differences
+   rightdown --dry-run    # Preview changes without writing files
    rightdown --init       # Create config with formatter detection
+   rightdown --config <p> # Use explicit config path
+   rightdown --version    # Show version + detected formatters
+   rightdown --write-configs # Write generated tool configs
+   rightdown --check-drift  # Check if configs have drifted
    ```
 
 ### Benefits
@@ -108,25 +122,29 @@ output:
 
 ### Migration Path
 
-```javascript
-// Phase 1: Orchestrator (2.1)
-dependencies: {
-  "markdownlint-cli2": "^0.15.0",
-  "prettier": "^3.0.0",
-  "@biomejs/biome": "^1.0.0",
-  "remark": "^15.0.0"
-}
+```jsonc
+// ***Dependency strategy***
+// We keep the dependency surface minimal and use **peerDependencies** for the
+// heavy-weight formatters that consuming repos may already have installed.
 
-// Phase 2: Partial Internalization (3.0)
-dependencies: {
-  "markdownlint-cli2": "^0.15.0",
-  // Custom code formatter implementation
-  "remark": "^15.0.0"
-}
+{
+  // Phase 1 – Orchestrator (Rightdown 2.1)
+  "dependencies": {
+    "markdownlint-cli2": "^0.15.0",
+    "remark": "^15.0.0",            // optional but bundled for AST features
+    "unified": "^11.0.0"            // remark peer
+  },
+  "peerDependencies": {
+    "prettier": "^3.0.0",            // ESM-only – require Node >=18.12
+    "@biomejs/biome": "^2.0.0"       // biome is heavy; peer keeps install size down
+  },
 
-// Phase 3: Full Integration (4.0)
-dependencies: {
-  // Everything internalized or using lightweight alternatives
+  // Phase 2 – Partial internalisation (Rightdown 3.0)
+  // We may drop markdownlint-cli2 and embed the rule engine, but this stays
+  // out of scope for 2.x.
+  "optionalDependencies": {
+    "prettier-plugin-python": "*"      // example: extra formatters auto-detected
+  }
 }
 ```
 
@@ -146,15 +164,41 @@ rules:
   line-length: 100
   
 # Custom code formatters
-codeFormatters:
-  javascript: biome
-  typescript: biome
-  sql: none  # Don't format SQL blocks
+formatters:
+  languages:
+    javascript: biome
+    typescript: biome
+    sql: none  # Don't format SQL blocks
   
 # Ignore patterns
 ignores:
   - "vendor/**"
   - "*.generated.md"
+```
+
+**Monorepo Setup**:
+
+```yaml
+version: 2
+preset: standard
+
+# Monorepo-specific overrides
+rules:
+  line-length: false  # Let Prettier handle this
+  
+formatters:
+  default: prettier
+  languages:
+    javascript: biome
+    typescript: biome
+    json: biome
+    
+# Monorepo ignores
+ignores:
+  - "packages/*/dist/**"
+  - "packages/*/build/**"
+  - "**/node_modules/**"
+  - "**/.turbo/**"
 ```
 
 **IDE Integration**:
@@ -168,20 +212,45 @@ ide:
 ### Technical Architecture
 
 ```
-rightdown
-├── core/
-│   ├── config-reader.ts    # Reads .rightdown.config.yaml
-│   ├── config-compiler.ts  # Generates tool-specific configs
-│   └── orchestrator.ts     # Coordinates tools
-├── formatters/
-│   ├── prettier.ts         # Prettier integration
-│   ├── biome.ts           # Biome integration
-│   └── custom.ts          # Future custom formatters
-├── processors/
-│   ├── markdownlint.ts    # Structure linting
-│   └── remark.ts          # AST processing
-└── cli/
-    └── index.ts           # CLI interface
+rightdown/
+├── src/
+│   ├── core/
+│   │   ├── config-reader.ts      # Reads .rightdown.config.yaml
+│   │   ├── config-compiler.ts    # Generates tool-specific configs
+│   │   └── orchestrator.ts       # Coordinates all tools
+│   ├── formatters/
+│   │   ├── base.ts              # Base formatter interface
+│   │   ├── prettier.ts          # Prettier integration
+│   │   ├── biome.ts            # Biome integration
+│   │   └── markdownlint.ts    # Existing markdownlint wrapper
+│   ├── processors/
+│   │   ├── code-block.ts       # Extract/replace code blocks
+│   │   └── remark.ts          # Future: Remark AST processing
+│   └── cli/
+│       └── commands/
+│           └── format.ts       # Enhanced format command
+```
+
+### CI Integration
+
+**GitHub Actions**:
+
+```yaml
+- name: Check Markdown
+  run: pnpm rightdown --check
+
+- name: Verify No Drift
+  run: pnpm rightdown --check-drift
+```
+
+**Pre-commit Hooks**:
+
+```bash
+# .husky/pre-commit
+pnpm rightdown --dry-run || {
+  echo "Markdown issues found. Run 'pnpm rightdown --fix'"
+  exit 1
+}
 ```
 
 ### Future Possibilities
@@ -191,6 +260,8 @@ rightdown
 3. **Watch Mode**: Format on save with incremental processing
 4. **Plugin System**: Allow custom formatters and processors
 5. **Cloud Formation**: Format via API for CI/CD pipelines
+6. **Configuration Sync**: Auto-sync tool configs with Rightdown config
+7. **Monorepo Awareness**: Inherit configs from parent directories
 
 ## Alternatives Considered
 
@@ -213,9 +284,20 @@ rightdown
 
 - Single command formats everything correctly
 - Configuration is simpler than managing multiple tools
-- Performance is comparable to running tools separately
+- Performance: ≤1.5× the time of raw markdownlint-cli2 alone
+- Test coverage ≥90% on core components
+- v1 configs continue to work unchanged
 - Community adoption increases
 - Clear path to future improvements
+
+## Exit Codes
+
+| Code | Meaning                                |
+|------|----------------------------------------|
+| 0    | No issues detected                     |
+| 1    | Lint/formatting errors found           |
+| 2    | Configuration error or invalid flag    |
+| 3    | Unexpected runtime error              |
 
 ## Questions to Resolve
 
@@ -224,6 +306,16 @@ rightdown
 3. Should the config compiler be a separate package?
 4. How to handle formatter-specific options?
 5. What's the best way to test the orchestration?
+
+## Risk Mitigation
+
+| Risk                                  | Impact | Mitigation                                          |
+|---------------------------------------|--------|-----------------------------------------------------|
+| Biome size inflates install           | High   | Keep Biome a peerDependency, lazy-import at runtime |
+| Formatter version conflicts           | Medium | Pin versions, surface `--versions` diagnostics      |
+| Prettier v3 ESM-only                  | High   | Dynamic import, require Node ≥ 18.12               |
+| Large monorepo memory usage           | Medium | Stream processing & file chunking                   |
+| Unformatted exotic languages          | Low    | Skip file with warning, expose formatter hooks      |
 
 ## Conclusion
 

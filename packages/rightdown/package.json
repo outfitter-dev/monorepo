@@ -1,7 +1,7 @@
 {
   "name": "@outfitter/rightdown",
   "version": "2.0.0",
-  "description": "Opinionated Markdown linting and formatting for correct documentation",
+  "description": "Unified Markdown formatter orchestrating code block formatting tools",
   "keywords": [
     "markdown",
     "linting",
@@ -26,20 +26,41 @@
     "dev": "tsup --watch",
     "type-check": "tsc --noEmit",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@outfitter/contracts": "workspace:*",
     "js-yaml": "^4.1.0",
     "markdownlint-cli2": "^0.15.0",
+    "remark": "^15.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-stringify": "^11.0.0",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0",
     "yargs": "^18.0.0"
   },
+  "peerDependencies": {
+    "@biomejs/biome": "^2.0.0",
+    "prettier": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@biomejs/biome": {
+      "optional": true
+    },
+    "prettier": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@biomejs/biome": "^2.0.0",
     "@outfitter/typescript-config": "workspace:*",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.7.4",
     "@types/yargs": "^17.0.33",
+    "@vitest/coverage-v8": "^2.1.5",
     "markdownlint": "^0.34.0",
+    "prettier": "^3.5.3",
     "tsup": "^8.3.0",
     "typescript": "^5.6.3",
     "vitest": "^2.1.5"

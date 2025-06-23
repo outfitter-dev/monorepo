@@ -1,103 +1,110 @@
-import { existsSync, writeFileSync } from 'node:fs';
+import { writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { ArgumentsCamelCase } from 'yargs';
-import { select, confirm, input } from '../utils/prompts.js';
 import { colors } from '../utils/colors.js';
-import { generateConfig, defaultTerminology } from '../config-generator.js';
-import { getConfigPath } from '../utils/config-path.js';
-import type { PresetName } from '../types.js';
+import * as yaml from 'js-yaml';
+import type { RightdownConfig } from '../core/types.js';
 
 interface InitCommandArgs {
-  preset?: PresetName;
+  preset?: 'strict' | 'standard' | 'relaxed';
+  force?: boolean;
   quiet?: boolean;
 }
 
-/**
- * Initializes a `.rightdown.config.yaml` configuration file for the Markdown linting tool, either interactively or using a specified preset.
- *
- * If a configuration file already exists, prompts the user to confirm overwriting. In interactive mode, allows selection of a preset, enabling custom terminology checking, and adding custom ignore patterns. In direct mode, generates the configuration using the provided preset. Writes the generated configuration to disk and displays next steps unless quiet mode is enabled.
- *
- * @param argv - Command-line arguments including optional `preset` and `quiet` flags
- */
 export async function initCommand(argv: ArgumentsCamelCase<InitCommandArgs>): Promise<void> {
-  const { quiet } = argv;
-  let { preset } = argv;
+  const { preset = 'standard', force = false, quiet = false } = argv;
+  const configPath = resolve(process.cwd(), '.rightdown.config.yaml');
 
-  // Check if config already exists
-  const configPath = getConfigPath();
-  if (existsSync(configPath)) {
-    const overwrite = await confirm({
-      message: `${configPath} already exists. Overwrite?`,
-      default: false,
-    });
-
-    if (!overwrite) {
-      console.log(colors.warning('Init cancelled.'));
-      return;
+  try {
+    // Check if config already exists
+    if (existsSync(configPath) && !force) {
+      throw new Error('Configuration file already exists. Use --force to overwrite.');
     }
-  }
 
-  // Interactive mode if no preset specified
-  if (!preset) {
-    preset = (await select({
-      message: 'Choose a preset:',
-      choices: [
-        { name: 'strict   - Enforce consistent markdown style', value: 'strict' },
-        { name: 'standard - Balanced rules for technical docs', value: 'standard' },
-        { name: 'relaxed  - Minimal rules focusing on consistency', value: 'relaxed' },
+    // Create default config
+    const config: RightdownConfig = {
+      version: 2,
+      preset,
+      formatters: {
+        default: 'prettier',
+        languages: {
+          javascript: 'biome',
+          typescript: 'biome',
+          jsx: 'biome',
+          tsx: 'biome',
+          json: 'biome',
+          jsonc: 'biome',
+        },
+      },
+      ignores: [
+        'node_modules/**',
+        'dist/**',
+        'build/**',
+        'coverage/**',
+        '.git/**',
+        '*.min.js',
+        '*.min.css',
       ],
-      default: 'standard',
-    })) as PresetName;
+    };
 
-    const enableTerminology = await confirm({
-      message: 'Enable custom terminology checking?',
-      default: true,
-    });
-
-    let ignores: string[] = [];
-    const addCustomIgnores = await confirm({
-      message: 'Add custom ignore patterns?',
-      default: false,
-    });
-
-    if (addCustomIgnores) {
-      const patternsInput = await input({
-        message: 'Enter ignore patterns (comma-separated):',
-        default: '',
-      });
-      ignores = patternsInput
-        .split(',')
-        .map((s) => s.trim())
-        .filter(Boolean);
+    // Add example formatter options based on preset
+    if (preset === 'strict') {
+      config.rules = {
+        'line-length': 80,
+        'code-block-style': 'fenced',
+      };
+      config.formatterOptions = {
+        prettier: {
+          printWidth: 80,
+          proseWrap: 'always',
+        },
+        biome: {
+          lineWidth: 80,
+          indentStyle: 'space',
+          indentWidth: 2,
+        },
+      };
+    } else if (preset === 'relaxed') {
+      config.rules = {
+        'line-length': false,
+      };
+      config.formatterOptions = {
+        prettier: {
+          printWidth: 120,
+          proseWrap: 'preserve',
+        },
+        biome: {
+          lineWidth: 120,
+        },
+      };
     }
 
-    // Generate config
-    const config = generateConfig({
-      preset,
-      terminology: enableTerminology ? defaultTerminology : [],
-      customRules: enableTerminology
-        ? ['./node_modules/@outfitter/rightdown/dist/rules/consistent-terminology.js']
-        : [],
-      ignores,
+    // Write config file
+    const yamlContent = yaml.dump(config, {
+      indent: 2,
+      lineWidth: 80,
+      quotingType: '"',
+      forceQuotes: false,
     });
 
-    writeFileSync(configPath, config);
-  } else {
-    // Direct mode with preset
-    const config = generateConfig({
-      preset,
-      terminology: defaultTerminology,
-      customRules: ['./node_modules/@outfitter/rightdown/dist/rules/consistent-terminology.js'],
-    });
+    writeFileSync(configPath, yamlContent);
 
-    writeFileSync(configPath, config);
-  }
-
-  if (!quiet) {
-    console.log(colors.success('✅'), `Created ${configPath} with ${preset} preset`);
-    console.log(colors.dim('\nNext steps:'));
-    console.log(colors.dim('  • Run "rightdown" to lint your Markdown files'));
-    console.log(colors.dim('  • Run "rightdown --fix" to automatically fix issues'));
-    console.log(colors.dim('  • Run "rightdown rules list" to see available rules'));
+    if (!quiet) {
+      console.log(colors.success(`✅ Created ${configPath}`));
+      console.log();
+      console.log('Configuration created with:');
+      console.log(`  • Preset: ${colors.info(preset)}`);
+      console.log(`  • Default formatter: ${colors.info('prettier')}`);
+      console.log(`  • JavaScript/TypeScript formatter: ${colors.info('biome')}`);
+      console.log();
+      console.log('Next steps:');
+      console.log('  1. Install peer dependencies:');
+      console.log(`     ${colors.dim('pnpm add -D prettier @biomejs/biome')}`);
+      console.log('  2. Format your markdown files:');
+      console.log(`     ${colors.dim('rightdown --write')}`);
+    }
+  } catch (error) {
+    console.error(colors.error('Error:'), error instanceof Error ? error.message : error);
+    process.exit(1);
   }
 }
