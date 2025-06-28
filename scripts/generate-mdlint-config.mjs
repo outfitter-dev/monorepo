@@ -19,7 +19,14 @@ const strictConfig = {
   MD048: { style: 'backtick' },
   MD049: { style: 'underscore' },
   MD050: { style: 'asterisk' },
-  ignores: ['node_modules/**', '.git/**', 'dist/**', 'build/**', 'coverage/**', '*.min.md'],
+  ignores: [
+    'node_modules/**',
+    '.git/**',
+    'dist/**',
+    'build/**',
+    'coverage/**',
+    '*.min.md',
+  ],
 };
 
 const standardConfig = {
@@ -100,7 +107,12 @@ const defaultTerminology = [
 ];
 
 function generateConfig(options = {}) {
-  const { preset = 'standard', terminology = [], customRules = [], ignores = [] } = options;
+  const {
+    preset = 'standard',
+    terminology = [],
+    customRules = [],
+    ignores = [],
+  } = options;
   const config = getPresetConfig(preset);
 
   if (terminology.length > 0) {
@@ -121,10 +133,11 @@ const config = generateConfig({
   preset: 'standard',
   terminology: defaultTerminology,
   ignores: ['CHANGELOG.md'],
+  customRules: ['./packages/rightdown/dist/rules/consistent-terminology.js'],
 });
 
-const outputPath = join(process.cwd(), '.markdownlint-cli2.jsonc');
+const outputPath = join(process.cwd(), '.markdownlint.json');
 
 writeFileSync(outputPath, config);
 
-console.log(`✅ Generated .markdownlint-cli2.jsonc with 'standard' preset.`);
+console.log(`✅ Generated .markdownlint.json with 'standard' preset.`);

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { glob } from 'glob';
 
 /**
@@ -42,8 +42,56 @@ function unwrapMarkdownProse(content) {
 
     // Preserve list items
     if (/^[\s]*[-*+]\s/.test(line) || /^[\s]*\d+\.\s/.test(line)) {
-      result.push(line);
-      i++;
+      // Unwrap hard-wrapped lines within a list item
+      const listItemLines = [line];
+      let j = i + 1;
+      while (j < lines.length) {
+        const nextLine = lines[j];
+        // If next line is indented (continuation of list item) or blank, join it
+        if (/^\s+$/.test(nextLine)) {
+          listItemLines.push('');
+          j++;
+          continue;
+        }
+        // If next line is indented (at least 2 spaces or a tab), treat as continuation
+        if (/^\s{2,}\S/.test(nextLine) || /^\t+\S/.test(nextLine)) {
+          listItemLines.push(nextLine.trim());
+          j++;
+          continue;
+        }
+        // If next line is NOT a new list item, header, code block, blockquote, table, or horizontal rule, treat as continuation
+        const nextTrimmed = nextLine.trim();
+        if (
+          nextTrimmed === '' ||
+          nextTrimmed.startsWith('#') ||
+          nextTrimmed.startsWith('```') ||
+          nextTrimmed.startsWith('~~~') ||
+          /^[\s]*[-*+]\s/.test(nextLine) ||
+          /^[\s]*\d+\.\s/.test(nextLine) ||
+          nextLine.includes('|') ||
+          nextTrimmed.startsWith('>') ||
+          /^[\s]*-{3,}[\s]*$/.test(nextLine) ||
+          /^[\s]*\*{3,}[\s]*$/.test(nextLine)
+        ) {
+          break;
+        }
+        // Otherwise, treat as continuation of the list item
+        listItemLines.push(nextLine.trim());
+        j++;
+      }
+      // Join the list item lines, preserving the marker and unwrapping prose
+      const firstLine = listItemLines[0];
+      const markerMatch = firstLine.match(/^([\s]*([-*+]\s|\d+\.\s))/);
+      const marker = markerMatch ? markerMatch[1] : '';
+      const content = listItemLines
+        .map((l, idx) =>
+          idx === 0 ? l.replace(/^([\s]*([-*+]\s|\d+\.\s))/, '') : l,
+        )
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      result.push(`${marker}${content}`);
+      i = j;
       continue;
     }
 
@@ -214,7 +262,9 @@ Examples:
     }
   }
 
-  console.log(`🔍 Processing ${filePaths.length} files${isDryRun ? ' (dry run)' : ''}...\n`);
+  console.log(
+    `🔍 Processing ${filePaths.length} files${isDryRun ? ' (dry run)' : ''}...\n`,
+  );
 
   let processedCount = 0;
   let changedCount = 0;
@@ -244,7 +294,9 @@ Examples:
 
   console.log(`\n📊 Summary:`);
   console.log(`   Processed: ${processedCount} files`);
-  console.log(`   ${isDryRun ? 'Would change' : 'Changed'}: ${changedCount} files`);
+  console.log(
+    `   ${isDryRun ? 'Would change' : 'Changed'}: ${changedCount} files`,
+  );
 
   if (isDryRun && changedCount > 0) {
     console.log(`\n💡 Run without --dry-run to apply changes`);

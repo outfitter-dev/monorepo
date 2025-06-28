@@ -17,6 +17,7 @@ This monorepo contains the following packages:
 - **[@outfitter/typescript-config](./packages/typescript-config)** - Shared TypeScript configurations
 - **[@outfitter/husky-config](./packages/husky-config)** - Git hooks configuration
 - **[@outfitter/changeset-config](./packages/changeset-config)** - Release management configuration
+- **[@outfitter/formatting](./packages/formatting)** - Unified formatting setup for Prettier, Biome, and Remark
 
 ### Tools & Documentation
 

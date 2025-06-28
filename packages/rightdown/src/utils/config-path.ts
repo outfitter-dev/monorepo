@@ -6,7 +6,7 @@ const DEFAULT_CONFIG_NAMES = ['.rightdown.config.yaml', '.markdownlint-cli2.yaml
 /**
  * Get the configuration file path. Checks for existing config files in order of preference,
  * or uses the first default if none exist.
- * 
+ *
  * Priority order:
  * 1. RIGHTDOWN_CONFIG environment variable
  * 2. Existing .rightdown.config.yaml file
@@ -59,5 +59,5 @@ export function hasAnyConfigFile(): boolean {
   }
 
   // Check for any supported config file
-  return ALL_SUPPORTED_CONFIGS.some(configName => existsSync(configName));
+  return ALL_SUPPORTED_CONFIGS.some((configName) => existsSync(configName));
 }

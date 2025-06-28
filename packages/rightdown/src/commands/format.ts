@@ -122,7 +122,7 @@ async function formatMarkdown(content: string, preset?: PresetName): Promise<str
       tempConfigPath = join(tempDir, '.markdownlint.json');
       const presetConfig = getPresetConfig(preset);
       // Remove customRules for formatting (they may not exist in the expected path)
-      delete presetConfig.customRules;
+      presetConfig.customRules = undefined;
       writeFileSync(tempConfigPath, JSON.stringify(presetConfig, null, 2));
       args.push('--config', tempConfigPath);
     }

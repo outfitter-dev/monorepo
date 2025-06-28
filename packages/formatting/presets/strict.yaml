@@ -1,0 +1,59 @@
+# @outfitter/formatting Strict Preset
+# Rigorous formatting for documentation-heavy projects
+name: strict
+description: Strict formatting rules optimized for documentation and long-term maintenance
+extends: standard # Inherit from standard and override specific settings
+
+common:
+  # Stricter line length
+  lineWidth: 80
+  # Consistent quotes everywhere
+  quotes:
+    style: single
+    jsx: single # Even JSX uses single quotes
+  # Always use semicolons
+  semicolons: always
+  # Maximum trailing commas
+  trailingComma: all
+
+# Raw tool-specific overrides
+raw:
+  prettier:
+    # Strict prose wrapping for markdown
+    proseWrap: always
+  biome:
+    # Stricter linting rules
+    linter:
+      rules:
+        complexity:
+          noExcessiveCognitiveComplexity: error
+          noBannedTypes: error
+        correctness:
+          noUnusedVariables: error
+        style:
+          useConsistentArrayType: error
+          noNonNullAssertion: error
+  eslint:
+    # Stricter ESLint rules
+    extends:
+      - eslint:recommended
+    rules:
+      no-console: error
+      no-debugger: error
+      no-unused-vars: error
+      eqeqeq: error
+      curly: error
+      no-var: error
+  remark:
+    # More remark-lint rules for documentation
+    plugins:
+      - remark-lint-no-duplicate-headings
+      - - remark-lint-maximum-heading-length
+        - 50 # Stricter heading length
+      - - remark-lint-maximum-line-length
+        - 80
+      - remark-lint-no-heading-punctuation
+      - remark-lint-heading-increment
+      - remark-lint-list-item-indent
+      - - remark-lint-list-item-spacing
+        - checkBlanks: true

@@ -1,0 +1,62 @@
+# @outfitter/formatting Relaxed Preset
+# Flexible formatting for rapid development
+name: relaxed
+description: Relaxed formatting rules for rapid prototyping and flexible development
+
+common:
+  # Longer lines allowed
+  lineWidth: 120
+  # Standard indentation
+  indentation:
+    style: space
+    width: 2
+  # Flexible quotes
+  quotes:
+    style: single
+    jsx: double
+  # Semicolons only when needed
+  semicolons: asNeeded
+  # ES5 compatible trailing commas
+  trailingComma: es5
+  # Spaces inside brackets
+  bracketSpacing: true
+  # Arrow parens only when needed
+  arrowParens: asNeeded
+  # Auto-detect line endings
+  endOfLine: auto
+
+# Raw tool-specific overrides
+raw:
+  prettier:
+    # Don't wrap prose
+    proseWrap: preserve
+    # Be flexible with HTML
+    htmlWhitespaceSensitivity: ignore
+  biome:
+    # Relaxed linting - mostly warnings
+    linter:
+      rules:
+        complexity:
+          noExcessiveCognitiveComplexity: warn
+        correctness:
+          noUnusedVariables: warn
+        style:
+          # Allow flexibility in coding style
+          useConsistentArrayType: off
+  eslint:
+    # Minimal ESLint rules
+    extends:
+      - eslint:recommended
+    rules:
+      no-console: warn
+      no-debugger: error
+      no-unused-vars: warn
+  remark:
+    # Minimal remark rules
+    plugins:
+      - remark-lint-no-duplicate-headings
+      # Allow longer headings and lines
+      - - remark-lint-maximum-heading-length
+        - 80
+      - - remark-lint-maximum-line-length
+        - 120

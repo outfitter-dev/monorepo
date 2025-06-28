@@ -1,0 +1,65 @@
+# @outfitter/formatting Standard Preset
+# Balanced formatting for most projects
+name: standard
+description: Balanced formatting rules suitable for most JavaScript/TypeScript projects
+
+common:
+  # Line length for wrapping
+  lineWidth: 80
+
+  # Indentation settings
+  indentation:
+    style: space
+    width: 2
+
+  # Quote preferences
+  quotes:
+    style: single
+    jsx: double
+
+  # Semicolon usage
+  semicolons: always
+
+  # Trailing comma placement
+  trailingComma: all
+
+  # Spaces inside brackets
+  bracketSpacing: true
+
+  # Parentheses around arrow functions
+  arrowParens: always
+
+  # Line ending style
+  endOfLine: lf
+
+# Raw tool-specific overrides (optional)
+raw:
+  prettier:
+    # Prettier-specific settings that don't map to common
+    proseWrap: preserve
+    htmlWhitespaceSensitivity: css
+    embeddedLanguageFormatting: auto
+
+  biome:
+    # Biome-specific linting rules
+    linter:
+      rules:
+        complexity:
+          noExcessiveCognitiveComplexity: warn
+        style:
+          useConsistentArrayType: error
+
+  eslint:
+    # ESLint-specific rules
+    extends:
+      - eslint:recommended
+    rules:
+      no-console: error
+      no-debugger: error
+
+  remark:
+    # Remark-specific plugins
+    plugins:
+      - remark-lint-no-duplicate-headings
+      - - remark-lint-maximum-heading-length
+        - 60

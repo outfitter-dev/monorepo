@@ -1,0 +1,99 @@
+# Example Custom Preset
+# Shows how to create organization-specific formatting rules
+name: custom-example
+description: Example of a custom preset with organization-specific rules
+extends: standard # Start from standard and customize
+
+common:
+  # Organization prefers 100 character lines
+  lineWidth: 100
+
+  # Tabs for indentation (company standard)
+  indentation:
+    style: tab
+    width: 4
+
+  # Double quotes everywhere
+  quotes:
+    style: double
+    jsx: double
+
+# Raw tool-specific settings for fine-grained control
+raw:
+  prettier:
+    # Organization-specific overrides
+    printWidth: 100 # Ensure consistency
+    useTabs: true
+    tabWidth: 4
+
+    # Custom plugin configuration
+    plugins:
+      - prettier-plugin-organize-imports
+      - prettier-plugin-tailwindcss
+
+    # File-specific overrides
+    overrides:
+      - files: '*.test.{js,ts}'
+        options:
+          printWidth: 120 # More space for test descriptions
+
+      - files: '*.{yml,yaml}'
+        options:
+          tabWidth: 2 # YAML files always use 2 spaces
+          useTabs: false
+
+  biome:
+    # Organization's linting standards
+    formatter:
+      indentStyle: tab
+      indentWidth: 4
+      lineWidth: 100
+
+    linter:
+      enabled: true
+      rules:
+        # Enforce organization's naming conventions
+        naming:
+          - error
+          - format:
+              - camelCase # variables, functions
+              - PascalCase # types, classes
+              - CONSTANT_CASE # constants
+
+        # Security rules
+        security:
+          noHardcodedCredentials: error
+
+        # Custom complexity thresholds
+        complexity:
+          noExcessiveCognitiveComplexity:
+            - error
+            - maxComplexity: 15
+
+  remark:
+    # Documentation standards
+    settings:
+      # Force specific list markers
+      bullet: '-'
+      bulletOrdered: '.'
+
+    plugins:
+      # Standard plugins
+      - remark-lint-no-duplicate-headings
+      - - remark-lint-ordered-list-marker-style
+        - '.'
+
+      # Custom documentation rules
+      - - remark-lint-heading-style
+        - atx # Always use # style headings
+
+      # Enforce code block language specification
+      - remark-lint-fenced-code-flag
+
+      # Custom plugin for organization's docs
+      - - ./plugins/remark-company-terms.js
+        - terms:
+            - from: 'e-mail'
+              to: 'email'
+            - from: 'dev ops'
+              to: 'DevOps'

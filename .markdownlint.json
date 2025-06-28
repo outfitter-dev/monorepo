@@ -17,14 +17,12 @@
   "MD029": {
     "style": "ordered"
   },
-  "MD032": true,
   "MD033": false,
   "MD041": false,
   "MD043": false,
   "MD046": {
     "style": "fenced"
   },
-  "MD047": true,
   "ignores": [
     "node_modules/**",
     ".git/**",
@@ -71,5 +69,8 @@
       "incorrect": "react native",
       "correct": "React Native"
     }
+  ],
+  "customRules": [
+    "./packages/rightdown/dist/rules/consistent-terminology.js"
   ]
 }

@@ -1,0 +1,98 @@
+{
+  "name": "@outfitter/formatting",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Lightweight formatting setup tool that orchestrates Prettier, Biome, ESLint, and Remark configurations",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "outfitter-formatting": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./cli": {
+      "types": "./dist/cli.d.ts",
+      "import": "./dist/cli.mjs",
+      "require": "./dist/cli.js"
+    }
+  },
+  "files": [
+    "dist",
+    "presets"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "type-check": "tsc --noEmit",
+    "test": "vitest",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@outfitter/biome-config": "workspace:*",
+    "@outfitter/contracts": "workspace:*",
+    "@outfitter/contracts-zod": "workspace:*",
+    "@outfitter/prettier-config": "workspace:*",
+    "@outfitter/remark-config": "workspace:*",
+    "commander": "^12.0.0",
+    "unified": "^11.0.0",
+    "unist-util-visit": "^5.0.0",
+    "yaml": "^2.3.4",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@outfitter/typescript-config": "workspace:*",
+    "@types/mdast": "^4.0.0",
+    "@types/node": "^22.7.4",
+    "@vitest/coverage-v8": "^2.1.9",
+    "eslint": "^9.29.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": ">=1.8.0",
+    "eslint": ">=8.0.0",
+    "prettier": ">=3.0.0",
+    "remark-cli": ">=12.0.0"
+  },
+  "peerDependenciesMeta": {
+    "prettier": {
+      "optional": true
+    },
+    "@biomejs/biome": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
+    "remark-cli": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "formatting",
+    "prettier",
+    "biome",
+    "eslint",
+    "remark",
+    "config",
+    "setup",
+    "outfitter"
+  ],
+  "author": "Outfitter",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "directory": "packages/formatting"
+  },
+  "bugs": {
+    "url": "https://github.com/outfitter-dev/monorepo/issues"
+  },
+  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/formatting"
+}
