@@ -52,7 +52,7 @@
     "dev": "bun build src/index.ts src/error.ts src/result.ts src/assert.ts src/types/index.ts src/types/branded.ts src/zod/index.ts --outdir=dist --format=esm --sourcemap=external --watch",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "type-check": "bunx tsc --noEmit"
+    "typecheck": "../../../node_modules/typescript/bin/tsc --noEmit"
   },
   "dependencies": {},
   "peerDependencies": {
@@ -64,8 +64,9 @@
     }
   },
   "devDependencies": {
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4",
+    "@types/node": "24.3.0",
+    "typescript": "5.9.2",
+    "vitest": "3.2.4",
     "zod": "^3.23.8"
   },
   "license": "MIT",
