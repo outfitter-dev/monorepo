@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { checkbox, confirm, input, select } from '@inquirer/prompts';
+import { checkbox, confirm, input } from '@inquirer/prompts';
 import {
   failure,
   isFailure,
@@ -15,7 +15,6 @@ import { removeOldConfigs } from '../core/cleanup.js';
 import { cleanupDependencies } from '../core/dependency-cleanup.js';
 import { type DetectedTools, detectExistingTools } from '../core/detector.js';
 import { installDependencies } from '../core/installer.js';
-import { MigrationReporter } from '../core/migration-report.js';
 import { generateBiomeConfig } from '../generators/biome.js';
 import { generateCommitlintConfig } from '../generators/commitlint.js';
 import { generateEditorconfigConfig } from '../generators/editorconfig.js';
@@ -76,7 +75,7 @@ export async function init(options: InitOptions): Promise<Result<void, Error>> {
     }
 
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
-    
+
     // 1. Detect existing tools and project characteristics
     const detectionResult = await detectExistingTools(projectRoot);
     if (isFailure(detectionResult)) {
@@ -89,8 +88,11 @@ export async function init(options: InitOptions): Promise<Result<void, Error>> {
     }
 
     const detectedTools = detectionResult.data;
-    const detection = await detectProjectCharacteristics(projectRoot, packageJson);
-    
+    const detection = await detectProjectCharacteristics(
+      projectRoot,
+      packageJson
+    );
+
     // Show detection summary
     console.log('\n🔍 Project Analysis:');
     showDetectionSummary(detection, detectedTools);
@@ -104,7 +106,11 @@ export async function init(options: InitOptions): Promise<Result<void, Error>> {
       selectedFeatures = getDefaultFeatures(detection);
       config = generateConfig(selectedFeatures, detection);
     } else {
-      const interactiveResult = await runInteractiveSetup(detection, detectedTools, options);
+      const interactiveResult = await runInteractiveSetup(
+        detection,
+        detectedTools,
+        options
+      );
       if (isFailure(interactiveResult)) {
         return interactiveResult;
       }
@@ -124,8 +130,8 @@ export async function init(options: InitOptions): Promise<Result<void, Error>> {
     // 3. Show summary and confirm
     console.log('\n📋 Configuration Summary:');
     showConfigSummary(config, selectedFeatures);
-    
-    if (!options.yes && !options.dryRun) {
+
+    if (!(options.yes || options.dryRun)) {
       const proceed = await confirm({
         message: 'Proceed with this configuration?',
         default: true,
@@ -173,11 +179,16 @@ export async function init(options: InitOptions): Promise<Result<void, Error>> {
 
 // Helper functions for the interactive init process
 
-async function detectProjectCharacteristics(projectRoot: string, packageJson: any): Promise<ProjectDetection> {
+async function detectProjectCharacteristics(
+  projectRoot: string,
+  packageJson: any
+): Promise<ProjectDetection> {
   const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
-  
-  return {
-    hasTypeScript: existsSync(join(projectRoot, 'tsconfig.json')) || !!deps.typescript,
+
+  const detectedFramework = detectFramework(deps);
+  const result: ProjectDetection = {
+    hasTypeScript:
+      existsSync(join(projectRoot, 'tsconfig.json')) || !!deps.typescript,
     hasReact: !!deps.react,
     hasNext: !!deps.next,
     hasVue: !!deps.vue,
@@ -188,6 +199,13 @@ async function detectProjectCharacteristics(projectRoot: string, packageJson: an
     framework: detectFramework(deps),
     packageManager: detectPackageManager(projectRoot),
   };
+
+  // Only set framework if it's detected (exactOptionalPropertyTypes compliance)
+  if (detectedFramework) {
+    result.framework = detectedFramework;
+  }
+
+  return result;
 }
 
 async function detectCSSFiles(projectRoot: string): Promise<boolean> {
@@ -226,25 +244,32 @@ function detectMonorepo(projectRoot: string, packageJson: any): boolean {
   );
 }
 
-function detectFramework(deps: Record<string, string>): ProjectDetection['framework'] {
+function detectFramework(
+  deps: Record<string, string>
+): ProjectDetection['framework'] {
   if (deps.next) return 'next';
   if (deps.react) return 'react';
   if (deps.vue) return 'vue';
   if (deps.svelte) return 'svelte';
   if (deps.angular) return 'angular';
-  return undefined;
+  return;
 }
 
-function detectPackageManager(projectRoot: string): ProjectDetection['packageManager'] {
+function detectPackageManager(
+  projectRoot: string
+): ProjectDetection['packageManager'] {
   if (existsSync(join(projectRoot, 'pnpm-lock.yaml'))) return 'pnpm';
   if (existsSync(join(projectRoot, 'yarn.lock'))) return 'yarn';
   if (existsSync(join(projectRoot, 'bun.lockb'))) return 'bun';
   return 'npm';
 }
 
-function showDetectionSummary(detection: ProjectDetection, detectedTools: DetectedTools): void {
+function showDetectionSummary(
+  detection: ProjectDetection,
+  detectedTools: DetectedTools
+): void {
   const items = [];
-  
+
   if (detection.framework) {
     items.push(`Framework: ${detection.framework}`);
   }
@@ -263,17 +288,21 @@ function showDetectionSummary(detection: ProjectDetection, detectedTools: Detect
     items.push('Markdown files found');
   }
   if (detectedTools.hasConfigs) {
-    items.push(`Existing configs: ${detectedTools.configs.map(c => c.tool).join(', ')}`);
+    items.push(
+      `Existing configs: ${detectedTools.configs.map((c) => c.tool).join(', ')}`
+    );
   }
 
-  items.forEach(item => console.log(`  • ${item}`));
+  items.forEach((item) => console.log(`  • ${item}`));
 }
 
 async function runInteractiveSetup(
-  detection: ProjectDetection, 
-  detectedTools: DetectedTools, 
-  options: InitOptions
-): Promise<Result<{ selectedFeatures: Set<string>; config: OutfitterConfig }, Error>> {
+  detection: ProjectDetection,
+  detectedTools: DetectedTools,
+  _options: InitOptions
+): Promise<
+  Result<{ selectedFeatures: Set<string>; config: OutfitterConfig }, Error>
+> {
   try {
     console.log('\n⚙️  Feature Selection:');
 
@@ -282,7 +311,7 @@ async function runInteractiveSetup(
 
     const selected = await checkbox({
       message: 'Select features to configure:',
-      choices: choices.map(choice => ({
+      choices: choices.map((choice) => ({
         ...choice,
         checked: choice.checked ?? defaultFeatures.has(choice.value),
       })),
@@ -317,7 +346,10 @@ async function runInteractiveSetup(
   }
 }
 
-function buildFeatureChoices(detection: ProjectDetection, detectedTools: DetectedTools): FeatureChoice[] {
+function buildFeatureChoices(
+  detection: ProjectDetection,
+  _detectedTools: DetectedTools
+): FeatureChoice[] {
   const choices: FeatureChoice[] = [
     {
       name: 'TypeScript/JavaScript',
@@ -328,7 +360,8 @@ function buildFeatureChoices(detection: ProjectDetection, detectedTools: Detecte
     {
       name: 'JSON/YAML',
       value: 'json',
-      description: 'Format JSON, YAML, and other structured files with Prettier',
+      description:
+        'Format JSON, YAML, and other structured files with Prettier',
       checked: true,
     },
     {
@@ -336,14 +369,16 @@ function buildFeatureChoices(detection: ProjectDetection, detectedTools: Detecte
       value: 'markdown',
       description: 'Lint markdown files with markdownlint-cli2',
       checked: detection.hasMarkdownFiles,
-      disabled: !detection.hasMarkdownFiles ? 'No markdown files detected' : false,
+      disabled: detection.hasMarkdownFiles
+        ? false
+        : 'No markdown files detected',
     },
     {
       name: 'CSS/SCSS',
       value: 'styles',
       description: 'Lint CSS/SCSS files with Stylelint',
       checked: detection.hasCSSFiles,
-      disabled: !detection.hasCSSFiles ? 'No CSS files detected' : false,
+      disabled: detection.hasCSSFiles ? false : 'No CSS files detected',
     },
     {
       name: 'Git Hooks',
@@ -361,19 +396,24 @@ function buildFeatureChoices(detection: ProjectDetection, detectedTools: Detecte
       name: 'VS Code Settings',
       value: 'vscode',
       description: 'Configure VS Code for optimal formatting experience',
-      checked: existsSync(join(process.cwd(), '.vscode')) || existsSync(join(process.cwd(), '*.code-workspace')),
+      checked:
+        existsSync(join(process.cwd(), '.vscode')) ||
+        existsSync(join(process.cwd(), '*.code-workspace')),
     },
   ];
 
   // Add package validation for libraries
-  const isLibrary = detection.packageManager !== 'npm' || 
-    (process.cwd().includes('packages/') || process.cwd().includes('libs/'));
-  
+  const isLibrary =
+    detection.packageManager !== 'npm' ||
+    process.cwd().includes('packages/') ||
+    process.cwd().includes('libs/');
+
   if (isLibrary) {
     choices.push({
       name: 'Package Validation',
       value: 'packages',
-      description: 'Validate package.json and exports with publint (for libraries)',
+      description:
+        'Validate package.json and exports with publint (for libraries)',
       checked: false,
     });
   }
@@ -382,8 +422,14 @@ function buildFeatureChoices(detection: ProjectDetection, detectedTools: Detecte
 }
 
 function getDefaultFeatures(detection: ProjectDetection): Set<string> {
-  const defaults = new Set(['typescript', 'json', 'commits', 'scripts', 'vscode']);
-  
+  const defaults = new Set([
+    'typescript',
+    'json',
+    'commits',
+    'scripts',
+    'vscode',
+  ]);
+
   if (detection.hasMarkdownFiles) {
     defaults.add('markdown');
   }
@@ -394,7 +440,10 @@ function getDefaultFeatures(detection: ProjectDetection): Set<string> {
   return defaults;
 }
 
-function generateConfig(selectedFeatures: Set<string>, detection: ProjectDetection): OutfitterConfig {
+function generateConfig(
+  selectedFeatures: Set<string>,
+  _detection: ProjectDetection
+): OutfitterConfig {
   return {
     features: {
       typescript: selectedFeatures.has('typescript'),
@@ -408,7 +457,10 @@ function generateConfig(selectedFeatures: Set<string>, detection: ProjectDetecti
   };
 }
 
-async function configureAdvancedOptions(config: OutfitterConfig, detection: ProjectDetection): Promise<OutfitterConfig> {
+async function configureAdvancedOptions(
+  config: OutfitterConfig,
+  _detection: ProjectDetection
+): Promise<OutfitterConfig> {
   console.log('\n🔧 Advanced Configuration:');
 
   // Allow custom Biome config
@@ -440,24 +492,34 @@ async function configureAdvancedOptions(config: OutfitterConfig, detection: Proj
   return config;
 }
 
-function showConfigSummary(config: OutfitterConfig, selectedFeatures: Set<string>): void {
+function showConfigSummary(
+  config: OutfitterConfig,
+  _selectedFeatures: Set<string>
+): void {
   const features = Object.entries(config.features || {})
     .filter(([, enabled]) => enabled)
     .map(([feature]) => feature);
 
   console.log(`  Enabled features: ${features.join(', ')}`);
-  
+
   if (Object.keys(config.overrides || {}).length > 0) {
-    console.log(`  Custom overrides: ${Object.keys(config.overrides!).join(', ')}`);
+    console.log(
+      `  Custom overrides: ${Object.keys(config.overrides!).join(', ')}`
+    );
   }
 }
 
-async function showDryRunActions(context: InitContext, options: InitOptions): Promise<void> {
+async function showDryRunActions(
+  context: InitContext,
+  options: InitOptions
+): Promise<void> {
   const actions = [];
 
   // Cleanup actions
   if (context.detectedTools.hasConfigs && !options.keepExisting) {
-    actions.push(`• Remove existing configs: ${context.detectedTools.configs.map(c => c.path).join(', ')}`);
+    actions.push(
+      `• Remove existing configs: ${context.detectedTools.configs.map((c) => c.path).join(', ')}`
+    );
   }
 
   // Installation actions
@@ -473,28 +535,38 @@ async function showDryRunActions(context: InitContext, options: InitOptions): Pr
     actions.push('• Update package.json scripts');
   }
 
-  actions.forEach(action => console.log(action));
+  actions.forEach((action) => console.log(action));
 }
 
-async function executeSetup(context: InitContext, options: InitOptions): Promise<Result<void, Error>> {
+async function executeSetup(
+  context: InitContext,
+  options: InitOptions
+): Promise<Result<void, Error>> {
   try {
     // 1. Backup existing configs
     if (context.detectedTools.hasConfigs && !options.keepExisting) {
       console.log('  📦 Creating backup...');
       const backupResult = await createBackup(context.detectedTools.configs);
       if (isFailure(backupResult)) {
-        return failure(makeError('INTERNAL_ERROR', `Backup failed: ${backupResult.error.message}`));
+        return failure(
+          makeError(
+            'INTERNAL_ERROR',
+            `Backup failed: ${backupResult.error.message}`
+          )
+        );
       }
     }
 
     // 2. Clean up old configs
     if (context.detectedTools.hasConfigs && !options.keepExisting) {
       console.log('  🧹 Cleaning up old configs...');
-      const cleanupResult = await removeOldConfigs(context.detectedTools.configs.map(c => c.path));
+      const cleanupResult = await removeOldConfigs(
+        context.detectedTools.configs.map((c) => c.path)
+      );
       if (isFailure(cleanupResult)) {
         console.warn('  ⚠️  Some files could not be cleaned up');
       }
-      
+
       const depCleanupResult = await cleanupDependencies();
       if (isFailure(depCleanupResult)) {
         console.warn('  ⚠️  Some dependencies could not be cleaned up');
@@ -505,9 +577,17 @@ async function executeSetup(context: InitContext, options: InitOptions): Promise
     const dependencies = await gatherDependencies(context, options);
     if (dependencies.length > 0) {
       console.log(`  📥 Installing ${dependencies.length} dependencies...`);
-      const installResult = await installDependencies(dependencies, context.projectRoot);
+      const installResult = await installDependencies(
+        dependencies,
+        context.projectRoot
+      );
       if (isFailure(installResult)) {
-        return failure(makeError('EXTERNAL_SERVICE_ERROR', `Installation failed: ${installResult.error.message}`));
+        return failure(
+          makeError(
+            'EXTERNAL_SERVICE_ERROR',
+            `Installation failed: ${installResult.error.message}`
+          )
+        );
       }
     }
 
@@ -523,7 +603,12 @@ async function executeSetup(context: InitContext, options: InitOptions): Promise
         isMonorepo: context.detection.isMonorepo,
       });
       if (isFailure(scriptsResult)) {
-        return failure(makeError('INTERNAL_ERROR', `Scripts update failed: ${scriptsResult.error.message}`));
+        return failure(
+          makeError(
+            'INTERNAL_ERROR',
+            `Scripts update failed: ${scriptsResult.error.message}`
+          )
+        );
       }
     }
 
@@ -538,8 +623,11 @@ async function executeSetup(context: InitContext, options: InitOptions): Promise
   }
 }
 
-async function generateSelectedConfigs(context: InitContext, options: InitOptions): Promise<void> {
-  const { selectedFeatures, projectRoot, detection } = context;
+async function generateSelectedConfigs(
+  context: InitContext,
+  _options: InitOptions
+): Promise<void> {
+  const { selectedFeatures, projectRoot } = context;
 
   // TypeScript/JavaScript (Biome)
   if (selectedFeatures.has('typescript')) {
@@ -588,7 +676,10 @@ async function generateSelectedConfigs(context: InitContext, options: InitOption
   // Styles
   if (selectedFeatures.has('styles')) {
     console.log('  ⚙️  Configuring Stylelint...');
-    const stylelintResult = await generateStylelintConfig(projectRoot, detection.framework);
+    const stylelintResult = await generateStylelintConfig(
+      projectRoot,
+      detection.framework
+    );
     if (isFailure(stylelintResult)) {
       console.warn('  ⚠️  Stylelint config generation failed');
     }
@@ -632,14 +723,20 @@ async function generateSelectedConfigs(context: InitContext, options: InitOption
   }
 }
 
-async function writeConfigFile(projectRoot: string, config: OutfitterConfig): Promise<Result<void, Error>> {
+async function writeConfigFile(
+  projectRoot: string,
+  config: OutfitterConfig
+): Promise<Result<void, Error>> {
   try {
     const configPath = join(projectRoot, 'baselayer.jsonc');
     const configContent = JSON.stringify(config, null, 2);
-    
-    writeFileSync(configPath, `// Baselayer configuration\n// https://github.com/outfitter-dev/baselayer\n${configContent}\n`);
-    
-    console.log(`  📄 Created baselayer.jsonc`);
+
+    writeFileSync(
+      configPath,
+      `// Baselayer configuration\n// https://github.com/outfitter-dev/baselayer\n${configContent}\n`
+    );
+
+    console.log('  📄 Created baselayer.jsonc');
     return success(undefined);
   } catch (error) {
     return failure(
@@ -651,10 +748,13 @@ async function writeConfigFile(projectRoot: string, config: OutfitterConfig): Pr
   }
 }
 
-function showCompletionSummary(selectedFeatures: Set<string>, projectRoot: string): void {
+function showCompletionSummary(
+  selectedFeatures: Set<string>,
+  projectRoot: string
+): void {
   console.log('\n📁 Files created:');
   console.log('  • baselayer.jsonc - Main configuration');
-  
+
   if (selectedFeatures.has('typescript')) {
     console.log('  • biome.json - TypeScript/JavaScript formatting');
     console.log('  • oxlint.json - Additional JavaScript linting');
@@ -686,7 +786,10 @@ function showCompletionSummary(selectedFeatures: Set<string>, projectRoot: strin
 }
 
 // Legacy helper functions (updated to work with new context structure)
-async function gatherDependencies(context: InitContext, options: InitOptions): Promise<string[]> {
+async function gatherDependencies(
+  context: InitContext,
+  _options: InitOptions
+): Promise<string[]> {
   const deps: string[] = [];
 
   if (context.selectedFeatures.has('typescript')) {
@@ -703,7 +806,10 @@ async function gatherDependencies(context: InitContext, options: InitOptions): P
 
   if (context.selectedFeatures.has('styles')) {
     deps.push('stylelint', 'stylelint-config-standard');
-    if (context.detection.framework === 'next' || context.detection.framework === 'react') {
+    if (
+      context.detection.framework === 'next' ||
+      context.detection.framework === 'react'
+    ) {
       deps.push('stylelint-config-standard-scss');
     }
   }
@@ -719,7 +825,10 @@ async function gatherDependencies(context: InitContext, options: InitOptions): P
   return deps;
 }
 
-async function gatherConfigs(context: InitContext, options: InitOptions): Promise<string[]> {
+async function gatherConfigs(
+  context: InitContext,
+  _options: InitOptions
+): Promise<string[]> {
   const configs = ['baselayer.jsonc', '.editorconfig'];
 
   if (context.selectedFeatures.has('typescript')) {
