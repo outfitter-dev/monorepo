@@ -4,7 +4,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { failure, makeError, success, type Result } from '@outfitter/contracts';
+import { failure, makeError, type Result, success } from '@outfitter/contracts';
 
 export interface FrameworkConfig {
   name: string;
@@ -24,26 +24,37 @@ export async function detectFrameworkConfig(
   try {
     const packageJsonPath = join(cwd, 'package.json');
     let version: string | undefined;
-    
+
     if (existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
-      const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
+      const deps = {
+        ...packageJson.dependencies,
+        ...packageJson.devDependencies,
+      };
       version = deps[framework];
     }
 
     const configFiles = getFrameworkConfigFiles(framework);
-    const hasConfigFile = configFiles.some(file => existsSync(join(cwd, file)));
-    
+    const hasConfigFile = configFiles.some((file) =>
+      existsSync(join(cwd, file))
+    );
+
     // Check for custom setup patterns
     const customSetup = await hasCustomFrameworkSetup(framework, cwd);
 
-    return success({
+    const result = {
       name: framework,
-      version,
-      configFiles: configFiles.filter(file => existsSync(join(cwd, file))),
+      configFiles: configFiles.filter((file) => existsSync(join(cwd, file))),
       hasConfigFile,
       customSetup,
-    });
+    } as FrameworkConfig;
+
+    // Only set version if it exists (exactOptionalPropertyTypes compliance)
+    if (version) {
+      result.version = version;
+    }
+
+    return success(result);
   } catch (error) {
     return failure(
       makeError(
@@ -66,7 +77,10 @@ function getFrameworkConfigFiles(framework: string): Array<string> {
   return configMap[framework] || [];
 }
 
-async function hasCustomFrameworkSetup(framework: string, cwd: string): Promise<boolean> {
+async function hasCustomFrameworkSetup(
+  framework: string,
+  cwd: string
+): Promise<boolean> {
   // Check for common custom setup patterns
   const customPatterns: Record<string, Array<string>> = {
     next: ['src/app/layout.tsx', 'pages/_app.tsx', 'app/layout.tsx'],
@@ -77,5 +91,5 @@ async function hasCustomFrameworkSetup(framework: string, cwd: string): Promise<
   };
 
   const patterns = customPatterns[framework] || [];
-  return patterns.some(pattern => existsSync(join(cwd, pattern)));
+  return patterns.some((pattern) => existsSync(join(cwd, pattern)));
 }

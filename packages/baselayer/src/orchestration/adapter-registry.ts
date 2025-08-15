@@ -1,13 +1,12 @@
-import type { ToolAdapter } from '../types.js';
-import type { BaselayerConfig } from '../schemas/baselayer-config.js';
-import type { FileType } from './file-matcher.js';
-
+import { MarkdownlintAdapter } from '../adapters/markdownlint-adapter.js';
 // Import all available adapters
 import { PrettierAdapter } from '../adapters/prettier-adapter.js';
 import { StylelintAdapter } from '../adapters/stylelint-adapter.js';
-import { MarkdownlintAdapter } from '../adapters/markdownlint-adapter.js';
 import { UltraciteAdapter } from '../adapters/ultracite-adapter.js';
-import { LefthookAdapter } from '../adapters/lefthook-adapter.js';
+import type { BaselayerConfig } from '../schemas/baselayer-config.js';
+import type { ToolAdapter } from '../types.js';
+import type { FileType } from './file-matcher.js';
+// import { LefthookAdapter } from '../adapters/lefthook-adapter.js';
 
 /**
  * Registry for dynamically managing tool adapters based on configuration
@@ -33,14 +32,14 @@ export class AdapterRegistry {
     // When other tools are disabled, Prettier expands to handle their files
     if (config.features?.json !== false) {
       const prettierAdapter = new PrettierAdapter();
-      
+
       // Configure Prettier with dynamic file extensions based on disabled tools
       const additionalExtensions: string[] = [];
-      
+
       if (config.features?.styles === false) {
         additionalExtensions.push('.css', '.scss', '.sass', '.less');
       }
-      
+
       if (config.features?.markdown === false) {
         additionalExtensions.push('.md', '.mdx', '.mdc');
       }
@@ -49,7 +48,7 @@ export class AdapterRegistry {
       if (additionalExtensions.length > 0) {
         this.configurePrettierAdapter(prettierAdapter, additionalExtensions);
       }
-      
+
       this.adapters.set('json', prettierAdapter);
     }
 
@@ -101,7 +100,7 @@ export class AdapterRegistry {
     toolName: keyof NonNullable<BaselayerConfig['overrides']>
   ): T | undefined {
     if (!this.currentConfig?.overrides?.[toolName]) {
-      return undefined;
+      return;
     }
     return this.currentConfig.overrides[toolName] as T;
   }
@@ -110,8 +109,8 @@ export class AdapterRegistry {
    * Apply tool-specific configuration overrides to adapters
    */
   private configurePrettierAdapter(
-    adapter: PrettierAdapter, 
-    additionalExtensions: string[]
+    _adapter: PrettierAdapter,
+    _additionalExtensions: string[]
   ): void {
     // Extend Prettier's file handling capabilities
     // This would require modifying the adapter's extensions property
@@ -134,15 +133,20 @@ export class AdapterRegistry {
     adaptersByType: Record<FileType, string>;
     disabledFeatures: string[];
   } {
-    const adaptersByType: Record<FileType, string> = {} as Record<FileType, string>;
-    
+    const adaptersByType: Record<FileType, string> = {} as Record<
+      FileType,
+      string
+    >;
+
     for (const [fileType, adapter] of this.adapters.entries()) {
       adaptersByType[fileType] = adapter.name;
     }
 
     const disabledFeatures: string[] = [];
     if (this.currentConfig?.features) {
-      for (const [feature, enabled] of Object.entries(this.currentConfig.features)) {
+      for (const [feature, enabled] of Object.entries(
+        this.currentConfig.features
+      )) {
         if (enabled === false) {
           disabledFeatures.push(feature);
         }

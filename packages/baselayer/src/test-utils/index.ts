@@ -29,7 +29,7 @@ export function createMockFileSystem(files: MockFileSystem): MockFileSystem {
 }
 
 // Global state for mocks that need to be hoisted
-let globalMockState = {
+const globalMockState = {
   mockFs: {} as MockFileSystem,
   mockExec: vi.fn<[string], MockExecResult>(),
 };
@@ -130,7 +130,7 @@ export function createTestContext(
   // Reset and setup mock filesystem
   globalMockState.mockFs = createMockFileSystem(initialFiles);
   globalMockState.mockExec = vi.fn<[string], MockExecResult>();
-  
+
   const mockConsole = {
     log: vi.fn(),
     error: vi.fn(),
@@ -217,13 +217,21 @@ export function mockPrompts(responses: Record<string, any>) {
           return responses[key];
         }
         // Return default checked items
-        return choices.filter(c => c.checked).map(c => c.value);
+        return choices.filter((c) => c.checked).map((c) => c.value);
       }
     ),
-    input: vi.fn(async ({ message, defaultValue }: { message: string; defaultValue?: string }) => {
-      const key = Object.keys(responses).find((k) => message.includes(k));
-      return key ? responses[key] : (defaultValue || '');
-    }),
+    input: vi.fn(
+      async ({
+        message,
+        defaultValue,
+      }: {
+        message: string;
+        defaultValue?: string;
+      }) => {
+        const key = Object.keys(responses).find((k) => message.includes(k));
+        return key ? responses[key] : defaultValue || '';
+      }
+    ),
   }));
 }
 

@@ -4,7 +4,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { failure, makeError, success, type Result } from '@outfitter/contracts';
+import { failure, makeError, type Result, success } from '@outfitter/contracts';
 
 export interface ProjectInfo {
   type: 'monorepo' | 'library' | 'application' | 'unknown';
@@ -16,7 +16,9 @@ export interface ProjectInfo {
 /**
  * Detect project characteristics from package.json and other indicators
  */
-export async function detectProjectInfo(cwd = process.cwd()): Promise<Result<ProjectInfo, Error>> {
+export async function detectProjectInfo(
+  cwd = process.cwd()
+): Promise<Result<ProjectInfo, Error>> {
   try {
     const packageJsonPath = join(cwd, 'package.json');
     if (!existsSync(packageJsonPath)) {
@@ -28,7 +30,7 @@ export async function detectProjectInfo(cwd = process.cwd()): Promise<Result<Pro
     }
 
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
-    
+
     // Detect package manager
     let packageManager: ProjectInfo['packageManager'] = 'unknown';
     if (existsSync(join(cwd, 'pnpm-lock.yaml'))) {
@@ -54,13 +56,16 @@ export async function detectProjectInfo(cwd = process.cwd()): Promise<Result<Pro
     // Detect TypeScript
     const hasTypeScript = Boolean(
       packageJson.devDependencies?.typescript ||
-      packageJson.dependencies?.typescript ||
-      existsSync(join(cwd, 'tsconfig.json'))
+        packageJson.dependencies?.typescript ||
+        existsSync(join(cwd, 'tsconfig.json'))
     );
 
     // Detect framework
     let framework: ProjectInfo['framework'];
-    const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
+    const deps = {
+      ...packageJson.dependencies,
+      ...packageJson.devDependencies,
+    };
     if (deps.react || deps['@types/react']) {
       if (deps.next) {
         framework = 'next';
@@ -75,12 +80,18 @@ export async function detectProjectInfo(cwd = process.cwd()): Promise<Result<Pro
       framework = 'astro';
     }
 
-    return success({
+    const result = {
       type,
       packageManager,
       hasTypeScript,
-      framework,
-    });
+    } as ProjectInfo;
+
+    // Only set framework if it's detected (exactOptionalPropertyTypes compliance)
+    if (framework) {
+      result.framework = framework;
+    }
+
+    return success(result);
   } catch (error) {
     return failure(
       makeError(

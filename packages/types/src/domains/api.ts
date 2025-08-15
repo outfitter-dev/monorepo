@@ -1,11 +1,11 @@
 /**
  * API-specific types
- * 
+ *
  * Types commonly used in API design and implementation.
  */
 
-import type { Brand } from '../core/branded.js';
 import type { JsonValue } from 'type-fest';
+import type { Brand } from '../core/branded.js';
 import type { HttpMethod, HttpStatus } from './web.js';
 
 // API versioning

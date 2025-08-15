@@ -201,7 +201,9 @@ export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
 /**
  * Generate Turborepo configuration optimized for different project types
  */
-export function generateProjectTurboConfig(config?: BaselayerConfig): TurboConfig {
+export function generateProjectTurboConfig(
+  config?: BaselayerConfig
+): TurboConfig {
   const turboConfig = generateTurboConfig(config);
 
   // Library-specific optimizations
@@ -247,7 +249,7 @@ export async function generateTurboConfigFile(
     }
 
     const turboConfig = generateProjectTurboConfig(config);
-    
+
     const result = await writeJSON('turbo.json', turboConfig);
     if (isFailure(result)) {
       return failure(result.error);

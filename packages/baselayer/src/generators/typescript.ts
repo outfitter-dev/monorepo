@@ -14,7 +14,9 @@ export interface TypeScriptConfig {
 /**
  * Get TypeScript compiler options for different presets
  */
-function getPresetCompilerOptions(preset: TypeScriptPreset): Record<string, unknown> {
+function getPresetCompilerOptions(
+  preset: TypeScriptPreset
+): Record<string, unknown> {
   const base = {
     target: 'ES2022',
     lib: ['ES2022'],
@@ -209,7 +211,7 @@ export async function generateTypeScriptConfigFile(
 ): Promise<Result<void, Error>> {
   try {
     const tsConfig = generateTypeScriptConfig(config, preset);
-    
+
     const result = await writeJSON('tsconfig.json', tsConfig);
     if (isFailure(result)) {
       return failure(result.error);

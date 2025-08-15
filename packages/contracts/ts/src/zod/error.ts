@@ -1,5 +1,5 @@
-import { type AppError, ErrorCode, makeError } from '../index.js';
 import type { z } from 'zod';
+import { type AppError, ErrorCode, makeError } from '../index.js';
 
 /**
  * Converts a Zod validation error into a standardized application error.

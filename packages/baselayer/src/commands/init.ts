@@ -504,7 +504,7 @@ function showConfigSummary(
 
   if (Object.keys(config.overrides || {}).length > 0) {
     console.log(
-      `  Custom overrides: ${Object.keys(config.overrides!).join(', ')}`
+      `  Custom overrides: ${Object.keys(config.overrides || {}).join(', ')}`
     );
   }
 }
