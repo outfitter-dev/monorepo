@@ -178,7 +178,7 @@ export function useUser(userId: string) {
 
   const mutation = useMutation({
     mutationFn: (data: UpdateUserInput) => updateUser(userId, data),
-    onSuccess: updatedUser => {
+    onSuccess: (updatedUser) => {
       queryClient.setQueryData(['user', userId], updatedUser);
     },
   });
@@ -196,7 +196,7 @@ export function useUser(userId: string) {
 export function useEventListener<K extends keyof WindowEventMap>(
   eventName: K,
   handler: (event: WindowEventMap[K]) => void,
-  element: HTMLElement | Window = window
+  element: HTMLElement | Window = window,
 ) {
   const savedHandler = useRef(handler);
 
@@ -257,7 +257,7 @@ class PaginationController {
   }
 
   private notify(): void {
-    this.listeners.forEach(listener => listener());
+    this.listeners.forEach((listener) => listener());
   }
 }
 ```
@@ -279,12 +279,16 @@ class EventBus<Events extends Record<string, any>> {
 
   on<K extends keyof Events>(
     event: K,
-    handler: (data: Events[K]) => void
+    handler: (data: Events[K]) => void,
   ): () => void {
     if (!this.handlers.has(event)) {
       this.handlers.set(event, new Set());
     }
-    this.handlers.get(event)!.add(handler);
+
+    const handlers = this.handlers.get(event);
+    if (handlers) {
+      handlers.add(handler);
+    }
 
     return () => {
       this.handlers.get(event)?.delete(handler);
@@ -292,7 +296,7 @@ class EventBus<Events extends Record<string, any>> {
   }
 
   emit<K extends keyof Events>(event: K, data: Events[K]): void {
-    this.handlers.get(event)?.forEach(handler => handler(data));
+    this.handlers.get(event)?.forEach((handler) => handler(data));
   }
 }
 ```
@@ -700,7 +704,7 @@ function createLazyComponent<T>(loader: () => Promise<T>): LazyComponent<T> {
     load(): Promise<T> {
       if (cache) return Promise.resolve(cache);
       if (!promise) {
-        promise = loader().then(result => {
+        promise = loader().then((result) => {
           cache = result;
           return result;
         });
@@ -721,7 +725,7 @@ function createLazyComponent<T>(loader: () => Promise<T>): LazyComponent<T> {
 // Generic memoization
 function memoize<Args extends any[], Result>(
   fn: (...args: Args) => Result,
-  keyGenerator?: (...args: Args) => string
+  keyGenerator?: (...args: Args) => string,
 ): (...args: Args) => Result {
   const cache = new Map<string, Result>();
 

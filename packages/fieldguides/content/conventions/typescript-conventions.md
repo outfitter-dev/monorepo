@@ -5,7 +5,8 @@ description: TypeScript configuration and coding conventions for all projects.
 type: convention
 category: typescript
 tags: [typescript, configuration, type-safety]
-related: [typescript-error-handling, typescript-utility-types, typescript-validation]
+related:
+  [typescript-error-handling, typescript-utility-types, typescript-validation]
 ---
 
 # TypeScript Conventions
@@ -322,7 +323,7 @@ type UserResponse = Awaited<ReturnType<typeof fetchUser>>;
 ```typescript
 // Type-safe error handling
 async function safeAsync<T>(
-  fn: () => Promise<T>
+  fn: () => Promise<T>,
 ): Promise<[T, null] | [null, Error]> {
   try {
     const result = await fn();
@@ -371,8 +372,8 @@ function makeCancellable<T>(promise: Promise<T>): CancellablePromise<T> {
 
   const wrappedPromise = new Promise<T>((resolve, reject) => {
     promise.then(
-      value => (cancelled ? reject(new Error('Cancelled')) : resolve(value)),
-      error => (cancelled ? reject(new Error('Cancelled')) : reject(error))
+      (value) => (cancelled ? reject(new Error('Cancelled')) : resolve(value)),
+      (error) => (cancelled ? reject(new Error('Cancelled')) : reject(error)),
     );
   }) as CancellablePromise<T>;
 
@@ -481,7 +482,8 @@ export default tseslint.config(
         },
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-      '@typescript-eslint/array-type': ['error', { default: 'generic' }],
+      // Allow either array syntax but enforce consistency within the project
+      // '@typescript-eslint/array-type': ['error', { default: 'generic' }], // Removed - let Ultracite handle this
 
       // Modern Naming Conventions (no I prefix)
       '@typescript-eslint/naming-convention': [
@@ -525,7 +527,7 @@ export default tseslint.config(
   {
     files: ['**/*.js'],
     extends: [tseslint.configs.disableTypeChecked],
-  }
+  },
 );
 ```
 
@@ -587,7 +589,7 @@ const config = defineConfig({
 // Constrain generics appropriately
 function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>;
-  keys.forEach(key => {
+  keys.forEach((key) => {
     result[key] = obj[key];
   });
   return result;
@@ -785,12 +787,12 @@ class AsyncResource implements AsyncDisposable {
 ```typescript
 // TypeScript 5.4+ NoInfer to control inference
 function createState<T>(
-  initial: T
+  initial: T,
 ): [state: T, setState: (value: NoInfer<T>) => void] {
   let state = initial;
   return [
     state,
-    value => {
+    (value) => {
       state = value;
     },
   ];
