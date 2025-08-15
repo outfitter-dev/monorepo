@@ -1,14 +1,14 @@
 import { failure, makeError, type Result, success } from '@outfitter/contracts';
+import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import type {
   CommandOptions,
   FlintError,
   OrchestrationResult,
   ToolResult,
 } from '../types.js';
-import type { BaselayerConfig } from '../schemas/baselayer-config.js';
+import { AdapterRegistry } from './adapter-registry.js';
 import { ConfigLoader } from './config-loader.js';
 import { FileMatcher, type FileType } from './file-matcher.js';
-import { AdapterRegistry } from './adapter-registry.js';
 
 /**
  * Core orchestration engine with dynamic configuration support
@@ -24,17 +24,19 @@ export class Orchestrator {
    * Initialize orchestrator with configuration
    * Must be called before using format/lint/check methods
    */
-  async initialize(cwd: string = process.cwd()): Promise<Result<void, FlintError>> {
+  async initialize(
+    cwd: string = process.cwd()
+  ): Promise<Result<void, FlintError>> {
     const configResult = await this.configLoader.loadConfig(cwd);
     if (configResult.success === false) {
       return failure(configResult.error);
     }
 
     this.currentConfig = configResult.data;
-    
+
     // Configure dynamic adapters based on loaded configuration
     this.adapterRegistry.configure(this.currentConfig);
-    
+
     // Update file matcher with configuration
     this.fileMatcher.updateHandlers(this.currentConfig);
 
@@ -61,9 +63,15 @@ export class Orchestrator {
       }
 
       // Find and categorize files using dynamic configuration
-      const files = await this.fileMatcher.findFiles(patterns, {
-        onlyStaged: options.staged,
-      });
+      const findOptions: {
+        cwd?: string;
+        ignore?: readonly string[];
+        onlyStaged?: boolean;
+      } = {};
+      if (options.staged !== undefined) {
+        findOptions.onlyStaged = options.staged;
+      }
+      const files = await this.fileMatcher.findFiles(patterns, findOptions);
 
       if (files.length === 0) {
         return success({
@@ -75,7 +83,10 @@ export class Orchestrator {
         } as OrchestrationResult);
       }
 
-      const categorized = this.fileMatcher.categorizeFiles(files, this.currentConfig!);
+      const categorized = this.fileMatcher.categorizeFiles(
+        files,
+        this.currentConfig!
+      );
 
       // Filter by --only flag if specified
       const fileTypes = options.only
@@ -143,9 +154,15 @@ export class Orchestrator {
       }
 
       // Find and categorize files using dynamic configuration
-      const files = await this.fileMatcher.findFiles(patterns, {
-        onlyStaged: options.staged,
-      });
+      const findOptions: {
+        cwd?: string;
+        ignore?: readonly string[];
+        onlyStaged?: boolean;
+      } = {};
+      if (options.staged !== undefined) {
+        findOptions.onlyStaged = options.staged;
+      }
+      const files = await this.fileMatcher.findFiles(patterns, findOptions);
 
       if (files.length === 0) {
         return success({
@@ -157,7 +174,10 @@ export class Orchestrator {
         } as OrchestrationResult);
       }
 
-      const categorized = this.fileMatcher.categorizeFiles(files, this.currentConfig!);
+      const categorized = this.fileMatcher.categorizeFiles(
+        files,
+        this.currentConfig!
+      );
 
       // Filter by --only flag if specified
       const fileTypes = options.only
@@ -292,7 +312,7 @@ export class Orchestrator {
   }
 
   /**
-   * Get file matcher (for debugging and introspection)  
+   * Get file matcher (for debugging and introspection)
    */
   getFileMatcher(): FileMatcher {
     return this.fileMatcher;

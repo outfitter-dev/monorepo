@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { generateTypeScriptConfig, generateProjectTypeScriptConfigs } from '../typescript.js';
 import type { BaselayerConfig } from '../../schemas/baselayer-config.js';
+import {
+  generateProjectTypeScriptConfigs,
+  generateTypeScriptConfig,
+} from '../typescript.js';
 
 describe('generateTypeScriptConfig', () => {
   it('should generate strict preset by default', () => {
     const config = generateTypeScriptConfig();
-    
+
     expect(config.compilerOptions).toMatchObject({
       target: 'ES2022',
       lib: ['ES2022'],
@@ -16,18 +19,18 @@ describe('generateTypeScriptConfig', () => {
       noImplicitReturns: true,
       noUncheckedIndexedAccess: true,
     });
-    
+
     expect(config.include).toEqual(['src/**/*']);
     expect(config.exclude).toContain('node_modules');
   });
 
   it('should configure for React projects', () => {
     const baselayerConfig: BaselayerConfig = {
-      project: { framework: 'react' }
+      project: { framework: 'react' },
     };
-    
+
     const config = generateTypeScriptConfig(baselayerConfig);
-    
+
     expect(config.compilerOptions).toMatchObject({
       jsx: 'react-jsx',
       lib: expect.arrayContaining(['ES2022', 'DOM', 'DOM.Iterable']),
@@ -36,11 +39,11 @@ describe('generateTypeScriptConfig', () => {
 
   it('should configure for Next.js projects', () => {
     const baselayerConfig: BaselayerConfig = {
-      project: { framework: 'next' }
+      project: { framework: 'next' },
     };
-    
+
     const config = generateTypeScriptConfig(baselayerConfig);
-    
+
     expect(config.compilerOptions).toMatchObject({
       jsx: 'preserve',
       lib: expect.arrayContaining(['ES2022', 'DOM', 'DOM.Iterable']),
@@ -51,11 +54,11 @@ describe('generateTypeScriptConfig', () => {
 
   it('should configure for library projects', () => {
     const baselayerConfig: BaselayerConfig = {
-      project: { type: 'library' }
+      project: { type: 'library' },
     };
-    
+
     const config = generateTypeScriptConfig(baselayerConfig);
-    
+
     expect(config.compilerOptions).toMatchObject({
       declaration: true,
       declarationMap: true,
@@ -66,33 +69,33 @@ describe('generateTypeScriptConfig', () => {
 
   it('should add monorepo exclusions', () => {
     const baselayerConfig: BaselayerConfig = {
-      project: { type: 'monorepo' }
+      project: { type: 'monorepo' },
     };
-    
+
     const config = generateTypeScriptConfig(baselayerConfig);
-    
+
     expect(config.exclude).toContain('packages/**/node_modules');
     expect(config.exclude).toContain('packages/**/dist');
   });
 
   it('should include testing files when testing enabled', () => {
     const baselayerConfig: BaselayerConfig = {
-      features: { testing: true }
+      features: { testing: true },
     };
-    
+
     const config = generateTypeScriptConfig(baselayerConfig);
-    
+
     expect(config.include).toContain('**/*.test.*');
     expect(config.include).toContain('**/*.spec.*');
   });
 
   it('should add custom ignore patterns', () => {
     const baselayerConfig: BaselayerConfig = {
-      ignore: ['custom-build/', '*.generated.*']
+      ignore: ['custom-build/', '*.generated.*'],
     };
-    
+
     const config = generateTypeScriptConfig(baselayerConfig);
-    
+
     expect(config.exclude).toContain('custom-build/');
     expect(config.exclude).toContain('*.generated.*');
   });
@@ -101,7 +104,7 @@ describe('generateTypeScriptConfig', () => {
 describe('generateProjectTypeScriptConfigs', () => {
   it('should generate basic config for simple projects', () => {
     const configs = generateProjectTypeScriptConfigs();
-    
+
     expect(Object.keys(configs)).toContain('tsconfig.json');
     expect(configs['tsconfig.json'].compilerOptions).toMatchObject({
       target: 'ES2022',
@@ -111,11 +114,11 @@ describe('generateProjectTypeScriptConfigs', () => {
 
   it('should generate build config for libraries', () => {
     const baselayerConfig: BaselayerConfig = {
-      project: { type: 'library' }
+      project: { type: 'library' },
     };
-    
+
     const configs = generateProjectTypeScriptConfigs(baselayerConfig);
-    
+
     expect(Object.keys(configs)).toContain('tsconfig.build.json');
     expect(configs['tsconfig.build.json']).toMatchObject({
       extends: './tsconfig.json',
@@ -129,11 +132,11 @@ describe('generateProjectTypeScriptConfigs', () => {
 
   it('should generate test config when testing enabled', () => {
     const baselayerConfig: BaselayerConfig = {
-      features: { testing: true }
+      features: { testing: true },
     };
-    
+
     const configs = generateProjectTypeScriptConfigs(baselayerConfig);
-    
+
     expect(Object.keys(configs)).toContain('tsconfig.test.json');
     expect(configs['tsconfig.test.json']).toMatchObject({
       extends: './tsconfig.json',

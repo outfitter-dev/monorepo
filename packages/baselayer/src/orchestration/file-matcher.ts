@@ -8,7 +8,7 @@ import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 export const BASE_FILE_HANDLERS = {
   typescript: ['.ts', '.tsx', '.js', '.jsx'], // Biome/Ultracite
   json: ['.json'], // Prettier
-  yaml: ['.yaml', '.yml'], // Prettier  
+  yaml: ['.yaml', '.yml'], // Prettier
   css: ['.css', '.scss', '.sass', '.less'], // Stylelint
   markdown: ['.md', '.mdx', '.mdc'], // Markdownlint
 } as const;
@@ -19,24 +19,32 @@ export type FileType = keyof typeof BASE_FILE_HANDLERS;
  * Dynamic file handlers that adjust based on configuration
  * When tools are disabled, their files are handled by fallback tools
  */
-export function getFileHandlers(config: BaselayerConfig): Record<FileType, readonly string[]> {
-  const handlers = { ...BASE_FILE_HANDLERS };
-  
+export function getFileHandlers(
+  config: BaselayerConfig
+): Record<FileType, string[]> {
+  const handlers: Record<FileType, string[]> = {
+    typescript: [...BASE_FILE_HANDLERS.typescript],
+    json: [...BASE_FILE_HANDLERS.json],
+    yaml: [...BASE_FILE_HANDLERS.yaml],
+    css: [...BASE_FILE_HANDLERS.css],
+    markdown: [...BASE_FILE_HANDLERS.markdown],
+  };
+
   // Tool boundary logic: when specific tools are disabled,
   // Prettier takes over their responsibilities
-  
+
   // If stylelint is disabled, Prettier handles CSS files
   if (!config.features?.styles) {
     handlers.json = [...handlers.json, ...handlers.css];
     handlers.css = [];
   }
-  
-  // If markdownlint is disabled, Prettier handles Markdown files  
+
+  // If markdownlint is disabled, Prettier handles Markdown files
   if (!config.features?.markdown) {
     handlers.json = [...handlers.json, ...handlers.markdown];
     handlers.markdown = [];
   }
-  
+
   return handlers;
 }
 
@@ -45,7 +53,8 @@ export function getFileHandlers(config: BaselayerConfig): Record<FileType, reado
  * Handles file discovery, filtering, and categorization with configuration awareness
  */
 export class FileMatcher {
-  private fileHandlers: Record<FileType, readonly string[]> = BASE_FILE_HANDLERS;
+  private fileHandlers: Record<FileType, readonly string[]> =
+    BASE_FILE_HANDLERS;
 
   /**
    * Update file handlers based on configuration
@@ -59,7 +68,10 @@ export class FileMatcher {
    * Categorize files by type for tool processing
    * Uses dynamic handlers based on current configuration
    */
-  categorizeFiles(files: readonly string[], config?: BaselayerConfig): Record<FileType, string[]> {
+  categorizeFiles(
+    files: readonly string[],
+    config?: BaselayerConfig
+  ): Record<FileType, string[]> {
     // Update handlers if config provided
     if (config) {
       this.updateHandlers(config);
@@ -140,14 +152,13 @@ export class FileMatcher {
     try {
       const { spawn } = await import('node:child_process');
       const { promisify } = await import('node:util');
-      const execFile = promisify(spawn);
+      const _execFile = promisify(spawn);
 
-      const result = await execFile(
+      const result = await execFileAsync(
         'git',
         ['diff', '--cached', '--name-only'],
         {
           cwd,
-          encoding: 'utf-8',
         }
       );
 

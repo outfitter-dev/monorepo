@@ -48,12 +48,7 @@ export function generateEditorconfigContent(config?: BaselayerConfig): string {
 
   // JSON files (enabled by default)
   if (config?.features?.json !== false) {
-    sections.push(
-      '# JSON files',
-      '[*.{json,jsonc}]',
-      'indent_size = 2',
-      ''
-    );
+    sections.push('# JSON files', '[*.{json,jsonc}]', 'indent_size = 2', '');
   }
 
   // CSS/SCSS files
@@ -68,20 +63,10 @@ export function generateEditorconfigContent(config?: BaselayerConfig): string {
   }
 
   // YAML files
-  sections.push(
-    '# YAML files',
-    '[*.{yml,yaml}]',
-    'indent_size = 2',
-    ''
-  );
+  sections.push('# YAML files', '[*.{yml,yaml}]', 'indent_size = 2', '');
 
   // Package files
-  sections.push(
-    '# Package files',
-    '[package.json]',
-    'indent_size = 2',
-    ''
-  );
+  sections.push('# Package files', '[package.json]', 'indent_size = 2', '');
 
   // Testing files
   if (config?.features?.testing === true) {
@@ -148,7 +133,7 @@ export function generateEditorconfigContent(config?: BaselayerConfig): string {
     'indent_size = 2'
   );
 
-  return sections.join('\n') + '\n';
+  return `${sections.join('\n')}\n`;
 }
 
 /**
@@ -159,12 +144,12 @@ export async function generateEditorconfigConfig(
 ): Promise<Result<void, Error>> {
   try {
     const content = generateEditorconfigContent(config);
-    
+
     const writeResult = await writeFile('.editorconfig', content);
     if (isFailure(writeResult)) {
       return failure(writeResult.error);
     }
-    
+
     return success(undefined);
   } catch (error) {
     return failure(error as Error);

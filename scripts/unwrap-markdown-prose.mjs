@@ -200,8 +200,8 @@ async function processFile(filePath) {
       console.log(`✅ Unwrapped: ${filePath}`);
       return true;
     }
-      console.log(`⏭️  No changes: ${filePath}`);
-      return false;
+    console.log(`⏭️  No changes: ${filePath}`);
+    return false;
   } catch (error) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
     return false;

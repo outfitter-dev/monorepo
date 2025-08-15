@@ -11,9 +11,12 @@ import {
   type Result,
   success,
 } from '@outfitter/contracts';
-import { console } from '../utils/console';
-import { readPackageJson } from '../utils/file-system';
-import { getPackageManager, getRemoveCommand } from '../utils/package-manager';
+import { console } from '../utils/console.js';
+import { readPackageJson } from '../utils/file-system.js';
+import {
+  getPackageManager,
+  getRemoveCommand,
+} from '../utils/package-manager.js';
 
 export interface DependencyCleanupOptions {
   keepPrettier?: boolean;

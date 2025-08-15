@@ -1,6 +1,6 @@
 /**
  * Core domain types
- * 
+ *
  * Modern branded types and enhanced patterns.
  */
 

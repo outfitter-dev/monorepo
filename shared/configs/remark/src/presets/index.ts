@@ -30,7 +30,6 @@ export function generate(options: RemarkConfigOptions = {}): RemarkConfig {
     case 'relaxed':
       baseConfig = relaxed;
       break;
-    case 'standard':
     default:
       baseConfig = standard;
       break;

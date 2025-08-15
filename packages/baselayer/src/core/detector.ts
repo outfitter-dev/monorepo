@@ -245,7 +245,10 @@ export async function detectStyles(
     ignore: ['node_modules/**', 'dist/**', 'build/**'],
   });
 
-  if (isSuccess(styleFilesResult) && styleFilesResult.data.length > 0) {
+  if (
+    isSuccess(styleFilesResult) &&
+    (styleFilesResult.data as string[]).length > 0
+  ) {
     return success(true);
   }
 

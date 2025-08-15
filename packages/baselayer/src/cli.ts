@@ -3,19 +3,16 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isFailure, isSuccess } from '@outfitter/contracts';
 import { Command } from 'commander';
-import {
-  MarkdownlintAdapter,
-  PrettierAdapter,
-  StylelintAdapter,
-  UltraciteAdapter,
-} from './adapters/index.js';
+import { add } from './commands/add.js';
 // Legacy commands for backward compatibility
 import { clean } from './commands/clean.js';
 import { doctor } from './commands/doctor.js';
 import { init } from './commands/init.js';
 // New commands
 import { cleanOldConfigs, migrate } from './commands/migrate.js';
+import { remove } from './commands/remove.js';
 import { setup, teardown } from './commands/setup.js';
+import { update } from './commands/update.js';
 // New orchestration system
 import { Orchestrator } from './orchestration/orchestrator.js';
 
@@ -223,6 +220,88 @@ program
     const result = await cleanOldConfigs(options);
 
     if (isFailure(result)) {
+      process.exit(1);
+    }
+  });
+
+// Update command - update existing configuration to latest version
+program
+  .command('update')
+  .description('Update existing baselayer configuration to latest version')
+  .option('--force', 'Force update even if current version is newer')
+  .option('--dry-run', 'Show what would be updated without making changes')
+  .option('--verbose', 'Show detailed output')
+  .action(async (options) => {
+    const result = await update(options);
+
+    if (isFailure(result)) {
+      console.error(result.error.message);
+      process.exit(1);
+    }
+  });
+
+// Add command - add new tools/features to configuration
+program
+  .command('add')
+  .description('Add new tools/features to existing baselayer config')
+  .option(
+    '-t, --tools <tools...>',
+    'Tools to add (biome, prettier, stylelint, markdownlint, lefthook)'
+  )
+  .option('--dry-run', 'Show what would be added without making changes')
+  .option('--verbose', 'Show detailed output')
+  .action(async (options) => {
+    if (!options.tools || options.tools.length === 0) {
+      console.error(
+        'Error: No tools specified. Use --tools to specify tools to add.'
+      );
+      console.log(
+        'Valid tools: biome, prettier, stylelint, markdownlint, lefthook, typescript, markdown, styles, json, commits, packages, testing, docs'
+      );
+      process.exit(1);
+    }
+
+    const result = await add({
+      tools: options.tools,
+      dryRun: options.dryRun,
+      verbose: options.verbose,
+    });
+
+    if (isFailure(result)) {
+      console.error(result.error.message);
+      process.exit(1);
+    }
+  });
+
+// Remove command - remove tools/features from configuration
+program
+  .command('remove')
+  .description('Remove tools/features from existing baselayer config')
+  .option(
+    '-t, --tools <tools...>',
+    'Tools to remove (biome, prettier, stylelint, markdownlint, lefthook)'
+  )
+  .option('--dry-run', 'Show what would be removed without making changes')
+  .option('--verbose', 'Show detailed output')
+  .action(async (options) => {
+    if (!options.tools || options.tools.length === 0) {
+      console.error(
+        'Error: No tools specified. Use --tools to specify tools to remove.'
+      );
+      console.log(
+        'Valid tools: biome, prettier, stylelint, markdownlint, lefthook, typescript, markdown, styles, json, commits, packages, testing, docs'
+      );
+      process.exit(1);
+    }
+
+    const result = await remove({
+      tools: options.tools,
+      dryRun: options.dryRun,
+      verbose: options.verbose,
+    });
+
+    if (isFailure(result)) {
+      console.error(result.error.message);
       process.exit(1);
     }
   });

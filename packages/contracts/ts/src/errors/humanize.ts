@@ -16,6 +16,30 @@ const errorMessages: Record<ErrorCode, string> = {
     'External service is unavailable. Please try again later.',
   [ErrorCode.RATE_LIMIT_EXCEEDED]:
     'Too many requests. Please wait a moment and try again.',
+  [ErrorCode.FILE_OPERATION_FAILED]:
+    'File operation failed. Please check permissions and try again.',
+  [ErrorCode.MIGRATION_FAILED]:
+    'Migration failed. Please check the logs for details.',
+  [ErrorCode.SETUP_FAILED]:
+    'Setup failed. Please check your configuration and try again.',
+  [ErrorCode.UPDATE_FAILED]:
+    'Update operation failed. Please check your configuration and try again.',
+  [ErrorCode.ADD_FAILED]:
+    'Add operation failed. Please verify the tools and try again.',
+  [ErrorCode.REMOVE_FAILED]:
+    'Remove operation failed. Please check the configuration and try again.',
+  [ErrorCode.SCHEMA_VALIDATION_FAILED]:
+    'Configuration validation failed. Please check your settings.',
+  [ErrorCode.DEPENDENCY_CONFLICT]:
+    'Dependency conflict detected. Please resolve conflicts and try again.',
+  [ErrorCode.BACKUP_FAILED]:
+    'Backup operation failed. Please check disk space and permissions.',
+  [ErrorCode.CONCURRENT_ACCESS_ERROR]:
+    'File is being used by another process. Please try again.',
+  [ErrorCode.NETWORK_ERROR]:
+    'Network error occurred. Please check your connection and try again.',
+  [ErrorCode.TIMEOUT_ERROR]:
+    'Operation timed out. Please try again or check system resources.',
 };
 
 /**

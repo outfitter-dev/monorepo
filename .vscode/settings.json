@@ -9,7 +9,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "package.json": "pnpm-*.yaml,*config.json,*.config.js,*.config.ts,.markdownlint-cli2.jsonc,lint-staged.config.mjs,biome.json,.markdownlint.json,.prettierignore,.biomeignore,commitlint.config.mjs,*.lock,lefthook.yml,bunfig.toml",
+    "package.json": "pnpm-*.yaml,*config.json,*.config.js,*.config.ts,.markdownlint-cli2.jsonc,lint-staged.config.mjs,biome.json,.markdownlint.json,.prettierrc.json,.prettierignore,.editorconfig,.biomeignore,commitlint.config.mjs,*.lock,lefthook.yml,bunfig.toml,.env,turbo.json",
     "AGENT.md": ".mcp.json,CLAUDE.md, AGENTS.md"
   },
   "typescript.preferences.includePackageJsonAutoImports": "auto",
@@ -18,7 +18,6 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit",
     "source.organizeImports.biome": "explicit",
     "source.fixAll.biome": "explicit"
   },

@@ -90,7 +90,9 @@ async function mergeVSCodeExtensions(
 /**
  * Generate VSCode settings.json based on baselayer configuration
  */
-export function generateVSCodeSettings(config?: BaselayerConfig): Record<string, unknown> {
+export function generateVSCodeSettings(
+  config?: BaselayerConfig
+): Record<string, unknown> {
   const settings: Record<string, unknown> = {
     // Base editor settings
     'editor.formatOnSave': true,
@@ -119,7 +121,7 @@ export function generateVSCodeSettings(config?: BaselayerConfig): Record<string,
     codeActions['source.fixAll.biome'] = 'explicit';
   }
 
-  // JSON settings (enabled by default)  
+  // JSON settings (enabled by default)
   if (config?.features?.json !== false) {
     Object.assign(settings, {
       '[json]': { 'editor.defaultFormatter': 'esbenp.prettier-vscode' },
@@ -163,11 +165,14 @@ export function generateVSCodeSettings(config?: BaselayerConfig): Record<string,
   });
 
   // Framework-specific settings
-  if (config?.project?.framework === 'react' || config?.project?.framework === 'next') {
+  if (
+    config?.project?.framework === 'react' ||
+    config?.project?.framework === 'next'
+  ) {
     Object.assign(settings, {
       'emmet.includeLanguages': {
-        'javascript': 'javascriptreact',
-        'typescript': 'typescriptreact',
+        javascript: 'javascriptreact',
+        typescript: 'typescriptreact',
       },
       'emmet.triggerExpansionOnTab': false,
     });
@@ -212,21 +217,17 @@ export function generateVSCodeSettings(config?: BaselayerConfig): Record<string,
 /**
  * Generate VSCode extensions.json based on configuration
  */
-export function generateVSCodeExtensions(config?: BaselayerConfig): { recommendations: string[] } {
+export function generateVSCodeExtensions(config?: BaselayerConfig): {
+  recommendations: string[];
+} {
   const extensions: string[] = [];
 
   // Core extensions always included
-  extensions.push(
-    'editorconfig.editorconfig',
-    'esbenp.prettier-vscode'
-  );
+  extensions.push('editorconfig.editorconfig', 'esbenp.prettier-vscode');
 
   // TypeScript extensions (enabled by default)
   if (config?.features?.typescript !== false) {
-    extensions.push(
-      'biomejs.biome',
-      'ms-vscode.vscode-typescript-next'
-    );
+    extensions.push('biomejs.biome', 'ms-vscode.vscode-typescript-next');
   }
 
   // Markdown extensions (enabled by default)
@@ -280,7 +281,9 @@ export function generateVSCodeExtensions(config?: BaselayerConfig): { recommenda
 /**
  * Sets up VS Code configuration
  */
-export async function setupVSCode(config?: BaselayerConfig): Promise<Result<void, Error>> {
+export async function setupVSCode(
+  config?: BaselayerConfig
+): Promise<Result<void, Error>> {
   try {
     // Generate settings based on configuration
     const settings = generateVSCodeSettings(config);
@@ -297,7 +300,7 @@ export async function setupVSCode(config?: BaselayerConfig): Promise<Result<void
     if (isFailure(extensionsResult)) {
       return failure(extensionsResult.error);
     }
-    
+
     return success(undefined);
   } catch (error) {
     return failure(error as Error);
@@ -308,7 +311,9 @@ export async function setupVSCode(config?: BaselayerConfig): Promise<Result<void
  * Enhances VS Code settings after other tools have set up their configs
  * This is called after Ultracite init to ensure we don't override its settings
  */
-export async function enhanceVSCodeSettings(config?: BaselayerConfig): Promise<Result<void, Error>> {
+export async function enhanceVSCodeSettings(
+  config?: BaselayerConfig
+): Promise<Result<void, Error>> {
   try {
     // Generate minimal additional settings that Ultracite doesn't handle
     const additionalSettings: Record<string, unknown> = {};

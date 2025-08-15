@@ -1,15 +1,19 @@
 import { isFailure, isSuccess } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import * as fileSystem from '../../utils/file-system.js';
-import { generatePrettierConfig, generatePrettierConfigObject, generatePrettierIgnore } from '../prettier.js';
 import type { BaselayerConfig } from '../../schemas/baselayer-config.js';
+import * as fileSystem from '../../utils/file-system.js';
+import {
+  generatePrettierConfig,
+  generatePrettierConfigObject,
+  generatePrettierIgnore,
+} from '../prettier.js';
 
 vi.mock('../../utils/file-system.js');
 
 describe('generatePrettierConfigObject', () => {
   it('should generate basic prettier config', () => {
     const config = generatePrettierConfigObject();
-    
+
     expect(config).toMatchObject({
       semi: true,
       singleQuote: true,
@@ -24,7 +28,7 @@ describe('generatePrettierConfigObject', () => {
 
   it('should handle JSON files by default', () => {
     const config = generatePrettierConfigObject();
-    
+
     expect(config.overrides).toContainEqual({
       files: ['*.json', '*.jsonc'],
       options: {
@@ -36,11 +40,11 @@ describe('generatePrettierConfigObject', () => {
 
   it('should handle markdown when enabled', () => {
     const baselayerConfig: BaselayerConfig = {
-      features: { markdown: true }
+      features: { markdown: true },
     };
-    
+
     const config = generatePrettierConfigObject(baselayerConfig);
-    
+
     expect(config.overrides).toContainEqual({
       files: ['*.md', '*.mdx'],
       options: {
@@ -52,11 +56,11 @@ describe('generatePrettierConfigObject', () => {
 
   it('should handle CSS when stylelint disabled', () => {
     const baselayerConfig: BaselayerConfig = {
-      features: { styles: false }
+      features: { styles: false },
     };
-    
+
     const config = generatePrettierConfigObject(baselayerConfig);
-    
+
     expect(config.overrides).toContainEqual({
       files: ['*.css', '*.scss', '*.less'],
       options: {
@@ -71,12 +75,12 @@ describe('generatePrettierConfigObject', () => {
         prettier: {
           printWidth: 120,
           tabWidth: 4,
-        }
-      }
+        },
+      },
     };
-    
+
     const config = generatePrettierConfigObject(baselayerConfig);
-    
+
     expect(config.printWidth).toBe(120);
     expect(config.tabWidth).toBe(4);
   });
@@ -85,7 +89,7 @@ describe('generatePrettierConfigObject', () => {
 describe('generatePrettierIgnore', () => {
   it('should generate basic ignore patterns', () => {
     const ignore = generatePrettierIgnore();
-    
+
     expect(ignore).toContain('node_modules/');
     expect(ignore).toContain('dist/');
     expect(ignore).toContain('*.js');
@@ -94,22 +98,22 @@ describe('generatePrettierIgnore', () => {
 
   it('should add monorepo ignores', () => {
     const baselayerConfig: BaselayerConfig = {
-      project: { type: 'monorepo' }
+      project: { type: 'monorepo' },
     };
-    
+
     const ignore = generatePrettierIgnore(baselayerConfig);
-    
+
     expect(ignore).toContain('packages/**/dist/');
     expect(ignore).toContain('packages/**/build/');
   });
 
   it('should not ignore JS files when TypeScript disabled', () => {
     const baselayerConfig: BaselayerConfig = {
-      features: { typescript: false }
+      features: { typescript: false },
     };
-    
+
     const ignore = generatePrettierIgnore(baselayerConfig);
-    
+
     // Should not have JS-related ignores
     expect(ignore).not.toMatch(/\*\.js$/m);
     expect(ignore).not.toMatch(/\*\.jsx$/m);
@@ -117,11 +121,11 @@ describe('generatePrettierIgnore', () => {
 
   it('should add custom ignores', () => {
     const baselayerConfig: BaselayerConfig = {
-      ignore: ['custom-build/', '*.generated.*']
+      ignore: ['custom-build/', '*.generated.*'],
     };
-    
+
     const ignore = generatePrettierIgnore(baselayerConfig);
-    
+
     expect(ignore).toContain('custom-build/');
     expect(ignore).toContain('*.generated.*');
   });

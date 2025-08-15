@@ -130,29 +130,27 @@ export const MarkdownlintConfigSchema = z
 /**
  * Schema for Lefthook configuration
  */
-export const LefthookConfigSchema = z
-  .record(
-    z.object({
-      parallel: z.boolean().optional(),
-      commands: z
-        .record(
-          z.object({
-            glob: z.string().optional(),
-            run: z.string(),
-            skip: z
-              .array(
-                z.object({
-                  ref: z.string().optional(),
-                  branch: z.string().optional(),
-                })
-              )
-              .optional(),
-          })
-        )
-        .optional(),
-    })
-  )
-  .passthrough();
+export const LefthookConfigSchema = z.record(
+  z.object({
+    parallel: z.boolean().optional(),
+    commands: z
+      .record(
+        z.object({
+          glob: z.string().optional(),
+          run: z.string(),
+          skip: z
+            .array(
+              z.object({
+                ref: z.string().optional(),
+                branch: z.string().optional(),
+              })
+            )
+            .optional(),
+        })
+      )
+      .optional(),
+  })
+);
 
 /**
  * Validates configuration against schema with helpful error messages
