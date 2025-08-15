@@ -20,6 +20,10 @@ coverage/
 .env.test.local
 .env.production.local
 .env.*.local
+.env.*
+.env.backup.*
+.dev.vars.*
+.dev.vars.backup.*
 
 # IDE and editors
 .vscode/

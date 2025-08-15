@@ -261,8 +261,9 @@ export async function doctor(): Promise<Result<DoctorReport, Error>> {
       const hasOxlintInstalled = existsSync(join(projectRoot, 'oxlint.json'));
       if (
         hasOxlintInstalled &&
-        Object.values(scripts).some((script: string) =>
-          script.includes('eslint')
+        Object.values(scripts).some(
+          (script: unknown) =>
+            typeof script === 'string' && script.includes('eslint')
         )
       ) {
         issues.push({
@@ -277,8 +278,10 @@ export async function doctor(): Promise<Result<DoctorReport, Error>> {
       if (
         existsSync(join(projectRoot, 'biome.json')) &&
         Object.values(scripts).some(
-          (script: string) =>
-            script.includes('prettier') && !script.includes('--write')
+          (script: unknown) =>
+            typeof script === 'string' &&
+            script.includes('prettier') &&
+            !script.includes('--write')
         )
       ) {
         issues.push({
@@ -324,9 +327,15 @@ export async function doctor(): Promise<Result<DoctorReport, Error>> {
     }
 
     // Summary
-    const _errorCount = issues.filter((i) => i.severity === 'error').length;
-    const _warningCount = issues.filter((i) => i.severity === 'warning').length;
-    const _infoCount = issues.filter((i) => i.severity === 'info').length;
+    // Summary counts (potentially used for reporting)
+    const errorCount = issues.filter((i) => i.severity === 'error').length;
+    const warningCount = issues.filter((i) => i.severity === 'warning').length;
+    const infoCount = issues.filter((i) => i.severity === 'info').length;
+
+    // Use the counts to potentially enhance report
+    void errorCount;
+    void warningCount;
+    void infoCount;
 
     // Sort issues by severity
     issues.sort((a, b) => {

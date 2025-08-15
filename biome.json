@@ -1,8 +1,28 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
-  "extends": ["ultracite"],
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "error"
+      },
+      "style": {
+        "useImportType": "error"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
   "javascript": {
-    "globals": ["Bun"]
+    "globals": ["Bun"],
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "es5"
+    }
   },
   "json": {
     "parser": {
@@ -12,7 +32,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["!**/*.{md,mdx,mdc,css,scss,less,yaml,yml}"]
+    "includes": ["**/*", "!dist/**", "!coverage/**", "!node_modules/**"]
   },
   "vcs": {
     "useIgnoreFile": true
