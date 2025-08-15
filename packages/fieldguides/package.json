@@ -14,21 +14,23 @@
   ],
   "scripts": {
     "build": "echo 'No build needed for documentation package'",
+    "test": "echo 'No tests for documentation package'",
+    "typecheck": "echo 'No TypeScript compilation for documentation package'",
     "lint": "bun run lint:md",
-    "lint:md": "markdownlint-cli2 \"**/*.md\" \"!node_modules/**\" \"!.bun/**\"",
     "lint:fix": "bun run lint:md:fix",
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"!node_modules/**\" \"!.bun/**\"",
     "lint:md:fix": "markdownlint-cli2 \"**/*.md\" \"!node_modules/**\" \"!.bun/**\" --fix",
     "format": "prettier --check \"**/*.md\"",
-    "format:fix": "prettier --write \"**/*.md\"",
-    "test": "echo 'No tests for documentation package'"
+    "format:check": "prettier --check \"**/*.md\"",
+    "format:fix": "prettier --write \"**/*.md\""
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "glob": "^11.0.2",
+    "@types/node": "24.3.0",
+    "glob": "^11.0.3",
     "gray-matter": "^4.0.3",
-    "markdownlint-cli2": "^0.15.0",
-    "prettier": "^3.5.3",
-    "typescript": "^5.3.3"
+    "markdownlint-cli2": "^0.18.1",
+    "prettier": "^3.6.2",
+    "typescript": "5.9.2"
   },
   "engines": {
     "node": ">=20",

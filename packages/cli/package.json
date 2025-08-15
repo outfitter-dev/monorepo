@@ -11,10 +11,16 @@
     "templates"
   ],
   "scripts": {
-    "build": "bunx tsc",
+    "build": "../../node_modules/typescript/bin/tsc",
     "dev": "bun src/index.ts",
-    "test": "bun test",
-    "type-check": "bunx tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "../../node_modules/typescript/bin/tsc --noEmit",
+    "lint": "bunx ultracite lint",
+    "lint:fix": "bunx ultracite lint --write",
+    "format": "bunx ultracite format",
+    "format:check": "bunx ultracite format",
+    "format:fix": "bunx ultracite format --write",
     "prepare": "bun run build"
   },
   "dependencies": {
@@ -22,21 +28,21 @@
     "@inquirer/prompts": "^3.3.0",
     "semver": "^7.6.0",
     "chalk": "^5.3.0",
-    "commander": "^11.1.0",
+    "commander": "^12.0.0",
     "execa": "^8.0.1",
     "fs-extra": "^11.2.0",
     "inquirer": "^9.2.12",
     "ora": "^8.0.1",
-    "zod": "^3.22.4"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^9.0.7",
-    "@types/node": "^20.10.5",
+    "@types/node": "24.3.0",
     "@types/semver": "^7.5.0",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3",
-    "vitest": "^1.1.0"
+    "typescript": "5.9.2",
+    "vitest": "3.2.4"
   },
   "engines": {
     "node": ">=20"
