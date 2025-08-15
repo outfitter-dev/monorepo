@@ -28,18 +28,10 @@ const errorMessages: Record<ErrorCode, string> = {
     'Add operation failed. Please verify the tools and try again.',
   [ErrorCode.REMOVE_FAILED]:
     'Remove operation failed. Please check the configuration and try again.',
-  [ErrorCode.SCHEMA_VALIDATION_FAILED]:
-    'Configuration validation failed. Please check your settings.',
-  [ErrorCode.DEPENDENCY_CONFLICT]:
-    'Dependency conflict detected. Please resolve conflicts and try again.',
-  [ErrorCode.BACKUP_FAILED]:
-    'Backup operation failed. Please check disk space and permissions.',
-  [ErrorCode.CONCURRENT_ACCESS_ERROR]:
-    'File is being used by another process. Please try again.',
-  [ErrorCode.NETWORK_ERROR]:
-    'Network error occurred. Please check your connection and try again.',
-  [ErrorCode.TIMEOUT_ERROR]:
-    'Operation timed out. Please try again or check system resources.',
+  [ErrorCode.PACKAGE_MANAGER_ERROR]:
+    'Package manager operation failed. Please check your setup.',
+  [ErrorCode.PROJECT_DETECTION_FAILED]:
+    'Project detection failed. Please verify project structure.',
 };
 
 /**
