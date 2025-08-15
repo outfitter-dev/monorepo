@@ -9,9 +9,12 @@ type: pattern
 
 Modern type-safe error handling patterns using Result types, Effect patterns, custom error types, and TypeScript 5.7+ features.
 
+> **Note**: All examples assume you have configured a logger instance as described in [Logging Standards](../standards/logging-standards.md). Replace `console.*` with appropriate logger methods.
+
 ## Related Documentation
 
 - [TypeScript Standards](../standards/typescript-standards.md) - Core TypeScript configuration
+- [Logging Standards](../standards/logging-standards.md) - Structured logging with tslog
 - [Validation Patterns](./typescript-validation.md) - Input validation with error handling
 - [Unit Testing Patterns](./testing-unit.md) - Testing error scenarios
 - [React Query Guide](../guides/react-query.md) - Error handling in data fetching
@@ -37,13 +40,13 @@ export function failure<E>(error: E): Result<never, E> {
 
 ```typescript
 export function isSuccess<T, E>(
-  result: Result<T, E>
+  result: Result<T, E>,
 ): result is { ok: true; data: T } {
   return result.ok;
 }
 
 export function isFailure<T, E>(
-  result: Result<T, E>
+  result: Result<T, E>,
 ): result is { ok: false; error: E } {
   return !result.ok;
 }
@@ -52,10 +55,10 @@ export function isFailure<T, E>(
 function processResult<T, E>(result: Result<T, E>) {
   if (isSuccess(result)) {
     // TypeScript knows result.data is available
-    console.log(result.data);
+    logger.info('Operation succeeded', { data: result.data });
   } else {
     // TypeScript knows result.error is available
-    console.error(result.error);
+    logger.error('Operation failed', { error: result.error });
   }
 }
 ```
@@ -102,7 +105,7 @@ export type AppError =
 export function createApiError(
   status: number,
   message: string,
-  options?: Partial<ApiError>
+  options?: Partial<ApiError>,
 ): ApiError {
   return {
     status,
@@ -115,7 +118,7 @@ export function createApiError(
 export function createValidationError(
   field: string,
   message: string,
-  value?: unknown
+  value?: unknown,
 ): ValidationError {
   return {
     field,
@@ -134,7 +137,7 @@ export function createValidationError(
 // Transform successful values
 export function map<T, U, E>(
   result: Result<T, E>,
-  fn: (data: T) => U
+  fn: (data: T) => U,
 ): Result<U, E> {
   return result.ok ? success(fn(result.data)) : result;
 }
@@ -142,7 +145,7 @@ export function map<T, U, E>(
 // Chain Result operations
 export function flatMap<T, U, E>(
   result: Result<T, E>,
-  fn: (data: T) => Result<U, E>
+  fn: (data: T) => Result<U, E>,
 ): Result<U, E> {
   return result.ok ? fn(result.data) : result;
 }
@@ -150,7 +153,7 @@ export function flatMap<T, U, E>(
 // Map error values
 export function mapError<T, E1, E2>(
   result: Result<T, E1>,
-  fn: (error: E1) => E2
+  fn: (error: E1) => E2,
 ): Result<T, E2> {
   return result.ok ? result : failure(fn(result.error));
 }
@@ -163,7 +166,7 @@ export function mapError<T, E1, E2>(
 export function match<T, E, U>(
   result: Result<T, E>,
   onSuccess: (data: T) => U,
-  onError: (error: E) => U
+  onError: (error: E) => U,
 ): U {
   return result.ok ? onSuccess(result.data) : onError(result.error);
 }
@@ -211,7 +214,7 @@ export function tryCatchSync<T>(fn: () => T): Result<T, Error> {
 ```typescript
 export async function mapAsync<T, U, E>(
   result: AsyncResult<T, E>,
-  fn: (data: T) => Promise<U>
+  fn: (data: T) => Promise<U>,
 ): AsyncResult<U, E> {
   const resolved = await result;
   return resolved.ok ? success(await fn(resolved.data)) : resolved;
@@ -219,12 +222,127 @@ export async function mapAsync<T, U, E>(
 
 export async function flatMapAsync<T, U, E>(
   result: AsyncResult<T, E>,
-  fn: (data: T) => AsyncResult<U, E>
+  fn: (data: T) => AsyncResult<U, E>,
 ): AsyncResult<U, E> {
   const resolved = await result;
   return resolved.ok ? fn(resolved.data) : resolved;
 }
 ```
+
+## Logging Integration
+
+Combine Result patterns with structured logging for comprehensive error handling that provides both type safety and operational visibility.
+
+### Basic Integration
+
+```typescript
+import { logger } from '@/lib/logger';
+import { Result, success, failure } from '@/types/result';
+
+export async function fetchUserData(
+  id: string,
+): Promise<Result<User, AppError>> {
+  logger.debug('Fetching user', { userId: id });
+
+  try {
+    const response = await fetch(`/api/users/${id}`);
+
+    if (!response.ok) {
+      const error = createApiError(response.status, 'User fetch failed');
+      logger.error('API error', {
+        userId: id,
+        status: response.status,
+        error: error.message,
+      });
+      return failure(error);
+    }
+
+    const data = await response.json();
+    logger.info('User fetched successfully', { userId: id });
+    return success(data);
+  } catch (error) {
+    logger.error('Network error', {
+      userId: id,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+    return failure(
+      createNetworkError(
+        error instanceof Error ? error.message : 'Unknown error',
+      ),
+    );
+  }
+}
+```
+
+### Enhanced tryCatch with Logging
+
+```typescript
+export async function tryCatchWithLogging<T>(
+  fn: () => Promise<T>,
+  context?: Record<string, any>,
+): AsyncResult<T, Error> {
+  try {
+    const data = await fn();
+    logger.debug('Operation succeeded', context);
+    return success(data);
+  } catch (error) {
+    logger.error('Operation failed', {
+      ...context,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    return failure(error instanceof Error ? error : new Error(String(error)));
+  }
+}
+
+// Usage
+const result = await tryCatchWithLogging(() => fetchUserData('123'), {
+  operation: 'fetchUser',
+  userId: '123',
+});
+```
+
+### Logging Result Handlers
+
+```typescript
+export function logResultError<E>(
+  result: Result<any, E>,
+  context?: Record<string, any>,
+): void {
+  if (!result.ok) {
+    logger.error('Operation failed', {
+      ...context,
+      error: result.error,
+    });
+  }
+}
+
+export function processWithLogging<T, E>(
+  result: Result<T, E>,
+  onSuccess: (data: T) => void,
+  context?: Record<string, any>,
+): void {
+  if (result.ok) {
+    logger.info('Processing successful result', context);
+    onSuccess(result.data);
+  } else {
+    logger.error('Processing failed result', {
+      ...context,
+      error: result.error,
+    });
+  }
+}
+```
+
+### Benefits
+
+This combined approach provides:
+
+- **Type safety**: Callers receive typed errors they can handle appropriately
+- **Observability**: All errors are logged with context for debugging
+- **No silent failures**: Every error path is explicit and tracked
+- **Better debugging**: Structured logs make it easy to trace issues in production
+- **Compliance**: Meets both Ultracite's logging requirements and Outfitter's type safety standards
 
 ## Advanced Patterns
 
@@ -274,7 +392,7 @@ type ContextualResult<T, E> = Result<T, E> & {
 export function withContext<T, E>(
   result: Result<T, E>,
   operation: string,
-  metadata?: Record<string, any>
+  metadata?: Record<string, any>,
 ): ContextualResult<T, E> {
   return {
     ...result,
@@ -295,7 +413,7 @@ export function withContext<T, E>(
 export class TypedApiClient {
   private async request<T>(
     url: string,
-    options?: RequestInit
+    options?: RequestInit,
   ): AsyncResult<T, ApiError> {
     return tryCatch(async () => {
       const response = await fetch(url, options);
@@ -305,19 +423,19 @@ export class TypedApiClient {
         throw createApiError(
           response.status,
           errorData.message || response.statusText,
-          { code: errorData.code, endpoint: url }
+          { code: errorData.code, endpoint: url },
         );
       }
 
       return response.json() as T;
-    }).then(result =>
+    }).then((result) =>
       mapError(
         result,
         (error): ApiError =>
           error instanceof Error && 'status' in error
             ? (error as ApiError)
-            : createApiError(0, error.message)
-      )
+            : createApiError(0, error.message),
+      ),
     );
   }
 }
@@ -332,7 +450,7 @@ function validateField<T>(
   value: T | null | undefined,
   field: string,
   validator: (value: T) => boolean,
-  message: string
+  message: string,
 ): Result<T, ValidationError> {
   if (value == null) {
     return failure(createValidationError(field, `${field} is required`));
@@ -349,14 +467,14 @@ function validateField<T>(
 function validateForm<T extends Record<string, any>>(validators: {
   [K in keyof T]: (value: any) => Result<T[K], ValidationError>;
 }): (data: Partial<T>) => ValidationResult<T> {
-  return data => {
+  return (data) => {
     const results = Object.entries(validators).map(([field, validate]) =>
-      validate(data[field as keyof T])
+      validate(data[field as keyof T]),
     );
 
     const errors = results
       .filter((r): r is { ok: false; error: ValidationError } => !r.ok)
-      .map(r => r.error);
+      .map((r) => r.error);
 
     if (errors.length > 0) {
       return failure(errors);
@@ -366,7 +484,7 @@ function validateForm<T extends Record<string, any>>(validators: {
       Object.keys(validators).map((field, i) => [
         field,
         (results[i] as { ok: true; data: any }).data,
-      ])
+      ]),
     );
 
     return success(validData as T);
@@ -381,7 +499,7 @@ function validateForm<T extends Record<string, any>>(validators: {
 ```typescript
 // Use type guards for clean code flow
 async function fetchUserProfile(
-  id: string
+  id: string,
 ): AsyncResult<UserProfile, ApiError> {
   const userResult = await fetchUser(id);
 
@@ -391,7 +509,7 @@ async function fetchUserProfile(
 
   const profileResult = await fetchProfile(userResult.data.profileId);
 
-  return map(profileResult, profile => ({
+  return map(profileResult, (profile) => ({
     ...userResult.data,
     profile,
   }));
@@ -404,7 +522,7 @@ async function fetchUserProfile(
 // Provide fallback strategies
 function withFallback<T, E>(
   primary: () => Result<T, E>,
-  fallback: () => Result<T, E>
+  fallback: () => Result<T, E>,
 ): Result<T, E> {
   const primaryResult = primary();
   return isSuccess(primaryResult) ? primaryResult : fallback();
@@ -414,7 +532,7 @@ function withFallback<T, E>(
 async function retryWithBackoff<T>(
   fn: () => AsyncResult<T, Error>,
   maxAttempts = 3,
-  initialDelay = 1000
+  initialDelay = 1000,
 ): AsyncResult<T, Error> {
   let lastError: Error;
 
@@ -428,8 +546,8 @@ async function retryWithBackoff<T>(
     lastError = result.error;
 
     if (attempt < maxAttempts - 1) {
-      await new Promise(resolve =>
-        setTimeout(resolve, initialDelay * Math.pow(2, attempt))
+      await new Promise((resolve) =>
+        setTimeout(resolve, initialDelay * Math.pow(2, attempt)),
       );
     }
   }
@@ -452,7 +570,7 @@ class NetworkError {
   readonly _tag = 'NetworkError';
   constructor(
     readonly message: string,
-    readonly status?: number
+    readonly status?: number,
   ) {}
 }
 
@@ -460,7 +578,7 @@ class ValidationError {
   readonly _tag = 'ValidationError';
   constructor(
     readonly field: string,
-    readonly message: string
+    readonly message: string,
   ) {}
 }
 
@@ -477,26 +595,26 @@ class UserService {
     return pipe(
       Effect.tryPromise({
         try: () => fetch(`/api/users/${id}`),
-        catch: error => new NetworkError(String(error)),
+        catch: (error) => new NetworkError(String(error)),
       }),
-      Effect.flatMap(response =>
+      Effect.flatMap((response) =>
         response.ok
           ? Effect.succeed(response)
-          : Effect.fail(new NetworkError('Failed to fetch', response.status))
+          : Effect.fail(new NetworkError('Failed to fetch', response.status)),
       ),
-      Effect.flatMap(response =>
+      Effect.flatMap((response) =>
         Effect.tryPromise({
           try: () => response.json(),
           catch: () => new ParseError('Invalid JSON response'),
-        })
+        }),
       ),
-      Effect.flatMap(data =>
-        pipe(userSchema.safeParse(data), result =>
+      Effect.flatMap((data) =>
+        pipe(userSchema.safeParse(data), (result) =>
           result.success
             ? Effect.succeed(result.data)
-            : Effect.fail(new ParseError('Invalid user data'))
-        )
-      )
+            : Effect.fail(new ParseError('Invalid user data')),
+        ),
+      ),
     );
   }
 }
@@ -510,22 +628,25 @@ const program = pipe(
   Effect.Do,
   Effect.bind('user', () => userService.fetchUser('123')),
   Effect.bind('profile', ({ user }) => profileService.fetchProfile(user.id)),
-  Effect.map(({ user, profile }) => ({ ...user, profile }))
+  Effect.map(({ user, profile }) => ({ ...user, profile })),
 );
 
 // Running Effects
 Effect.runPromise(program)
-  .then(console.log)
-  .catch(error => {
+  .then((result) => logger.info('Program completed', { result }))
+  .catch((error) => {
     switch (error._tag) {
       case 'NetworkError':
-        console.error(`Network error: ${error.message}`);
+        logger.error('Network error', { message: error.message });
         break;
       case 'ValidationError':
-        console.error(`Validation error in ${error.field}: ${error.message}`);
+        logger.error('Validation error', {
+          field: error.field,
+          message: error.message,
+        });
         break;
       case 'ParseError':
-        console.error(`Parse error: ${error.message}`);
+        logger.error('Parse error', { message: error.message });
         break;
     }
   });
@@ -539,7 +660,7 @@ Effect.runPromise(program)
 // Prevent TypeScript from inferring overly broad types
 function createResult<T, E = Error>(
   value: T,
-  error?: NoInfer<E>
+  error?: NoInfer<E>,
 ): Result<T, E> {
   return error ? failure(error) : success(value);
 }
@@ -568,7 +689,7 @@ interface TypedError {
 function createError<T extends ErrorCode>(
   code: T,
   message: string,
-  details?: unknown
+  details?: unknown,
 ): TypedError {
   return { code, message, details };
 }

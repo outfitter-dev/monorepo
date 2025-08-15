@@ -24,8 +24,7 @@ Essential TypeScript patterns, configuration, and best practices for type-safe d
 
 This guide requires:
 
-- TypeScript: 5.7+ (for const type parameters, satisfies operator, NoInfer
-utility, and import attributes)
+- TypeScript: 5.7+ (for const type parameters, satisfies operator, NoInfer utility, and import attributes)
 - Node.js: 18+ (for ES2022 features)
 - ESLint: 9.0+ (for flat config format)
 
@@ -41,6 +40,23 @@ utility, and import attributes)
 - **Be explicit at boundaries** - Input/output types should be clearly defined
 - **Leverage type narrowing** - Use guards over casting
 - **Fail at compile time** - Catch errors before runtime
+
+### Array Type Syntax
+
+Both `T[]` and `Array<T>` syntaxes are acceptable. Choose one style and use it consistently throughout your project:
+
+```typescript
+// Both styles are valid - pick one for your project
+const numbers: number[] = [1, 2, 3];
+const users: User[] = [];
+
+// OR
+
+const numbers: Array<number> = [1, 2, 3];
+const users: Array<User> = [];
+```
+
+Consistency within a codebase is more important than which style you choose.
 
 ### Quick Heuristics
 
@@ -300,7 +316,7 @@ type UserResponse = Awaited<ReturnType<typeof fetchUser>>;
 // ✂️ Production-ready: Type-safe error handling
 // Type-safe error handling
 async function safeAsync<T>(
-  fn: () => Promise<T>
+  fn: () => Promise<T>,
 ): Promise<[T, null] | [null, Error]> {
   try {
     const result = await fn();
@@ -541,7 +557,7 @@ function createStore<T>(initial: T, onChange?: (value: NoInfer<T>) => void) {
 }
 
 // Prevents inference from the callback parameter
-const store = createStore({ count: 0 }, value => {
+const store = createStore({ count: 0 }, (value) => {
   console.log(value); // Type is correctly { count: number }
 });
 ```
@@ -698,7 +714,7 @@ type Role = (typeof ROLES)[number]; // "admin" | "user" | "guest"
 // Constrain generics appropriately
 function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>;
-  keys.forEach(key => {
+  keys.forEach((key) => {
     result[key] = obj[key];
   });
   return result;
