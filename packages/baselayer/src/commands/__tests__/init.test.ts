@@ -76,7 +76,7 @@ describe('init command', () => {
 
   it('should skip user prompts with --yes flag', async () => {
     ctx.mockExec.mockReturnValue({ stdout: '', stderr: '' });
-    
+
     const result = await init({ yes: true });
 
     if (isFailure(result)) {

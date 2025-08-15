@@ -37,40 +37,39 @@ export * as Types from './types/index.js';
 
 // Explicit public re-exports ---------------------------------------------------------------
 
-// Result pattern – core helpers
-export {
-  type Result,
-  type Success,
-  type Failure,
-  success,
-  failure,
-  isSuccess,
-  isFailure,
-  map,
-  mapError,
-  flatMap,
-  flatten,
-  all,
-  getOrElse,
-  getOrElseWith,
-  tap,
-  tapError,
-  toPromise,
-  fromNullable,
-  match,
-  unwrap,
-  unwrapOr,
-  unwrapError,
-  trySync,
-  tryAsync,
-} from './result.js';
-
 // Error helpers
 export {
   type AppError,
-  makeError,
-  tryMakeError,
   isAppError,
-  toAppError,
   isErrorInCategory,
+  makeError,
+  toAppError,
+  tryMakeError,
 } from './error.js';
+// Result pattern – core helpers
+export {
+  all,
+  type Failure,
+  failure,
+  flatMap,
+  flatten,
+  fromNullable,
+  getOrElse,
+  getOrElseWith,
+  isFailure,
+  isSuccess,
+  map,
+  mapError,
+  match,
+  type Result,
+  type Success,
+  success,
+  tap,
+  tapError,
+  toPromise,
+  tryAsync,
+  trySync,
+  unwrap,
+  unwrapError,
+  unwrapOr,
+} from './result.js';

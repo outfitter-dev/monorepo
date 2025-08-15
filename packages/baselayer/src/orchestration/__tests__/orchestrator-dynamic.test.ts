@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Orchestrator } from '../orchestrator.js';
+import { beforeEach, describe, expect, it } from 'vitest';
 import type { BaselayerConfig } from '../../schemas/baselayer-config.js';
+import { Orchestrator } from '../orchestrator.js';
 
 describe('Orchestrator Dynamic Configuration', () => {
   let orchestrator: Orchestrator;
@@ -13,7 +13,7 @@ describe('Orchestrator Dynamic Configuration', () => {
     it('should initialize with default configuration', async () => {
       const result = await orchestrator.initialize();
       expect(result.success).toBe(true);
-      
+
       const config = orchestrator.getCurrentConfig();
       expect(config).toBeDefined();
       expect(config?.features?.typescript).toBe(true);
@@ -23,7 +23,7 @@ describe('Orchestrator Dynamic Configuration', () => {
     it('should handle missing configuration file gracefully', async () => {
       const result = await orchestrator.initialize('/nonexistent/path');
       expect(result.success).toBe(true); // Should use defaults
-      
+
       const config = orchestrator.getCurrentConfig();
       expect(config?.features?.typescript).toBe(true);
     });
@@ -41,7 +41,7 @@ describe('Orchestrator Dynamic Configuration', () => {
       };
 
       await orchestrator.reconfigure(config);
-      
+
       const registry = orchestrator.getAdapterRegistry();
       expect(registry.hasAdapter('typescript')).toBe(true);
       expect(registry.hasAdapter('json')).toBe(true);
@@ -60,16 +60,16 @@ describe('Orchestrator Dynamic Configuration', () => {
       };
 
       await orchestrator.reconfigure(config);
-      
+
       const fileMatcher = orchestrator.getFileMatcher();
       const handlers = fileMatcher.getActiveHandlers();
-      
+
       // When stylelint is disabled, Prettier (json) should handle CSS files
       expect(handlers.json).toContain('.css');
       expect(handlers.json).toContain('.scss');
       expect(handlers.json).toContain('.md');
       expect(handlers.json).toContain('.mdx');
-      
+
       // CSS and Markdown handlers should be empty
       expect(handlers.css).toHaveLength(0);
       expect(handlers.markdown).toHaveLength(0);
@@ -88,11 +88,11 @@ describe('Orchestrator Dynamic Configuration', () => {
       };
 
       await orchestrator.reconfigure(config);
-      
+
       const fileMatcher = orchestrator.getFileMatcher();
       const files = ['test.ts', 'style.css', 'readme.md', 'config.json'];
       const categorized = fileMatcher.categorizeFiles(files, config);
-      
+
       expect(categorized.typescript).toContain('test.ts');
       expect(categorized.json).toContain('style.css'); // CSS handled by Prettier
       expect(categorized.json).toContain('config.json');
@@ -113,9 +113,9 @@ describe('Orchestrator Dynamic Configuration', () => {
       };
 
       await orchestrator.reconfigure(config);
-      
+
       const summary = orchestrator.getSummary();
-      
+
       expect(summary.configLoaded).toBe(true);
       expect(summary.adapters.totalAdapters).toBeGreaterThan(0);
       expect(summary.adapters.disabledFeatures).toContain('styles');

@@ -1,18 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/outfitter-dev/baselayer/main/schema.json",
-  
+
   // Feature flags - enable/disable specific development tools
   "features": {
-    "typescript": true,     // Biome/Ultracite for TS/JS files
-    "markdown": true,       // Markdownlint for .md files
-    "styles": false,        // Stylelint for CSS (disabled - Prettier handles CSS)
-    "json": true,          // Prettier for JSON/YAML
-    "commits": true,       // Commitlint via Lefthook
-    "packages": false,     // Publint for package.json validation
-    "testing": false,      // Testing framework setup
-    "docs": false         // Documentation generation
+    "typescript": true, // Biome/Ultracite for TS/JS files
+    "markdown": true, // Markdownlint for .md files
+    "styles": false, // Stylelint for CSS (disabled - Prettier handles CSS)
+    "json": true, // Prettier for JSON/YAML
+    "commits": true, // Commitlint via Lefthook
+    "packages": false, // Publint for package.json validation
+    "testing": false, // Testing framework setup
+    "docs": false // Documentation generation
   },
-  
+
   // Tool-specific configuration overrides
   "overrides": {
     "prettier": {
@@ -28,18 +28,14 @@
       }
     }
   },
-  
+
   // Project context for smarter defaults
   "project": {
     "type": "monorepo",
     "framework": "react",
     "packageManager": "bun"
   },
-  
+
   // Global ignore patterns
-  "ignore": [
-    "dist/**",
-    "build/**",
-    "*.min.*"
-  ]
+  "ignore": ["dist/**", "build/**", "*.min.*"]
 }

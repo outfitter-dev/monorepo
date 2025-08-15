@@ -5,75 +5,120 @@
 import { z } from 'zod';
 
 // Core feature flags
-export const FeaturesSchema = z.object({
-  typescript: z.boolean().default(true).describe('Enable TypeScript support'),
-  markdown: z.boolean().default(true).describe('Enable Markdown linting'),
-  styles: z.boolean().default(false).describe('Enable CSS/SCSS linting'),
-  json: z.boolean().default(true).describe('Enable JSON formatting'),
-  commits: z.boolean().default(true).describe('Enable commit message linting'),
-  packages: z.boolean().default(false).describe('Enable package.json validation'),
-  testing: z.boolean().default(false).describe('Enable testing setup'),
-  docs: z.boolean().default(false).describe('Enable documentation generation'),
-}).describe('Feature flags for Baselayer tools');
+export const FeaturesSchema = z
+  .object({
+    typescript: z.boolean().default(true).describe('Enable TypeScript support'),
+    markdown: z.boolean().default(true).describe('Enable Markdown linting'),
+    styles: z.boolean().default(false).describe('Enable CSS/SCSS linting'),
+    json: z.boolean().default(true).describe('Enable JSON formatting'),
+    commits: z
+      .boolean()
+      .default(true)
+      .describe('Enable commit message linting'),
+    packages: z
+      .boolean()
+      .default(false)
+      .describe('Enable package.json validation'),
+    testing: z.boolean().default(false).describe('Enable testing setup'),
+    docs: z
+      .boolean()
+      .default(false)
+      .describe('Enable documentation generation'),
+  })
+  .describe('Feature flags for Baselayer tools');
 
 // Tool-specific overrides
-export const BiomeOverrideSchema = z.object({
-  formatter: z.record(z.unknown()).optional(),
-  linter: z.record(z.unknown()).optional(),
-  organizeImports: z.record(z.unknown()).optional(),
-}).describe('Biome configuration overrides');
+export const BiomeOverrideSchema = z
+  .object({
+    formatter: z.record(z.unknown()).optional(),
+    linter: z.record(z.unknown()).optional(),
+    organizeImports: z.record(z.unknown()).optional(),
+  })
+  .describe('Biome configuration overrides');
 
-export const PrettierOverrideSchema = z.record(z.unknown())
+export const PrettierOverrideSchema = z
+  .record(z.unknown())
   .describe('Prettier configuration overrides');
 
-export const StylelintOverrideSchema = z.record(z.unknown())
+export const StylelintOverrideSchema = z
+  .record(z.unknown())
   .describe('Stylelint configuration overrides');
 
-export const MarkdownlintOverrideSchema = z.record(z.unknown())
+export const MarkdownlintOverrideSchema = z
+  .record(z.unknown())
   .describe('Markdownlint configuration overrides');
 
-export const OverridesSchema = z.object({
-  biome: BiomeOverrideSchema.optional(),
-  prettier: PrettierOverrideSchema.optional(),
-  stylelint: StylelintOverrideSchema.optional(),
-  markdownlint: MarkdownlintOverrideSchema.optional(),
-}).describe('Tool-specific configuration overrides');
+export const OverridesSchema = z
+  .object({
+    biome: BiomeOverrideSchema.optional(),
+    prettier: PrettierOverrideSchema.optional(),
+    stylelint: StylelintOverrideSchema.optional(),
+    markdownlint: MarkdownlintOverrideSchema.optional(),
+  })
+  .describe('Tool-specific configuration overrides');
 
 // Project context
-export const ProjectContextSchema = z.object({
-  type: z.enum(['monorepo', 'library', 'application']).optional()
-    .describe('Project type for context-aware configuration'),
-  framework: z.enum(['react', 'vue', 'svelte', 'next', 'astro']).optional()
-    .describe('Primary framework being used'),
-  packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).optional()
-    .describe('Package manager in use'),
-  rootDir: z.string().optional()
-    .describe('Root directory for configuration files'),
-}).describe('Project context information');
+export const ProjectContextSchema = z
+  .object({
+    type: z
+      .enum(['monorepo', 'library', 'application'])
+      .optional()
+      .describe('Project type for context-aware configuration'),
+    framework: z
+      .enum(['react', 'vue', 'svelte', 'next', 'astro'])
+      .optional()
+      .describe('Primary framework being used'),
+    packageManager: z
+      .enum(['npm', 'yarn', 'pnpm', 'bun'])
+      .optional()
+      .describe('Package manager in use'),
+    rootDir: z
+      .string()
+      .optional()
+      .describe('Root directory for configuration files'),
+  })
+  .describe('Project context information');
 
 // Main configuration schema
-export const BaselayerConfigSchema = z.object({
-  $schema: z.string().optional()
-    .describe('JSON Schema reference'),
-  
-  features: FeaturesSchema.optional()
-    .describe('Enable or disable specific features'),
-  
-  overrides: OverridesSchema.optional()
-    .describe('Tool-specific configuration overrides'),
-  
-  project: ProjectContextSchema.optional()
-    .describe('Project context for smarter defaults'),
-  
-  ignore: z.array(z.string()).optional()
-    .describe('Files and patterns to ignore across all tools'),
-  
-  extends: z.union([z.string(), z.array(z.string())]).optional()
-    .describe('Extend from other configuration files or presets'),
-    
-  presets: z.array(z.string()).optional()
-    .describe('Apply predefined configuration presets'),
-}).describe('Baselayer unified configuration');
+export const BaselayerConfigSchema = z
+  .object({
+    $schema: z.string().optional().describe('JSON Schema reference'),
+
+    features: FeaturesSchema.default({
+      typescript: true,
+      markdown: true,
+      styles: false,
+      json: true,
+      commits: true,
+      packages: false,
+      testing: false,
+      docs: false,
+    }).describe('Enable or disable specific features'),
+
+    overrides: OverridesSchema.default({}).describe(
+      'Tool-specific configuration overrides'
+    ),
+
+    project: ProjectContextSchema.optional().describe(
+      'Project context for smarter defaults'
+    ),
+
+    ignore: z
+      .array(z.string())
+      .optional()
+      .describe('Files and patterns to ignore across all tools'),
+
+    extends: z
+      .union([z.string(), z.array(z.string())])
+      .optional()
+      .describe('Extend from other configuration files or presets'),
+
+    presets: z
+      .array(z.string())
+      .optional()
+      .describe('Apply predefined configuration presets'),
+  })
+  .describe('Baselayer unified configuration');
 
 // TypeScript types
 export type FeaturesConfig = z.infer<typeof FeaturesSchema>;
@@ -90,6 +135,23 @@ export function validateBaselayerConfig(config: unknown): BaselayerConfig {
   return BaselayerConfigSchema.parse(config);
 }
 
+/**
+ * Safe validation function that returns a Result instead of throwing
+ */
+export function safeValidateBaselayerConfig(
+  config: unknown
+):
+  | { success: true; data: BaselayerConfig }
+  | { success: false; error: z.ZodError } {
+  const result = BaselayerConfigSchema.safeParse(config);
+
+  if (result.success) {
+    return { success: true, data: result.data };
+  }
+
+  return { success: false, error: result.error };
+}
+
 // JSON Schema export for baselayer.jsonc intellisense
 export const BASELAYER_JSON_SCHEMA = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -99,7 +161,7 @@ export const BASELAYER_JSON_SCHEMA = {
   properties: {
     $schema: {
       type: 'string',
-      description: 'JSON Schema reference'
+      description: 'JSON Schema reference',
     },
     features: {
       type: 'object',
@@ -113,7 +175,7 @@ export const BASELAYER_JSON_SCHEMA = {
         packages: { type: 'boolean', default: false },
         testing: { type: 'boolean', default: false },
         docs: { type: 'boolean', default: false },
-      }
+      },
     },
     project: {
       type: 'object',
@@ -122,8 +184,8 @@ export const BASELAYER_JSON_SCHEMA = {
         type: { enum: ['monorepo', 'library', 'application'] },
         framework: { enum: ['react', 'vue', 'svelte', 'next', 'astro'] },
         packageManager: { enum: ['npm', 'yarn', 'pnpm', 'bun'] },
-        rootDir: { type: 'string' }
-      }
-    }
-  }
+        rootDir: { type: 'string' },
+      },
+    },
+  },
 };

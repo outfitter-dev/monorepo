@@ -1,6 +1,6 @@
+import { z } from 'zod';
 import type { AppError, Result } from '../index.js';
 import { ErrorCode, failure, makeError, success } from '../index.js';
-import { z } from 'zod';
 
 /**
  * Validates and parses environment variables against a provided Zod schema.

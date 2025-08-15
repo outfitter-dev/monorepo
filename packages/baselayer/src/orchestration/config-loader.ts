@@ -1,7 +1,16 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { failure, makeError, type Result, success } from '@outfitter/contracts';
-import { validateBaselayerConfig, type BaselayerConfig } from '../schemas/baselayer-config.js';
+import {
+  ErrorCode,
+  failure,
+  makeError,
+  type Result,
+  success,
+} from '@outfitter/contracts';
+import {
+  type BaselayerConfig,
+  safeValidateBaselayerConfig,
+} from '../schemas/baselayer-config.js';
 import type { FlintError } from '../types.js';
 
 /**
@@ -11,7 +20,7 @@ import type { FlintError } from '../types.js';
 const DEFAULT_CONFIG: BaselayerConfig = {
   features: {
     typescript: true,
-    markdown: true, 
+    markdown: true,
     styles: false, // Opt-in for CSS projects
     json: true,
     commits: true,
@@ -21,6 +30,36 @@ const DEFAULT_CONFIG: BaselayerConfig = {
   },
   overrides: {},
 };
+
+/**
+ * Format Zod validation errors into user-friendly error details
+ */
+function formatValidationErrors(zodError: import('zod').ZodError) {
+  return zodError.issues.map((issue) => {
+    const path = issue.path.length > 0 ? issue.path.join('.') : 'root';
+
+    // Create user-friendly error messages based on error type
+    let friendlyMessage = issue.message;
+
+    if (issue.code === 'invalid_type') {
+      const received = 'received' in issue ? issue.received : 'unknown';
+      const expected = 'expected' in issue ? issue.expected : 'unknown';
+      friendlyMessage = `Expected ${expected} but received ${received}`;
+    } else if (issue.code === 'invalid_enum_value') {
+      const received = 'received' in issue ? issue.received : 'unknown';
+      const options = 'options' in issue ? issue.options : [];
+      friendlyMessage = `Invalid value "${received}". Valid options are: ${options.join(', ')}`;
+    }
+
+    return {
+      path,
+      message: friendlyMessage,
+      code: issue.code,
+      received: 'received' in issue ? issue.received : undefined,
+      expected: 'expected' in issue ? issue.expected : undefined,
+    };
+  });
+}
 
 export class ConfigLoader {
   /**
@@ -53,14 +92,49 @@ export class ConfigLoader {
           userConfig = this.parseJsonc(configContent);
         } else {
           // Legacy JS module support
-          const configModule = await import(fullPath);
-          userConfig = configModule.default || configModule;
+          try {
+            const configModule = await import(fullPath);
+            userConfig = configModule.default || configModule;
+          } catch (importError) {
+            return failure(
+              makeError(
+                ErrorCode.VALIDATION_ERROR,
+                `Failed to import configuration module ${configPath}`,
+                {
+                  configPath: fullPath,
+                  importError: (importError as Error).message,
+                },
+                importError as Error
+              )
+            );
+          }
         }
 
-        // Validate and merge with defaults
-        const validatedConfig = validateBaselayerConfig(userConfig);
-        const mergedConfig = this.mergeWithDefaults(validatedConfig);
+        // Validate configuration with Zod schema
+        const validationResult = safeValidateBaselayerConfig(userConfig);
 
+        if (!validationResult.success) {
+          const formattedErrors = formatValidationErrors(
+            validationResult.error
+          );
+
+          return failure(
+            makeError(
+              ErrorCode.SCHEMA_VALIDATION_FAILED,
+              `Invalid configuration in ${configPath}: ${formattedErrors.length} validation error(s) found`,
+              {
+                configPath: fullPath,
+                validationErrors: formattedErrors,
+                errorSummary: formattedErrors
+                  .map((err) => `${err.path}: ${err.message}`)
+                  .join('; '),
+              }
+            )
+          );
+        }
+
+        // Configuration is valid, merge with defaults
+        const mergedConfig = this.mergeWithDefaults(validationResult.data);
         return success(mergedConfig);
       } catch (error) {
         // File doesn't exist, continue to next path
@@ -94,7 +168,7 @@ export class ConfigLoader {
       .replace(/\/\*[\s\S]*?\*\//g, '')
       // Remove trailing commas before closing brackets/braces
       .replace(/,(\s*[}\]])/g, '$1');
-    
+
     return JSON.parse(cleaned);
   }
 
@@ -109,8 +183,23 @@ export class ConfigLoader {
       ...DEFAULT_CONFIG,
       ...userConfig,
       features: {
-        ...DEFAULT_CONFIG.features,
-        ...userConfig.features,
+        typescript:
+          validatedConfig.features?.typescript ??
+          DEFAULT_CONFIG.features?.typescript,
+        markdown:
+          validatedConfig.features?.markdown ??
+          DEFAULT_CONFIG.features?.markdown,
+        styles:
+          validatedConfig.features?.styles ?? DEFAULT_CONFIG.features?.styles,
+        json: validatedConfig.features?.json ?? DEFAULT_CONFIG.features?.json,
+        commits:
+          validatedConfig.features?.commits ?? DEFAULT_CONFIG.features?.commits,
+        packages:
+          validatedConfig.features?.packages ??
+          DEFAULT_CONFIG.features?.packages,
+        testing:
+          validatedConfig.features?.testing ?? DEFAULT_CONFIG.features?.testing,
+        docs: validatedConfig.features?.docs ?? DEFAULT_CONFIG.features?.docs,
       },
       overrides: {
         ...DEFAULT_CONFIG.overrides,
@@ -145,5 +234,34 @@ export class ConfigLoader {
     feature: keyof NonNullable<BaselayerConfig['features']>
   ): boolean {
     return config.features?.[feature] ?? false;
+  }
+
+  /**
+   * Validate arbitrary configuration object against schema
+   * Useful for testing and configuration validation in external tools
+   */
+  validateConfigurationObject(
+    config: unknown
+  ): Result<BaselayerConfig, FlintError> {
+    const validationResult = safeValidateBaselayerConfig(config);
+
+    if (!validationResult.success) {
+      const formattedErrors = formatValidationErrors(validationResult.error);
+
+      return failure(
+        makeError(
+          ErrorCode.SCHEMA_VALIDATION_FAILED,
+          `Configuration validation failed: ${formattedErrors.length} error(s) found`,
+          {
+            validationErrors: formattedErrors,
+            errorSummary: formattedErrors
+              .map((err) => `${err.path}: ${err.message}`)
+              .join('; '),
+          }
+        )
+      );
+    }
+
+    return success(validationResult.data);
   }
 }

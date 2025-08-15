@@ -13,7 +13,7 @@ export function generateBiomeConfig(config?: BaselayerConfig): string {
 
   // Smart exclusions based on enabled tools
   const excludes: string[] = [];
-  
+
   // Always exclude common build/dependency files
   excludes.push(
     'node_modules/**',
@@ -54,7 +54,9 @@ export function generateBiomeConfig(config?: BaselayerConfig): string {
 /**
  * Install Biome via Ultracite and create configuration
  */
-export async function installBiomeConfig(config?: BaselayerConfig): Promise<Result<void, Error>> {
+export async function installBiomeConfig(
+  _config?: BaselayerConfig
+): Promise<Result<void, Error>> {
   try {
     // Ultracite init handles installation and basic setup
     execSync('bunx ultracite init --yes', {

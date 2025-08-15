@@ -1,6 +1,6 @@
 /**
  * Enhanced TypeScript utility types
- * 
+ *
  * Additional utilities that complement type-fest.
  */
 

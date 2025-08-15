@@ -117,7 +117,7 @@ async function validateCrossReferences() {
   for (const [source, targets] of fileReferences.entries()) {
     for (const target of targets) {
       const targetRefs = fileReferences.get(target);
-      if (!(targetRefs && targetRefs.has(source))) {
+      if (!targetRefs?.has(source)) {
         // Only suggest bidirectional refs for files in same directory level
         const sourceDir = dirname(source).split('/')[0];
         const targetDir = dirname(target).split('/')[0];

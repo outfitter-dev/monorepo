@@ -1,8 +1,8 @@
 import * as childProcess from 'node:child_process';
 import { isFailure, isSuccess } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { generateBiomeConfig, installBiomeConfig } from '../biome.js';
 import type { BaselayerConfig } from '../../schemas/baselayer-config.js';
+import { generateBiomeConfig, installBiomeConfig } from '../biome.js';
 
 vi.mock('node:child_process');
 
@@ -10,7 +10,7 @@ describe('generateBiomeConfig', () => {
   it('should generate basic Biome configuration', () => {
     const config = generateBiomeConfig();
     const parsed = JSON.parse(config);
-    
+
     expect(parsed).toMatchObject({
       $schema: 'https://biomejs.dev/schemas/1.9.4/schema.json',
       extends: ['ultracite'],
@@ -19,30 +19,30 @@ describe('generateBiomeConfig', () => {
           'node_modules/**',
           'dist/**',
           'build/**',
-        ])
-      }
+        ]),
+      },
     });
   });
 
   it('should add monorepo exclusions', () => {
     const baselayerConfig: BaselayerConfig = {
-      project: { type: 'monorepo' }
+      project: { type: 'monorepo' },
     };
-    
+
     const config = generateBiomeConfig(baselayerConfig);
     const parsed = JSON.parse(config);
-    
+
     expect(parsed.files.ignore).toContain('packages/**/node_modules/**');
   });
 
   it('should add custom ignores', () => {
     const baselayerConfig: BaselayerConfig = {
-      ignore: ['custom-build/', '*.generated.*']
+      ignore: ['custom-build/', '*.generated.*'],
     };
-    
+
     const config = generateBiomeConfig(baselayerConfig);
     const parsed = JSON.parse(config);
-    
+
     expect(parsed.files.ignore).toContain('custom-build/');
     expect(parsed.files.ignore).toContain('*.generated.*');
   });
@@ -52,17 +52,17 @@ describe('generateBiomeConfig', () => {
       overrides: {
         biome: {
           formatter: {
-            indentStyle: 'tab'
-          }
-        }
-      }
+            indentStyle: 'tab',
+          },
+        },
+      },
     };
-    
+
     const config = generateBiomeConfig(baselayerConfig);
     const parsed = JSON.parse(config);
-    
+
     expect(parsed.formatter).toMatchObject({
-      indentStyle: 'tab'
+      indentStyle: 'tab',
     });
   });
 });

@@ -52,7 +52,16 @@ Result
 
 Next steps
 
-- PR: Push completed. Opening a PR via automation failed because the base branch is local-only/renamed in the current session; remote now has `chore/hooks-and-lint-fixes` but the base `refactor/baselayer-ts-config-consolidation` may not exist remotely. Action for next agent: create PR from `chore/hooks-and-lint-fixes` -> `refactor/baselayer-ts-config-consolidation` after ensuring the base branch exists on origin.
+<<<<<<< Updated upstream <<<<<<< Updated upstream
+
+- # PR: Push completed. Opening a PR via automation failed because the base branch is local-only/renamed in the current session; remote now has `chore/hooks-and-lint-fixes` but the base `refactor/baselayer-ts-config-consolidation` may not exist remotely. Action for next agent: create PR from `chore/hooks-and-lint-fixes` -> `refactor/baselayer-ts-config-consolidation` after ensuring the base branch exists on origin.
+
+- Push `chore/hooks-and-lint-fixes` and open a PR into `refactor/baselayer-ts-config-consolidation`
+
+  > > > > > > > # Stashed changes
+
+- Push `chore/hooks-and-lint-fixes` and open a PR into `refactor/baselayer-ts-config-consolidation`
+  > > > > > > > Stashed changes
 - In follow-up, consider:
   - Aligning ultracite/biome versions and enabling linter where desired
   - Addressing remaining markdown issues incrementally via staged-only approach

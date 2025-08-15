@@ -1,53 +1,51 @@
 // Core configuration generators
-export { 
-  generateBiomeConfig, 
+export {
+  generateBiomeConfig,
+  generateBiomeConfigLegacy,
   installBiomeConfig,
-  generateBiomeConfigLegacy 
 } from './biome.js';
 export { generateCommitlintConfig } from './commitlint.js';
-export { 
+export {
   generateEditorconfigConfig,
-  generateEditorconfigContent 
+  generateEditorconfigContent,
 } from './editorconfig.js';
 export { generateLefthookConfig } from './lefthook.js';
 export { generateMarkdownlintConfig } from './markdownlint.js';
 export { generateOxlintConfig } from './oxlint.js';
 export { updatePackageScripts } from './package-scripts.js';
-export { 
+export {
   generatePrettierConfig,
   generatePrettierConfigObject,
-  generatePrettierIgnore 
+  generatePrettierIgnore,
 } from './prettier.js';
 export { generateStylelintConfig } from './stylelint.js';
-
+export {
+  generateProjectTurboConfig,
+  generateTurboConfig,
+  generateTurboConfigFile,
+  type TurboConfig,
+  type TurboPipeline,
+} from './turborepo.js';
 // Advanced generators
 export {
-  generateTypeScriptConfig,
-  generateProjectTypeScriptConfigs,
   generateAllTypeScriptConfigs,
+  generateProjectTypeScriptConfigs,
+  generateTypeScriptConfig,
   generateTypeScriptConfigFile,
-  type TypeScriptPreset
+  type TypeScriptPreset,
 } from './typescript.js';
 
 export {
-  generateTurboConfig,
-  generateProjectTurboConfig,
-  generateTurboConfigFile,
-  type TurboConfig,
-  type TurboPipeline
-} from './turborepo.js';
-
-export {
-  generateVitestConfig,
   generateTestSetup,
-  generateVitestConfigFiles
+  generateVitestConfig,
+  generateVitestConfigFiles,
 } from './vitest.js';
 
 // VSCode integration
-export { 
-  enhanceVSCodeSettings, 
-  generateVSCodeSettings,
+export {
+  enhanceVSCodeSettings,
   generateVSCodeExtensions,
-  hasVSCode, 
-  setupVSCode 
+  generateVSCodeSettings,
+  hasVSCode,
+  setupVSCode,
 } from './vscode.js';

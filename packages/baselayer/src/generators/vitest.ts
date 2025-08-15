@@ -6,12 +6,11 @@ import { writeFile } from '../utils/file-system.js';
  * Generate vitest.config.ts configuration
  */
 export function generateVitestConfig(config?: BaselayerConfig): string {
-  const isReactProject = config?.project?.framework === 'react' || 
-                         config?.project?.framework === 'next';
+  const isReactProject =
+    config?.project?.framework === 'react' ||
+    config?.project?.framework === 'next';
 
-  const imports = [
-    "import { defineConfig } from 'vitest/config'",
-  ];
+  const imports = ["import { defineConfig } from 'vitest/config'"];
 
   if (isReactProject) {
     imports.push("import react from '@vitejs/plugin-react'");
@@ -66,7 +65,9 @@ export function generateVitestConfig(config?: BaselayerConfig): string {
 
   // Monorepo-specific configuration
   if (config?.project?.type === 'monorepo') {
-    testConfig.include.push('packages/*/src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}');
+    testConfig.include.push(
+      'packages/*/src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
+    );
     coverage.exclude.push('packages/*/dist/**', 'packages/*/build/**');
   }
 
@@ -97,8 +98,9 @@ export default defineConfig(${configString})
  * Generate test setup file content
  */
 export function generateTestSetup(config?: BaselayerConfig): string {
-  const isReactProject = config?.project?.framework === 'react' || 
-                         config?.project?.framework === 'next';
+  const isReactProject =
+    config?.project?.framework === 'react' ||
+    config?.project?.framework === 'next';
 
   const imports = [];
   const setup = [];

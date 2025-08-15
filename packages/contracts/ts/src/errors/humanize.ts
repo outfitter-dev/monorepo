@@ -16,6 +16,22 @@ const errorMessages: Record<ErrorCode, string> = {
     'External service is unavailable. Please try again later.',
   [ErrorCode.RATE_LIMIT_EXCEEDED]:
     'Too many requests. Please wait a moment and try again.',
+  [ErrorCode.FILE_OPERATION_FAILED]:
+    'File operation failed. Please check permissions and try again.',
+  [ErrorCode.MIGRATION_FAILED]:
+    'Migration failed. Please check the logs for details.',
+  [ErrorCode.SETUP_FAILED]:
+    'Setup failed. Please check your configuration and try again.',
+  [ErrorCode.UPDATE_FAILED]:
+    'Update operation failed. Please check your configuration and try again.',
+  [ErrorCode.ADD_FAILED]:
+    'Add operation failed. Please verify the tools and try again.',
+  [ErrorCode.REMOVE_FAILED]:
+    'Remove operation failed. Please check the configuration and try again.',
+  [ErrorCode.PACKAGE_MANAGER_ERROR]:
+    'Package manager operation failed. Please check your setup.',
+  [ErrorCode.PROJECT_DETECTION_FAILED]:
+    'Project detection failed. Please verify project structure.',
 };
 
 /**

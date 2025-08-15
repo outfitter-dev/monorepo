@@ -18,21 +18,19 @@ export async function setup(
   options: SetupOptions = {}
 ): Promise<FlintResult<void>> {
   try {
-    const {
-      force = false,
-      skipHooks = false,
-      dryRun = false,
-      verbose = false,
-    } = options;
+    const { skipHooks = false, dryRun = false, verbose = false } = options;
 
     if (verbose) {
+      console.log('Starting Flint setup...');
     }
 
     // Step 1: Generate Lefthook configuration
     if (verbose) {
+      console.log('Generating Lefthook configuration...');
     }
 
     if (dryRun) {
+      console.log('[DRY RUN] Would generate Lefthook configuration');
     } else {
       const configResult = await generateLefthookConfig();
       if (isFailure(configResult)) {
@@ -48,12 +46,15 @@ export async function setup(
     // Step 2: Install git hooks (unless skipped)
     if (skipHooks) {
       if (verbose) {
+        console.log('Skipping git hooks installation...');
       }
     } else {
       if (verbose) {
+        console.log('Installing git hooks...');
       }
 
       if (dryRun) {
+        console.log('[DRY RUN] Would install git hooks');
       } else {
         const lefthookAdapter = new LefthookAdapter();
         const installResult = await lefthookAdapter.install();
@@ -68,6 +69,7 @@ export async function setup(
         }
 
         if (verbose && installResult.output) {
+          console.log('Install output:', installResult.output);
         }
       }
     }
@@ -75,19 +77,27 @@ export async function setup(
     // Step 3: Verify setup
     if (!(dryRun || skipHooks)) {
       if (verbose) {
+        console.log('Verifying setup...');
       }
 
       const lefthookAdapter = new LefthookAdapter();
       const checkResult = await lefthookAdapter.check([]);
 
       if (!checkResult.success) {
+        console.warn(
+          'Setup verification failed:',
+          checkResult.errors.join(', ')
+        );
       } else if (verbose) {
+        console.log('Setup verification successful');
       }
     }
 
     // Success message
     if (dryRun) {
+      console.log('[DRY RUN] Setup would be complete');
     } else {
+      console.log('✅ Flint setup complete');
     }
 
     return success(undefined);
@@ -135,6 +145,7 @@ export async function teardown(
     const { verbose = false } = options;
 
     if (verbose) {
+      console.log('Starting Flint teardown...');
     }
 
     const lefthookAdapter = new LefthookAdapter();
@@ -150,6 +161,7 @@ export async function teardown(
     }
 
     if (verbose && uninstallResult.output) {
+      console.log('Uninstall output:', uninstallResult.output);
     }
 
     return success(undefined);

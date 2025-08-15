@@ -14,9 +14,7 @@ const entryPoints = [
   'src/types/branded.ts',
 ];
 
-const zodEntryPoints = [
-  'src/zod/index.ts',
-];
+const _zodEntryPoints = ['src/zod/index.ts'];
 
 console.log('Building with Bun...');
 

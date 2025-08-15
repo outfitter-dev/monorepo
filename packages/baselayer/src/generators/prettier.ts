@@ -5,7 +5,9 @@ import { writeFile, writeJSON } from '../utils/file-system.js';
 /**
  * Generate .prettierrc.json configuration with smart file handling
  */
-export function generatePrettierConfigObject(config?: BaselayerConfig): Record<string, unknown> {
+export function generatePrettierConfigObject(
+  config?: BaselayerConfig
+): Record<string, unknown> {
   const base = {
     semi: true,
     singleQuote: true,
@@ -17,7 +19,10 @@ export function generatePrettierConfigObject(config?: BaselayerConfig): Record<s
     proseWrap: 'preserve' as const,
   };
 
-  const overrides: Array<{ files: string | string[]; options: Record<string, unknown> }> = [];
+  const overrides: Array<{
+    files: string | string[];
+    options: Record<string, unknown>;
+  }> = [];
 
   // Always handle JSON (even if not explicitly enabled, it's common)
   overrides.push({
@@ -29,7 +34,10 @@ export function generatePrettierConfigObject(config?: BaselayerConfig): Record<s
   });
 
   // Handle markdown if enabled or no stylelint (default responsibility)
-  if (config?.features?.markdown !== false || config?.features?.styles === false) {
+  if (
+    config?.features?.markdown !== false ||
+    config?.features?.styles === false
+  ) {
     overrides.push({
       files: ['*.md', '*.mdx'],
       options: {
@@ -110,7 +118,7 @@ export function generatePrettierIgnore(config?: BaselayerConfig): string {
 
   // If TypeScript is disabled, don't ignore JS files
   if (config?.features?.typescript === false) {
-    const jsIndex = ignore.findIndex(line => line === '*.js');
+    const jsIndex = ignore.indexOf('*.js');
     if (jsIndex > 0) {
       // Remove JS-related ignores
       ignore.splice(jsIndex - 1, 6); // Remove comment and JS extensions
@@ -139,7 +147,9 @@ export function generatePrettierIgnore(config?: BaselayerConfig): string {
 /**
  * Write Prettier configuration files
  */
-export async function generatePrettierConfig(config?: BaselayerConfig): Promise<Result<void, Error>> {
+export async function generatePrettierConfig(
+  config?: BaselayerConfig
+): Promise<Result<void, Error>> {
   try {
     const configObject = generatePrettierConfigObject(config);
     const ignoreContent = generatePrettierIgnore(config);
@@ -155,7 +165,7 @@ export async function generatePrettierConfig(config?: BaselayerConfig): Promise<
     if (isFailure(ignoreResult)) {
       return failure(ignoreResult.error);
     }
-    
+
     return success(undefined);
   } catch (error) {
     return failure(error as Error);
