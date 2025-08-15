@@ -1,0 +1,34 @@
+{
+  "versionGroups": [
+    {
+      "label": "Use workspace protocol for internal packages",
+      "packages": ["**"],
+      "dependencies": ["@outfitter/**"],
+      "dependencyTypes": ["dev", "peer", "prod"],
+      "pinVersion": "workspace:*"
+    }
+  ],
+  "semverGroups": [
+    {
+      "label": "Keep TypeScript versions in sync",
+      "packages": ["**"],
+      "dependencies": ["typescript"],
+      "dependencyTypes": ["dev"],
+      "range": ""
+    },
+    {
+      "label": "Keep @types/node versions in sync",
+      "packages": ["**"],
+      "dependencies": ["@types/node"],
+      "dependencyTypes": ["dev"],
+      "range": ""
+    },
+    {
+      "label": "Keep vitest versions in sync",
+      "packages": ["**"],
+      "dependencies": ["vitest"],
+      "dependencyTypes": ["dev"],
+      "range": ""
+    }
+  ]
+}
