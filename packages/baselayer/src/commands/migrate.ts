@@ -151,7 +151,7 @@ function generateOutfitterConfig(existing: ExistingConfigs): OutfitterConfig {
       formatter: _formatter,
       linter: _linter,
       ...customSettings
-    } = existing.biome as any;
+    } = existing.biome;
     if (Object.keys(customSettings).length > 0) {
       overrides.biome = customSettings;
       hasOverrides = true;
@@ -174,7 +174,7 @@ function generateOutfitterConfig(existing: ExistingConfigs): OutfitterConfig {
     !existing.stylelint._file &&
     !existing.stylelint._note
   ) {
-    const { extends: _, ...customSettings } = existing.stylelint as any;
+    const { extends: _, ...customSettings } = existing.stylelint;
     if (Object.keys(customSettings).length > 0) {
       overrides.stylelint = customSettings;
       hasOverrides = true;

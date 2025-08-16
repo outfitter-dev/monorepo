@@ -182,7 +182,7 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     for (const tool of toolsToAdd) {
       const feature = TOOL_TO_FEATURE[tool];
       if (feature && updatedConfig.features) {
-        (updatedConfig.features as any)[feature] = true;
+        updatedConfig.features[feature] = true;
       }
     }
 
@@ -193,7 +193,10 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     }
 
     // Step 7: Generate tool configurations
-    const configTasks: Array<{ name: string; task: () => Promise<any> }> = [];
+    const configTasks: Array<{
+      name: string;
+      task: () => Promise<Result<void, Error>>;
+    }> = [];
 
     for (const tool of toolsToAdd) {
       const generator = TOOL_GENERATORS[tool];

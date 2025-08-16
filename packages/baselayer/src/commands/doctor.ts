@@ -31,7 +31,7 @@ export async function doctor(): Promise<Result<DoctorReport, Error>> {
       return success({ issues });
     }
 
-    let packageJson;
+    let packageJson: Record<string, unknown>;
     try {
       packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
     } catch (_error) {

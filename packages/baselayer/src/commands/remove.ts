@@ -199,7 +199,7 @@ export async function remove(
     for (const tool of toolsToRemove) {
       const feature = TOOL_TO_FEATURE[tool];
       if (feature && updatedConfig.features) {
-        (updatedConfig.features as any)[feature] = false;
+        updatedConfig.features[feature] = false;
       }
     }
 

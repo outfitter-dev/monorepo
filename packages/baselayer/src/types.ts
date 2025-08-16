@@ -91,9 +91,7 @@ export interface CleanOptions {
   force?: boolean;
 }
 
-export interface DoctorOptions {
-  // Add properties as needed for doctor command
-}
+export type DoctorOptions = {};
 
 export interface DetectedConfig {
   tool: string;

@@ -118,7 +118,10 @@ export async function update(
     }
 
     // Step 3: Update tool configurations based on enabled features
-    const updateTasks: Array<{ name: string; task: () => Promise<any> }> = [];
+    const updateTasks: Array<{
+      name: string;
+      task: () => Promise<Result<void, Error>>;
+    }> = [];
 
     // Map features to their primary tools and display names
     const featureToTask = {

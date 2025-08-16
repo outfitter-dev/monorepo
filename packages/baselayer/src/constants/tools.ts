@@ -3,6 +3,7 @@
  * Centralizes tool configuration to eliminate duplication across command files
  */
 
+import type { Result } from '@outfitter/contracts';
 import { installBiomeConfig } from '../generators/biome.js';
 import { generateCommitlintConfig } from '../generators/commitlint.js';
 import { generateEditorconfigConfig } from '../generators/editorconfig.js';
@@ -71,7 +72,10 @@ export const TOOL_TO_FEATURE: Record<string, keyof FeaturesConfig> = {
  * Maps tools to their configuration generator functions
  * Used for creating configurations when tools are added
  */
-export const TOOL_GENERATORS: Record<string, () => Promise<any>> = {
+export const TOOL_GENERATORS: Record<
+  string,
+  () => Promise<Result<void, Error>>
+> = {
   biome: () => installBiomeConfig(),
   prettier: () => generatePrettierConfig(),
   stylelint: () => generateStylelintConfig(),
@@ -187,7 +191,7 @@ export const TOOL_GROUPS: Record<string, readonly string[]> = {
 export function isValidTool(
   tool: string
 ): tool is (typeof VALID_TOOLS)[number] {
-  return VALID_TOOLS.includes(tool as any);
+  return (VALID_TOOLS as readonly string[]).includes(tool);
 }
 
 /**
@@ -203,7 +207,7 @@ export function getToolsForFeature(feature: keyof FeaturesConfig): string[] {
  * Checks if a tool is considered a core baselayer tool
  */
 export function isCoreTool(tool: string): boolean {
-  return CORE_TOOLS.has(tool as any);
+  return CORE_TOOLS.has(tool);
 }
 
 /**
