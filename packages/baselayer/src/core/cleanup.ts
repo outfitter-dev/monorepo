@@ -25,7 +25,7 @@ export interface CleanupOptions {
 export async function removeOldConfigs(
   configs: string[],
   options: CleanupOptions = {}
-): Promise<Result<string[], any>> {
+): Promise<Result<string[], Error>> {
   const { dryRun = false, force = false, silent = false } = options;
   const removed: string[] = [];
 
@@ -75,7 +75,7 @@ export async function removeOldConfigs(
  */
 export async function cleanupOldTools(
   options: CleanupOptions = {}
-): Promise<Result<string[], any>> {
+): Promise<Result<string[], Error>> {
   const configsResult = await getConfigsToCleanup();
   if (isFailure(configsResult)) {
     return failure(
@@ -95,7 +95,7 @@ export async function cleanupOldTools(
 export async function removeToolConfigs(
   tool: string,
   options: CleanupOptions = {}
-): Promise<Result<string[], any>> {
+): Promise<Result<string[], Error>> {
   const toolConfigs: Record<string, string[]> = {
     eslint: [
       '.eslintrc',
@@ -155,7 +155,7 @@ export async function removeToolConfigs(
 /**
  * Clean up VS Code settings for old tools
  */
-export async function cleanupVSCodeSettings(): Promise<Result<void, any>> {
+export async function cleanupVSCodeSettings(): Promise<Result<void, Error>> {
   const settingsPath = '.vscode/settings.json';
   const existsResult = await fileExists(settingsPath);
 
@@ -174,7 +174,7 @@ export async function cleanupVSCodeSettings(): Promise<Result<void, any>> {
 export async function removeOldGitHooks(
   hookType: 'husky' | 'simple-git-hooks',
   options: CleanupOptions = {}
-): Promise<Result<void, any>> {
+): Promise<Result<void, Error>> {
   const { dryRun = false, silent = false } = options;
 
   if (hookType === 'husky') {
