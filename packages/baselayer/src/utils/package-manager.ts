@@ -115,7 +115,7 @@ export function getInstallCommand(pm: PackageManager): string {
  */
 export function getAddCommand(
   pm: PackageManager,
-  dev,
+  dev: boolean,
   packages: string[]
 ): string {
   const command = dev ? COMMANDS.addDev[pm] : COMMANDS.add[pm];

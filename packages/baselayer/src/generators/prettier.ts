@@ -157,13 +157,13 @@ export async function generatePrettierConfig(
     // Write .prettierrc.json
     const configResult = await writeJSON('.prettierrc.json', configObject);
     if (isFailure(configResult)) {
-      return failure(configResult.error);
+      return failure(new Error(configResult.error.message));
     }
 
     // Write .prettierignore
     const ignoreResult = await writeFile('.prettierignore', ignoreContent);
     if (isFailure(ignoreResult)) {
-      return failure(ignoreResult.error);
+      return failure(new Error(ignoreResult.error.message));
     }
 
     return success(undefined);

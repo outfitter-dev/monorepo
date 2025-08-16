@@ -1,5 +1,5 @@
-import { type AppError, ErrorCode, makeError } from '../error';
-import { failure, type Result, success } from '../result';
+import { type AppError, ErrorCode, makeError } from '../error.js';
+import { failure, type Result, success } from '../result.js';
 
 /**
  * Create a branded type for compile-time safety

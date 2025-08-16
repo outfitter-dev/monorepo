@@ -120,7 +120,7 @@ export class ConfigLoader {
 
           return failure(
             makeError(
-              ErrorCode.SCHEMA_VALIDATION_FAILED,
+              ErrorCode.VALIDATION_ERROR,
               `Invalid configuration in ${configPath}: ${formattedErrors.length} validation error(s) found`,
               {
                 configPath: fullPath,
@@ -145,7 +145,7 @@ export class ConfigLoader {
         // Invalid config file
         return failure(
           makeError(
-            'CONFIG_INVALID',
+            ErrorCode.INTERNAL_ERROR,
             `Failed to load config from ${configPath}: ${(error as Error).message}`
           )
         );
@@ -184,22 +184,19 @@ export class ConfigLoader {
       ...userConfig,
       features: {
         typescript:
-          validatedConfig.features?.typescript ??
+          userConfig.features?.typescript ??
           DEFAULT_CONFIG.features?.typescript,
         markdown:
-          validatedConfig.features?.markdown ??
-          DEFAULT_CONFIG.features?.markdown,
-        styles:
-          validatedConfig.features?.styles ?? DEFAULT_CONFIG.features?.styles,
-        json: validatedConfig.features?.json ?? DEFAULT_CONFIG.features?.json,
+          userConfig.features?.markdown ?? DEFAULT_CONFIG.features?.markdown,
+        styles: userConfig.features?.styles ?? DEFAULT_CONFIG.features?.styles,
+        json: userConfig.features?.json ?? DEFAULT_CONFIG.features?.json,
         commits:
-          validatedConfig.features?.commits ?? DEFAULT_CONFIG.features?.commits,
+          userConfig.features?.commits ?? DEFAULT_CONFIG.features?.commits,
         packages:
-          validatedConfig.features?.packages ??
-          DEFAULT_CONFIG.features?.packages,
+          userConfig.features?.packages ?? DEFAULT_CONFIG.features?.packages,
         testing:
-          validatedConfig.features?.testing ?? DEFAULT_CONFIG.features?.testing,
-        docs: validatedConfig.features?.docs ?? DEFAULT_CONFIG.features?.docs,
+          userConfig.features?.testing ?? DEFAULT_CONFIG.features?.testing,
+        docs: userConfig.features?.docs ?? DEFAULT_CONFIG.features?.docs,
       },
       overrides: {
         ...DEFAULT_CONFIG.overrides,
@@ -250,7 +247,7 @@ export class ConfigLoader {
 
       return failure(
         makeError(
-          ErrorCode.SCHEMA_VALIDATION_FAILED,
+          ErrorCode.VALIDATION_ERROR,
           `Configuration validation failed: ${formattedErrors.length} error(s) found`,
           {
             validationErrors: formattedErrors,

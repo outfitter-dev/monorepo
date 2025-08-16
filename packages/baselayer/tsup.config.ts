@@ -5,7 +5,7 @@ export default defineConfig([
   {
     entry: ['src/index.ts'],
     format: ['esm', 'cjs'],
-    dts: false, // TypeScript handles this via tsc --emitDeclarationOnly
+    dts: false, // Disabled until type issues are fixed
     clean: true,
     sourcemap: true,
     tsconfig: './tsconfig.json',

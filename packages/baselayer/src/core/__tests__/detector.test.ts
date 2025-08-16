@@ -20,11 +20,14 @@ import {
   getConfigsToCleanup,
 } from '../detector';
 
-vi.mock('../../utils/file-system');
-
 describe('detector', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock file system functions
+    vi.spyOn(fs, 'fileExists').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'readFile').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'readJSON').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'findFiles').mockImplementation(vi.fn());
   });
 
   describe('detectExistingTools', () => {

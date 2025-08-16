@@ -28,7 +28,7 @@
     "moduleResolution": "bundler",
     "moduleDetection": "force",
     "resolveJsonModule": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,

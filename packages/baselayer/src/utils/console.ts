@@ -97,4 +97,4 @@ export class Console {
 }
 
 // Export a singleton instance
-export const console = new Console();
+export const logger = new Console();

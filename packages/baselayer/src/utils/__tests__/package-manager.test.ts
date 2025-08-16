@@ -1,4 +1,5 @@
-import { isSuccess, success } from '@outfitter/contracts';
+import { failure, isSuccess, makeError, success } from '@outfitter/contracts';
+import type { MockedFunction } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as fs from '../file-system';
 import {
@@ -14,14 +15,21 @@ import {
   isCI,
 } from '../package-manager';
 
-vi.mock('../file-system');
-
 describe('package-manager utilities', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
+    // Mock file system functions
+    vi.spyOn(fs, 'fileExists').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'readFile').mockImplementation(vi.fn());
+    // Clear all CI-related environment variables
     process.env.FLINT_PACKAGE_MANAGER = undefined;
     process.env.CI = undefined;
+    process.env.CONTINUOUS_INTEGRATION = undefined;
+    process.env.TRAVIS = undefined;
+    process.env.CIRCLECI = undefined;
+    process.env.JENKINS_URL = undefined;
+    process.env.GITHUB_ACTIONS = undefined;
   });
 
   describe('detectPackageManager', () => {
@@ -90,7 +98,9 @@ describe('package-manager utilities', () => {
     });
 
     it('should default to npm if no lock file found', async () => {
-      vi.mocked(fs.fileExists).mockResolvedValue(success(false));
+      (fs.fileExists as MockedFunction<typeof fs.fileExists>).mockResolvedValue(
+        success(false)
+      );
 
       const result = await detectPackageManager();
 
@@ -107,7 +117,9 @@ describe('package-manager utilities', () => {
       const cwd = '/project/packages/mypackage';
       let callCount = 0;
 
-      vi.mocked(fs.fileExists).mockImplementation(async (filePath) => {
+      (
+        fs.fileExists as MockedFunction<typeof fs.fileExists>
+      ).mockImplementation(async (filePath: string) => {
         callCount++;
         // First round: check current directory - no lock files
         if (callCount <= 4) {
@@ -214,69 +226,53 @@ describe('package-manager utilities', () => {
 
       const result = await getPreferredPackageManager();
 
-      expect(result.isSuccess()).toBe(true);
-      expect(result.value).toBe('pnpm');
+      expect(isSuccess(result)).toBe(true);
+      expect(result.data).toBe('pnpm');
     });
 
     it('should ignore invalid environment value', async () => {
       process.env.FLINT_PACKAGE_MANAGER = 'invalid';
-      vi.mocked(fs.readFile).mockResolvedValue({
-        isSuccess: () => false,
-        value: '',
-        error: {
-          type: 'FILE_SYSTEM_ERROR',
-          code: 'ENOENT',
-          message: 'Not found',
-        },
-      });
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        failure(makeError('FILE_NOT_FOUND', 'File not found'))
+      );
 
       const result = await getPreferredPackageManager();
 
-      expect(result.isSuccess()).toBe(true);
-      expect(result.value).toBe(null);
+      expect(isSuccess(result)).toBe(true);
+      expect(result.data).toBe(null);
     });
 
     it('should read from .flintrc file', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue({
-        isSuccess: () => true,
-        value: '{"packageManager": "yarn"}',
-        error: null as any,
-      });
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        success('{"packageManager": "yarn"}')
+      );
 
       const result = await getPreferredPackageManager();
 
-      expect(result.isSuccess()).toBe(true);
-      expect(result.value).toBe('yarn');
+      expect(isSuccess(result)).toBe(true);
+      expect(result.data).toBe('yarn');
     });
 
     it('should handle invalid .flintrc json', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue({
-        isSuccess: () => true,
-        value: 'invalid json',
-        error: null as any,
-      });
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        success('invalid json')
+      );
 
       const result = await getPreferredPackageManager();
 
-      expect(result.isSuccess()).toBe(true);
-      expect(result.value).toBe(null);
+      expect(isSuccess(result)).toBe(true);
+      expect(result.data).toBe(null);
     });
 
     it('should return null if no preference found', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue({
-        isSuccess: () => false,
-        value: '',
-        error: {
-          type: 'FILE_SYSTEM_ERROR',
-          code: 'ENOENT',
-          message: 'Not found',
-        },
-      });
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        failure(makeError('FILE_NOT_FOUND', 'File not found'))
+      );
 
       const result = await getPreferredPackageManager();
 
-      expect(result.isSuccess()).toBe(true);
-      expect(result.value).toBe(null);
+      expect(isSuccess(result)).toBe(true);
+      expect(result.data).toBe(null);
     });
   });
 
@@ -286,34 +282,26 @@ describe('package-manager utilities', () => {
 
       const result = await getPackageManager();
 
-      expect(result.isSuccess()).toBe(true);
-      expect(result.value).toEqual({
+      expect(isSuccess(result)).toBe(true);
+      expect(result.data).toEqual({
         type: 'bun',
         lockFile: 'bun.lockb',
       });
     });
 
     it('should detect from lock file if no preference', async () => {
-      vi.mocked(fs.fileExists).mockImplementation(async (path) => ({
-        isSuccess: () => true,
-        value: path.endsWith('pnpm-lock.yaml'),
-        error: null as any,
-      }));
+      vi.mocked(fs.fileExists).mockImplementation(async (path: string) =>
+        success(path.endsWith('pnpm-lock.yaml'))
+      );
 
-      vi.mocked(fs.readFile).mockResolvedValue({
-        isSuccess: () => false,
-        value: '',
-        error: {
-          type: 'FILE_SYSTEM_ERROR',
-          code: 'ENOENT',
-          message: 'Not found',
-        },
-      });
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        failure(makeError('FILE_NOT_FOUND', 'File not found'))
+      );
 
       const result = await getPackageManager();
 
-      expect(result.isSuccess()).toBe(true);
-      expect(result.value.type).toBe('pnpm');
+      expect(isSuccess(result)).toBe(true);
+      expect(result.data.type).toBe('pnpm');
     });
   });
 

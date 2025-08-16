@@ -4,6 +4,7 @@ import {
   failure,
   isFailure,
   makeError,
+  type Result,
   success,
 } from '@outfitter/contracts';
 import {
@@ -16,7 +17,11 @@ import {
 import { ConfigLoader } from '../orchestration/config-loader.js';
 import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import type { FlintResult } from '../types.js';
-import { backupFile, writeJSON } from '../utils/file-system.js';
+import {
+  backupFile,
+  type FileSystemError,
+  writeJSON,
+} from '../utils/file-system.js';
 
 export interface AddOptions {
   /** Tools/features to add */
@@ -107,6 +112,7 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
       currentConfig = {
         $schema: 'https://schemas.outfitter.dev/baselayer.json',
         features: DEFAULT_FEATURES,
+        overrides: {},
       };
 
       if (verbose) {
@@ -195,7 +201,7 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     // Step 7: Generate tool configurations
     const configTasks: Array<{
       name: string;
-      task: () => Promise<Result<void, Error>>;
+      task: () => Promise<Result<void, FileSystemError>>;
     }> = [];
 
     for (const tool of toolsToAdd) {
@@ -240,7 +246,6 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
               return {
                 name,
                 success: true,
-                error: null,
               };
             } catch (error) {
               return {
@@ -263,7 +268,7 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
             } else {
               failed.push({
                 name: result.value.name,
-                error: result.value.error,
+                error: result.value.error as string,
               });
             }
           } else {

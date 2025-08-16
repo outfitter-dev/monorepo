@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import type { AppError, Result } from '@outfitter/contracts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { add, getEnabledTools, listAvailableTools } from '../add.js';
 
@@ -243,7 +244,10 @@ describe('add command', () => {
         vi.spyOn(ConfigLoader.prototype, 'loadConfig').mockResolvedValue({
           success: false,
           error: { message: 'Permission denied', code: 'CONFIG_LOAD_FAILED' },
-        } as any);
+        } as Result<
+          import('../../schemas/baselayer-config.js').BaselayerConfig,
+          import('../../types.js').FlintError
+        >);
 
         const result = await add({
           tools: ['stylelint'],
@@ -265,14 +269,13 @@ describe('add command', () => {
         );
 
         // Mock writeJSON to fail with disk space error
-        const { writeJSON } = await import('../../utils/file-system.js');
         vi.spyOn(
           await import('../../utils/file-system.js'),
           'writeJSON'
         ).mockResolvedValue({
           success: false,
           error: { message: 'No space left on device', code: 'ENOSPC' },
-        } as any);
+        } as Result<void, AppError>);
 
         const result = await add({
           tools: ['stylelint'],
@@ -326,7 +329,7 @@ describe('add command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'Read-only file system', code: 'EROFS' },
-        } as any);
+        } as Result<void, AppError>);
 
         const result = await add({
           tools: ['stylelint'],
@@ -433,7 +436,7 @@ describe('add command', () => {
 
     describe('input validation edge cases', () => {
       it('should handle null options', async () => {
-        const result = await add(null as any);
+        const result = await add(null as unknown as Parameters<typeof add>[0]);
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -442,7 +445,9 @@ describe('add command', () => {
       });
 
       it('should handle undefined options', async () => {
-        const result = await add(undefined as any);
+        const result = await add(
+          undefined as unknown as Parameters<typeof add>[0]
+        );
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -451,7 +456,7 @@ describe('add command', () => {
       });
 
       it('should handle non-array tools', async () => {
-        const result = await add({ tools: 'stylelint' as any });
+        const result = await add({ tools: 'stylelint' as unknown as string[] });
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -460,7 +465,7 @@ describe('add command', () => {
       });
 
       it('should handle null tools array', async () => {
-        const result = await add({ tools: null as any });
+        const result = await add({ tools: null as unknown as string[] });
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -471,7 +476,7 @@ describe('add command', () => {
       it('should handle invalid dryRun type', async () => {
         const result = await add({
           tools: ['stylelint'],
-          dryRun: 'true' as any,
+          dryRun: 'true' as unknown as boolean,
         });
 
         expect(result.success).toBe(false);
@@ -483,7 +488,7 @@ describe('add command', () => {
       it('should handle invalid verbose type', async () => {
         const result = await add({
           tools: ['stylelint'],
-          verbose: 1 as any,
+          verbose: 1 as unknown as boolean,
         });
 
         expect(result.success).toBe(false);
@@ -559,7 +564,7 @@ describe('add command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'Backup failed' },
-        } as any);
+        } as Result<string, AppError>);
 
         const result = await add({
           tools: ['stylelint'],

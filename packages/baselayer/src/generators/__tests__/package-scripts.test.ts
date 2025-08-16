@@ -1,13 +1,15 @@
-import { isSuccess } from '@outfitter/contracts';
+import { isSuccess, type Result } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { FileSystemError } from '../../utils/file-system.js';
 import * as fileSystem from '../../utils/file-system.js';
 import { updatePackageScripts } from '../package-scripts.js';
-
-vi.mock('../../utils/file-system.js');
 
 describe('updatePackageScripts', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock file system functions
+    vi.spyOn(fileSystem, 'readPackageJson').mockImplementation(vi.fn());
+    vi.spyOn(fileSystem, 'writePackageJson').mockImplementation(vi.fn());
   });
 
   it('should add Flint scripts to package.json', async () => {
@@ -20,15 +22,15 @@ describe('updatePackageScripts', () => {
           build: 'tsc',
         },
       },
-    } as any);
+    } as Result<Record<string, unknown>, FileSystemError>);
 
-    let writtenPackage: any;
+    let writtenPackage: Record<string, unknown>;
     vi.mocked(fileSystem.writePackageJson).mockImplementation(async (pkg) => {
       writtenPackage = pkg;
       return {
         success: true,
         data: undefined,
-      } as any;
+      } as Result<void, FileSystemError>;
     });
 
     const result = await updatePackageScripts();
@@ -54,15 +56,15 @@ describe('updatePackageScripts', () => {
       data: {
         name: 'test-project',
       },
-    } as any);
+    } as Result<Record<string, unknown>, FileSystemError>);
 
-    let writtenPackage: any;
+    let writtenPackage: Record<string, unknown>;
     vi.mocked(fileSystem.writePackageJson).mockImplementation(async (pkg) => {
       writtenPackage = pkg;
       return {
         success: true,
         data: undefined,
-      } as any;
+      } as Result<void, FileSystemError>;
     });
 
     const result = await updatePackageScripts();
@@ -84,15 +86,15 @@ describe('updatePackageScripts', () => {
           custom: 'echo custom', // Custom script - should be preserved
         },
       },
-    } as any);
+    } as Result<Record<string, unknown>, FileSystemError>);
 
-    let writtenPackage: any;
+    let writtenPackage: Record<string, unknown>;
     vi.mocked(fileSystem.writePackageJson).mockImplementation(async (pkg) => {
       writtenPackage = pkg;
       return {
         success: true,
         data: undefined,
-      } as any;
+      } as Result<void, FileSystemError>;
     });
 
     const result = await updatePackageScripts();

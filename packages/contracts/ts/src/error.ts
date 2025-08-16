@@ -1,4 +1,4 @@
-import type { DeepReadonly } from './types/index';
+import type { DeepReadonly } from './types/index.js';
 
 /**
  * Standard error codes for application errors
@@ -21,6 +21,10 @@ export const ErrorCode = {
   REMOVE_FAILED: 'REMOVE_FAILED',
   PACKAGE_MANAGER_ERROR: 'PACKAGE_MANAGER_ERROR',
   PROJECT_DETECTION_FAILED: 'PROJECT_DETECTION_FAILED',
+  CHECK_FAILED: 'CHECK_FAILED',
+  TEARDOWN_FAILED: 'TEARDOWN_FAILED',
+  CLEANUP_FAILED: 'CLEANUP_FAILED',
+  FRAMEWORK_DETECTION_FAILED: 'FRAMEWORK_DETECTION_FAILED',
 } as const;
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
@@ -35,15 +39,20 @@ export const ErrorCategory = {
   SYSTEM: [ErrorCode.INTERNAL_ERROR, ErrorCode.EXTERNAL_SERVICE_ERROR],
   RATE_LIMIT: [ErrorCode.RATE_LIMIT_EXCEEDED],
   FILE_OPERATIONS: [ErrorCode.FILE_OPERATION_FAILED],
-  MIGRATIONS: [ErrorCode.MIGRATION_FAILED],
+  MIGRATIONS: [ErrorCode.MIGRATION_FAILED, ErrorCode.CLEANUP_FAILED],
   SETUP_OPERATIONS: [
     ErrorCode.SETUP_FAILED,
     ErrorCode.ADD_FAILED,
     ErrorCode.REMOVE_FAILED,
     ErrorCode.UPDATE_FAILED,
+    ErrorCode.CHECK_FAILED,
+    ErrorCode.TEARDOWN_FAILED,
   ],
   PACKAGE_MANAGEMENT: [ErrorCode.PACKAGE_MANAGER_ERROR],
-  PROJECT_DETECTION: [ErrorCode.PROJECT_DETECTION_FAILED],
+  PROJECT_DETECTION: [
+    ErrorCode.PROJECT_DETECTION_FAILED,
+    ErrorCode.FRAMEWORK_DETECTION_FAILED,
+  ],
 } as const;
 
 /**

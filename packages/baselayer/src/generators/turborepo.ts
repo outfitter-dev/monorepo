@@ -252,7 +252,7 @@ export async function generateTurboConfigFile(
 
     const result = await writeJSON('turbo.json', turboConfig);
     if (isFailure(result)) {
-      return failure(result.error);
+      return failure(new Error(result.error.message));
     }
 
     return success(undefined);

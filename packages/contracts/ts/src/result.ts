@@ -2,8 +2,8 @@
  * Result pattern for type-safe error handling without exceptions
  */
 
-import { type AppError, toAppError } from './error';
-import type { DeepReadonly } from './types/index';
+import { type AppError, toAppError } from './error.js';
+import type { DeepReadonly } from './types/index.js';
 
 /**
  * A successful result

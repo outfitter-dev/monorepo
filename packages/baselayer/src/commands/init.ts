@@ -26,6 +26,7 @@ import { generatePrettierConfig } from '../generators/prettier.js';
 import { generateStylelintConfig } from '../generators/stylelint.js';
 import { setupVSCode } from '../generators/vscode.js';
 import type { InitOptions, OutfitterConfig } from '../types.js';
+import { writeFile } from '../utils/file-system.js';
 
 interface ProjectDetection {
   hasTypeScript: boolean;
@@ -50,7 +51,7 @@ interface FeatureChoice {
 
 interface InitContext {
   projectRoot: string;
-  packageJson: any;
+  packageJson: Record<string, unknown>;
   detectedTools: DetectedTools;
   detection: ProjectDetection;
   selectedFeatures: Set<string>;
@@ -181,7 +182,7 @@ export async function init(options: InitOptions): Promise<Result<void, Error>> {
 
 async function detectProjectCharacteristics(
   projectRoot: string,
-  packageJson: any
+  packageJson: Record<string, unknown>
 ): Promise<ProjectDetection> {
   const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
 
@@ -196,7 +197,6 @@ async function detectProjectCharacteristics(
     hasCSSFiles: await detectCSSFiles(projectRoot),
     hasPackageScripts: Object.keys(packageJson.scripts || {}).length > 0,
     isMonorepo: detectMonorepo(projectRoot, packageJson),
-    framework: detectFramework(deps),
     packageManager: detectPackageManager(projectRoot),
   };
 
@@ -235,7 +235,10 @@ async function detectMarkdownFiles(projectRoot: string): Promise<boolean> {
   }
 }
 
-function detectMonorepo(projectRoot: string, packageJson: any): boolean {
+function detectMonorepo(
+  projectRoot: string,
+  packageJson: Record<string, unknown>
+): boolean {
   return (
     existsSync(join(projectRoot, 'pnpm-workspace.yaml')) ||
     existsSync(join(projectRoot, 'lerna.json')) ||
@@ -293,7 +296,9 @@ function showDetectionSummary(
     );
   }
 
-  items.forEach((item) => console.log(`  • ${item}`));
+  for (const item of items) {
+    console.log(`  • ${item}`);
+  }
 }
 
 async function runInteractiveSetup(
@@ -535,7 +540,9 @@ async function showDryRunActions(
     actions.push('• Update package.json scripts');
   }
 
-  actions.forEach((action) => console.log(action));
+  for (const action of actions) {
+    console.log(action);
+  }
 }
 
 async function executeSetup(
@@ -577,10 +584,9 @@ async function executeSetup(
     const dependencies = await gatherDependencies(context, options);
     if (dependencies.length > 0) {
       console.log(`  📥 Installing ${dependencies.length} dependencies...`);
-      const installResult = await installDependencies(
-        dependencies,
-        context.projectRoot
-      );
+      const installResult = await installDependencies(dependencies, {
+        dev: true,
+      });
       if (isFailure(installResult)) {
         return failure(
           makeError(
@@ -597,11 +603,7 @@ async function executeSetup(
     // 5. Update package scripts
     if (context.selectedFeatures.has('scripts')) {
       console.log('  📝 Updating package.json scripts...');
-      const scriptsResult = await updatePackageScripts(context.projectRoot, {
-        hasPrettier: context.selectedFeatures.has('json'),
-        hasStylelint: context.selectedFeatures.has('styles'),
-        isMonorepo: context.detection.isMonorepo,
-      });
+      const scriptsResult = await updatePackageScripts();
       if (isFailure(scriptsResult)) {
         return failure(
           makeError(
@@ -632,8 +634,9 @@ async function generateSelectedConfigs(
   // TypeScript/JavaScript (Biome)
   if (selectedFeatures.has('typescript')) {
     console.log('  ⚙️  Configuring Biome...');
-    const biomeResult = await generateBiomeConfig();
-    if (isFailure(biomeResult)) {
+    const biomeConfigContent = generateBiomeConfig();
+    const writeResult = await writeFile('biome.json', biomeConfigContent);
+    if (isFailure(writeResult)) {
       console.warn('  ⚠️  Biome config generation failed');
     }
 
@@ -649,7 +652,7 @@ async function generateSelectedConfigs(
     }
 
     // Oxlint for additional linting
-    const oxlintResult = await generateOxlintConfig(projectRoot);
+    const oxlintResult = await generateOxlintConfig();
     if (isFailure(oxlintResult)) {
       console.warn('  ⚠️  Oxlint config generation failed');
     }
@@ -658,7 +661,7 @@ async function generateSelectedConfigs(
   // JSON/YAML (Prettier)
   if (selectedFeatures.has('json')) {
     console.log('  ⚙️  Configuring Prettier...');
-    const prettierResult = await generatePrettierConfig(projectRoot, false);
+    const prettierResult = await generatePrettierConfig();
     if (isFailure(prettierResult)) {
       console.warn('  ⚠️  Prettier config generation failed');
     }
@@ -667,7 +670,7 @@ async function generateSelectedConfigs(
   // Markdown
   if (selectedFeatures.has('markdown')) {
     console.log('  ⚙️  Configuring Markdownlint...');
-    const markdownResult = await generateMarkdownlintConfig(projectRoot);
+    const markdownResult = await generateMarkdownlintConfig();
     if (isFailure(markdownResult)) {
       console.warn('  ⚠️  Markdownlint config generation failed');
     }
@@ -676,10 +679,7 @@ async function generateSelectedConfigs(
   // Styles
   if (selectedFeatures.has('styles')) {
     console.log('  ⚙️  Configuring Stylelint...');
-    const stylelintResult = await generateStylelintConfig(
-      projectRoot,
-      detection.framework
-    );
+    const stylelintResult = await generateStylelintConfig();
     if (isFailure(stylelintResult)) {
       console.warn('  ⚠️  Stylelint config generation failed');
     }
@@ -688,12 +688,12 @@ async function generateSelectedConfigs(
   // Git hooks and commits
   if (selectedFeatures.has('commits')) {
     console.log('  ⚙️  Configuring git hooks...');
-    const lefthookResult = await generateLefthookConfig(projectRoot);
+    const lefthookResult = await generateLefthookConfig();
     if (isFailure(lefthookResult)) {
       console.warn('  ⚠️  Lefthook config generation failed');
     }
 
-    const commitlintResult = await generateCommitlintConfig(projectRoot);
+    const commitlintResult = await generateCommitlintConfig();
     if (isFailure(commitlintResult)) {
       console.warn('  ⚠️  Commitlint config generation failed');
     }
@@ -708,7 +708,7 @@ async function generateSelectedConfigs(
 
   // EditorConfig
   console.log('  ⚙️  Configuring EditorConfig...');
-  const editorconfigResult = await generateEditorconfigConfig(projectRoot);
+  const editorconfigResult = await generateEditorconfigConfig();
   if (isFailure(editorconfigResult)) {
     console.warn('  ⚠️  EditorConfig generation failed');
   }

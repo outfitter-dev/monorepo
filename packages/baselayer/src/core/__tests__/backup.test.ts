@@ -10,18 +10,15 @@ import * as fs from '../../utils/file-system';
 import { createBackup, createBackupSummary } from '../backup';
 import type { DetectedConfig } from '../detector';
 
-vi.mock('../../utils/file-system');
-
 describe('backup', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date('2024-01-15T10:30:00.000Z'));
+    vi.clearAllMocks(); // Mock file system functions
+    vi.spyOn(fs, 'ensureDir').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'writeFile').mockImplementation(vi.fn());
+    // Mock current time to 2024-01-15T10:30:00.000Z
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+  afterEach(() => {});
 
   describe('createBackup', () => {
     it('should create markdown backup of configurations', async () => {

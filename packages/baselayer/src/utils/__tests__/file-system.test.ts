@@ -1,5 +1,7 @@
+import type { Stats } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import { isFailure, isSuccess } from '@outfitter/contracts';
+import type { MockedFunction } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   backupFile,
@@ -19,19 +21,27 @@ import {
   writePackageJson,
 } from '../file-system';
 
-vi.mock('node:fs/promises');
-vi.mock('glob', () => ({
-  glob: vi.fn(),
-}));
-
 describe('file-system utilities', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock fs/promises functions
+    vi.spyOn(fs, 'access').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'readFile').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'writeFile').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'mkdir').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'copyFile').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'unlink').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'rename').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'stat').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'readdir').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'rm').mockImplementation(vi.fn());
   });
 
   describe('fileExists', () => {
     it('should return true when file exists', async () => {
-      vi.mocked(fs.access).mockResolvedValue(undefined);
+      (fs.access as MockedFunction<typeof fs.access>).mockResolvedValue(
+        undefined
+      );
 
       const result = await fileExists('/test/file.txt');
 
@@ -44,7 +54,7 @@ describe('file-system utilities', () => {
     it('should return false when file does not exist', async () => {
       const error = new Error('ENOENT') as NodeJS.ErrnoException;
       error.code = 'ENOENT';
-      vi.mocked(fs.access).mockRejectedValue(error);
+      (fs.access as MockedFunction<typeof fs.access>).mockRejectedValue(error);
 
       const result = await fileExists('/test/file.txt');
 
@@ -55,7 +65,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error for other failures', async () => {
-      vi.mocked(fs.access).mockRejectedValue(new Error('Permission denied'));
+      (fs.access as MockedFunction<typeof fs.access>).mockRejectedValue(
+        new Error('Permission denied')
+      );
 
       const result = await fileExists('/test/file.txt');
 
@@ -65,7 +77,9 @@ describe('file-system utilities', () => {
 
   describe('readFile', () => {
     it('should read file content', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue('file content');
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        'file content'
+      );
 
       const result = await readFile('/test/file.txt');
 
@@ -77,7 +91,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error on failure', async () => {
-      vi.mocked(fs.readFile).mockRejectedValue(new Error('Read failed'));
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockRejectedValue(
+        new Error('Read failed')
+      );
 
       const result = await readFile('/test/file.txt');
 
@@ -90,7 +106,9 @@ describe('file-system utilities', () => {
 
   describe('writeFile', () => {
     it('should write file content', async () => {
-      vi.mocked(fs.writeFile).mockResolvedValue(undefined);
+      (fs.writeFile as MockedFunction<typeof fs.writeFile>).mockResolvedValue(
+        undefined
+      );
 
       const result = await writeFile('/test/file.txt', 'content');
 
@@ -103,7 +121,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error on failure', async () => {
-      vi.mocked(fs.writeFile).mockRejectedValue(new Error('Write failed'));
+      (fs.writeFile as MockedFunction<typeof fs.writeFile>).mockRejectedValue(
+        new Error('Write failed')
+      );
 
       const result = await writeFile('/test/file.txt', 'content');
 
@@ -113,7 +133,9 @@ describe('file-system utilities', () => {
 
   describe('readJSON', () => {
     it('should read and parse JSON file', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue('{"key": "value"}');
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        '{"key": "value"}'
+      );
 
       const result = await readJSON('/test/file.json');
 
@@ -124,7 +146,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error for invalid JSON', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue('invalid json');
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        'invalid json'
+      );
 
       const result = await readJSON('/test/file.json');
 
@@ -135,7 +159,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error for read failure', async () => {
-      vi.mocked(fs.readFile).mockRejectedValue(new Error('Read failed'));
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockRejectedValue(
+        new Error('Read failed')
+      );
 
       const result = await readJSON('/test/file.json');
 
@@ -145,7 +171,9 @@ describe('file-system utilities', () => {
 
   describe('writeJSON', () => {
     it('should stringify and write JSON', async () => {
-      vi.mocked(fs.writeFile).mockResolvedValue(undefined);
+      (fs.writeFile as MockedFunction<typeof fs.writeFile>).mockResolvedValue(
+        undefined
+      );
 
       const result = await writeJSON('/test/file.json', { key: 'value' });
 
@@ -158,7 +186,7 @@ describe('file-system utilities', () => {
     });
 
     it('should return error for circular reference', async () => {
-      const circular: any = { key: 'value' };
+      const circular: Record<string, unknown> = { key: 'value' };
       circular.self = circular;
 
       const result = await writeJSON('/test/file.json', circular);
@@ -172,7 +200,9 @@ describe('file-system utilities', () => {
 
   describe('ensureDir', () => {
     it('should create directory', async () => {
-      vi.mocked(fs.mkdir).mockResolvedValue(undefined);
+      (fs.mkdir as MockedFunction<typeof fs.mkdir>).mockResolvedValue(
+        undefined
+      );
 
       const result = await ensureDir('/test/dir');
 
@@ -181,7 +211,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error on failure', async () => {
-      vi.mocked(fs.mkdir).mockRejectedValue(new Error('Mkdir failed'));
+      (fs.mkdir as MockedFunction<typeof fs.mkdir>).mockRejectedValue(
+        new Error('Mkdir failed')
+      );
 
       const result = await ensureDir('/test/dir');
 
@@ -191,7 +223,7 @@ describe('file-system utilities', () => {
 
   describe('remove', () => {
     it('should remove file or directory', async () => {
-      vi.mocked(fs.rm).mockResolvedValue(undefined);
+      (fs.rm as MockedFunction<typeof fs.rm>).mockResolvedValue(undefined);
 
       const result = await remove('/test/target');
 
@@ -203,7 +235,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error on failure', async () => {
-      vi.mocked(fs.rm).mockRejectedValue(new Error('Remove failed'));
+      (fs.rm as MockedFunction<typeof fs.rm>).mockRejectedValue(
+        new Error('Remove failed')
+      );
 
       const result = await remove('/test/target');
 
@@ -213,7 +247,9 @@ describe('file-system utilities', () => {
 
   describe('copyFile', () => {
     it('should copy file', async () => {
-      vi.mocked(fs.copyFile).mockResolvedValue(undefined);
+      (fs.copyFile as MockedFunction<typeof fs.copyFile>).mockResolvedValue(
+        undefined
+      );
 
       const result = await copyFile('/src/file.txt', '/dest/file.txt');
 
@@ -225,7 +261,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error on failure', async () => {
-      vi.mocked(fs.copyFile).mockRejectedValue(new Error('Copy failed'));
+      (fs.copyFile as MockedFunction<typeof fs.copyFile>).mockRejectedValue(
+        new Error('Copy failed')
+      );
 
       const result = await copyFile('/src/file.txt', '/dest/file.txt');
 
@@ -235,7 +273,9 @@ describe('file-system utilities', () => {
 
   describe('moveFile', () => {
     it('should move/rename file', async () => {
-      vi.mocked(fs.rename).mockResolvedValue(undefined);
+      (fs.rename as MockedFunction<typeof fs.rename>).mockResolvedValue(
+        undefined
+      );
 
       const result = await moveFile('/src/file.txt', '/dest/file.txt');
 
@@ -244,7 +284,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error on failure', async () => {
-      vi.mocked(fs.rename).mockRejectedValue(new Error('Move failed'));
+      (fs.rename as MockedFunction<typeof fs.rename>).mockRejectedValue(
+        new Error('Move failed')
+      );
 
       const result = await moveFile('/src/file.txt', '/dest/file.txt');
 
@@ -254,10 +296,10 @@ describe('file-system utilities', () => {
 
   describe('listFiles', () => {
     it('should list files in directory', async () => {
-      vi.mocked(fs.readdir).mockResolvedValue([
+      (fs.readdir as MockedFunction<typeof fs.readdir>).mockResolvedValue([
         'file1.txt',
         'file2.txt',
-      ] as any);
+      ]);
 
       const result = await listFiles('/test/dir');
 
@@ -268,7 +310,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error on failure', async () => {
-      vi.mocked(fs.readdir).mockRejectedValue(new Error('List failed'));
+      (fs.readdir as MockedFunction<typeof fs.readdir>).mockRejectedValue(
+        new Error('List failed')
+      );
 
       const result = await listFiles('/test/dir');
 
@@ -278,8 +322,8 @@ describe('file-system utilities', () => {
 
   describe('getStats', () => {
     it('should get file stats', async () => {
-      const mockStats = { size: 1024, isFile: () => true };
-      vi.mocked(fs.stat).mockResolvedValue(mockStats as any);
+      const mockStats = { size: 1024, isFile: () => true } as Stats;
+      (fs.stat as MockedFunction<typeof fs.stat>).mockResolvedValue(mockStats);
 
       const result = await getStats('/test/file.txt');
 
@@ -290,7 +334,9 @@ describe('file-system utilities', () => {
     });
 
     it('should return error on failure', async () => {
-      vi.mocked(fs.stat).mockRejectedValue(new Error('Stat failed'));
+      (fs.stat as MockedFunction<typeof fs.stat>).mockRejectedValue(
+        new Error('Stat failed')
+      );
 
       const result = await getStats('/test/file.txt');
 
@@ -301,7 +347,10 @@ describe('file-system utilities', () => {
   describe('findFiles', () => {
     it('should find files matching pattern', async () => {
       const glob = await import('glob');
-      vi.mocked(glob.glob).mockResolvedValue(['file1.js', 'file2.js']);
+      (glob.glob as MockedFunction<typeof glob.glob>).mockResolvedValue([
+        'file1.js',
+        'file2.js',
+      ]);
 
       const result = await findFiles('**/*.js');
 
@@ -313,7 +362,9 @@ describe('file-system utilities', () => {
 
     it('should return error on failure', async () => {
       const glob = await import('glob');
-      vi.mocked(glob.glob).mockRejectedValue(new Error('Glob failed'));
+      (glob.glob as MockedFunction<typeof glob.glob>).mockRejectedValue(
+        new Error('Glob failed')
+      );
 
       const result = await findFiles('**/*.js');
 
@@ -323,7 +374,9 @@ describe('file-system utilities', () => {
 
   describe('readPackageJson', () => {
     it('should read package.json from current directory', async () => {
-      vi.mocked(fs.readFile).mockResolvedValue('{"name": "test-package"}');
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        '{"name": "test-package"}'
+      );
 
       const result = await readPackageJson();
 
@@ -337,7 +390,9 @@ describe('file-system utilities', () => {
 
   describe('writePackageJson', () => {
     it('should write package.json to current directory', async () => {
-      vi.mocked(fs.writeFile).mockResolvedValue(undefined);
+      (fs.writeFile as MockedFunction<typeof fs.writeFile>).mockResolvedValue(
+        undefined
+      );
 
       const result = await writePackageJson({ name: 'test-package' });
 
@@ -353,16 +408,24 @@ describe('file-system utilities', () => {
   describe('backupFile', () => {
     it('should create backup of existing file', async () => {
       // Mock file exists
-      vi.mocked(fs.access).mockResolvedValue(undefined);
+      (fs.access as MockedFunction<typeof fs.access>).mockResolvedValue(
+        undefined
+      );
 
       // Mock read file
-      vi.mocked(fs.readFile).mockResolvedValue('original content');
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        Buffer.from('original content')
+      );
 
       // Mock mkdir
-      vi.mocked(fs.mkdir).mockResolvedValue(undefined);
+      (fs.mkdir as MockedFunction<typeof fs.mkdir>).mockResolvedValue(
+        undefined
+      );
 
       // Mock write file
-      vi.mocked(fs.writeFile).mockResolvedValue(undefined);
+      (fs.writeFile as MockedFunction<typeof fs.writeFile>).mockResolvedValue(
+        undefined
+      );
 
       const result = await backupFile('/test/file.txt');
 
@@ -382,7 +445,7 @@ describe('file-system utilities', () => {
     it('should fail if file does not exist', async () => {
       const error = new Error('ENOENT') as NodeJS.ErrnoException;
       error.code = 'ENOENT';
-      vi.mocked(fs.access).mockRejectedValue(error);
+      (fs.access as MockedFunction<typeof fs.access>).mockRejectedValue(error);
 
       const result = await backupFile('/test/file.txt');
 
@@ -391,10 +454,18 @@ describe('file-system utilities', () => {
     });
 
     it('should use custom backup directory', async () => {
-      vi.mocked(fs.access).mockResolvedValue(undefined);
-      vi.mocked(fs.readFile).mockResolvedValue('content');
-      vi.mocked(fs.mkdir).mockResolvedValue(undefined);
-      vi.mocked(fs.writeFile).mockResolvedValue(undefined);
+      (fs.access as MockedFunction<typeof fs.access>).mockResolvedValue(
+        undefined
+      );
+      (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
+        Buffer.from('content')
+      );
+      (fs.mkdir as MockedFunction<typeof fs.mkdir>).mockResolvedValue(
+        undefined
+      );
+      (fs.writeFile as MockedFunction<typeof fs.writeFile>).mockResolvedValue(
+        undefined
+      );
 
       const result = await backupFile('/test/file.txt', '/custom/backup');
 

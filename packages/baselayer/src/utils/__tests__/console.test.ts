@@ -3,7 +3,7 @@ import { Console } from '../console';
 
 describe('Console', () => {
   let console: Console;
-  let mockLog: any;
+  let mockLog: typeof console.log;
 
   beforeEach(() => {
     console = new Console();

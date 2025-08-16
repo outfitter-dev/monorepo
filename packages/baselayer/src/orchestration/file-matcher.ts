@@ -150,9 +150,9 @@ export class FileMatcher {
    */
   private async getStagedFiles(cwd: string): Promise<string[]> {
     try {
-      const { spawn } = await import('node:child_process');
+      const { execFile } = await import('node:child_process');
       const { promisify } = await import('node:util');
-      const _execFile = promisify(spawn);
+      const execFileAsync = promisify(execFile);
 
       const result = await execFileAsync(
         'git',
@@ -169,7 +169,7 @@ export class FileMatcher {
       return result.stdout
         .split('\n')
         .filter(Boolean)
-        .filter((file) => !file.startsWith('node_modules/'));
+        .filter((file: string) => !file.startsWith('node_modules/'));
     } catch (_error) {
       return [];
     }

@@ -55,7 +55,7 @@ export async function generateOxlintConfig(): Promise<Result<void, Error>> {
 
     // Create new config if it doesn't exist or enhance existing one
     const configPath = '.oxlintrc.json';
-    let existingConfig: any = {};
+    let existingConfig: Record<string, unknown> = {};
 
     const configExists = await fileExists(configPath);
     if (isSuccess(configExists) && configExists.data) {
@@ -210,7 +210,7 @@ export async function generateOxlintConfig(): Promise<Result<void, Error>> {
     // Write the enhanced config
     const writeResult = await writeJSON(configPath, enhancedConfig);
     if (isFailure(writeResult)) {
-      return failure(writeResult.error);
+      return failure(new Error(writeResult.error.message));
     }
     return success(undefined);
   } catch (error) {

@@ -54,7 +54,10 @@ describe('ConfigLoader - Runtime Validation', () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        const errors = result.error.details?.validationErrors as Array<any>;
+        const errors = result.error.details?.validationErrors as Array<{
+          path: string;
+          message: string;
+        }>;
         expect(errors).toBeDefined();
         expect(errors.length).toBeGreaterThan(0);
 
@@ -114,7 +117,10 @@ describe('ConfigLoader - Runtime Validation', () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        const errors = result.error.details?.validationErrors as Array<any>;
+        const errors = result.error.details?.validationErrors as Array<{
+          path: string;
+          message: string;
+        }>;
         expect(errors.length).toBeGreaterThan(1); // Should have multiple errors
 
         // Check that paths are properly formatted
@@ -133,7 +139,10 @@ describe('ConfigLoader - Runtime Validation', () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        const errors = result.error.details?.validationErrors as Array<any>;
+        const errors = result.error.details?.validationErrors as Array<{
+          path: string;
+          message: string;
+        }>;
         const typeError = errors.find((e) => e.path === 'features.typescript');
 
         expect(typeError).toBeDefined();
@@ -150,7 +159,10 @@ describe('ConfigLoader - Runtime Validation', () => {
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        const errors = result.error.details?.validationErrors as Array<any>;
+        const errors = result.error.details?.validationErrors as Array<{
+          path: string;
+          message: string;
+        }>;
         const enumError = errors.find((e) => e.path === 'project.type');
 
         expect(enumError).toBeDefined();

@@ -4,21 +4,27 @@
 
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import {
-  ErrorCode,
-  failure,
-  isSuccess,
-  makeError,
-  type Result,
-  success,
-} from '@outfitter/contracts';
+import { failure, isSuccess, type Result, success } from '@outfitter/contracts';
 import { glob } from 'glob';
 
 export interface FileSystemError {
   type: 'FILE_SYSTEM_ERROR';
   code: string;
   message: string;
-  path?: string;
+  path?: string | undefined;
+}
+
+function makeFileSystemError(
+  code: string,
+  message: string,
+  filePath?: string | undefined
+): FileSystemError {
+  return {
+    type: 'FILE_SYSTEM_ERROR',
+    code,
+    message,
+    ...(filePath !== undefined && { path: filePath }),
+  };
 }
 
 /**
@@ -35,7 +41,7 @@ export async function fileExists(
       return success(false);
     }
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to check file: ${error}`)
+      makeFileSystemError('ACCESS_ERROR', `Failed to check file: ${error}`)
     );
   }
 }
@@ -51,9 +57,11 @@ export async function readFile(
     return success(content);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to read file: ${error}`, {
-        path: filePath,
-      })
+      makeFileSystemError(
+        'READ_ERROR',
+        `Failed to read file: ${error}`,
+        filePath
+      )
     );
   }
 }
@@ -70,9 +78,11 @@ export async function writeFile(
     return success(undefined);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to write file: ${error}`, {
-        path: filePath,
-      })
+      makeFileSystemError(
+        'WRITE_ERROR',
+        `Failed to write file: ${error}`,
+        filePath
+      )
     );
   }
 }
@@ -80,7 +90,7 @@ export async function writeFile(
 /**
  * Read and parse JSON file
  */
-export async function readJSON<T = any>(
+export async function readJSON<T = unknown>(
   filePath: string
 ): Promise<Result<T, FileSystemError>> {
   const contentResult = await readFile(filePath);
@@ -93,9 +103,11 @@ export async function readJSON<T = any>(
     return success(data);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to parse JSON: ${error}`, {
-        path: filePath,
-      })
+      makeFileSystemError(
+        'PARSE_ERROR',
+        `Failed to parse JSON: ${error}`,
+        filePath
+      )
     );
   }
 }
@@ -105,17 +117,17 @@ export async function readJSON<T = any>(
  */
 export async function writeJSON(
   filePath: string,
-  data: any
+  data: unknown
 ): Promise<Result<void, FileSystemError>> {
   try {
     const content = JSON.stringify(data, null, 2);
     return writeFile(filePath, content);
   } catch (error) {
     return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
+      makeFileSystemError(
+        'STRINGIFY_ERROR',
         `Failed to stringify JSON: ${error}`,
-        { path: filePath }
+        filePath
       )
     );
   }
@@ -132,10 +144,10 @@ export async function ensureDir(
     return success(undefined);
   } catch (error) {
     return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
+      makeFileSystemError(
+        'MKDIR_ERROR',
         `Failed to create directory: ${error}`,
-        { path: dirPath }
+        dirPath
       )
     );
   }
@@ -152,9 +164,11 @@ export async function remove(
     return success(undefined);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to remove: ${error}`, {
-        path: targetPath,
-      })
+      makeFileSystemError(
+        'REMOVE_ERROR',
+        `Failed to remove: ${error}`,
+        targetPath
+      )
     );
   }
 }
@@ -171,9 +185,7 @@ export async function copyFile(
     return success(undefined);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to copy file: ${error}`, {
-        path: src,
-      })
+      makeFileSystemError('COPY_ERROR', `Failed to copy file: ${error}`, src)
     );
   }
 }
@@ -190,9 +202,7 @@ export async function moveFile(
     return success(undefined);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to move file: ${error}`, {
-        path: src,
-      })
+      makeFileSystemError('MOVE_ERROR', `Failed to move file: ${error}`, src)
     );
   }
 }
@@ -208,9 +218,11 @@ export async function listFiles(
     return success(files);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to list files: ${error}`, {
-        path: dirPath,
-      })
+      makeFileSystemError(
+        'LIST_ERROR',
+        `Failed to list files: ${error}`,
+        dirPath
+      )
     );
   }
 }
@@ -220,15 +232,17 @@ export async function listFiles(
  */
 export async function getStats(
   filePath: string
-): Promise<Result<fs.Stats, FileSystemError>> {
+): Promise<Result<Awaited<ReturnType<typeof fs.stat>>, FileSystemError>> {
   try {
     const stats = await fs.stat(filePath);
     return success(stats);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to get stats: ${error}`, {
-        path: filePath,
-      })
+      makeFileSystemError(
+        'STAT_ERROR',
+        `Failed to get stats: ${error}`,
+        filePath
+      )
     );
   }
 }
@@ -238,14 +252,18 @@ export async function getStats(
  */
 export async function findFiles(
   pattern: string,
-  options?: any
+  options?: import('glob').GlobOptions
 ): Promise<Result<string[], FileSystemError>> {
   try {
-    const files = await glob(pattern, options);
-    return success(files);
+    const files = await glob(pattern, options ?? {});
+    // Ensure we return string[] - convert Path objects to strings if needed
+    const stringFiles = files.map((file) =>
+      typeof file === 'string' ? file : file.toString()
+    );
+    return success(stringFiles);
   } catch (error) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to glob files: ${error}`)
+      makeFileSystemError('GLOB_ERROR', `Failed to glob files: ${error}`)
     );
   }
 }
@@ -253,7 +271,9 @@ export async function findFiles(
 /**
  * Read package.json from current directory
  */
-export async function readPackageJson(): Promise<Result<any, FileSystemError>> {
+export async function readPackageJson(): Promise<
+  Result<Record<string, unknown>, FileSystemError>
+> {
   return readJSON('package.json');
 }
 
@@ -261,7 +281,7 @@ export async function readPackageJson(): Promise<Result<any, FileSystemError>> {
  * Write package.json to current directory
  */
 export async function writePackageJson(
-  data: any
+  data: Record<string, unknown>
 ): Promise<Result<void, FileSystemError>> {
   return writeJSON('package.json', data);
 }
@@ -280,9 +300,7 @@ export async function backupFile(
 
   if (!existsResult.data) {
     return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, 'File does not exist', {
-        path: filePath,
-      })
+      makeFileSystemError('NOT_FOUND', 'File does not exist', filePath)
     );
   }
 

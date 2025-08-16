@@ -1,5 +1,5 @@
-import type { AppError } from '../error';
-import { ErrorCode } from '../error';
+import type { AppError } from '../error.js';
+import { ErrorCode } from '../error.js';
 
 /**
  * User-friendly error messages for each error code.
@@ -32,6 +32,14 @@ const errorMessages: Record<ErrorCode, string> = {
     'Package manager operation failed. Please check your setup.',
   [ErrorCode.PROJECT_DETECTION_FAILED]:
     'Project detection failed. Please verify project structure.',
+  [ErrorCode.CHECK_FAILED]:
+    'Check operation failed. Please verify your configuration.',
+  [ErrorCode.TEARDOWN_FAILED]:
+    'Teardown operation failed. Please check the logs for details.',
+  [ErrorCode.CLEANUP_FAILED]:
+    'Cleanup operation failed. Please check permissions and try again.',
+  [ErrorCode.FRAMEWORK_DETECTION_FAILED]:
+    'Framework detection failed. Please verify project structure.',
 };
 
 /**

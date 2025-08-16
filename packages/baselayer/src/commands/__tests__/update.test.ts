@@ -2,7 +2,9 @@ import { existsSync } from 'node:fs';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import type { Result } from '@outfitter/contracts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { FileSystemError } from '../../utils/file-system.js';
 import { checkUpdateAvailable, update } from '../update.js';
 
 describe('update command', () => {
@@ -189,7 +191,7 @@ describe('update command', () => {
                   code: 'CONFIG_LOAD_FAILED',
                 },
               }),
-            }) as any
+            }) as Result<void, FileSystemError>
         );
 
         const result = await update({
@@ -217,7 +219,7 @@ describe('update command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'No space left on device', code: 'ENOSPC' },
-        } as any);
+        } as Result<void, FileSystemError>);
 
         const result = await update({
           dryRun: false,
@@ -247,7 +249,7 @@ describe('update command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'Read-only file system', code: 'EROFS' },
-        } as any);
+        } as Result<void, FileSystemError>);
 
         const result = await update({
           dryRun: false,
@@ -277,7 +279,7 @@ describe('update command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'Interrupted system call', code: 'EINTR' },
-        } as any);
+        } as Result<void, FileSystemError>);
 
         const result = await update({
           dryRun: false,
@@ -423,7 +425,8 @@ describe('update command', () => {
 
     describe('input validation edge cases', () => {
       it('should handle null options', async () => {
-        const result = await update(null as any);
+        // Test passing null (invalid input)
+        const result = await update(null as never);
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -432,7 +435,8 @@ describe('update command', () => {
       });
 
       it('should handle undefined options', async () => {
-        const result = await update(undefined as any);
+        // Test passing undefined (invalid input)
+        const result = await update(undefined as never);
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -441,7 +445,8 @@ describe('update command', () => {
       });
 
       it('should handle invalid dryRun type', async () => {
-        const result = await update({ dryRun: 'true' as any });
+        // Test passing invalid dryRun type
+        const result = await update({ dryRun: 'true' as never });
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -450,7 +455,8 @@ describe('update command', () => {
       });
 
       it('should handle invalid verbose type', async () => {
-        const result = await update({ verbose: 1 as any });
+        // Test passing invalid verbose type
+        const result = await update({ verbose: 1 as never });
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -459,11 +465,12 @@ describe('update command', () => {
       });
 
       it('should handle options with extra properties', async () => {
+        // Test passing extra properties that should be ignored
         const result = await update({
           dryRun: true,
           verbose: false,
           invalidProp: 'should be ignored',
-        } as any);
+        } as never);
 
         expect(result.success).toBe(true); // Should ignore extra properties
       });
@@ -548,7 +555,7 @@ describe('update command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'Backup failed' },
-        } as any);
+        } as Result<void, FileSystemError>);
 
         const result = await update({
           dryRun: false,
@@ -580,7 +587,7 @@ describe('update command', () => {
           error: {
             message: 'Permission denied: cannot create backup directory',
           },
-        } as any);
+        } as Result<void, FileSystemError>);
 
         const result = await update({
           dryRun: false,

@@ -33,11 +33,12 @@
   },
   "files": [
     "dist",
+    "dist-types",
     "configs",
     "templates"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp dist-types/index.d.ts dist/index.d.ts",
     "dev": "tsup --watch",
     "test": "vitest",
     "test:run": "vitest run",

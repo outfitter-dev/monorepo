@@ -5,6 +5,7 @@ import { writeJSON } from '../utils/file-system.js';
 export type TypeScriptPreset = 'strict' | 'standard' | 'minimal';
 
 export interface TypeScriptConfig {
+  extends?: string;
   compilerOptions: Record<string, unknown>;
   include?: string[];
   exclude?: string[];
@@ -192,7 +193,7 @@ export async function generateAllTypeScriptConfigs(
     for (const [filename, tsConfig] of Object.entries(configs)) {
       const result = await writeJSON(filename, tsConfig);
       if (isFailure(result)) {
-        return failure(result.error);
+        return failure(new Error(result.error.message));
       }
     }
 
@@ -214,7 +215,7 @@ export async function generateTypeScriptConfigFile(
 
     const result = await writeJSON('tsconfig.json', tsConfig);
     if (isFailure(result)) {
-      return failure(result.error);
+      return failure(new Error(result.error.message));
     }
 
     return success(undefined);

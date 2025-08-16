@@ -28,7 +28,8 @@ export async function clean(
       );
     }
 
-    const _packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+    // Verify package.json exists and is readable
+    JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
     const detectionResult = await detectExistingTools(projectRoot);
     if (isFailure(detectionResult)) {
       return failure(
