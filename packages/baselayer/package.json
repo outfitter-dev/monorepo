@@ -24,9 +24,9 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./typescript/base": "./configs/typescript/base.json",
-    "./typescript/next": "./configs/typescript/next.json",
-    "./typescript/vite": "./configs/typescript/vite.json"
+    "./typescript/base.json": "./configs/typescript/base.json",
+    "./typescript/next.json": "./configs/typescript/next.json",
+    "./typescript/vite.json": "./configs/typescript/vite.json"
   },
   "bin": {
     "baselayer": "./dist/cli.js"

@@ -4,6 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 About you: @./.agent/prompts/mode-max-eng.md
 
+Rules: @.agent/rules/IMPORTANT.md
+
 ## Repository Overview
 
 This is the `@outfitter/monorepo` - a collection of shared configurations and utilities for Outfitter projects. It uses Bun workspaces and contains packages that provide development tools, configurations, and coding standards.
