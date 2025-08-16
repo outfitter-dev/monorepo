@@ -8,7 +8,7 @@ export async function updatePackageScripts(): Promise<Result<void, Error>> {
   try {
     const pkgResult = await readPackageJson();
     if (isFailure(pkgResult)) {
-      return failure(pkgResult.error);
+      return failure(new Error(pkgResult.error.message));
     }
 
     const packageJson = pkgResult.data;
@@ -45,7 +45,10 @@ export async function updatePackageScripts(): Promise<Result<void, Error>> {
     };
 
     // Only add scripts that don't exist or update Flint-managed ones
-    packageJson.scripts = packageJson.scripts || {};
+    const existingScripts = packageJson.scripts as
+      | Record<string, string>
+      | undefined;
+    const scriptsToUpdate = existingScripts || {};
 
     // Track which scripts we're managing
     const flintManagedScripts = new Set(Object.keys(scripts));
@@ -53,20 +56,22 @@ export async function updatePackageScripts(): Promise<Result<void, Error>> {
     // Add or update our scripts
     for (const [name, command] of Object.entries(scripts)) {
       // Only override if it's a script we manage or doesn't exist
-      if (!packageJson.scripts[name] || flintManagedScripts.has(name)) {
-        packageJson.scripts[name] = command;
+      if (!scriptsToUpdate[name] || flintManagedScripts.has(name)) {
+        scriptsToUpdate[name] = command;
       }
     }
+
+    // Update the package.json with the new scripts
+    packageJson.scripts = scriptsToUpdate;
 
     // Preserve existing test, build, dev scripts etc.
     // Just ensure they're not conflicting with our naming
 
     const writeResult = await writePackageJson(packageJson);
     if (isFailure(writeResult)) {
-      return failure(writeResult.error);
+      return failure(new Error(writeResult.error.message));
     }
-    for (const _scriptName of Object.keys(scripts)) {
-    }
+    // Scripts successfully updated
 
     return success(undefined);
   } catch (error) {

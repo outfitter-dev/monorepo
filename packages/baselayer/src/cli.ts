@@ -24,13 +24,8 @@ const packageJson = JSON.parse(
 );
 const version = packageJson.version;
 
-// Initialize orchestrator and register adapters
+// Initialize orchestrator - adapters are registered automatically via configuration
 const orchestrator = new Orchestrator();
-orchestrator.registerAdapter('typescript', new UltraciteAdapter());
-orchestrator.registerAdapter('json', new PrettierAdapter());
-orchestrator.registerAdapter('yaml', new PrettierAdapter());
-orchestrator.registerAdapter('css', new StylelintAdapter());
-orchestrator.registerAdapter('markdown', new MarkdownlintAdapter());
 
 const program = new Command();
 

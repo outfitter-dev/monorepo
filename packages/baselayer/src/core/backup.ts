@@ -3,14 +3,7 @@
  */
 
 import * as path from 'node:path';
-import {
-  ErrorCode,
-  failure,
-  isFailure,
-  makeError,
-  type Result,
-  success,
-} from '@outfitter/contracts';
+import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import { ensureDir, writeFile } from '../utils/file-system';
 import type { DetectedConfig } from './detector';
 
@@ -36,20 +29,21 @@ export async function createBackup(
     options;
 
   if (configs.length === 0) {
-    return failure(
-      makeError(ErrorCode.VALIDATION_ERROR, 'No configurations to backup')
-    );
+    return failure({
+      type: 'BACKUP_ERROR' as const,
+      code: 'VALIDATION_ERROR',
+      message: 'No configurations to backup',
+    });
   }
 
   // Ensure backup directory exists
   const ensureDirResult = await ensureDir(backupDir);
   if (isFailure(ensureDirResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to create backup directory: ${ensureDirResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'BACKUP_ERROR' as const,
+      code: 'INTERNAL_ERROR',
+      message: `Failed to create backup directory: ${ensureDirResult.error.message}`,
+    });
   }
 
   // Generate backup content
@@ -67,12 +61,11 @@ export async function createBackup(
   // Write backup file
   const writeResult = await writeFile(backupPath, content);
   if (isFailure(writeResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to write backup file: ${writeResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'BACKUP_ERROR' as const,
+      code: 'INTERNAL_ERROR',
+      message: `Failed to write backup file: ${writeResult.error.message}`,
+    });
   }
 
   return success(backupPath);
@@ -179,7 +172,7 @@ function groupConfigsByTool(
     if (!grouped[config.tool]) {
       grouped[config.tool] = [];
     }
-    grouped[config.tool].push(config);
+    grouped[config.tool]?.push(config);
   }
 
   return grouped;
@@ -250,12 +243,11 @@ export async function createBackupSummary(
 
   const writeResult = await writeFile(summaryPath, lines.join('\n'));
   if (isFailure(writeResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to write summary: ${writeResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'BACKUP_ERROR' as const,
+      code: 'INTERNAL_ERROR',
+      message: `Failed to write summary: ${writeResult.error.message}`,
+    });
   }
 
   return success(summaryPath);

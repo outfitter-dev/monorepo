@@ -1,15 +1,17 @@
 import * as childProcess from 'node:child_process';
 import { isSuccess, type Result } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { FileSystemError } from '../../utils/file-system.js';
 import * as fileSystem from '../../utils/file-system.js';
 import { generateOxlintConfig } from '../oxlint.js';
-
-vi.mock('node:child_process');
-vi.mock('../../utils/file-system.js');
 
 describe('generateOxlintConfig', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock file system functions
+    vi.spyOn(fileSystem, 'fileExists').mockImplementation(vi.fn());
+    vi.spyOn(fileSystem, 'readJSON').mockImplementation(vi.fn());
+    vi.spyOn(fileSystem, 'writeJSON').mockImplementation(vi.fn());
   });
 
   it('should attempt ESLint migration when ESLint config exists', async () => {
@@ -17,7 +19,7 @@ describe('generateOxlintConfig', () => {
     vi.mocked(fileSystem.fileExists).mockResolvedValue({
       success: true,
       data: true,
-    } as any);
+    } as Result<boolean, FileSystemError>);
 
     const execSyncMock = vi
       .spyOn(childProcess, 'execSync')
@@ -26,12 +28,12 @@ describe('generateOxlintConfig', () => {
     vi.mocked(fileSystem.readJSON).mockResolvedValue({
       success: true,
       data: {},
-    } as any);
+    } as Result<unknown, Error>);
 
     vi.mocked(fileSystem.writeJSON).mockResolvedValue({
       success: true,
       data: undefined,
-    } as any);
+    } as Result<unknown, Error>);
 
     const result = await generateOxlintConfig();
 
@@ -47,7 +49,7 @@ describe('generateOxlintConfig', () => {
     vi.mocked(fileSystem.fileExists).mockResolvedValue({
       success: true,
       data: false,
-    } as any);
+    } as Result<unknown, Error>);
 
     const execSyncMock = vi
       .spyOn(childProcess, 'execSync')
@@ -56,12 +58,12 @@ describe('generateOxlintConfig', () => {
     vi.mocked(fileSystem.readJSON).mockResolvedValue({
       success: true,
       data: {},
-    } as any);
+    } as Result<unknown, Error>);
 
     vi.mocked(fileSystem.writeJSON).mockResolvedValue({
       success: true,
       data: undefined,
-    } as any);
+    } as Result<unknown, Error>);
 
     const result = await generateOxlintConfig();
 
@@ -76,16 +78,16 @@ describe('generateOxlintConfig', () => {
     vi.mocked(fileSystem.fileExists).mockResolvedValue({
       success: true,
       data: false,
-    } as any);
+    } as Result<unknown, Error>);
 
     vi.spyOn(childProcess, 'execSync').mockImplementation(() => '');
 
     vi.mocked(fileSystem.readJSON).mockResolvedValue({
       success: true,
       data: { rules: {} },
-    } as any);
+    } as Result<unknown, Error>);
 
-    let writtenConfig: any;
+    let writtenConfig: unknown;
     vi.mocked(fileSystem.writeJSON).mockImplementation(
       async (_path, config): Promise<Result<void, Error>> => {
         writtenConfig = config;

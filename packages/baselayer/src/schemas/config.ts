@@ -34,12 +34,12 @@ export const OxlintConfigSchema = z
   .object({
     plugins: z.array(z.string()).optional(),
     env: z.record(z.boolean()).optional(),
-    rules: z.record(z.any()).optional(),
+    rules: z.record(z.unknown()).optional(),
     overrides: z
       .array(
         z.object({
           files: z.union([z.string(), z.array(z.string())]),
-          rules: z.record(z.any()).optional(),
+          rules: z.record(z.unknown()).optional(),
         })
       )
       .optional(),
@@ -63,7 +63,7 @@ export const PrettierConfigSchema = z
       .array(
         z.object({
           files: z.union([z.string(), z.array(z.string())]),
-          options: z.record(z.any()).optional(),
+          options: z.record(z.unknown()).optional(),
         })
       )
       .optional(),
@@ -73,7 +73,7 @@ export const PrettierConfigSchema = z
 /**
  * Schema for VS Code settings.json
  */
-export const VSCodeSettingsSchema = z.record(z.any());
+export const VSCodeSettingsSchema = z.record(z.unknown());
 
 /**
  * Schema for VS Code extensions.json
@@ -91,8 +91,8 @@ export const VSCodeExtensionsSchema = z
 export const CommitlintConfigSchema = z
   .object({
     extends: z.array(z.string()).optional(),
-    rules: z.record(z.any()).optional(),
-    prompt: z.any().optional(),
+    rules: z.record(z.unknown()).optional(),
+    prompt: z.unknown().optional(),
   })
   .passthrough();
 
@@ -103,13 +103,13 @@ export const StylelintConfigSchema = z
   .object({
     extends: z.union([z.string(), z.array(z.string())]).optional(),
     plugins: z.array(z.string()).optional(),
-    rules: z.record(z.any()).optional(),
+    rules: z.record(z.unknown()).optional(),
     overrides: z
       .array(
         z.object({
           files: z.union([z.string(), z.array(z.string())]),
           customSyntax: z.string().optional(),
-          rules: z.record(z.any()).optional(),
+          rules: z.record(z.unknown()).optional(),
         })
       )
       .optional(),
@@ -121,7 +121,7 @@ export const StylelintConfigSchema = z
  */
 export const MarkdownlintConfigSchema = z
   .object({
-    config: z.record(z.any()).optional(),
+    config: z.record(z.unknown()).optional(),
     globs: z.array(z.string()).optional(),
     ignores: z.array(z.string()).optional(),
   })

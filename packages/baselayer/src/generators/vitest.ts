@@ -152,14 +152,14 @@ export async function generateVitestConfigFiles(
     const vitestConfig = generateVitestConfig(config);
     const vitestResult = await writeFile('vitest.config.ts', vitestConfig);
     if (isFailure(vitestResult)) {
-      return failure(vitestResult.error);
+      return failure(new Error(vitestResult.error.message));
     }
 
     // Generate test setup file if it doesn't exist
     const testSetup = generateTestSetup(config);
     const setupResult = await writeFile('src/test-setup.ts', testSetup);
     if (isFailure(setupResult)) {
-      return failure(setupResult.error);
+      return failure(new Error(setupResult.error.message));
     }
 
     return success(undefined);

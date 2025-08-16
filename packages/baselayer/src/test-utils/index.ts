@@ -13,7 +13,7 @@ export interface MockExecResult {
 
 export interface TestContext {
   mockFs: MockFileSystem;
-  mockExec: Mock<[string], MockExecResult>;
+  mockExec: Mock;
   mockConsole: {
     log: Mock;
     error: Mock;
@@ -28,108 +28,50 @@ export function createMockFileSystem(files: MockFileSystem): MockFileSystem {
   return { ...files };
 }
 
-// Global state for mocks that need to be hoisted
-const globalMockState = {
-  mockFs: {} as MockFileSystem,
-  mockExec: vi.fn<[string], MockExecResult>(),
-};
+/**
+ * Set up mocks for a test. Call this in beforeEach.
+ */
+export function setupMocks() {
+  // Mock modules that are commonly used
+  const mockState = {
+    mockFs: {} as MockFileSystem,
+    mockExec: vi.fn(),
+  };
 
-// Mock modules at the top level (hoisted)
-vi.mock('node:fs', () => ({
-  existsSync: vi.fn((path: string) => path in globalMockState.mockFs),
-  readFileSync: vi.fn((path: string) => {
-    if (!(path in globalMockState.mockFs)) {
-      throw new Error(`ENOENT: no such file or directory, open '${path}'`);
-    }
-    return globalMockState.mockFs[path];
-  }),
-  writeFileSync: vi.fn((path: string, content: string) => {
-    globalMockState.mockFs[path] = content;
-  }),
-  mkdirSync: vi.fn(),
-  rmSync: vi.fn((path: string) => {
-    delete globalMockState.mockFs[path];
-  }),
-  readdirSync: vi.fn((dir: string) => {
-    const prefix = dir.endsWith('/') ? dir : `${dir}/`;
-    return Object.keys(globalMockState.mockFs)
-      .filter((path) => path.startsWith(prefix))
-      .map((path) => path.slice(prefix.length).split('/')[0])
-      .filter((name, index, arr) => arr.indexOf(name) === index);
-  }),
-}));
-
-vi.mock('node:fs/promises', () => ({
-  readFile: vi.fn(async (path: string) => {
-    if (!(path in globalMockState.mockFs)) {
-      throw new Error(`ENOENT: no such file or directory, open '${path}'`);
-    }
-    return globalMockState.mockFs[path];
-  }),
-  writeFile: vi.fn(async (path: string, content: string) => {
-    globalMockState.mockFs[path] = content;
-  }),
-  mkdir: vi.fn(),
-  rm: vi.fn(async (path: string) => {
-    delete globalMockState.mockFs[path];
-  }),
-  access: vi.fn(async (path: string) => {
-    if (!(path in globalMockState.mockFs)) {
-      throw new Error(`ENOENT: no such file or directory, access '${path}'`);
-    }
-  }),
-}));
-
-vi.mock('node:child_process', () => ({
-  execSync: vi.fn((cmd: string) => globalMockState.mockExec(cmd)),
-}));
-
-// Mock glob
-vi.mock('glob', () => ({
-  glob: vi.fn(async () => []),
-}));
-
-// Mock the file-system utility
-vi.mock('../utils/file-system.js', () => ({
-  findFiles: vi.fn(async () => ({ success: true, data: [] })),
-  fileExists: vi.fn(async () => ({ success: true, data: false })),
-  readFile: vi.fn(async () => ({ success: true, data: '' })),
-  writeFile: vi.fn(async () => ({ success: true, data: undefined })),
-  createDirectory: vi.fn(async () => ({ success: true, data: undefined })),
-  copyFile: vi.fn(async () => ({ success: true, data: undefined })),
-  deleteFile: vi.fn(async () => ({ success: true, data: undefined })),
-}));
-
-vi.mock('node:path', async () => {
-  const actual = await vi.importActual<typeof import('node:path')>('node:path');
+  // Return mock functions that can be configured per test
   return {
-    ...actual,
-    join: (...args: string[]) => {
-      const filtered = args.filter(Boolean);
-      let result = filtered.join('/');
-      // Clean up double slashes
-      result = result.replace(/\/+/g, '/');
-      return result;
-    },
-    resolve: (...args: string[]) => {
-      const joined = args.filter(Boolean).join('/');
-      let result = joined.startsWith('/') ? joined : `/${joined}`;
-      // Clean up double slashes
-      result = result.replace(/\/+/g, '/');
-      return result;
+    mockState,
+    setupFileMocks: (files: MockFileSystem) => {
+      mockState.mockFs = files;
+
+      // Mock fs methods
+      vi.mocked = vi.mocked || ((fn: unknown) => fn);
+
+      // Create spies for fs operations
+      const mockExists = vi.fn((path: string) => path in mockState.mockFs);
+      const mockReadFile = vi.fn((path: string) => {
+        if (!(path in mockState.mockFs)) {
+          throw new Error(`ENOENT: no such file or directory, open '${path}'`);
+        }
+        return mockState.mockFs[path];
+      });
+      const mockWriteFile = vi.fn((path: string, content: string) => {
+        mockState.mockFs[path] = content;
+      });
+
+      return { mockExists, mockReadFile, mockWriteFile };
     },
   };
-});
+}
 
 /**
  * Create a test context with common mocks
  */
 export function createTestContext(
-  initialFiles: MockFileSystem = {}
+  initialFiles: MockFileSystem = { '/package.json': '{}' }
 ): TestContext {
-  // Reset and setup mock filesystem
-  globalMockState.mockFs = createMockFileSystem(initialFiles);
-  globalMockState.mockExec = vi.fn<[string], MockExecResult>();
+  const mockFs = createMockFileSystem(initialFiles);
+  const mockExec = vi.fn();
 
   const mockConsole = {
     log: vi.fn(),
@@ -141,8 +83,8 @@ export function createTestContext(
   vi.spyOn(process, 'cwd').mockReturnValue('/');
 
   return {
-    mockFs: globalMockState.mockFs,
-    mockExec: globalMockState.mockExec,
+    mockFs,
+    mockExec,
     mockConsole,
   };
 }
@@ -150,7 +92,9 @@ export function createTestContext(
 /**
  * Create a basic package.json for testing
  */
-export function createPackageJson(overrides: Record<string, any> = {}): string {
+export function createPackageJson(
+  overrides: Record<string, unknown> = {}
+): string {
   const packageJson = {
     name: 'test-project',
     version: '1.0.0',
@@ -195,44 +139,57 @@ export function createPrettierConfig(): string {
   );
 }
 
+interface Choice {
+  value: unknown;
+  checked?: boolean;
+}
+
 /**
  * Mock prompts for interactive testing
  */
-export function mockPrompts(responses: Record<string, any>) {
-  vi.mock('@inquirer/prompts', () => ({
-    confirm: vi.fn(async ({ message }: { message: string }) => {
+export function mockPrompts(responses: Record<string, unknown>) {
+  const mockConfirm = vi.fn(async ({ message }: { message: string }) => {
+    const key = Object.keys(responses).find((k) => message.includes(k));
+    return key ? responses[key] : false;
+  });
+
+  const mockSelect = vi.fn(
+    async ({ message, choices }: { message: string; choices: Choice[] }) => {
       const key = Object.keys(responses).find((k) => message.includes(k));
-      return key ? responses[key] : false;
-    }),
-    select: vi.fn(
-      async ({ message, choices }: { message: string; choices: any[] }) => {
-        const key = Object.keys(responses).find((k) => message.includes(k));
-        return key ? responses[key] : choices[0].value;
+      return key ? responses[key] : choices[0]?.value;
+    }
+  );
+
+  const mockCheckbox = vi.fn(
+    async ({ message, choices }: { message: string; choices: Choice[] }) => {
+      const key = Object.keys(responses).find((k) => message.includes(k));
+      if (key && Array.isArray(responses[key])) {
+        return responses[key];
       }
-    ),
-    checkbox: vi.fn(
-      async ({ message, choices }: { message: string; choices: any[] }) => {
-        const key = Object.keys(responses).find((k) => message.includes(k));
-        if (key && Array.isArray(responses[key])) {
-          return responses[key];
-        }
-        // Return default checked items
-        return choices.filter((c) => c.checked).map((c) => c.value);
-      }
-    ),
-    input: vi.fn(
-      async ({
-        message,
-        defaultValue,
-      }: {
-        message: string;
-        defaultValue?: string;
-      }) => {
-        const key = Object.keys(responses).find((k) => message.includes(k));
-        return key ? responses[key] : defaultValue || '';
-      }
-    ),
-  }));
+      // Return default checked items
+      return choices.filter((c) => c.checked).map((c) => c.value);
+    }
+  );
+
+  const mockInput = vi.fn(
+    async ({
+      message,
+      defaultValue,
+    }: {
+      message: string;
+      defaultValue?: string;
+    }) => {
+      const key = Object.keys(responses).find((k) => message.includes(k));
+      return key ? responses[key] : defaultValue || '';
+    }
+  );
+
+  return {
+    confirm: mockConfirm,
+    select: mockSelect,
+    checkbox: mockCheckbox,
+    input: mockInput,
+  };
 }
 
 /**

@@ -17,11 +17,13 @@ import {
   removeJSONFields,
 } from '../merger';
 
-vi.mock('../../utils/file-system');
-
 describe('merger', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock file system functions
+    vi.spyOn(fs, 'fileExists').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'readJSON').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'writeJSON').mockImplementation(vi.fn());
   });
 
   describe('deepMerge', () => {

@@ -26,7 +26,7 @@ export async function hasVSCode(): Promise<boolean> {
  * Merges new VS Code settings with existing ones
  */
 async function mergeVSCodeSettings(
-  newSettings: any
+  newSettings: Record<string, unknown>
 ): Promise<Result<void, Error>> {
   const settingsPath = path.join('.vscode', 'settings.json');
   let existingSettings = {};
@@ -35,7 +35,7 @@ async function mergeVSCodeSettings(
   if (isSuccess(fileExistsResult) && fileExistsResult.data) {
     const readResult = await readJSON(settingsPath);
     if (isSuccess(readResult)) {
-      existingSettings = readResult.data;
+      existingSettings = readResult.data as Record<string, unknown>;
     }
   }
 
@@ -46,26 +46,32 @@ async function mergeVSCodeSettings(
 
   const ensureDirResult = await ensureDir('.vscode');
   if (isFailure(ensureDirResult)) {
-    return failure(ensureDirResult.error);
+    return failure(new Error(ensureDirResult.error.message));
   }
 
-  return writeJSON(settingsPath, merged);
+  const writeResult = await writeJSON(settingsPath, merged);
+  if (isFailure(writeResult)) {
+    return failure(new Error(writeResult.error.message));
+  }
+  return success(undefined);
 }
 
 /**
  * Merges new VS Code extensions with existing ones
  */
-async function mergeVSCodeExtensions(
-  newExtensions: any
-): Promise<Result<void, Error>> {
+async function mergeVSCodeExtensions(newExtensions: {
+  recommendations: string[];
+}): Promise<Result<void, Error>> {
   const extensionsPath = path.join('.vscode', 'extensions.json');
-  let existingExtensions = { recommendations: [] };
+  let existingExtensions: { recommendations: string[] } = {
+    recommendations: [],
+  };
 
   const fileExistsResult = await fileExists(extensionsPath);
   if (isSuccess(fileExistsResult) && fileExistsResult.data) {
     const readResult = await readJSON(extensionsPath);
     if (isSuccess(readResult)) {
-      existingExtensions = readResult.data;
+      existingExtensions = readResult.data as { recommendations: string[] };
     }
   }
 
@@ -81,10 +87,14 @@ async function mergeVSCodeExtensions(
 
   const ensureDirResult = await ensureDir('.vscode');
   if (isFailure(ensureDirResult)) {
-    return failure(ensureDirResult.error);
+    return failure(new Error(ensureDirResult.error.message));
   }
 
-  return writeJSON(extensionsPath, merged);
+  const writeResult = await writeJSON(extensionsPath, merged);
+  if (isFailure(writeResult)) {
+    return failure(new Error(writeResult.error.message));
+  }
+  return success(undefined);
 }
 
 /**
@@ -292,13 +302,13 @@ export async function setupVSCode(
     // Merge settings
     const settingsResult = await mergeVSCodeSettings(settings);
     if (isFailure(settingsResult)) {
-      return failure(settingsResult.error);
+      return failure(new Error(settingsResult.error.message));
     }
 
     // Merge extensions
     const extensionsResult = await mergeVSCodeExtensions(extensions);
     if (isFailure(extensionsResult)) {
-      return failure(extensionsResult.error);
+      return failure(new Error(extensionsResult.error.message));
     }
 
     return success(undefined);
@@ -357,7 +367,7 @@ export async function enhanceVSCodeSettings(
     if (Object.keys(additionalSettings).length > 0) {
       const settingsResult = await mergeVSCodeSettings(additionalSettings);
       if (isFailure(settingsResult)) {
-        return failure(settingsResult.error);
+        return failure(new Error(settingsResult.error.message));
       }
     }
 
@@ -367,7 +377,7 @@ export async function enhanceVSCodeSettings(
         recommendations: additionalExtensions,
       });
       if (isFailure(extensionsResult)) {
-        return failure(extensionsResult.error);
+        return failure(new Error(extensionsResult.error.message));
       }
     }
 

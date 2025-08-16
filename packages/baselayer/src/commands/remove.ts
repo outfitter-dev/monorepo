@@ -288,7 +288,7 @@ export async function remove(
             } else {
               failedBackups.push({
                 file: result.value.file,
-                error: result.value.error,
+                error: result.value.error || 'Unknown backup error',
               });
             }
           } else {

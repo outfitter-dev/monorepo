@@ -211,7 +211,8 @@ export async function migrate(
     }
     foundConfigs.forEach((config) => {
       const configData = existingConfigs[config as keyof ExistingConfigs];
-      const _file = configData?._file || config;
+      // File reference for potential future use
+      configData?._file || config;
     });
 
     // Step 2: Generate Outfitter config

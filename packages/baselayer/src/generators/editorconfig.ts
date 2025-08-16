@@ -147,7 +147,7 @@ export async function generateEditorconfigConfig(
 
     const writeResult = await writeFile('.editorconfig', content);
     if (isFailure(writeResult)) {
-      return failure(writeResult.error);
+      return failure(new Error(writeResult.error.message));
     }
 
     return success(undefined);

@@ -1,7 +1,7 @@
 import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import * as yaml from 'yaml';
 import type { BaselayerConfig } from '../schemas/baselayer-config.js';
-import { writeFile } from '../utils/file-system.js';
+import { type FileSystemError, writeFile } from '../utils/file-system.js';
 
 export interface LefthookGeneratorOptions {
   config?: BaselayerConfig;
@@ -17,7 +17,7 @@ export interface LefthookGeneratorOptions {
  */
 export async function generateLefthookConfig(
   options: LefthookGeneratorOptions = {}
-): Promise<Result<void, Error>> {
+): Promise<Result<void, FileSystemError>> {
   try {
     const {
       config: userConfig,
@@ -163,6 +163,10 @@ ${yamlContent}`;
     }
     return success(undefined);
   } catch (error) {
-    return failure(error as Error);
+    return failure({
+      type: 'FILE_SYSTEM_ERROR',
+      code: 'GENERATION_FAILED',
+      message: `Failed to generate lefthook config: ${(error as Error).message}`,
+    } as FileSystemError);
   }
 }

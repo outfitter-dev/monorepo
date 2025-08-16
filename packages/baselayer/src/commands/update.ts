@@ -4,13 +4,18 @@ import {
   failure,
   isFailure,
   makeError,
+  type Result,
   success,
 } from '@outfitter/contracts';
 import { DEFAULT_FEATURES, TOOL_GENERATORS } from '../constants/tools.js';
 import { ConfigLoader } from '../orchestration/config-loader.js';
 import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import type { FlintResult } from '../types.js';
-import { backupFile, writeJSON } from '../utils/file-system.js';
+import {
+  backupFile,
+  type FileSystemError,
+  writeJSON,
+} from '../utils/file-system.js';
 
 export interface UpdateOptions {
   /** Force update even if current version is newer */
@@ -120,7 +125,7 @@ export async function update(
     // Step 3: Update tool configurations based on enabled features
     const updateTasks: Array<{
       name: string;
-      task: () => Promise<Result<void, Error>>;
+      task: () => Promise<Result<void, FileSystemError>>;
     }> = [];
 
     // Map features to their primary tools and display names
@@ -220,7 +225,7 @@ export async function update(
             } else {
               failed.push({
                 name: result.value.name,
-                error: result.value.error,
+                error: result.value.error || 'Unknown update error',
               });
             }
           } else {

@@ -116,7 +116,7 @@ export async function detectExistingTools(
   }
 
   // Also check package.json for embedded configs
-  const pkgJsonResult = await readFile(path.join(cwd, 'package.json'));
+  const pkgJsonResult = await readFile(join(cwd, 'package.json'));
   if (isSuccess(pkgJsonResult)) {
     try {
       const pkg = JSON.parse(pkgJsonResult.data);
@@ -192,7 +192,7 @@ export async function detectPrettierConfig(
 export async function detectTypeScript(
   cwd: string = process.cwd()
 ): Promise<Result<boolean, DetectorError>> {
-  const tsconfigResult = await fileExists(path.join(cwd, 'tsconfig.json'));
+  const tsconfigResult = await fileExists(join(cwd, 'tsconfig.json'));
   if (isSuccess(tsconfigResult) && tsconfigResult.data) {
     return success(true);
   }
@@ -216,7 +216,7 @@ export async function detectTypeScript(
 export async function detectReact(
   cwd: string = process.cwd()
 ): Promise<Result<boolean, DetectorError>> {
-  const pkgJsonResult = await readFile(path.join(cwd, 'package.json'));
+  const pkgJsonResult = await readFile(join(cwd, 'package.json'));
   if (isFailure(pkgJsonResult)) {
     return success(false);
   }
@@ -279,7 +279,7 @@ export async function detectMarkdown(
 export async function detectVSCode(
   cwd: string = process.cwd()
 ): Promise<Result<boolean, DetectorError>> {
-  const vscodeResult = await fileExists(path.join(cwd, '.vscode'));
+  const vscodeResult = await fileExists(join(cwd, '.vscode'));
   if (isSuccess(vscodeResult) && vscodeResult.data) {
     return success(true);
   }
@@ -294,19 +294,19 @@ export async function detectGitHooks(
   cwd: string = process.cwd()
 ): Promise<Result<string | null, DetectorError>> {
   // Check for husky
-  const huskyResult = await fileExists(path.join(cwd, '.husky'));
+  const huskyResult = await fileExists(join(cwd, '.husky'));
   if (isSuccess(huskyResult) && huskyResult.data) {
     return success('husky');
   }
 
   // Check for lefthook
-  const lefthookResult = await fileExists(path.join(cwd, 'lefthook.yml'));
+  const lefthookResult = await fileExists(join(cwd, 'lefthook.yml'));
   if (isSuccess(lefthookResult) && lefthookResult.data) {
     return success('lefthook');
   }
 
   // Check for simple-git-hooks
-  const pkgJsonResult = await readFile(path.join(cwd, 'package.json'));
+  const pkgJsonResult = await readFile(join(cwd, 'package.json'));
   if (isSuccess(pkgJsonResult)) {
     try {
       const pkg = JSON.parse(pkgJsonResult.data);
@@ -331,7 +331,7 @@ export async function getConfigsToCleanup(
   const allPatterns = Object.values(TOOL_PATTERNS).flat();
 
   for (const pattern of allPatterns) {
-    const filePath = path.join(cwd, pattern);
+    const filePath = join(cwd, pattern);
     const existsResult = await fileExists(filePath);
 
     if (isSuccess(existsResult) && existsResult.data) {

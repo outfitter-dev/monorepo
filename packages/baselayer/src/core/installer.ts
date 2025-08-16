@@ -3,15 +3,8 @@
  */
 
 import { execSync } from 'node:child_process';
-import {
-  ErrorCode,
-  failure,
-  isFailure,
-  makeError,
-  type Result,
-  success,
-} from '@outfitter/contracts';
-import { console } from '../utils/console';
+import { failure, isFailure, type Result, success } from '@outfitter/contracts';
+import { logger } from '../utils/console';
 import { readPackageJson } from '../utils/file-system';
 import {
   getAddCommand,
@@ -55,19 +48,17 @@ export async function getMissingDependencies(): Promise<
 > {
   const pkgJsonResult = await readPackageJson();
   if (isFailure(pkgJsonResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to read package.json: ${pkgJsonResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'INSTALLER_ERROR',
+      code: 'PACKAGE_READ_FAILED',
+      message: `Failed to read package.json: ${pkgJsonResult.error.message}`,
+    });
   }
 
   const pkg = pkgJsonResult.data;
-  const allDeps = {
-    ...pkg.dependencies,
-    ...pkg.devDependencies,
-  };
+  const dependencies = (pkg.dependencies as Record<string, string>) || {};
+  const devDependencies = (pkg.devDependencies as Record<string, string>) || {};
+  const allDeps = { ...dependencies, ...devDependencies };
 
   const missing = REQUIRED_DEPENDENCIES.filter((dep) => !(dep in allDeps));
   return success(missing);
@@ -88,12 +79,11 @@ export async function installDependencies(
 
   const pmResult = await getPackageManager();
   if (isFailure(pmResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to detect package manager: ${pmResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'INSTALLER_ERROR',
+      code: 'PACKAGE_MANAGER_DETECTION_FAILED',
+      message: `Failed to detect package manager: ${pmResult.error.message}`,
+    });
   }
 
   const pm = pmResult.data.type;
@@ -101,8 +91,8 @@ export async function installDependencies(
   const fullCommand = exact ? `${command} --exact` : command;
 
   if (!silent) {
-    console.info(`Installing dependencies with ${pm}...`);
-    console.step(fullCommand);
+    logger.info(`Installing dependencies with ${pm}...`);
+    logger.step(fullCommand);
   }
 
   try {
@@ -112,18 +102,17 @@ export async function installDependencies(
     });
 
     if (!silent) {
-      console.success(`Successfully installed ${packages.length} dependencies`);
+      logger.success(`Successfully installed ${packages.length} dependencies`);
     }
 
     return success(undefined);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to install dependencies: ${message}`
-      )
-    );
+    return failure({
+      type: 'INSTALLER_ERROR',
+      code: 'INSTALL_FAILED',
+      message: `Failed to install dependencies: ${message}`,
+    });
   }
 }
 
@@ -137,12 +126,11 @@ export async function runInstall(
 
   const pmResult = await getPackageManager();
   if (isFailure(pmResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to detect package manager: ${pmResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'INSTALLER_ERROR',
+      code: 'PACKAGE_MANAGER_DETECTION_FAILED',
+      message: `Failed to detect package manager: ${pmResult.error.message}`,
+    });
   }
 
   const pm = pmResult.data.type;
@@ -157,7 +145,7 @@ export async function runInstall(
   }
 
   if (!silent) {
-    console.info(`Running ${pm} install...`);
+    logger.info(`Running ${pm} install...`);
   }
 
   try {
@@ -167,15 +155,17 @@ export async function runInstall(
     });
 
     if (!silent) {
-      console.success('Dependencies installed successfully');
+      logger.success('Dependencies installed successfully');
     }
 
     return success(undefined);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    return failure(
-      makeError(ErrorCode.INTERNAL_ERROR, `Failed to run install: ${message}`)
-    );
+    return failure({
+      type: 'INSTALLER_ERROR',
+      code: 'INSTALL_FAILED',
+      message: `Failed to run install: ${message}`,
+    });
   }
 }
 
@@ -187,19 +177,17 @@ export async function isPackageInstalled(
 ): Promise<Result<boolean, InstallerError>> {
   const pkgJsonResult = await readPackageJson();
   if (isFailure(pkgJsonResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to read package.json: ${pkgJsonResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'INSTALLER_ERROR',
+      code: 'PACKAGE_READ_FAILED',
+      message: `Failed to read package.json: ${pkgJsonResult.error.message}`,
+    });
   }
 
   const pkg = pkgJsonResult.data;
-  const allDeps = {
-    ...pkg.dependencies,
-    ...pkg.devDependencies,
-  };
+  const dependencies = (pkg.dependencies as Record<string, string>) || {};
+  const devDependencies = (pkg.devDependencies as Record<string, string>) || {};
+  const allDeps = { ...dependencies, ...devDependencies };
 
   return success(packageName in allDeps);
 }
@@ -212,19 +200,17 @@ export async function getPackageVersion(
 ): Promise<Result<string | null, InstallerError>> {
   const pkgJsonResult = await readPackageJson();
   if (isFailure(pkgJsonResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to read package.json: ${pkgJsonResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'INSTALLER_ERROR',
+      code: 'PACKAGE_READ_FAILED',
+      message: `Failed to read package.json: ${pkgJsonResult.error.message}`,
+    });
   }
 
   const pkg = pkgJsonResult.data;
-  const allDeps = {
-    ...pkg.dependencies,
-    ...pkg.devDependencies,
-  };
+  const dependencies = (pkg.dependencies as Record<string, string>) || {};
+  const devDependencies = (pkg.devDependencies as Record<string, string>) || {};
+  const allDeps = { ...dependencies, ...devDependencies };
 
   const version = allDeps[packageName];
   return success(version || null);
@@ -253,10 +239,10 @@ export async function installMissingDependencies(
 
   const missing = missingResult.data;
   if (missing.length === 0) {
-    console.info('All required dependencies are already installed');
+    logger.info('All required dependencies are already installed');
     return success(undefined);
   }
 
-  console.info(`Found ${missing.length} missing dependencies`);
+  logger.info(`Found ${missing.length} missing dependencies`);
   return installDependencies(missing, options);
 }

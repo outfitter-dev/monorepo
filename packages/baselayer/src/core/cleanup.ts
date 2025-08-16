@@ -9,7 +9,7 @@ import {
   type Result,
   success,
 } from '@outfitter/contracts';
-import { console } from '../utils/console';
+import { logger } from '../utils/console';
 import { fileExists, remove } from '../utils/file-system';
 import { getConfigsToCleanup } from './detector';
 
@@ -40,7 +40,7 @@ export async function removeOldConfigs(
     }
 
     if (!silent) {
-      console.step(`Removing ${config}...`);
+      logger.step(`Removing ${config}...`);
     }
 
     if (dryRun) {
@@ -56,7 +56,7 @@ export async function removeOldConfigs(
             )
           );
         }
-        console.warning(`Failed to remove ${config}, continuing...`);
+        logger.warning(`Failed to remove ${config}, continuing...`);
       } else {
         removed.push(config);
       }
@@ -64,7 +64,7 @@ export async function removeOldConfigs(
   }
 
   if (!silent && removed.length > 0) {
-    console.success(`Removed ${removed.length} old configuration files`);
+    logger.success(`Removed ${removed.length} old configuration files`);
   }
 
   return success(removed);
@@ -179,7 +179,7 @@ export async function removeOldGitHooks(
 
   if (hookType === 'husky') {
     if (!silent) {
-      console.step('Removing husky configuration...');
+      logger.step('Removing husky configuration...');
     }
 
     if (!dryRun) {

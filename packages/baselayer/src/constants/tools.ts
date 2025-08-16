@@ -3,7 +3,7 @@
  * Centralizes tool configuration to eliminate duplication across command files
  */
 
-import type { Result } from '@outfitter/contracts';
+import { failure, isFailure, type Result } from '@outfitter/contracts';
 import { installBiomeConfig } from '../generators/biome.js';
 import { generateCommitlintConfig } from '../generators/commitlint.js';
 import { generateEditorconfigConfig } from '../generators/editorconfig.js';
@@ -15,6 +15,26 @@ import { generatePrettierConfig } from '../generators/prettier.js';
 import { generateStylelintConfig } from '../generators/stylelint.js';
 import { setupVSCode } from '../generators/vscode.js';
 import type { FeaturesConfig } from '../schemas/baselayer-config.js';
+import type { FileSystemError } from '../utils/file-system.js';
+
+/**
+ * Wraps a generator function that returns Error to return FileSystemError
+ */
+function wrapGenerator(
+  fn: () => Promise<Result<void, Error>>
+): () => Promise<Result<void, FileSystemError>> {
+  return async () => {
+    const result = await fn();
+    if (isFailure(result)) {
+      return failure({
+        type: 'FILE_SYSTEM_ERROR',
+        code: 'GENERATOR_FAILED',
+        message: result.error.message,
+      } as FileSystemError);
+    }
+    return result;
+  };
+}
 
 /**
  * Valid tool names that can be used in add/remove/update commands
@@ -74,24 +94,24 @@ export const TOOL_TO_FEATURE: Record<string, keyof FeaturesConfig> = {
  */
 export const TOOL_GENERATORS: Record<
   string,
-  () => Promise<Result<void, Error>>
+  () => Promise<Result<void, FileSystemError>>
 > = {
   biome: () => installBiomeConfig(),
-  prettier: () => generatePrettierConfig(),
-  stylelint: () => generateStylelintConfig(),
-  markdownlint: () => generateMarkdownlintConfig(),
+  prettier: wrapGenerator(() => generatePrettierConfig()),
+  stylelint: wrapGenerator(() => generateStylelintConfig()),
+  markdownlint: wrapGenerator(() => generateMarkdownlintConfig()),
   lefthook: () => generateLefthookConfig(),
-  commitlint: () => generateCommitlintConfig(),
-  editorconfig: () => generateEditorconfigConfig(),
-  oxlint: () => generateOxlintConfig(),
-  vscode: () => setupVSCode(),
+  commitlint: wrapGenerator(() => generateCommitlintConfig()),
+  editorconfig: wrapGenerator(() => generateEditorconfigConfig()),
+  oxlint: wrapGenerator(() => generateOxlintConfig()),
+  vscode: wrapGenerator(() => setupVSCode()),
   // Feature aliases point to their tool generators
   typescript: () => installBiomeConfig(),
-  markdown: () => generateMarkdownlintConfig(),
-  styles: () => generateStylelintConfig(),
-  json: () => generatePrettierConfig(),
+  markdown: wrapGenerator(() => generateMarkdownlintConfig()),
+  styles: wrapGenerator(() => generateStylelintConfig()),
+  json: wrapGenerator(() => generatePrettierConfig()),
   commits: () => generateLefthookConfig(),
-  packages: () => updatePackageScripts(),
+  packages: wrapGenerator(() => updatePackageScripts()),
 } as const;
 
 /**
@@ -206,8 +226,12 @@ export function getToolsForFeature(feature: keyof FeaturesConfig): string[] {
 /**
  * Checks if a tool is considered a core baselayer tool
  */
-export function isCoreTool(tool: string): boolean {
-  return CORE_TOOLS.has(tool);
+export function isCoreTool(
+  tool: string
+): tool is 'biome' | 'lefthook' | 'typescript' | 'commits' {
+  return CORE_TOOLS.has(
+    tool as 'biome' | 'lefthook' | 'typescript' | 'commits'
+  );
 }
 
 /**

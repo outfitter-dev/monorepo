@@ -91,4 +91,4 @@ export type Jsonify<T> = T extends JsonValue
         : never;
 
 // Re-export branded types
-export * from './branded';
+export * from './branded.js';

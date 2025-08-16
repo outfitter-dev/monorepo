@@ -1,1 +1,1 @@
-export { formatForDevelopers, humanize } from './humanize';
+export { formatForDevelopers, humanize } from './humanize.js';

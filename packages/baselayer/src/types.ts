@@ -91,7 +91,7 @@ export interface CleanOptions {
   force?: boolean;
 }
 
-export type DoctorOptions = {};
+export type DoctorOptions = Record<string, never>;
 
 export interface DetectedConfig {
   tool: string;

@@ -3,6 +3,7 @@
  */
 
 import {
+  type AppError,
   ErrorCode,
   failure,
   isFailure,
@@ -84,7 +85,7 @@ export class MigrationReporter {
    */
   async generateReport(
     options: MigrationReportOptions = {}
-  ): Promise<Result<string, any>> {
+  ): Promise<Result<string, AppError>> {
     const {
       includePerformance = true,
       includeNextSteps = true,

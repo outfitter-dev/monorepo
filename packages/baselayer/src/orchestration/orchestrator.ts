@@ -3,6 +3,8 @@ import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import type {
   CommandOptions,
   FlintError,
+  FormatOptions,
+  LintOptions,
   OrchestrationResult,
   ToolResult,
 } from '../types.js';
@@ -85,7 +87,7 @@ export class Orchestrator {
 
       const categorized = this.fileMatcher.categorizeFiles(
         files,
-        this.currentConfig!
+        this.currentConfig
       );
 
       // Filter by --only flag if specified
@@ -176,7 +178,7 @@ export class Orchestrator {
 
       const categorized = this.fileMatcher.categorizeFiles(
         files,
-        this.currentConfig!
+        this.currentConfig
       );
 
       // Filter by --only flag if specified
@@ -249,11 +251,12 @@ export class Orchestrator {
     }
 
     try {
-      return await adapter.format(files, {
+      const formatOptions: FormatOptions = {
         fix: options.fix ?? true,
-        staged: options.staged,
-        dryRun: options.dryRun,
-      });
+        ...(options.staged !== undefined && { staged: options.staged }),
+        ...(options.dryRun !== undefined && { dryRun: options.dryRun }),
+      };
+      return await adapter.format(files, formatOptions);
     } catch (error) {
       return {
         success: false,
@@ -280,11 +283,12 @@ export class Orchestrator {
     }
 
     try {
-      return await adapter.lint(files, {
+      const lintOptions: LintOptions = {
         fix: options.fix ?? false,
-        staged: options.staged,
         checkOnly: !options.fix,
-      });
+        ...(options.staged !== undefined && { staged: options.staged }),
+      };
+      return await adapter.lint(files, lintOptions);
     } catch (error) {
       return {
         success: false,

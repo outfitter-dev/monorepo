@@ -4,8 +4,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BaselayerConfig } from '../../schemas/baselayer-config.js';
 import { generateBiomeConfig, installBiomeConfig } from '../biome.js';
 
-vi.mock('node:child_process');
-
 describe('generateBiomeConfig', () => {
   it('should generate basic Biome configuration', () => {
     const config = generateBiomeConfig();
