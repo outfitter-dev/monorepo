@@ -5,7 +5,7 @@
 /**
  * Remark plugin configuration - can be a string or tuple with options
  */
-export type RemarkPlugin = string | [string, ...any[]];
+export type RemarkPlugin = string | [string, ...unknown[]];
 
 /**
  * Remark configuration object
