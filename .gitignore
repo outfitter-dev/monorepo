@@ -76,3 +76,4 @@ yarn.lock
 
 !.agent/
 .agent/research/
+.agent/logs/**
