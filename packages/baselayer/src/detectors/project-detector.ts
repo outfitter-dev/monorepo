@@ -5,13 +5,27 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { failure, makeError, type Result, success } from '@outfitter/contracts';
+import {
+  type AppError,
+  ErrorCode,
+  failure,
+  makeError,
+  type Result,
+  success,
+} from '@outfitter/contracts';
 
 export interface ProjectInfo {
   type: 'monorepo' | 'library' | 'application' | 'unknown';
   packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun' | 'unknown';
   hasTypeScript: boolean;
-  framework?: 'react' | 'vue' | 'svelte' | 'next' | 'astro' | 'unknown';
+  framework?:
+    | 'react'
+    | 'vue'
+    | 'svelte'
+    | 'next'
+    | 'astro'
+    | 'angular'
+    | 'unknown';
 }
 
 /**
@@ -20,7 +34,7 @@ export interface ProjectInfo {
  */
 export async function detectProjectInfo(
   cwd = process.cwd()
-): Promise<Result<ProjectInfo, Error>> {
+): Promise<Result<ProjectInfo, AppError>> {
   try {
     const packageJsonPath = join(cwd, 'package.json');
     if (!existsSync(packageJsonPath)) {
@@ -80,6 +94,8 @@ export async function detectProjectInfo(
       framework = 'svelte';
     } else if (deps.astro) {
       framework = 'astro';
+    } else if (deps['@angular/core'] || deps['@angular/cli']) {
+      framework = 'angular';
     }
 
     const result = {
@@ -97,8 +113,10 @@ export async function detectProjectInfo(
   } catch (error) {
     return failure(
       makeError(
-        'PROJECT_DETECTION_FAILED',
-        `Failed to detect project info: ${(error as Error).message}`
+        ErrorCode.PROJECT_DETECTION_FAILED,
+        `Failed to detect project info: ${(error as Error).message}`,
+        undefined,
+        error instanceof Error ? error : undefined
       )
     );
   }
