@@ -166,6 +166,7 @@ export class FileMatcher {
         ['diff', '--cached', '--name-only'],
         {
           cwd,
+          encoding: 'utf8',
         }
       );
 

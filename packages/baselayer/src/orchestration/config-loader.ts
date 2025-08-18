@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import {
   ErrorCode,
   failure,
@@ -7,6 +8,11 @@ import {
   type Result,
   success,
 } from '@outfitter/contracts';
+import {
+  type ParseError,
+  parse as parseJsonc,
+  printParseErrorCode,
+} from 'jsonc-parser';
 import {
   type BaselayerConfig,
   safeValidateBaselayerConfig,
@@ -94,9 +100,10 @@ export class ConfigLoader {
         if (configPath.endsWith('.json') || configPath.endsWith('.jsonc')) {
           userConfig = this.parseJsonc(configContent);
         } else {
-          // Legacy JS module support
+          // Legacy JS module support - use pathToFileURL for proper local module handling
           try {
-            const configModule = await import(fullPath);
+            const fileUrl = pathToFileURL(fullPath).href;
+            const configModule = await import(fileUrl);
             userConfig = configModule.default || configModule;
           } catch (importError) {
             return failure(
@@ -148,8 +155,13 @@ export class ConfigLoader {
         // Invalid config file
         return failure(
           makeError(
-            ErrorCode.INTERNAL_ERROR,
-            `Failed to load config from ${configPath}: ${(error as Error).message}`
+            ErrorCode.FILE_OPERATION_FAILED,
+            `Failed to load config from ${configPath}: ${(error as Error).message}`,
+            {
+              configPath: fullPath,
+              error: (error as Error).message,
+            },
+            error as Error
           )
         );
       }
@@ -164,16 +176,18 @@ export class ConfigLoader {
 - Parse JSONC content (JSON with comments and trailing commas)
    */
   private parseJsonc(content: string): unknown {
-    // Simple JSONC parser - removes single line comments and trailing commas
-    const cleaned = content
-      // Remove single line comments
-      .replace(/\/\/.*$/gm, '')
-      // Remove multi-line comments
-      .replace(/\/\*[\s\S]*?\*\//g, '')
-      // Remove trailing commas before closing brackets/braces
-      .replace(/,(\s*[}\]])/g, '$1');
+    const errors: ParseError[] = [];
+    const result = parseJsonc(content, errors);
 
-    return JSON.parse(cleaned);
+    if (errors.length > 0) {
+      const errorMessages = errors.map(
+        (error) =>
+          `${printParseErrorCode(error.error)} at offset ${error.offset}: ${error.length}`
+      );
+      throw new Error(`JSONC parsing failed: ${errorMessages.join(', ')}`);
+    }
+
+    return result;
   }
 
   /**
