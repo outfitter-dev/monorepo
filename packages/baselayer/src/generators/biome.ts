@@ -9,7 +9,7 @@ import type { FileSystemError } from '../utils/file-system.js';
  */
 export function generateBiomeConfig(config?: BaselayerConfig): string {
   const base = {
-    $schema: '<https://biomejs.dev/schemas/1.9.4/schema.json>',
+    $schema: 'https://biomejs.dev/schemas/1.9.4/schema.json',
     extends: ['ultracite'],
   };
 

@@ -26,7 +26,7 @@ export interface TurboPipeline {
  */
 export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
   const turboConfig: TurboConfig = {
-    $schema: '<https://turbo.build/schema.json>',
+    $schema: 'https://turbo.build/schema.json',
     ui: 'tui',
     pipeline: {},
     globalDependencies: [
