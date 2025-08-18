@@ -18,7 +18,6 @@ export declare function createEnvSchema<T extends z.ZodRawShape>(
 export declare const CommonEnvSchemas: {
   readonly NODE_ENV: z.ZodDefault<
     z.ZodEnum<['development', 'production', 'test']>
-
   >;
   readonly PORT: z.ZodDefault<z.ZodNumber>;
   readonly DATABASE_URL: z.ZodString;
@@ -53,12 +52,10 @@ export declare function createNextEnvSchema<T extends z.ZodRawShape>(
       } & T
     >,
     any
-
   > extends infer T_1
     ? { [k in keyof T_1]: T_1[k] }
     : never,
   AppError
-
 >;
 /**
 
@@ -81,12 +78,10 @@ export declare function createNodeEnvSchema<T extends z.ZodRawShape>(
       } & T
     >,
     any
-
   > extends infer T_1
     ? { [k in keyof T_1]: T_1[k] }
     : never,
   AppError
-
 >;
 /**
 

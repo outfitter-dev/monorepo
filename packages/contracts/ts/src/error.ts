@@ -29,7 +29,7 @@ export const ErrorCode = {
   FRAMEWORK_DETECTION_FAILED: 'FRAMEWORK_DETECTION_FAILED',
 } as const;
 
-export type ErrorCode = [typeof ErrorCode](keyof typeof ErrorCode);
+export type ErrorCode = keyof typeof ErrorCode;
 
 /**
 

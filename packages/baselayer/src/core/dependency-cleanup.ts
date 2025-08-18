@@ -229,7 +229,6 @@ export async function removeDependency(
  */
 export async function getEslintDependencies(): Promise<
   Result<string[], DependencyCleanupError>
-
 > {
   const pkgResult = await readPackageJson();
   if (isFailure(pkgResult)) {

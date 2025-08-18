@@ -150,7 +150,7 @@ function generateOutfitterConfig(existing: ExistingConfigs): OutfitterConfig {
   // Extract custom Biome settings
   if (existing.biome && !existing.biome._file) {
     const {
-      formatter:_formatter,
+      formatter: _formatter,
       linter: _linter,
       ...customSettings
     } = existing.biome;

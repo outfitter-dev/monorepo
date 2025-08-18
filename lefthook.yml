@@ -3,9 +3,9 @@
 pre-commit:
   parallel: false
   commands:
-    biome-check:
+    ultracite-format:
       glob: "*.{js,ts,jsx,tsx}"
-      run: bunx @biomejs/biome format --write {staged_files} && bunx @biomejs/biome check --apply {staged_files}
+      run: bunx ultracite format {staged_files}
       stage_fixed: true
     markdown:
       glob: "*.{md,mdx,mdc}"

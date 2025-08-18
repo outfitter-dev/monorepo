@@ -8,6 +8,8 @@ import { ErrorCode } from '../error.js';
  */
 const errorMessages: Record<ErrorCode, string> = {
   [ErrorCode.VALIDATION_ERROR]: 'Please check your input and try again.',
+  [ErrorCode.SCHEMA_VALIDATION_FAILED]:
+    'Schema validation failed. Please check your input format.',
   [ErrorCode.NOT_FOUND]: 'The requested resource was not found.',
   [ErrorCode.UNAUTHORIZED]: 'Please log in to continue.',
   [ErrorCode.FORBIDDEN]: "You don't have permission to access this resource.",

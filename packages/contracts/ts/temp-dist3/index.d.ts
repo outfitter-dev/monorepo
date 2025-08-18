@@ -1,9 +1,9 @@
-export *from './assert';
-export* from './error';
-export *from './errors/index';
-export* from './result';
-export *from './types/index';
-export* as Types from './types/index';
+export * from './assert';
+export * from './error';
+export * from './errors/index';
+export * from './result';
+export * from './types/index';
+export * as Types from './types/index';
 export {
   type AppError,
   isAppError,

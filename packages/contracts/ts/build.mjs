@@ -1,11 +1,11 @@
-# !/usr/bin/env bun
+#!/usr/bin/env bun
 
 // Bun build script for @outfitter/contracts
 // Replaces tsup with native Bun build for improved performance
 
 import { $ } from 'bun';
-import { glob } from 'glob';
 import fs from 'fs';
+import { glob } from 'glob';
 
 const entryPoints = [
   'src/index.ts',

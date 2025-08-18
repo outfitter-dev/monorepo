@@ -118,7 +118,6 @@ export async function setup(
  */
 export async function checkLefthookAvailability(): Promise<
   FlintResult<boolean>
-
 > {
   try {
     const lefthookAdapter = new LefthookAdapter();

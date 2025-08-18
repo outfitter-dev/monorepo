@@ -26,10 +26,10 @@
 // TypeScript’s module loader regardless of the package-exports mechanics.
 
 // Wild-card re-exports for local development -------------------------------------------------
-export *from './assert.js';
-export* from './error.js';
-export *from './errors/index.js';
-export* from './result.js';
+export * from './assert.js';
+export * from './error.js';
+export * from './errors/index.js';
+export * from './result.js';
 export * from './types/index.js';
 
 // Namespace re-export (retained for convenience) --------------------------------------------

@@ -2,7 +2,7 @@
 
 - Console utilities with formatting using picocolors
  */
-import* as pc from 'picocolors';
+import * as pc from 'picocolors';
 
 export interface LogOptions {
   indent?: number;

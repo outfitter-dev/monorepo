@@ -59,7 +59,6 @@ export type EnvVarPattern<T extends string> =
 export type Interpolate<
   T extends string,
   Values extends Record<string, string | number>,
-
 > = T extends `${infer Before}{${infer Key}}${infer After}`
   ? Key extends keyof Values
     ? `${Before}${Values[Key]}${Interpolate<After, Values>}`
@@ -98,7 +97,6 @@ export type Switch<
   T,
   K extends keyof T,
   Cases extends Record<PropertyKey, unknown>,
-
 > = T extends Record<K, infer V>
   ? V extends keyof Cases
     ? Cases[V]

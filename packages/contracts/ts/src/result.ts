@@ -128,7 +128,6 @@ export function all<T extends ReadonlyArray<Result<unknown, unknown>>>(
 ): Result<
   { [K in keyof T]: T[K] extends Result<infer U, unknown> ? U : never },
   T[number] extends Result<unknown, infer E> ? E : never
-
 > {
   type Values = {
     [K in keyof T]: T[K] extends Result<infer U, unknown> ? U : never;

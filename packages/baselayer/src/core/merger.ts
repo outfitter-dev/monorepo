@@ -218,7 +218,6 @@ export async function removeJSONFields(
  */
 export async function removeEmbeddedConfigs(): Promise<
   Result<void, FileSystemError>
-
 > {
   const embeddedConfigs = [
     'eslintConfig',
