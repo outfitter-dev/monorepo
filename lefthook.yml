@@ -22,6 +22,6 @@ commit-msg:
 pre-push:
   commands:
     types:
-      run: turbo run type-check
+      run: turbo run typecheck
     test:
       run: turbo run test
