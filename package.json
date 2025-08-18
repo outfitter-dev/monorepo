@@ -56,10 +56,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "<https://github.com/outfitter-dev/monorepo.git>"
+    "url": "https://github.com/outfitter-dev/monorepo.git"
   },
-  "homepage": "<https://github.com/outfitter-dev/monorepo#readme>",
+  "homepage": "https://github.com/outfitter-dev/monorepo#readme",
   "bugs": {
-    "url": "<https://github.com/outfitter-dev/monorepo/issues>"
+    "url": "https://github.com/outfitter-dev/monorepo/issues"
   }
 }
