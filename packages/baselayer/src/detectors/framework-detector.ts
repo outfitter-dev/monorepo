@@ -5,7 +5,14 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { failure, makeError, type Result, success } from '@outfitter/contracts';
+import {
+  type AppError,
+  ErrorCode,
+  failure,
+  makeError,
+  type Result,
+  success,
+} from '@outfitter/contracts';
 
 export interface FrameworkConfig {
   name: string;
@@ -22,7 +29,7 @@ export interface FrameworkConfig {
 export async function detectFrameworkConfig(
   framework: string,
   cwd = process.cwd()
-): Promise<Result<FrameworkConfig, Error>> {
+): Promise<Result<FrameworkConfig, AppError>> {
   try {
     const packageJsonPath = join(cwd, 'package.json');
     let version: string | undefined;
@@ -60,8 +67,10 @@ export async function detectFrameworkConfig(
   } catch (error) {
     return failure(
       makeError(
-        'FRAMEWORK_DETECTION_FAILED',
-        `Failed to detect framework config: ${(error as Error).message}`
+        ErrorCode.FRAMEWORK_DETECTION_FAILED,
+        `Failed to detect framework config: ${(error as Error).message}`,
+        undefined,
+        error instanceof Error ? error : undefined
       )
     );
   }
@@ -74,6 +83,7 @@ function getFrameworkConfigFiles(framework: string): Array<string> {
     vue: ['vue.config.js', 'vite.config.js', 'vite.config.ts'],
     svelte: ['svelte.config.js', 'vite.config.js', 'vite.config.ts'],
     astro: ['astro.config.js', 'astro.config.mjs', 'astro.config.ts'],
+    angular: ['angular.json', '.angular-cli.json', 'workspace.json'],
   };
 
   return configMap[framework] || [];
@@ -90,6 +100,11 @@ async function hasCustomFrameworkSetup(
     vue: ['src/main.js', 'src/main.ts', 'src/App.vue'],
     svelte: ['src/main.js', 'src/main.ts', 'src/App.svelte'],
     astro: ['src/pages/index.astro', 'src/layouts/Layout.astro'],
+    angular: [
+      'src/app/app.component.ts',
+      'src/main.ts',
+      'src/app/app.module.ts',
+    ],
   };
 
   const patterns = customPatterns[framework] || [];
