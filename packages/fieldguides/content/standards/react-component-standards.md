@@ -192,11 +192,11 @@ export function useUser(userId: string) {
   };
 }
 
-// Effect management with cleanup
+// Effect management with cleanup - SSR-safe
 export function useEventListener<K extends keyof WindowEventMap>(
   eventName: K,
   handler: (event: WindowEventMap[K]) => void,
-  element: HTMLElement | Window = window,
+  element?: HTMLElement | Window | null,
 ) {
   const savedHandler = useRef(handler);
 
@@ -205,12 +205,24 @@ export function useEventListener<K extends keyof WindowEventMap>(
   }, [handler]);
 
   useEffect(() => {
+    // SSR-safe: Check if we're in a browser environment and element exists
+    const targetElement =
+      element || (typeof window !== 'undefined' ? window : null);
+
+    if (!targetElement) {
+      return; // No cleanup needed if no element
+    }
+
     const eventListener = (event: WindowEventMap[K]) =>
       savedHandler.current(event);
-    element.addEventListener(eventName, eventListener as EventListener);
+
+    targetElement.addEventListener(eventName, eventListener as EventListener);
 
     return () => {
-      element.removeEventListener(eventName, eventListener as EventListener);
+      targetElement.removeEventListener(
+        eventName,
+        eventListener as EventListener,
+      );
     };
   }, [eventName, element]);
 }
@@ -695,7 +707,7 @@ interface LazyComponent<T> {
   preload(): void;
 }
 
-// Factory for lazy components
+// Factory for lazy components with retry support
 function createLazyComponent<T>(loader: () => Promise<T>): LazyComponent<T> {
   let cache: T | null = null;
   let promise: Promise<T> | null = null;
@@ -704,10 +716,16 @@ function createLazyComponent<T>(loader: () => Promise<T>): LazyComponent<T> {
     load(): Promise<T> {
       if (cache) return Promise.resolve(cache);
       if (!promise) {
-        promise = loader().then((result) => {
-          cache = result;
-          return result;
-        });
+        promise = loader()
+          .then((result) => {
+            cache = result;
+            return result;
+          })
+          .catch((error) => {
+            // Reset promise on failure to allow retries
+            promise = null;
+            throw error;
+          });
       }
       return promise;
     },

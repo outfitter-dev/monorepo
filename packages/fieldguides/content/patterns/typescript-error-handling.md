@@ -39,6 +39,8 @@ export function failure<E>(error: E): Result<never, E> {
 ### Type Guards
 
 ```typescript
+import { logger } from '@/lib/logger'; // Import logger instance
+
 export function isSuccess<T, E>(
   result: Result<T, E>,
 ): result is { ok: true; data: T } {
@@ -277,6 +279,8 @@ export async function fetchUserData(
 ### Enhanced tryCatch with Logging
 
 ```typescript
+import { logger } from '@/lib/logger'; // Import logger instance
+
 export async function tryCatchWithLogging<T>(
   fn: () => Promise<T>,
   context?: Record<string, any>,
@@ -305,6 +309,8 @@ const result = await tryCatchWithLogging(() => fetchUserData('123'), {
 ### Logging Result Handlers
 
 ```typescript
+import { logger } from '@/lib/logger'; // Import logger instance
+
 export function logResultError<E>(
   result: Result<any, E>,
   context?: Record<string, any>,
@@ -534,7 +540,7 @@ async function retryWithBackoff<T>(
   maxAttempts = 3,
   initialDelay = 1000,
 ): AsyncResult<T, Error> {
-  let lastError: Error;
+  let lastError: Error = new Error('No attempts made'); // Sensible default
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const result = await fn();
@@ -552,7 +558,7 @@ async function retryWithBackoff<T>(
     }
   }
 
-  return failure(lastError!);
+  return failure(lastError);
 }
 ```
 
@@ -632,6 +638,8 @@ const program = pipe(
 );
 
 // Running Effects
+import { logger } from '@/lib/logger'; // Import logger instance
+
 Effect.runPromise(program)
   .then((result) => logger.info('Program completed', { result }))
   .catch((error) => {
@@ -657,10 +665,11 @@ Effect.runPromise(program)
 ### Using NoInfer for Better Type Safety
 
 ```typescript
+// NoInfer is a built-in TypeScript 5.4+ utility type
 // Prevent TypeScript from inferring overly broad types
 function createResult<T, E = Error>(
   value: T,
-  error?: NoInfer<E>,
+  error?: NoInfer<E>, // Built-in utility type
 ): Result<T, E> {
   return error ? failure(error) : success(value);
 }

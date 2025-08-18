@@ -170,7 +170,7 @@ function isUser(value: unknown): value is User {
 }
 
 // Array type guard
-function isStringArray(value: unknown): value is string[] {
+function isStringArray(value: unknown): value is Array<string> {
   return Array.isArray(value) && value.every(isString);
 }
 ```
@@ -483,7 +483,7 @@ export default tseslint.config(
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       // Allow either array syntax but enforce consistency within the project
-      // '@typescript-eslint/array-type': ['error', { default: 'generic' }], // Removed - let Ultracite handle this
+      // '@typescript-eslint/array-type': ['error', { default: 'generic' }], // Removed - let Biome handle this
 
       // Modern Naming Conventions (no I prefix)
       '@typescript-eslint/naming-convention': [
@@ -587,7 +587,7 @@ const config = defineConfig({
 
 ```typescript
 // Constrain generics appropriately
-function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+function pick<T, K extends keyof T>(obj: T, keys: Array<K>): Pick<T, K> {
   const result = {} as Pick<T, K>;
   keys.forEach((key) => {
     result[key] = obj[key];
@@ -726,7 +726,7 @@ const permissions = {
   posts: ['read', 'write', 'delete'],
   users: ['read', 'write'],
   admin: ['*'],
-} as const satisfies Record<string, readonly string[]>;
+} as const satisfies Record<string, readonly Array<string>>;
 
 // Type-safe configuration builder
 class ConfigBuilder<T extends Record<string, unknown> = {}> {

@@ -24,13 +24,13 @@ Essential TypeScript patterns, configuration, and best practices for type-safe d
 
 This guide requires:
 
-- TypeScript: 5.7+ (for const type parameters, satisfies operator, NoInfer utility, and import attributes)
+- TypeScript: 5.7+ (minimum version for all features including const type parameters, satisfies operator, NoInfer utility, and import attributes)
 - Node.js: 18+ (for ES2022 features)
 - ESLint: 9.0+ (for flat config format)
 
 **Features by TypeScript version**:
 
-- TypeScript: 5.7+ (for const type parameters, satisfies operator, NoInfer utility, and import attributes)
+- TypeScript 5.7+ is the minimum required version for all examples and patterns in this guide
 
 ## Core Principles
 
@@ -43,20 +43,27 @@ This guide requires:
 
 ### Array Type Syntax
 
-Both `T[]` and `Array<T>` syntaxes are acceptable. Choose one style and use it consistently throughout your project:
+Prefer `Array<T>` syntax consistently throughout the codebase:
 
 ```typescript
-// Both styles are valid - pick one for your project
-const numbers: number[] = [1, 2, 3];
-const users: User[] = [];
-
-// OR
-
+// ✅ Preferred: Generic array syntax
 const numbers: Array<number> = [1, 2, 3];
 const users: Array<User> = [];
+const matrix: Array<Array<number>> = [
+  [1, 2],
+  [3, 4],
+];
+
+// ❌ Avoid: Bracket syntax can be ambiguous in complex types
+const numbers: number[] = [1, 2, 3];
+const users: User[] = [];
+const matrix: number[][] = [
+  [1, 2],
+  [3, 4],
+];
 ```
 
-Consistency within a codebase is more important than which style you choose.
+The `Array<T>` syntax is more explicit and reads better with complex generic types.
 
 ### Quick Heuristics
 
@@ -180,7 +187,7 @@ function isUser(value: unknown): value is User {
 }
 
 // Array type guard
-function isStringArray(value: unknown): value is string[] {
+function isStringArray(value: unknown): value is Array<string> {
   return Array.isArray(value) && value.every(isString);
 }
 ```
@@ -483,7 +490,7 @@ type DeepReadonly<T> = {
 type SecurityContext = DeepReadonly<{
   user: {
     id: UserId;
-    roles: string[];
+    roles: Array<string>;
     permissions: Set<string>;
   };
   session: {
@@ -573,7 +580,7 @@ import styles from './styles.css' with { type: 'css' };
 // Type-safe JSON imports
 interface Config {
   apiUrl: string;
-  features: string[];
+  features: Array<string>;
 }
 
 const typedConfig: Config = config;
@@ -677,7 +684,7 @@ export default [
 ```typescript
 // 📚 Educational: Type inference best practices
 // Let TypeScript infer when obvious
-const numbers = [1, 2, 3]; // number[]
+const numbers = [1, 2, 3]; // Array<number>
 const user = { name: 'John', age: 30 }; // { name: string; age: number }
 
 // Be explicit at function boundaries
@@ -712,7 +719,7 @@ type Role = (typeof ROLES)[number]; // "admin" | "user" | "guest"
 ```typescript
 // ✂️ Production-ready: Generic constraints
 // Constrain generics appropriately
-function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+function pick<T, K extends keyof T>(obj: T, keys: Array<K>): Pick<T, K> {
   const result = {} as Pick<T, K>;
   keys.forEach((key) => {
     result[key] = obj[key];
