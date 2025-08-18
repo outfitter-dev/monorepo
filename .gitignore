@@ -6,6 +6,7 @@ node_modules/
 
 dist/
 dist-*/
+temp-dist*/
 build/
 *.tsbuildinfo
 
