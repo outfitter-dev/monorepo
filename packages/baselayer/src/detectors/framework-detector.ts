@@ -30,8 +30,8 @@ export async function detectFrameworkConfig(
     if (existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
       const deps = {
-        ...packageJson.dependencies,
-        ...packageJson.devDependencies,
+        ...(packageJson.dependencies ?? {}),
+        ...(packageJson.devDependencies ?? {}),
       };
       version = deps[framework];
     }

@@ -7,6 +7,7 @@ import type { DeepReadonly } from './types/index.js';
  */
 export const ErrorCode = {
   VALIDATION_ERROR: 'VALIDATION_ERROR',
+  SCHEMA_VALIDATION_FAILED: 'SCHEMA_VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
   UNAUTHORIZED: 'UNAUTHORIZED',
   FORBIDDEN: 'FORBIDDEN',
@@ -35,7 +36,7 @@ export type ErrorCode = [typeof ErrorCode](keyof typeof ErrorCode);
 - Error code categories for better organization
  */
 export const ErrorCategory = {
-  VALIDATION: [ErrorCode.VALIDATION_ERROR],
+  VALIDATION: [ErrorCode.VALIDATION_ERROR, ErrorCode.SCHEMA_VALIDATION_FAILED],
   AUTH: [ErrorCode.UNAUTHORIZED, ErrorCode.FORBIDDEN],
   RESOURCE: [ErrorCode.NOT_FOUND, ErrorCode.CONFLICT],
   SYSTEM: [ErrorCode.INTERNAL_ERROR, ErrorCode.EXTERNAL_SERVICE_ERROR],

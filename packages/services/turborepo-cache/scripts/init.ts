@@ -46,6 +46,10 @@ function generateSecureToken(length = 32): string {
 - Generate environment variables content
  */
 function generateEnvContent(turboToken: string, signatureKey: string): string {
+  const TURBO_API = process.env.TURBO_API ?? 'http://localhost:5173';
+  const TURBO_TEAM = process.env.TURBO_TEAM ?? 'team_outfitter';
+  const ENVIRONMENT = process.env.ENVIRONMENT ?? 'development';
+  const EXPIRATION = process.env.BUCKET_OBJECT_EXPIRATION_HOURS ?? '720';
   return `# Auto-generated turborepo cache secrets
 
 # Generated on ${new Date().toISOString()}
@@ -54,15 +58,15 @@ function generateEnvContent(turboToken: string, signatureKey: string): string {
 
 # Turborepo remote cache configuration
 
-TURBO_API=<http://localhost:5173>
-TURBO_TEAM=team_outfitter
+TURBO_API=${TURBO_API}
+TURBO_TEAM=${TURBO_TEAM}
 TURBO_TOKEN=${turboToken}
 TURBO_REMOTE_CACHE_SIGNATURE_KEY=${signatureKey}
 
 # Cloudflare Workers development
 
-ENVIRONMENT=development
-BUCKET_OBJECT_EXPIRATION_HOURS=720
+ENVIRONMENT=${ENVIRONMENT}
+BUCKET_OBJECT_EXPIRATION_HOURS=${EXPIRATION}
 `;
 }
 
