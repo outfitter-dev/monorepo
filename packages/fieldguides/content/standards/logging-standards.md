@@ -4,7 +4,7 @@ This document defines logging standards and best practices for all projects.
 
 ## Overview
 
-Production applications require proper logging infrastructure with structured logging, appropriate log levels, and environment-aware behavior. Direct console usage is prohibited by our linting rules (Ultracite) to ensure production-ready code.
+Production applications require proper logging infrastructure with structured logging, appropriate log levels, and environment-aware behavior. Direct console usage is prohibited by our linting rules (Biome) to ensure production-ready code.
 
 ## Required Setup
 
@@ -134,17 +134,99 @@ logger.error('Operation failed', { error: error.message });
 
 ### Avoid Logging Sensitive Data
 
+Never log sensitive information that could compromise security, privacy, or compliance:
+
 ```typescript
 // ❌ Bad: Logging sensitive information
-logger.info('User login', {
+logger.info('User authentication', {
   email: user.email,
   password: user.password, // Never log passwords!
+  sessionToken: user.sessionToken, // Never log session tokens!
+  apiKey: config.apiKey, // Never log API keys!
+  creditCard: payment.cardNumber, // Never log payment details!
+  ssn: user.socialSecurityNumber, // Never log PII!
+  phoneNumber: user.phone, // Avoid logging personal data
+  address: user.homeAddress, // Avoid logging personal data
 });
 
-// ✅ Good: Log only safe identifiers
-logger.info('User login', {
+// ✅ Good: Log only safe identifiers and non-sensitive data
+logger.info('User authentication', {
+  userId: user.id, // Safe: Internal identifier
+  action: 'login', // Safe: Action type
+  timestamp: new Date().toISOString(), // Safe: When it happened
+  userAgent: req.headers['user-agent'], // Safe: Browser info
+  ipAddress: hashIpAddress(req.ip), // Safe: Hashed IP for privacy
+});
+```
+
+### Sensitive Data Categories
+
+**Authentication & Authorization:**
+
+- Passwords (plaintext or hashed)
+- Session tokens, JWTs, refresh tokens
+- API keys, secret keys, certificates
+- Two-factor authentication codes
+- OAuth tokens and secrets
+
+**Personally Identifiable Information (PII):**
+
+- Full names (consider using initials)
+- Email addresses (consider hashing or masking)
+- Phone numbers
+- Physical addresses
+- Social Security Numbers
+- Driver's license numbers
+- Passport numbers
+- Date of birth
+
+**Financial & Payment Data:**
+
+- Credit card numbers
+- Bank account numbers
+- Transaction amounts (in some contexts)
+- CVV codes, PINs
+- Payment processor tokens
+
+**Business Sensitive:**
+
+- Customer data from other systems
+- Internal system passwords
+- Database connection strings
+- Third-party service credentials
+- Proprietary algorithms or business logic
+
+### Safe Alternatives
+
+Instead of logging sensitive data directly:
+
+```typescript
+// Hash or mask sensitive data
+function maskEmail(email: string): string {
+  const [username, domain] = email.split('@');
+  const maskedUsername = username.slice(0, 2) + '*'.repeat(username.length - 2);
+  return `${maskedUsername}@${domain}`;
+}
+
+function hashSensitiveData(data: string): string {
+  return crypto.createHash('sha256').update(data).digest('hex').slice(0, 8);
+}
+
+logger.info('User registration', {
   userId: user.id,
-  email: user.email, // Only if necessary
+  emailHash: hashSensitiveData(user.email),
+  maskedEmail: maskEmail(user.email),
+  registrationSource: 'web',
+});
+
+// Use structured logging for correlation without exposing data
+logger.info('Payment processed', {
+  paymentId: payment.id,
+  userId: payment.userId,
+  amountCents: payment.amountCents, // Only if not sensitive
+  currency: payment.currency,
+  paymentMethodType: payment.method.type, // 'card', 'bank', etc.
+  // Don't log actual card details
 });
 ```
 
