@@ -9,13 +9,25 @@ import { checkUpdateAvailable, update } from '../update.js';
 
 describe('update command', () => {
   let testDir: string;
+  let originalCwd: string;
 
   beforeEach(async () => {
+    originalCwd = process.cwd();
     testDir = await mkdtemp(join(tmpdir(), 'baselayer-update-test-'));
     process.chdir(testDir);
   });
 
   afterEach(async () => {
+    // Restore original CWD first to avoid OS-dependent failures
+    if (originalCwd) {
+      try {
+        process.chdir(originalCwd);
+      } catch (error) {
+        // If original CWD no longer exists, stay in current dir
+        console.warn('Could not restore original CWD:', error);
+      }
+    }
+
     if (testDir && existsSync(testDir)) {
       await rm(testDir, { recursive: true, force: true });
     }
@@ -490,20 +502,18 @@ describe('update command', () => {
           verbose: false,
         });
 
-        // Simulate concurrent modification
-        setTimeout(async () => {
-          const newContent = {
-            features: { typescript: false, markdown: true },
-          };
-          try {
-            await writeFile(
-              'baselayer.jsonc',
-              JSON.stringify(newContent, null, 2)
-            );
-          } catch (_error) {
-            // Ignore write errors during race condition
-          }
-        }, 10);
+        // Simulate concurrent modification immediately (no timeout to avoid race)
+        const newContent = {
+          features: { typescript: false, markdown: true },
+        };
+        try {
+          await writeFile(
+            'baselayer.jsonc',
+            JSON.stringify(newContent, null, 2)
+          );
+        } catch (_error) {
+          // Ignore write errors during race condition
+        }
 
         const result = await updatePromise;
 
@@ -524,14 +534,12 @@ describe('update command', () => {
           verbose: false,
         });
 
-        // Simulate concurrent deletion
-        setTimeout(async () => {
-          try {
-            await rm('baselayer.jsonc');
-          } catch (_error) {
-            // Ignore deletion errors during race condition
-          }
-        }, 10);
+        // Simulate concurrent deletion immediately (no timeout to avoid race)
+        try {
+          await rm('baselayer.jsonc');
+        } catch (_error) {
+          // Ignore deletion errors during race condition
+        }
 
         const result = await updatePromise;
 

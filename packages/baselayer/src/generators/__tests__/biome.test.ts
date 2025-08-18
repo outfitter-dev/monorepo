@@ -96,8 +96,8 @@ describe('installBiomeConfig', () => {
 
     expect(isFailure(result)).toBe(true);
     if (isFailure(result)) {
-      expect(result.error).toBeInstanceOf(Error);
-      expect((result.error as Error).message).toContain('Command failed');
+      expect(result.error.message).toContain('Command failed');
+      expect(result.error.code).toBe('BIOME_INSTALL_FAILED');
     }
   });
 });
