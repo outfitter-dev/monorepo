@@ -13,6 +13,23 @@ describe('humanize', () => {
     expect(humanize(error)).toBe('Please log in to continue.');
   });
 
+  it('should have messages for ALL error codes', () => {
+    // This test ensures every ErrorCode has a corresponding message
+    const errorCodes = Object.values(ErrorCode) as ErrorCode[];
+
+    errorCodes.forEach((code) => {
+      const error = makeError(code, 'Technical message');
+      const message = humanize(error);
+
+      // Should not fall back to generic message for known error codes
+      expect(message).not.toBe('An error occurred. Please try again.');
+      // Should not return the technical message
+      expect(message).not.toBe('Technical message');
+      // Should be a meaningful message
+      expect(message.length).toBeGreaterThan(10);
+    });
+  });
+
   it('should handle all error codes', () => {
     // Test a sampling of error codes
     const testCases = [

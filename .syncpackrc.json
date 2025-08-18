@@ -1,76 +1,11 @@
 {
+  "source": ["package.json", "packages/*/package.json", "packages/contracts/ts/package.json"],
   "versionGroups": [
     {
       "label": "Use workspace protocol for internal packages",
       "packages": ["**"],
       "dependencies": ["@outfitter/**"],
-      "dependencyTypes": ["dev", "peer", "prod"],
       "pinVersion": "workspace:*"
-    }
-  ],
-  "semverGroups": [
-    {
-      "label": "Keep TypeScript versions in sync",
-      "packages": ["**"],
-      "dependencies": ["typescript"],
-      "dependencyTypes": ["dev"],
-      "range": ""
-    },
-    {
-      "label": "Keep @types/node versions in sync",
-      "packages": ["**"],
-      "dependencies": ["@types/node"],
-      "dependencyTypes": ["dev"],
-      "range": ""
-    },
-    {
-      "label": "Keep vitest versions in sync",
-      "packages": ["**"],
-      "dependencies": ["vitest"],
-      "dependencyTypes": ["dev"],
-      "range": ""
-    },
-    {
-      "label": "Keep tsup versions in sync",
-      "packages": ["**"],
-      "dependencies": ["tsup"],
-      "dependencyTypes": ["dev"],
-      "range": "^"
-    },
-    {
-      "label": "Keep @biomejs/biome versions in sync",
-      "packages": ["**"],
-      "dependencies": ["@biomejs/biome"],
-      "dependencyTypes": ["dev"],
-      "range": "^"
-    },
-    {
-      "label": "Keep prettier versions in sync",
-      "packages": ["**"],
-      "dependencies": ["prettier"],
-      "dependencyTypes": ["dev"],
-      "range": "^"
-    },
-    {
-      "label": "Keep markdownlint-cli2 versions in sync",
-      "packages": ["**"],
-      "dependencies": ["markdownlint-cli2"],
-      "dependencyTypes": ["dev"],
-      "range": "^"
-    },
-    {
-      "label": "Keep lefthook versions in sync",
-      "packages": ["**"],
-      "dependencies": ["lefthook"],
-      "dependencyTypes": ["dev"],
-      "range": "^"
-    },
-    {
-      "label": "Keep ultracite versions in sync",
-      "packages": ["**"],
-      "dependencies": ["ultracite"],
-      "dependencyTypes": ["dev"],
-      "range": "^"
     }
   ]
 }
