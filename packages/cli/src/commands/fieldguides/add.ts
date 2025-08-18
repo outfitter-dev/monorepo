@@ -11,13 +11,14 @@ interface OutfitterConfig {
 }
 
 /**
- * Adds the specified fieldguides to the local configuration file, avoiding duplicates.
- *
- * Updates `.outfitter/config.json` in the current working directory by appending new fieldguides to the `fieldguides` array, removing the legacy `supplies` key if present. Only fieldguides not already listed are added.
- *
- * @param fieldguides - Names of fieldguides to add to the configuration.
- *
- * @remark Exits the process with code 1 if the configuration file does not exist.
+
+- Adds the specified fieldguides to the local configuration file, avoiding duplicates.
+-
+- Updates `.outfitter/config.json` in the current working directory by appending new fieldguides to the `fieldguides` array, removing the legacy `supplies` key if present. Only fieldguides not already listed are added.
+-
+- @param fieldguides - Names of fieldguides to add to the configuration.
+-
+- @remark Exits the process with code 1 if the configuration file does not exist.
  */
 export async function addFieldguides(
   fieldguides: Array<string>
@@ -66,7 +67,7 @@ export async function addFieldguides(
 
     if (newFieldguides.length > 0) {
       console.log(`\n${chalk.green('Added:')}`);
-      newFieldguides.forEach((f) => console.log(`  • ${f}`));
+      newFieldguides.forEach((f) => console.log(`• ${f}`));
     }
 
     const skipped = fieldguides.length - newFieldguides.length;

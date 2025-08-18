@@ -2,7 +2,8 @@ import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import { readPackageJson, writePackageJson } from '../utils/file-system.js';
 
 /**
- * Updates package.json with Flint-managed scripts
+
+- Updates package.json with Flint-managed scripts
  */
 export async function updatePackageScripts(): Promise<Result<void, Error>> {
   try {

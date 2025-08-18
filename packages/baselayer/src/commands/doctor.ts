@@ -13,7 +13,8 @@ interface ToolVersion {
 }
 
 /**
- * Diagnose configuration issues
+
+- Diagnose configuration issues
  */
 export async function doctor(): Promise<Result<DoctorReport, Error>> {
   try {

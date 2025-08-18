@@ -12,8 +12,9 @@ export interface LefthookGeneratorOptions {
 }
 
 /**
- * Generates Lefthook configuration for Git hooks
- * Sets up pre-commit formatting and linting with the new orchestration system
+
+- Generates Lefthook configuration for Git hooks
+- Sets up pre-commit formatting and linting with the new orchestration system
  */
 export async function generateLefthookConfig(
   options: LefthookGeneratorOptions = {}
@@ -153,7 +154,8 @@ export async function generateLefthookConfig(
 
     // Add header comment
     const fullContent = `# Lefthook configuration
-# https://github.com/evilmartians/lefthook
+
+# <https://github.com/evilmartians/lefthook>
 
 ${yamlContent}`;
 

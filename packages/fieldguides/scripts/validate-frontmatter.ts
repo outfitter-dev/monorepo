@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+# !/usr/bin/env node
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,14 +23,14 @@ const VALID_TYPES = [
   'template',
   'reference',
 ] as const;
-type ValidType = (typeof VALID_TYPES)[number];
+type ValidType = [typeof VALID_TYPES](number);
 
 // Files that should NOT have frontmatter
 const STANDARDS_FILES = ['CODING.md', 'SECURITY.md', 'TESTING.md'] as const;
 
 // Valid statuses
 const VALID_STATUSES = ['draft', 'stable', 'deprecated'] as const;
-type ValidStatus = (typeof VALID_STATUSES)[number];
+type ValidStatus = [typeof VALID_STATUSES](number);
 
 // Frontmatter schema
 interface FrontmatterData {
@@ -82,7 +82,7 @@ const validationRules: Record<string, ValidationRule> = {
     validate: (value: unknown): string | null => {
       if (typeof value !== 'string') return 'Must be a string';
       if (value.length > 72)
-        return `Too long (${value.length} chars) - max 72 characters`;
+        return`Too long (${value.length} chars) - max 72 characters`;
       if (!value.endsWith('.')) return 'Should end with a period';
       return null;
     },
@@ -295,7 +295,7 @@ async function main(): Promise<void> {
       `${colors.green}✓ Valid files (${validFiles.length}):${colors.reset}`
     );
     validFiles.forEach((result) => {
-      console.log(`  ${colors.dim}${result.file}${colors.reset}`);
+      console.log(`${colors.dim}${result.file}${colors.reset}`);
     });
     console.log();
   }
@@ -305,10 +305,10 @@ async function main(): Promise<void> {
       `${colors.red}✗ Invalid files (${invalidFiles.length}):${colors.reset}`
     );
     invalidFiles.forEach((result) => {
-      console.log(`  ${colors.red}${result.file}${colors.reset}`);
+      console.log(`${colors.red}${result.file}${colors.reset}`);
       result.errors.forEach((error) => {
         console.log(
-          `    ${colors.yellow}• ${error.field}: ${error.error}${colors.reset}`
+          `${colors.yellow}• ${error.field}: ${error.error}${colors.reset}`
         );
       });
       console.log();
@@ -317,10 +317,10 @@ async function main(): Promise<void> {
 
   // Summary
   console.log(`${colors.blue}Summary:${colors.reset}`);
-  console.log(`  Total files: ${files.length}`);
-  console.log(`  Valid: ${colors.green}${validFiles.length}${colors.reset}`);
-  console.log(`  Invalid: ${colors.red}${invalidFiles.length}${colors.reset}`);
-  console.log(`  Skipped: ${colors.dim}${skippedFiles.length}${colors.reset}`);
+  console.log(`Total files: ${files.length}`);
+  console.log(`Valid: ${colors.green}${validFiles.length}${colors.reset}`);
+  console.log(`Invalid: ${colors.red}${invalidFiles.length}${colors.reset}`);
+  console.log(`Skipped: ${colors.dim}${skippedFiles.length}${colors.reset}`);
 
   // Exit with error if any files are invalid
   if (invalidFiles.length > 0) {

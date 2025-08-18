@@ -1,8 +1,9 @@
 import { defineConfig } from 'vitest/config';
 
 /**
- * Base Vitest configuration for all packages in the Outfitter monorepo
- * Individual packages can extend this config and add package-specific settings
+
+- Base Vitest configuration for all packages in the Outfitter monorepo
+- Individual packages can extend this config and add package-specific settings
  */
 export default defineConfig({
   test: {
@@ -17,7 +18,7 @@ export default defineConfig({
         'build/**',
         '**/*.config.{js,ts}',
         '**/*.test.{js,ts}',
-        '**/__tests__/**',
+        '**/**tests**/**',
         '**/test-utils/**',
       ],
       thresholds: {

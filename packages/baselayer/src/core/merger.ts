@@ -1,5 +1,6 @@
 /**
- * Smart config merging utilities
+
+- Smart config merging utilities
  */
 import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import {
@@ -16,7 +17,8 @@ export interface MergeOptions {
 }
 
 /**
- * Deep merge two objects
+
+- Deep merge two objects
  */
 export function deepMerge<T extends Record<string, unknown>>(
   target: T,
@@ -82,7 +84,8 @@ export function deepMerge<T extends Record<string, unknown>>(
 }
 
 /**
- * Merge JSON file with new data
+
+- Merge JSON file with new data
  */
 export async function mergeJSONFile(
   filePath: string,
@@ -114,7 +117,8 @@ export async function mergeJSONFile(
 }
 
 /**
- * Merge VS Code settings
+
+- Merge VS Code settings
  */
 export async function mergeVSCodeSettings(
   newSettings: Record<string, unknown>,
@@ -127,7 +131,8 @@ export async function mergeVSCodeSettings(
 }
 
 /**
- * Merge VS Code extensions
+
+- Merge VS Code extensions
  */
 export async function mergeVSCodeExtensions(
   newExtensions: { recommendations: string[] },
@@ -140,7 +145,8 @@ export async function mergeVSCodeExtensions(
 }
 
 /**
- * Merge package.json scripts
+
+- Merge package.json scripts
  */
 export async function mergePackageScripts(
   newScripts: Record<string, string>,
@@ -172,7 +178,8 @@ export async function mergePackageScripts(
 }
 
 /**
- * Remove fields from JSON file
+
+- Remove fields from JSON file
  */
 export async function removeJSONFields(
   filePath: string,
@@ -206,10 +213,12 @@ export async function removeJSONFields(
 }
 
 /**
- * Remove embedded configs from package.json
+
+- Remove embedded configs from package.json
  */
 export async function removeEmbeddedConfigs(): Promise<
   Result<void, FileSystemError>
+
 > {
   const embeddedConfigs = [
     'eslintConfig',

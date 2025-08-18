@@ -13,7 +13,8 @@ export interface TypeScriptConfig {
 }
 
 /**
- * Get TypeScript compiler options for different presets
+
+- Get TypeScript compiler options for different presets
  */
 function getPresetCompilerOptions(
   preset: TypeScriptPreset
@@ -69,7 +70,8 @@ function getPresetCompilerOptions(
 }
 
 /**
- * Generate tsconfig.json configuration
+
+- Generate tsconfig.json configuration
  */
 export function generateTypeScriptConfig(
   config?: BaselayerConfig,
@@ -136,7 +138,8 @@ export function generateTypeScriptConfig(
 }
 
 /**
- * Generate tsconfig for different project types
+
+- Generate tsconfig for different project types
  */
 export function generateProjectTypeScriptConfigs(
   config?: BaselayerConfig
@@ -159,7 +162,7 @@ export function generateProjectTypeScriptConfigs(
       exclude: [
         '**/*.test.*',
         '**/*.spec.*',
-        '**/__tests__/**',
+        '**/**tests**/**',
         'vitest.config.*',
         'vite.config.*',
       ],
@@ -182,7 +185,8 @@ export function generateProjectTypeScriptConfigs(
 }
 
 /**
- * Write TypeScript configuration files
+
+- Write TypeScript configuration files
  */
 export async function generateAllTypeScriptConfigs(
   config?: BaselayerConfig
@@ -204,7 +208,8 @@ export async function generateAllTypeScriptConfigs(
 }
 
 /**
- * Write single tsconfig.json file
+
+- Write single tsconfig.json file
  */
 export async function generateTypeScriptConfigFile(
   config?: BaselayerConfig,

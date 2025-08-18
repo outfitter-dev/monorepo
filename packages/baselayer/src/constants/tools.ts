@@ -1,6 +1,7 @@
 /**
- * Shared tool constants and mappings for command operations
- * Centralizes tool configuration to eliminate duplication across command files
+
+- Shared tool constants and mappings for command operations
+- Centralizes tool configuration to eliminate duplication across command files
  */
 
 import { failure, isFailure, type Result } from '@outfitter/contracts';
@@ -18,7 +19,8 @@ import type { FeaturesConfig } from '../schemas/baselayer-config.js';
 import type { FileSystemError } from '../utils/file-system.js';
 
 /**
- * Wraps a generator function that returns Error to return FileSystemError
+
+- Wraps a generator function that returns Error to return FileSystemError
  */
 function wrapGenerator(
   fn: () => Promise<Result<void, Error>>
@@ -37,8 +39,9 @@ function wrapGenerator(
 }
 
 /**
- * Valid tool names that can be used in add/remove/update commands
- * Includes both tool names and feature aliases for better UX
+
+- Valid tool names that can be used in add/remove/update commands
+- Includes both tool names and feature aliases for better UX
  */
 export const VALID_TOOLS = [
   // Primary tool names
@@ -63,8 +66,9 @@ export const VALID_TOOLS = [
 ] as const;
 
 /**
- * Maps tool names and feature aliases to their corresponding feature configuration keys
- * Allows users to specify either tool names (biome) or feature names (typescript)
+
+- Maps tool names and feature aliases to their corresponding feature configuration keys
+- Allows users to specify either tool names (biome) or feature names (typescript)
  */
 export const TOOL_TO_FEATURE: Record<string, keyof FeaturesConfig> = {
   // Tool name -> feature mapping
@@ -89,12 +93,14 @@ export const TOOL_TO_FEATURE: Record<string, keyof FeaturesConfig> = {
 } as const;
 
 /**
- * Maps tools to their configuration generator functions
- * Used for creating configurations when tools are added
+
+- Maps tools to their configuration generator functions
+- Used for creating configurations when tools are added
  */
 export const TOOL_GENERATORS: Record<
   string,
   () => Promise<Result<void, FileSystemError>>
+
 > = {
   biome: () => installBiomeConfig(),
   prettier: wrapGenerator(() => generatePrettierConfig()),
@@ -115,8 +121,9 @@ export const TOOL_GENERATORS: Record<
 } as const;
 
 /**
- * Maps tools to their typical configuration file patterns
- * Used for cleanup operations when tools are removed
+
+- Maps tools to their typical configuration file patterns
+- Used for cleanup operations when tools are removed
  */
 export const TOOL_CONFIG_FILES: Record<string, readonly string[]> = {
   biome: ['biome.json', 'biome.jsonc'] as const,
@@ -168,8 +175,9 @@ export const TOOL_CONFIG_FILES: Record<string, readonly string[]> = {
 } as const;
 
 /**
- * Default feature configuration with sensible defaults
- * Used as the base configuration when creating new configs
+
+- Default feature configuration with sensible defaults
+- Used as the base configuration when creating new configs
  */
 export const DEFAULT_FEATURES: FeaturesConfig = {
   typescript: true, // Core tool - TypeScript/JavaScript linting with Biome
@@ -183,8 +191,9 @@ export const DEFAULT_FEATURES: FeaturesConfig = {
 } as const;
 
 /**
- * Tools that are considered core to the baselayer setup
- * Removing these tools will show warnings to users
+
+- Tools that are considered core to the baselayer setup
+- Removing these tools will show warnings to users
  */
 export const CORE_TOOLS = new Set([
   'biome',
@@ -194,8 +203,9 @@ export const CORE_TOOLS = new Set([
 ] as const);
 
 /**
- * Tools that should be updated together as a group
- * Used for dependency management and coordination
+
+- Tools that should be updated together as a group
+- Used for dependency management and coordination
  */
 export const TOOL_GROUPS: Record<string, readonly string[]> = {
   typescript: ['biome', 'oxlint'] as const,
@@ -206,16 +216,18 @@ export const TOOL_GROUPS: Record<string, readonly string[]> = {
 } as const;
 
 /**
- * Validates if a tool name is recognized
+
+- Validates if a tool name is recognized
  */
 export function isValidTool(
   tool: string
-): tool is (typeof VALID_TOOLS)[number] {
+): tool is [typeof VALID_TOOLS](number) {
   return (VALID_TOOLS as readonly string[]).includes(tool);
 }
 
 /**
- * Gets all tools that correspond to a given feature
+
+- Gets all tools that correspond to a given feature
  */
 export function getToolsForFeature(feature: keyof FeaturesConfig): string[] {
   return Object.entries(TOOL_TO_FEATURE)
@@ -224,7 +236,8 @@ export function getToolsForFeature(feature: keyof FeaturesConfig): string[] {
 }
 
 /**
- * Checks if a tool is considered a core baselayer tool
+
+- Checks if a tool is considered a core baselayer tool
  */
 export function isCoreTool(
   tool: string
@@ -235,7 +248,8 @@ export function isCoreTool(
 }
 
 /**
- * Gets configuration files that should be cleaned up for a tool
+
+- Gets configuration files that should be cleaned up for a tool
  */
 export function getConfigFilesForTool(tool: string): readonly string[] {
   return TOOL_CONFIG_FILES[tool] || [];

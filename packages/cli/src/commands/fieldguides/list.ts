@@ -25,11 +25,12 @@ const availableFieldguides: Record<string, string> = {
 };
 
 /**
- * Lists fieldguides that are either installed locally or available for installation.
- *
- * Depending on the {@link options.installed} flag, displays either the installed fieldguides or all available fieldguides with their descriptions, highlighting which are installed.
- *
- * @param options - If `installed` is true, only lists installed fieldguides; otherwise, lists all available fieldguides and their installation status.
+
+- Lists fieldguides that are either installed locally or available for installation.
+-
+- Depending on the {@link options.installed} flag, displays either the installed fieldguides or all available fieldguides with their descriptions, highlighting which are installed.
+-
+- @param options - If `installed` is true, only lists installed fieldguides; otherwise, lists all available fieldguides and their installation status.
  */
 export async function listFieldguides(options: {
   installed?: boolean;
@@ -60,7 +61,7 @@ export async function listFieldguides(options: {
 
     console.log(chalk.cyan('Installed fieldguides:\n'));
     installedFieldguides.forEach((fieldguide) => {
-      console.log(`  ${chalk.green('✓')} ${fieldguide}`);
+      console.log(`${chalk.green('✓')} ${fieldguide}`);
     });
   } else {
     console.log(chalk.cyan('Available fieldguides:\n'));
@@ -69,8 +70,8 @@ export async function listFieldguides(options: {
         const isInstalled = installedFieldguides.includes(fieldguide);
         const status = isInstalled ? chalk.green('✓') : chalk.gray('○');
         const name = isInstalled ? chalk.green(fieldguide) : fieldguide;
-        console.log(`  ${status} ${name}`);
-        console.log(`    ${chalk.gray(description)}\n`);
+        console.log(`${status} ${name}`);
+        console.log(`${chalk.gray(description)}\n`);
       }
     );
 

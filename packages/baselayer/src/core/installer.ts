@@ -1,5 +1,6 @@
 /**
- * Install dependencies with package manager
+
+- Install dependencies with package manager
  */
 
 import { execSync } from 'node:child_process';
@@ -41,10 +42,12 @@ const REQUIRED_DEPENDENCIES = [
 ];
 
 /**
- * Get missing dependencies that need to be installed
+
+- Get missing dependencies that need to be installed
  */
 export async function getMissingDependencies(): Promise<
   Result<string[], InstallerError>
+
 > {
   const pkgJsonResult = await readPackageJson();
   if (isFailure(pkgJsonResult)) {
@@ -65,7 +68,8 @@ export async function getMissingDependencies(): Promise<
 }
 
 /**
- * Install dependencies
+
+- Install dependencies
  */
 export async function installDependencies(
   packages: string[],
@@ -117,7 +121,8 @@ export async function installDependencies(
 }
 
 /**
- * Run npm/yarn/pnpm/bun install
+
+- Run npm/yarn/pnpm/bun install
  */
 export async function runInstall(
   options: { silent?: boolean } = {}
@@ -170,7 +175,8 @@ export async function runInstall(
 }
 
 /**
- * Check if a package is installed
+
+- Check if a package is installed
  */
 export async function isPackageInstalled(
   packageName: string
@@ -193,7 +199,8 @@ export async function isPackageInstalled(
 }
 
 /**
- * Get version of installed package
+
+- Get version of installed package
  */
 export async function getPackageVersion(
   packageName: string
@@ -217,7 +224,8 @@ export async function getPackageVersion(
 }
 
 /**
- * Install a single package
+
+- Install a single package
  */
 export async function installPackage(
   packageName: string,
@@ -227,7 +235,8 @@ export async function installPackage(
 }
 
 /**
- * Install all missing Flint dependencies
+
+- Install all missing Flint dependencies
  */
 export async function installMissingDependencies(
   options: InstallOptions = {}

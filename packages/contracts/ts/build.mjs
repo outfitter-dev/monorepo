@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+# !/usr/bin/env bun
 
 // Bun build script for @outfitter/contracts
 // Replaces tsup with native Bun build for improved performance
@@ -73,7 +73,7 @@ for (const file of declarationFiles) {
     '$1$2'
   );
   
-  // Replace export * from './file.js' with export * from './file'
+  // Replace export *from './file.js' with export* from './file'
   content = content.replace(
     /(export\s+\*\s+from\s+['"]\.[^'"]*?)\.js(['"])/g,
     '$1$2'

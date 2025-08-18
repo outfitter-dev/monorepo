@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 /**
- * Schema for Flint initialization options
+
+- Schema for Flint initialization options
  */
 export const InitOptionsSchema = z.object({
   yes: z.boolean().optional(),
@@ -14,7 +15,8 @@ export const InitOptionsSchema = z.object({
 });
 
 /**
- * Schema for package.json
+
+- Schema for package.json
  */
 export const PackageJsonSchema = z
   .object({
@@ -28,7 +30,8 @@ export const PackageJsonSchema = z
   .passthrough(); // Allow additional fields
 
 /**
- * Schema for Oxlint configuration
+
+- Schema for Oxlint configuration
  */
 export const OxlintConfigSchema = z
   .object({
@@ -47,7 +50,8 @@ export const OxlintConfigSchema = z
   .passthrough();
 
 /**
- * Schema for Prettier configuration
+
+- Schema for Prettier configuration
  */
 export const PrettierConfigSchema = z
   .object({
@@ -71,12 +75,14 @@ export const PrettierConfigSchema = z
   .passthrough();
 
 /**
- * Schema for VS Code settings.json
+
+- Schema for VS Code settings.json
  */
 export const VSCodeSettingsSchema = z.record(z.unknown());
 
 /**
- * Schema for VS Code extensions.json
+
+- Schema for VS Code extensions.json
  */
 export const VSCodeExtensionsSchema = z
   .object({
@@ -86,7 +92,8 @@ export const VSCodeExtensionsSchema = z
   .passthrough();
 
 /**
- * Schema for commitlint configuration
+
+- Schema for commitlint configuration
  */
 export const CommitlintConfigSchema = z
   .object({
@@ -97,7 +104,8 @@ export const CommitlintConfigSchema = z
   .passthrough();
 
 /**
- * Schema for Stylelint configuration
+
+- Schema for Stylelint configuration
  */
 export const StylelintConfigSchema = z
   .object({
@@ -117,7 +125,8 @@ export const StylelintConfigSchema = z
   .passthrough();
 
 /**
- * Schema for markdownlint-cli2 configuration
+
+- Schema for markdownlint-cli2 configuration
  */
 export const MarkdownlintConfigSchema = z
   .object({
@@ -128,7 +137,8 @@ export const MarkdownlintConfigSchema = z
   .passthrough();
 
 /**
- * Schema for Lefthook configuration
+
+- Schema for Lefthook configuration
  */
 export const LefthookConfigSchema = z.record(
   z.object({
@@ -153,7 +163,8 @@ export const LefthookConfigSchema = z.record(
 );
 
 /**
- * Validates configuration against schema with helpful error messages
+
+- Validates configuration against schema with helpful error messages
  */
 export function validateConfig<T>(
   config: unknown,
@@ -165,7 +176,7 @@ export function validateConfig<T>(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const issues = error.issues
-        .map((issue) => `  - ${issue.path.join('.')}: ${issue.message}`)
+        .map((issue) => `- ${issue.path.join('.')}: ${issue.message}`)
         .join('\n');
       throw new Error(`Invalid ${configName} configuration:\n${issues}`);
     }

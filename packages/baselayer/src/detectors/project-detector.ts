@@ -1,5 +1,6 @@
 /**
- * Project type detection utilities
+
+- Project type detection utilities
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -14,7 +15,8 @@ export interface ProjectInfo {
 }
 
 /**
- * Detect project characteristics from package.json and other indicators
+
+- Detect project characteristics from package.json and other indicators
  */
 export async function detectProjectInfo(
   cwd = process.cwd()

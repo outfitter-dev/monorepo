@@ -26,15 +26,16 @@ import {
 export interface AddOptions {
   /** Tools/features to add */
   tools: string[];
-  /** Show what would be added without making changes */
+  /**Show what would be added without making changes */
   dryRun?: boolean;
   /** Enable verbose logging */
   verbose?: boolean;
 }
 
 /**
- * Add command - Adds new tools/features to existing baselayer config
- * Validates tool names and updates configuration and tool files accordingly
+
+- Add command - Adds new tools/features to existing baselayer config
+- Validates tool names and updates configuration and tool files accordingly
  */
 export async function add(options: AddOptions): Promise<FlintResult<void>> {
   try {
@@ -110,7 +111,7 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     if (configResult.success === false) {
       // Create default config if none exists
       currentConfig = {
-        $schema: 'https://schemas.outfitter.dev/baselayer.json',
+        $schema: '<https://schemas.outfitter.dev/baselayer.json>',
         features: DEFAULT_FEATURES,
         overrides: {},
       };
@@ -217,10 +218,10 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     if (dryRun) {
       console.log('🧪 DRY RUN - Would make the following changes:');
       console.log(
-        `   • Enable features: ${toolsToAdd.map((tool) => TOOL_TO_FEATURE[tool]).join(', ')}`
+        `• Enable features: ${toolsToAdd.map((tool) => TOOL_TO_FEATURE[tool]).join(', ')}`
       );
       console.log(
-        `   • Generate configurations for: ${configTasks.map((task) => task.name).join(', ')}`
+        `• Generate configurations for: ${configTasks.map((task) => task.name).join(', ')}`
       );
       console.log('   • Update baselayer.jsonc');
     } else {
@@ -343,14 +344,16 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
 }
 
 /**
- * List available tools that can be added
+
+- List available tools that can be added
  */
 export function listAvailableTools(): FlintResult<readonly string[]> {
   return success(VALID_TOOLS);
 }
 
 /**
- * Check which tools are currently enabled
+
+- Check which tools are currently enabled
  */
 export async function getEnabledTools(): Promise<FlintResult<string[]>> {
   try {

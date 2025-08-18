@@ -1,5 +1,6 @@
 /**
- * Create markdown backups of existing configurations
+
+- Create markdown backups of existing configurations
  */
 
 import * as path from 'node:path';
@@ -19,7 +20,8 @@ export interface BackupError {
 }
 
 /**
- * Create a markdown backup of configurations
+
+- Create a markdown backup of configurations
  */
 export async function createBackup(
   configs: DetectedConfig[],
@@ -48,7 +50,7 @@ export async function createBackup(
 
   // Generate backup content
   const timestamp = new Date().toISOString();
-  const date = timestamp.split('T')[0];
+  const date = timestamp.split['T'](0);
   const filename = `flint-backup-${date}.md`;
   const backupPath = path.join(backupDir, filename);
 
@@ -72,7 +74,8 @@ export async function createBackup(
 }
 
 /**
- * Generate markdown content for backup
+
+- Generate markdown content for backup
  */
 function generateBackupContent(
   configs: DetectedConfig[],
@@ -143,7 +146,7 @@ function generateBackupContent(
     lines.push('   rm -f biome.jsonc .oxlintrc.json .prettierrc.json');
     lines.push('   rm -f .markdownlint-cli2.yaml .stylelintrc.json');
     lines.push('   rm -f lefthook.yml .commitlintrc.json');
-    lines.push('   ```');
+    lines.push('```');
     lines.push('');
     lines.push('3. **Restore Package Dependencies**:');
     lines.push(
@@ -161,7 +164,8 @@ function generateBackupContent(
 }
 
 /**
- * Group configurations by tool
+
+- Group configurations by tool
  */
 function groupConfigsByTool(
   configs: DetectedConfig[]
@@ -179,7 +183,8 @@ function groupConfigsByTool(
 }
 
 /**
- * Get file extension from path
+
+- Get file extension from path
  */
 function getFileExtension(filePath: string): string {
   const ext = path.extname(filePath);
@@ -187,7 +192,8 @@ function getFileExtension(filePath: string): string {
 }
 
 /**
- * Map file extension to language for syntax highlighting
+
+- Map file extension to language for syntax highlighting
  */
 function getLanguageFromExtension(ext: string): string {
   const languageMap: Record<string, string> = {
@@ -210,14 +216,16 @@ function getLanguageFromExtension(ext: string): string {
 }
 
 /**
- * Capitalize first letter of string
+
+- Capitalize first letter of string
  */
 function capitalizeFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 /**
- * Create a summary backup with just the list of configs
+
+- Create a summary backup with just the list of configs
  */
 export async function createBackupSummary(
   configs: DetectedConfig[],

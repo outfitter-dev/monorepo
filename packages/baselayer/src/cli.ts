@@ -18,7 +18,7 @@ import { Orchestrator } from './orchestration/orchestrator.js';
 
 // Read version from package.json
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const__dirname = dirname(__filename);
 const packageJson = JSON.parse(
   readFileSync(join(__dirname, '../package.json'), 'utf-8')
 );

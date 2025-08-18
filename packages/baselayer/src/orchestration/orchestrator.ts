@@ -13,8 +13,9 @@ import { ConfigLoader } from './config-loader.js';
 import { FileMatcher, type FileType } from './file-matcher.js';
 
 /**
- * Core orchestration engine with dynamic configuration support
- * Coordinates multiple tools for parallel execution based on baselayer.jsonc configuration
+
+- Core orchestration engine with dynamic configuration support
+- Coordinates multiple tools for parallel execution based on baselayer.jsonc configuration
  */
 export class Orchestrator {
   private readonly fileMatcher = new FileMatcher();
@@ -23,8 +24,9 @@ export class Orchestrator {
   private currentConfig: BaselayerConfig | null = null;
 
   /**
-   * Initialize orchestrator with configuration
-   * Must be called before using format/lint/check methods
+
+- Initialize orchestrator with configuration
+- Must be called before using format/lint/check methods
    */
   async initialize(
     cwd: string = process.cwd()
@@ -46,8 +48,9 @@ export class Orchestrator {
   }
 
   /**
-   * Format files using appropriate tools
-   * Uses dynamic configuration to determine which tools are active
+
+- Format files using appropriate tools
+- Uses dynamic configuration to determine which tools are active
    */
   async format(
     patterns: readonly string[],
@@ -137,8 +140,9 @@ export class Orchestrator {
   }
 
   /**
-   * Lint files using appropriate tools
-   * Uses dynamic configuration to determine which tools are active
+
+- Lint files using appropriate tools
+- Uses dynamic configuration to determine which tools are active
    */
   async lint(
     patterns: readonly string[],
@@ -226,7 +230,8 @@ export class Orchestrator {
   }
 
   /**
-   * Check files (lint + format check)
+
+- Check files (lint + format check)
    */
   async check(
     patterns: readonly string[],
@@ -238,7 +243,8 @@ export class Orchestrator {
   }
 
   /**
-   * Execute formatting for specific file type using dynamic adapter registry
+
+- Execute formatting for specific file type using dynamic adapter registry
    */
   private async executeToolFormat(
     fileType: FileType,
@@ -270,7 +276,8 @@ export class Orchestrator {
   }
 
   /**
-   * Execute linting for specific file type using dynamic adapter registry
+
+- Execute linting for specific file type using dynamic adapter registry
    */
   private async executeToolLint(
     fileType: FileType,
@@ -302,29 +309,33 @@ export class Orchestrator {
   }
 
   /**
-   * Get current configuration (for external access)
+
+- Get current configuration (for external access)
    */
   getCurrentConfig(): BaselayerConfig | null {
     return this.currentConfig;
   }
 
   /**
-   * Get adapter registry (for debugging and introspection)
+
+- Get adapter registry (for debugging and introspection)
    */
   getAdapterRegistry(): AdapterRegistry {
     return this.adapterRegistry;
   }
 
   /**
-   * Get file matcher (for debugging and introspection)
+
+- Get file matcher (for debugging and introspection)
    */
   getFileMatcher(): FileMatcher {
     return this.fileMatcher;
   }
 
   /**
-   * Force reconfigure adapters with new configuration
-   * Useful for runtime configuration changes
+
+- Force reconfigure adapters with new configuration
+- Useful for runtime configuration changes
    */
   async reconfigure(config: BaselayerConfig): Promise<void> {
     this.currentConfig = config;
@@ -333,7 +344,8 @@ export class Orchestrator {
   }
 
   /**
-   * Get orchestration summary for debugging
+
+- Get orchestration summary for debugging
    */
   getSummary(): {
     configLoaded: boolean;

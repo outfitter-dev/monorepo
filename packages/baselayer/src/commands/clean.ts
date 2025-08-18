@@ -10,7 +10,8 @@ import { type DetectedConfig, detectExistingTools } from '../core/detector.js';
 import type { CleanOptions } from '../types.js';
 
 /**
- * Clean up old configuration files
+
+- Clean up old configuration files
  */
 export async function clean(
   options: CleanOptions

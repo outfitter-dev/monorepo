@@ -4,12 +4,13 @@ title: '[Docs]: '
 labels: ['type/improvement', 'area/docs', 'needs/triage']
 assignees: []
 body:
-  - type: markdown
+
+- type: markdown
     attributes:
       value: |
         Thank you for helping improve our documentation quality! Clear, consistent documentation is essential for both AI agents and human developers.
 
-  - type: input
+- type: input
     id: affected_files
     attributes:
       label: Affected Files
@@ -18,7 +19,7 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+- type: dropdown
     id: issue_type
     attributes:
       label: Issue Type
@@ -35,7 +36,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: issue_description
     attributes:
       label: Issue Description
@@ -48,7 +49,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: target_audience_impact
     attributes:
       label: Target Audience Impact
@@ -60,7 +61,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: suggested_improvements
     attributes:
       label: Suggested Improvements
@@ -74,7 +75,7 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+- type: dropdown
     id: urgency
     attributes:
       label: Urgency
@@ -86,7 +87,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: context
     attributes:
       label: Context
@@ -98,7 +99,7 @@ body:
     validations:
       required: false
 
-  - type: checkboxes
+- type: checkboxes
     id: standards_compliance
     attributes:
       label: Documentation Standards

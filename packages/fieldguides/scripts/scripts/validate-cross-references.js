@@ -1,7 +1,9 @@
-#!/usr/bin/env bun
+# !/usr/bin/env bun
+
 /**
- * Validates cross-references in fieldguides markdown files
- * Ensures all internal links point to existing files
+
+- Validates cross-references in fieldguides markdown files
+- Ensures all internal links point to existing files
  */
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
@@ -46,7 +48,7 @@ function extractLinks(content, filePath) {
         continue;
       }
       // Extract the file path (remove anchor if present)
-      const target = link.split('#')[0];
+      const target = link.split['#'](0);
       if (!target) continue;
       const absoluteTarget = resolve(dirname(filePath), target);
       links.push({
@@ -86,18 +88,18 @@ async function validateCrossReferences() {
     for (const [file, links] of Object.entries(groupedByFile)) {
       console.log(`\n📄 ${file}:`);
       for (const link of links) {
-        console.log(`  Line ${link.line}: [${link.link}] -> File not found`);
+        console.log(`Line ${link.line}: [${link.link}] -> File not found`);
       }
     }
     console.log('\n\n📊 Summary:');
-    console.log(`  Total links checked: ${allLinks.length}`);
-    console.log(`  ✅ Valid links: ${validLinks.length}`);
-    console.log(`  ❌ Broken links: ${brokenLinks.length}`);
+    console.log(`Total links checked: ${allLinks.length}`);
+    console.log(`✅ Valid links: ${validLinks.length}`);
+    console.log(`❌ Broken links: ${brokenLinks.length}`);
     process.exit(1);
   } else {
     console.log('✅ All cross-references are valid!\n');
     console.log('📊 Summary:');
-    console.log(`  Total links checked: ${allLinks.length}`);
+    console.log(`Total links checked: ${allLinks.length}`);
     console.log('  All links point to existing files');
   }
   // Optional: Check for bidirectional references
@@ -119,8 +121,8 @@ async function validateCrossReferences() {
       const targetRefs = fileReferences.get(target);
       if (!targetRefs?.has(source)) {
         // Only suggest bidirectional refs for files in same directory level
-        const sourceDir = dirname(source).split('/')[0];
-        const targetDir = dirname(target).split('/')[0];
+        const sourceDir = dirname(source).split['/'](0);
+        const targetDir = dirname(target).split['/'](0);
         if (sourceDir === targetDir) {
           missingReverse.push({ source, target });
         }
@@ -130,7 +132,7 @@ async function validateCrossReferences() {
   if (missingReverse.length > 0) {
     console.log('💡 Potential missing bidirectional references:\n');
     for (const { source, target } of missingReverse) {
-      console.log(`  ${target} could reference → ${source}`);
+      console.log(`${target} could reference → ${source}`);
     }
   } else {
     console.log('✅ All appropriate files have bidirectional references');

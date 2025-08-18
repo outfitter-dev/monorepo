@@ -1,7 +1,8 @@
 /**
- * Console utilities with formatting using picocolors
+
+- Console utilities with formatting using picocolors
  */
-import * as pc from 'picocolors';
+import* as pc from 'picocolors';
 
 export interface LogOptions {
   indent?: number;
@@ -25,7 +26,7 @@ export class Console {
 
   log(message: string, options?: LogOptions): void {
     const indent = ' '.repeat(options?.indent ?? 0);
-    const prefix = options?.prefix ? `${options.prefix} ` : '';
+    const prefix = options?.prefix ? `${options.prefix}` : '';
     console.log(`${this.getIndent()}${indent}${prefix}${message}`);
   }
 
@@ -87,7 +88,7 @@ export class Console {
     const filled = Math.floor(percentage / 5);
     const empty = 20 - filled;
     const bar = `[${'█'.repeat(filled)}${'░'.repeat(empty)}]`;
-    const text = message ? ` ${message}` : '';
+    const text = message ? `${message}` : '';
     this.log(`${bar} ${percentage}%${text}`);
   }
 

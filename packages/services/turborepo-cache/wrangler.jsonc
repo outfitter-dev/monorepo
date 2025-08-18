@@ -22,6 +22,6 @@
   ],
   // "kv_namespaces": [{"binding": "KV_STORE", "id": "ea20b0eb60f44b13b8d013eeace98ca2", "preview_id": "ea20b0eb60f44b13b8d013eeace98ca2"}],
   "triggers": {
-    "crons": ["0 3 * * *"]
+    "crons": ["0 3 ** *"]
   }
 }

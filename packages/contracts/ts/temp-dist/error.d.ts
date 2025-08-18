@@ -1,7 +1,8 @@
 import type { DeepReadonly } from './types/index';
 /**
- * Standard error codes for application errors
- * Using const object for better type safety than enum
+
+- Standard error codes for application errors
+- Using const object for better type safety than enum
  */
 export declare const ErrorCode: {
   readonly VALIDATION_ERROR: 'VALIDATION_ERROR';
@@ -21,9 +22,9 @@ export declare const ErrorCode: {
   readonly PACKAGE_MANAGER_ERROR: 'PACKAGE_MANAGER_ERROR';
   readonly PROJECT_DETECTION_FAILED: 'PROJECT_DETECTION_FAILED';
 };
-export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
+export type ErrorCode = [typeof ErrorCode](keyof typeof ErrorCode);
 /**
- * Error code categories for better organization
+- Error code categories for better organization
  */
 export declare const ErrorCategory: {
   readonly VALIDATION: readonly ['VALIDATION_ERROR'];
@@ -43,14 +44,14 @@ export declare const ErrorCategory: {
   readonly PROJECT_DETECTION: readonly ['PROJECT_DETECTION_FAILED'];
 };
 /**
- * Check if an error code belongs to a category
+- Check if an error code belongs to a category
  */
 export declare function isErrorInCategory(
   code: ErrorCode,
   category: keyof typeof ErrorCategory
 ): boolean;
 /**
- * Application error with structured metadata
+- Application error with structured metadata
  */
 export interface AppError {
   readonly name: 'AppError';
@@ -61,7 +62,7 @@ export interface AppError {
   readonly stack?: string;
 }
 /**
- * Create a structured app error
+- Create a structured app error
  */
 export declare function makeError(
   code: ErrorCode,
@@ -70,7 +71,7 @@ export declare function makeError(
   originalError?: Error
 ): AppError;
 /**
- * Safe version of makeError that returns a Result instead of throwing
+- Safe version of makeError that returns a Result instead of throwing
  */
 export declare function tryMakeError(
   code: unknown,
@@ -87,11 +88,11 @@ export declare function tryMakeError(
       error: string;
     };
 /**
- * Type guard to check if error is an AppError
+- Type guard to check if error is an AppError
  */
 export declare function isAppError(error: unknown): error is AppError;
 /**
- * Convert any error to AppError
+- Convert any error to AppError
  */
 export declare function toAppError(error: unknown): AppError;
 //# sourceMappingURL=error.d.ts.map

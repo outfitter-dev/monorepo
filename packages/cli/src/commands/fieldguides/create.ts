@@ -30,16 +30,17 @@ const presets = {
 };
 
 /**
- * Initializes a Fieldguide configuration in the current project directory.
- *
- * If a configuration already exists and the `force` option is not set, the process exits with an error. If no valid preset is provided, prompts the user to select one interactively. Creates a `.outfitter/config.json` file with the selected preset and associated fieldguides.
- *
- * @param options - Options for configuring the Fieldguide setup, including preset selection and force overwrite.
- *
- * @remark
- * Exits the process with code 1 if a configuration already exists and `force` is not specified.
- *
- * @throws {Error} If an error occurs during directory creation or file writing.
+
+- Initializes a Fieldguide configuration in the current project directory.
+-
+- If a configuration already exists and the `force` option is not set, the process exits with an error. If no valid preset is provided, prompts the user to select one interactively. Creates a `.outfitter/config.json` file with the selected preset and associated fieldguides.
+-
+- @param options - Options for configuring the Fieldguide setup, including preset selection and force overwrite.
+-
+- @remark
+- Exits the process with code 1 if a configuration already exists and `force` is not specified.
+-
+- @throws {Error} If an error occurs during directory creation or file writing.
  */
 export async function createFieldguideConfig(
   options: CreateOptions
@@ -97,10 +98,10 @@ export async function createFieldguideConfig(
     console.log(`\n${chalk.green('✓')} Created .outfitter/config.json`);
     console.log(`\n${chalk.cyan('Next steps:')}`);
     console.log(
-      `  1. Run ${chalk.yellow('outfitter fg add <fieldguide>')} to add specific fieldguides`
+      `1. Run ${chalk.yellow('outfitter fg add <fieldguide>')} to add specific fieldguides`
     );
     console.log(
-      `  2. Run ${chalk.yellow('outfitter fg list')} to see available fieldguides`
+      `2. Run ${chalk.yellow('outfitter fg list')} to see available fieldguides`
     );
   } catch (error) {
     spinner.fail('Failed to create fieldguide configuration');

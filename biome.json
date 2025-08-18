@@ -1,11 +1,15 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "$schema": "<https://biomejs.dev/schemas/2.2.0/schema.json>",
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noConsole": {
+          "level": "warn",
+          "options": {}
+        }
       },
       "style": {
         "useImportType": "error",
@@ -16,6 +20,25 @@
       }
     }
   },
+  "overrides": [
+    {
+      "includes": [
+        "packages/cli/src/**",
+        "packages/baselayer/src/cli.ts",
+        "scripts/**",
+        "*.mjs",
+        "**/*.test.ts",
+        "**/*.test.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    }
+  ],
   "formatter": {
     "enabled": true,
     "indentStyle": "space",

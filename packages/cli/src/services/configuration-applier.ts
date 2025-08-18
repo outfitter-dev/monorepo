@@ -112,7 +112,8 @@ async function initializeChangesets(cwd: string): Promise<void> {
 }
 
 /**
- * Initializes Husky by running the installation command to set up Git hooks.
+
+- Initializes Husky by running the installation command to set up Git hooks.
  */
 export async function initializeHusky(cwd: string): Promise<void> {
   try {

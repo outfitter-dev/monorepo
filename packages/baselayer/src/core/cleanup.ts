@@ -1,5 +1,6 @@
 /**
- * Remove old configs and dependencies
+
+- Remove old configs and dependencies
  */
 import {
   ErrorCode,
@@ -20,7 +21,8 @@ export interface CleanupOptions {
 }
 
 /**
- * Remove old configuration files
+
+- Remove old configuration files
  */
 export async function removeOldConfigs(
   configs: string[],
@@ -71,7 +73,8 @@ export async function removeOldConfigs(
 }
 
 /**
- * Clean up all old tool configurations
+
+- Clean up all old tool configurations
  */
 export async function cleanupOldTools(
   options: CleanupOptions = {}
@@ -90,7 +93,8 @@ export async function cleanupOldTools(
 }
 
 /**
- * Remove specific tool configurations
+
+- Remove specific tool configurations
  */
 export async function removeToolConfigs(
   tool: string,
@@ -153,7 +157,8 @@ export async function removeToolConfigs(
 }
 
 /**
- * Clean up VS Code settings for old tools
+
+- Clean up VS Code settings for old tools
  */
 export async function cleanupVSCodeSettings(): Promise<Result<void, Error>> {
   const settingsPath = '.vscode/settings.json';
@@ -169,7 +174,8 @@ export async function cleanupVSCodeSettings(): Promise<Result<void, Error>> {
 }
 
 /**
- * Remove old git hooks
+
+- Remove old git hooks
  */
 export async function removeOldGitHooks(
   hookType: 'husky' | 'simple-git-hooks',

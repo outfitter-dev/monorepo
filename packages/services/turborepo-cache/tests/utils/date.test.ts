@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { isDateOlderThan } from '~/utils/date';
 
 describe('isDateOlderThan', () => {
-  const millisecondsInHour = 1000 * 60 * 60;
+  const millisecondsInHour = 1000 *60* 60;
 
   test('should return true when date is older than hours', () => {
     const now = new Date();

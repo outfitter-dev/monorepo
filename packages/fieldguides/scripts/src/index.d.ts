@@ -1,7 +1,8 @@
 /**
- * @outfitter/fieldguides
- *
- * Living documentation system that equips AI agents with consistent development practices
+
+- @outfitter/fieldguides
+-
+- Living documentation system that equips AI agents with consistent development practices
  */
 export declare const metadata: {
   name: string;
@@ -30,4 +31,4 @@ export declare const categories: readonly [
   'references',
   'operations',
 ];
-export type Category = (typeof categories)[number];
+export type Category = [typeof categories](number);

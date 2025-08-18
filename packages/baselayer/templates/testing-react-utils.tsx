@@ -1,10 +1,12 @@
 /*
 ---
+
 slug: testing-react-utils
 title: React Testing Library utilities with dual Jest/Vitest support
 description: Custom render functions and utilities for testing React components with MSW 2.0.
 type: template
 ---
+
 */
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -131,12 +133,12 @@ function ExtendedProviders({
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        {/* Add your app-specific providers here */}
+        {/*Add your app-specific providers here */}
         {/* <ThemeProvider theme={theme}> */}
         {/* <AuthContext.Provider value={{ user }}> */}
         {children}
         {/* </AuthContext.Provider> */}
-        {/* </ThemeProvider> */}
+        {/* </ThemeProvider>*/}
       </BrowserRouter>
     </QueryClientProvider>
   );
@@ -227,9 +229,9 @@ export function createMockUser(overrides: Partial<MockUser> = {}): MockUser {
   const now = new Date().toISOString();
   return {
     id: '1',
-    email: 'test@example.com',
+    email: '<test@example.com>',
     name: 'Test User',
-    avatar: 'https://example.com/avatar.jpg',
+    avatar: '<https://example.com/avatar.jpg>',
     role: 'user',
     createdAt: now,
     updatedAt: now,
@@ -297,7 +299,7 @@ import { UserProfile } from '@/components/UserProfile';
 describe('UserProfile', () => {
   it('should display user information', async () => {
     const { user } = render(<UserProfile userId="1" />);
-    
+
     // Wait for data to load
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -320,7 +322,7 @@ describe('UserProfile', () => {
         );
       })
     );
-    
+
     render(<UserProfile userId="999" />);
     
     await waitFor(() => {

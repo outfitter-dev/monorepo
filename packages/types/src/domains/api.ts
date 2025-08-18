@@ -1,7 +1,8 @@
 /**
- * API-specific types
- *
- * Types commonly used in API design and implementation.
+
+- API-specific types
+-
+- Types commonly used in API design and implementation.
  */
 
 import type { JsonValue } from 'type-fest';

@@ -22,14 +22,16 @@ export interface TestContext {
 }
 
 /**
- * Create a mock file system for testing
+
+- Create a mock file system for testing
  */
 export function createMockFileSystem(files: MockFileSystem): MockFileSystem {
   return { ...files };
 }
 
 /**
- * Set up mocks for a test. Call this in beforeEach.
+
+- Set up mocks for a test. Call this in beforeEach.
  */
 export function setupMocks() {
   // Mock modules that are commonly used
@@ -65,7 +67,8 @@ export function setupMocks() {
 }
 
 /**
- * Create a test context with common mocks
+
+- Create a test context with common mocks
  */
 export function createTestContext(
   initialFiles: MockFileSystem = { '/package.json': '{}' }
@@ -90,7 +93,8 @@ export function createTestContext(
 }
 
 /**
- * Create a basic package.json for testing
+
+- Create a basic package.json for testing
  */
 export function createPackageJson(
   overrides: Record<string, unknown> = {}
@@ -109,7 +113,8 @@ export function createPackageJson(
 }
 
 /**
- * Create ESLint config for testing
+
+- Create ESLint config for testing
  */
 export function createEslintConfig(): string {
   return JSON.stringify(
@@ -125,7 +130,8 @@ export function createEslintConfig(): string {
 }
 
 /**
- * Create Prettier config for testing
+
+- Create Prettier config for testing
  */
 export function createPrettierConfig(): string {
   return JSON.stringify(
@@ -145,7 +151,8 @@ interface Choice {
 }
 
 /**
- * Mock prompts for interactive testing
+
+- Mock prompts for interactive testing
  */
 export function mockPrompts(responses: Record<string, unknown>) {
   const mockConfirm = vi.fn(async ({ message }: { message: string }) => {
@@ -193,7 +200,8 @@ export function mockPrompts(responses: Record<string, unknown>) {
 }
 
 /**
- * Reset all mocks
+
+- Reset all mocks
  */
 export function resetMocks() {
   vi.resetAllMocks();

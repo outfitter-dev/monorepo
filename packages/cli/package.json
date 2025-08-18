@@ -11,11 +11,11 @@
     "templates"
   ],
   "scripts": {
-    "build": "../../node_modules/typescript/bin/tsc",
+    "build": "tsc -p .",
     "dev": "bun src/index.ts",
     "test": "vitest",
     "test:run": "vitest run",
-    "typecheck": "../../node_modules/typescript/bin/tsc --noEmit",
+    "typecheck": "tsc --noEmit -p .",
     "lint": "bunx ultracite lint",
     "lint:fix": "bunx ultracite lint --write",
     "format": "bunx ultracite format",
@@ -59,13 +59,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "url": "<https://github.com/outfitter-dev/monorepo.git>",
     "directory": "packages/cli"
   },
   "bugs": {
-    "url": "https://github.com/outfitter-dev/monorepo/issues"
+    "url": "<https://github.com/outfitter-dev/monorepo/issues>"
   },
-  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/cli#readme",
+  "homepage": "<https://github.com/outfitter-dev/monorepo/tree/main/packages/cli#readme>",
   "publishConfig": {
     "access": "public"
   }

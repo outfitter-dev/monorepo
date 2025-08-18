@@ -1,10 +1,12 @@
 /*
 ---
+
 slug: testing-vitest-config
 title: Vitest configuration with coverage and TypeScript paths
 description: Complete Vitest configuration template with coverage, globals, and path aliases.
 type: template
 ---
+
 */
 
 import path from 'node:path';

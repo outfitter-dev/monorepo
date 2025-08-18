@@ -1,5 +1,6 @@
 /**
- * Schema definitions for baselayer.jsonc configuration file
+
+- Schema definitions for baselayer.jsonc configuration file
  */
 
 import { z } from 'zod';
@@ -136,7 +137,8 @@ export function validateBaselayerConfig(config: unknown): BaselayerConfig {
 }
 
 /**
- * Safe validation function that returns a Result instead of throwing
+
+- Safe validation function that returns a Result instead of throwing
  */
 export function safeValidateBaselayerConfig(
   config: unknown

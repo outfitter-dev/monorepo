@@ -1,4 +1,5 @@
 # Lefthook configuration
+
 pre-commit:
   parallel: false
   commands:

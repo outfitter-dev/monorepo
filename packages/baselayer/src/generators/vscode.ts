@@ -15,7 +15,8 @@ import {
 } from '../utils/file-system.js';
 
 /**
- * Checks if VS Code directory exists
+
+- Checks if VS Code directory exists
  */
 export async function hasVSCode(): Promise<boolean> {
   const result = await fileExists('.vscode');
@@ -23,7 +24,8 @@ export async function hasVSCode(): Promise<boolean> {
 }
 
 /**
- * Merges new VS Code settings with existing ones
+
+- Merges new VS Code settings with existing ones
  */
 async function mergeVSCodeSettings(
   newSettings: Record<string, unknown>
@@ -57,7 +59,8 @@ async function mergeVSCodeSettings(
 }
 
 /**
- * Merges new VS Code extensions with existing ones
+
+- Merges new VS Code extensions with existing ones
  */
 async function mergeVSCodeExtensions(newExtensions: {
   recommendations: string[];
@@ -98,7 +101,8 @@ async function mergeVSCodeExtensions(newExtensions: {
 }
 
 /**
- * Generate VSCode settings.json based on baselayer configuration
+
+- Generate VSCode settings.json based on baselayer configuration
  */
 export function generateVSCodeSettings(
   config?: BaselayerConfig
@@ -225,7 +229,8 @@ export function generateVSCodeSettings(
 }
 
 /**
- * Generate VSCode extensions.json based on configuration
+
+- Generate VSCode extensions.json based on configuration
  */
 export function generateVSCodeExtensions(config?: BaselayerConfig): {
   recommendations: string[];
@@ -289,7 +294,8 @@ export function generateVSCodeExtensions(config?: BaselayerConfig): {
 }
 
 /**
- * Sets up VS Code configuration
+
+- Sets up VS Code configuration
  */
 export async function setupVSCode(
   config?: BaselayerConfig
@@ -318,8 +324,9 @@ export async function setupVSCode(
 }
 
 /**
- * Enhances VS Code settings after other tools have set up their configs
- * This is called after Ultracite init to ensure we don't override its settings
+
+- Enhances VS Code settings after other tools have set up their configs
+- This is called after Ultracite init to ensure we don't override its settings
  */
 export async function enhanceVSCodeSettings(
   config?: BaselayerConfig

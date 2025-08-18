@@ -11,8 +11,9 @@ export interface SetupOptions {
 }
 
 /**
- * Setup command - Initialize Flint configuration and git hooks
- * Generates lefthook.yml and installs git hooks
+
+- Setup command - Initialize Flint configuration and git hooks
+- Generates lefthook.yml and installs git hooks
  */
 export async function setup(
   options: SetupOptions = {}
@@ -112,10 +113,12 @@ export async function setup(
 }
 
 /**
- * Check if Lefthook is available in the system
+
+- Check if Lefthook is available in the system
  */
 export async function checkLefthookAvailability(): Promise<
   FlintResult<boolean>
+
 > {
   try {
     const lefthookAdapter = new LefthookAdapter();
@@ -136,7 +139,8 @@ export async function checkLefthookAvailability(): Promise<
 }
 
 /**
- * Uninstall git hooks
+
+- Uninstall git hooks
  */
 export async function teardown(
   options: { verbose?: boolean } = {}

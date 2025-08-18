@@ -30,9 +30,10 @@ export async function selectUtilities(
 }
 
 /**
- * Prompts the user to confirm whether to initialize git hooks.
- *
- * @returns A promise that resolves to true if the user confirms, or false otherwise.
+
+- Prompts the user to confirm whether to initialize git hooks.
+-
+- @returns A promise that resolves to true if the user confirms, or false otherwise.
  */
 export async function confirmGitHooks(): Promise<boolean> {
   return confirm({
@@ -55,6 +56,6 @@ export function showRecommendedFieldguides(
           : fg.priority === 'recommended'
             ? '👍'
             : '📖';
-      console.log(`  ${icon} ${fg.name} - ${fg.description}`);
+      console.log(`${icon} ${fg.name} - ${fg.description}`);
     });
 }

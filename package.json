@@ -21,15 +21,15 @@
     "test:turbo": "turbo run test",
     "typecheck": "bun --filter '*' typecheck",
     "typecheck:turbo": "turbo run typecheck",
-    "lint": "bunx ultracite lint .",
-    "lint:md": "markdownlint-cli2 .",
-    "format": "bunx ultracite format .",
-    "format:md": "markdownlint-cli2 . --fix",
+    "lint": "bunx ultracite lint",
+    "lint:md": "markdownlint-cli2",
+    "format": "bunx ultracite format",
+    "format:md": "markdownlint-cli2 --fix",
     "deps:check": "syncpack list-mismatches",
     "deps:fix": "syncpack fix-mismatches",
     "deps:update": "syncpack update",
-    "ci": "bun run lint && bun run lint:md && bun run typecheck && bun run test",
-    "ci:local": "bun run format && bun run lint && bun run format:md && bun run typecheck && bun run test",
+    "ci": "bun run lint && bun run lint:md && bun run typecheck && bun run build:turbo && bun run test",
+    "ci:local": "bun run format && bun run lint && bun run format:md && bun run typecheck && bun run build:turbo && bun run test",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
     "@changesets/cli": "^2.29.5",
-    "@types/bun": "latest",
+    "@types/bun": "1.2.20",
     "@types/glob": "^8.1.0",
     "@types/node": "24.3.0",
     "glob": "^11.0.3",
@@ -56,10 +56,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/outfitter-dev/monorepo.git"
+    "url": "<https://github.com/outfitter-dev/monorepo.git>"
   },
-  "homepage": "https://github.com/outfitter-dev/monorepo#readme",
+  "homepage": "<https://github.com/outfitter-dev/monorepo#readme>",
   "bugs": {
-    "url": "https://github.com/outfitter-dev/monorepo/issues"
+    "url": "<https://github.com/outfitter-dev/monorepo/issues>"
   }
 }

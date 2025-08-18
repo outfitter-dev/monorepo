@@ -1,8 +1,8 @@
-import * as childProcess from 'node:child_process';
+import *as childProcess from 'node:child_process';
 import { isSuccess, type Result } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { FileSystemError } from '../../utils/file-system.js';
-import * as fileSystem from '../../utils/file-system.js';
+import* as fileSystem from '../../utils/file-system.js';
 import { generateOxlintConfig } from '../oxlint.js';
 
 describe('generateOxlintConfig', () => {

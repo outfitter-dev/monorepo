@@ -9,7 +9,8 @@ import {
 import { fileExists, readJSON, writeJSON } from '../utils/file-system.js';
 
 /**
- * Detects if ESLint configuration exists in the project
+
+- Detects if ESLint configuration exists in the project
  */
 async function detectEslintConfig(): Promise<boolean> {
   const eslintPatterns = [
@@ -35,7 +36,8 @@ async function detectEslintConfig(): Promise<boolean> {
 }
 
 /**
- * Generates Oxlint configuration with smart ESLint migration
+
+- Generates Oxlint configuration with smart ESLint migration
  */
 export async function generateOxlintConfig(): Promise<Result<void, Error>> {
   try {
@@ -199,7 +201,7 @@ export async function generateOxlintConfig(): Promise<Result<void, Error>> {
       },
       overrides: [
         {
-          files: ['*.test.ts', '*.test.tsx', '*.spec.ts', '*.spec.tsx'],
+          files: ['_.test.ts', '_.test.tsx', '_.spec.ts', '_.spec.tsx'],
           rules: {
             'no-console': 'off',
           },

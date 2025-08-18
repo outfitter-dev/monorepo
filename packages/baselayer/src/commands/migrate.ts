@@ -19,7 +19,8 @@ interface ExistingConfigs {
 }
 
 /**
- * Detect existing configuration files in the project
+
+- Detect existing configuration files in the project
  */
 async function detectExistingConfigs(): Promise<ExistingConfigs> {
   const configs: ExistingConfigs = {};
@@ -127,7 +128,8 @@ async function detectExistingConfigs(): Promise<ExistingConfigs> {
 }
 
 /**
- * Generate Outfitter config from existing configs
+
+- Generate Outfitter config from existing configs
  */
 function generateOutfitterConfig(existing: ExistingConfigs): OutfitterConfig {
   const config: OutfitterConfig = {
@@ -148,7 +150,7 @@ function generateOutfitterConfig(existing: ExistingConfigs): OutfitterConfig {
   // Extract custom Biome settings
   if (existing.biome && !existing.biome._file) {
     const {
-      formatter: _formatter,
+      formatter:_formatter,
       linter: _linter,
       ...customSettings
     } = existing.biome;
@@ -189,7 +191,8 @@ function generateOutfitterConfig(existing: ExistingConfigs): OutfitterConfig {
 }
 
 /**
- * Migrate existing configuration files to unified Outfitter config
+
+- Migrate existing configuration files to unified Outfitter config
  */
 export async function migrate(
   options: MigrateOptions = {}
@@ -237,11 +240,11 @@ export async function migrate(
     }
 
     const configContent = `/**
- * Outfitter Configuration
- * Unified code quality orchestration
- * 
- * Migrated from existing configuration files
- * Generated on ${new Date().toISOString()}
+- Outfitter Configuration
+- Unified code quality orchestration
+-
+- Migrated from existing configuration files
+- Generated on ${new Date().toISOString()}
  */
 
 /** @type {import('@outfitter/baselayer').OutfitterConfig} */
@@ -276,7 +279,8 @@ export default ${JSON.stringify(outfitterConfig, null, 2)};
 }
 
 /**
- * Clean up old configuration files after successful migration
+
+- Clean up old configuration files after successful migration
  */
 export async function cleanOldConfigs(
   options: { force?: boolean; verbose?: boolean } = {}

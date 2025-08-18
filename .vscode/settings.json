@@ -1,62 +1,52 @@
 {
-  "files.exclude": {
-    "**/node_modules": true,
-    "**/dist": true,
-    "**/.DS_Store": true,
-    "**/*.tsbuildinfo": true,
-    ".git": true
-  },
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
     "package.json": "pnpm-*.yaml,*config.json,*.config.js,*.config.ts,.markdownlint-cli2.jsonc,lint-staged.config.mjs,biome.json,.markdownlint.json,.prettierrc.json,.prettierignore,.editorconfig,.biomeignore,commitlint.config.mjs,*.lock,lefthook.yml,bunfig.toml,.env,turbo.json",
     "AGENT.md": ".mcp.json,CLAUDE.md, AGENTS.md"
   },
+
+  // GLOBAL EDITOR SETTINGS
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "emmet.showExpandedAbbreviation": "never",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // CODE ACTIONS ON SAVE
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.markdownlint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+
+  // TYPESCRIPT CONFIGURATION
+  "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.preferences.includePackageJsonAutoImports": "auto",
   "typescript.suggest.autoImports": true,
+
+  // BIOME CONFIGURATION
   "biome.enabled": true,
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {
-    "source.organizeImports.biome": "explicit",
-    "source.fixAll.biome": "explicit"
-  },
-  "[javascript]": {
+  "[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
+
+  // MARKDOWN CONFIGURATION
   "[markdown]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
     "editor.wordWrap": "on",
     "editor.quickSuggestions": {
-      "comments": "off",
-      "strings": "off",
-      "other": "off"
+      "comments": "on",
+      "strings": "on",
+      "other": "on"
     }
   },
-  "markdownlint.config": {
-    "MD013": false,
-    "MD033": false,
-    "MD041": false
-  },
+
   "files.associations": {
-    "*.md": "markdown"
+    "*.mdc": "markdown"
   },
+
+  // SEARCH EXCLUDE
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
@@ -64,11 +54,26 @@
     "**/coverage": true,
     "**/*.tsbuildinfo": true
   },
-  "[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.formatOnPaste": true,
-  "emmet.showExpandedAbbreviation": "never",
-  "biome.configurationPath": ""
+
+  // SPELL CHECKER CONFIGURATION
+  "cSpell.words": [
+    "bunfig",
+    "publint",
+    "lefthook",
+    "frontmatter",
+    "ultracite",
+    "previewable",
+    "previewability",
+    "lintability",
+    "subdirs",
+    "clinerules",
+    "sublist",
+    "rulesetkeep",
+    "rulesetignore",
+    "opencode",
+    "esbenp",
+    "myproject",
+    "syncpack",
+    "cheatsheet"
+  ]
 }
