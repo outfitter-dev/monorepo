@@ -16,7 +16,7 @@ describe('generateOxlintConfig', () => {
 
   it('should attempt ESLint migration when ESLint config exists', async () => {
     // Mock ESLint config exists
-    vi.mocked(fileSystem.fileExists).mockResolvedValue({
+    vi.spyOn(fileSystem, 'fileExists').mockResolvedValue({
       success: true,
       data: true,
     } as Result<boolean, FileSystemError>);
@@ -25,15 +25,15 @@ describe('generateOxlintConfig', () => {
       .spyOn(childProcess, 'execSync')
       .mockImplementation(() => '');
 
-    vi.mocked(fileSystem.readJSON).mockResolvedValue({
+    vi.spyOn(fileSystem, 'readJSON').mockResolvedValue({
       success: true,
       data: {},
-    } as Result<unknown, Error>);
+    } as Result<Record<string, unknown>, Error>);
 
-    vi.mocked(fileSystem.writeJSON).mockResolvedValue({
+    vi.spyOn(fileSystem, 'writeJSON').mockResolvedValue({
       success: true,
       data: undefined,
-    } as Result<unknown, Error>);
+    } as Result<void, Error>);
 
     const result = await generateOxlintConfig();
 
@@ -46,24 +46,24 @@ describe('generateOxlintConfig', () => {
 
   it('should create new config when no ESLint config exists', async () => {
     // Mock no ESLint config
-    vi.mocked(fileSystem.fileExists).mockResolvedValue({
+    vi.spyOn(fileSystem, 'fileExists').mockResolvedValue({
       success: true,
       data: false,
-    } as Result<unknown, Error>);
+    } as Result<Record<string, unknown>, Error>);
 
     const execSyncMock = vi
       .spyOn(childProcess, 'execSync')
       .mockImplementation(() => '');
 
-    vi.mocked(fileSystem.readJSON).mockResolvedValue({
+    vi.spyOn(fileSystem, 'readJSON').mockResolvedValue({
       success: true,
       data: {},
-    } as Result<unknown, Error>);
+    } as Result<Record<string, unknown>, Error>);
 
-    vi.mocked(fileSystem.writeJSON).mockResolvedValue({
+    vi.spyOn(fileSystem, 'writeJSON').mockResolvedValue({
       success: true,
       data: undefined,
-    } as Result<unknown, Error>);
+    } as Result<void, Error>);
 
     const result = await generateOxlintConfig();
 
@@ -75,22 +75,22 @@ describe('generateOxlintConfig', () => {
   });
 
   it('should enhance config with recommended rules', async () => {
-    vi.mocked(fileSystem.fileExists).mockResolvedValue({
+    vi.spyOn(fileSystem, 'fileExists').mockResolvedValue({
       success: true,
       data: false,
-    } as Result<unknown, Error>);
+    } as Result<Record<string, unknown>, Error>);
 
     vi.spyOn(childProcess, 'execSync').mockImplementation(() => '');
 
-    vi.mocked(fileSystem.readJSON).mockResolvedValue({
+    vi.spyOn(fileSystem, 'readJSON').mockResolvedValue({
       success: true,
       data: { rules: {} },
-    } as Result<unknown, Error>);
+    } as Result<Record<string, unknown>, Error>);
 
-    let writtenConfig: unknown;
-    vi.mocked(fileSystem.writeJSON).mockImplementation(
+    let writtenConfig: Record<string, unknown>;
+    vi.spyOn(fileSystem, 'writeJSON').mockImplementation(
       async (_path, config): Promise<Result<void, Error>> => {
-        writtenConfig = config;
+        writtenConfig = config as Record<string, unknown>;
         return {
           success: true,
           data: undefined,
@@ -102,12 +102,17 @@ describe('generateOxlintConfig', () => {
 
     expect(isSuccess(result)).toBe(true);
     expect(writtenConfig).toHaveProperty('plugins');
-    expect(writtenConfig.plugins).toContain('react');
-    expect(writtenConfig.plugins).toContain('typescript');
-    expect(writtenConfig.rules).toHaveProperty('no-debugger', 'error');
-    expect(writtenConfig.rules).toHaveProperty(
-      'react-hooks/rules-of-hooks',
-      'error'
+    expect((writtenConfig as { plugins: Array<string> }).plugins).toContain(
+      'react'
     );
+    expect((writtenConfig as { plugins: Array<string> }).plugins).toContain(
+      'typescript'
+    );
+    expect(
+      (writtenConfig as { rules: Record<string, string> }).rules
+    ).toHaveProperty('no-debugger', 'error');
+    expect(
+      (writtenConfig as { rules: Record<string, string> }).rules
+    ).toHaveProperty('react-hooks/rules-of-hooks', 'error');
   });
 });
