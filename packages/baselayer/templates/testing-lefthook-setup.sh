@@ -10,7 +10,7 @@ cat > lefthook.yml << 'EOF'
 
 # Lefthook configuration
 
-# <https://github.com/evilmartians/lefthook>
+# https://github.com/evilmartians/lefthook
 
 pre-commit:
   parallel: true
