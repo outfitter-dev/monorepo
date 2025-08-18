@@ -22,6 +22,6 @@ commit-msg:
 pre-push:
   commands:
     types:
-      run: turbo run type-check --affected
+      run: turbo run type-check --filter=[HEAD^1...]
     test:
-      run: turbo run test --affected
+      run: turbo run test --filter=[HEAD^1...]

@@ -1,6 +1,6 @@
 # Bun configuration for @outfitter/monorepo
 
-# <https://bun.sh/docs/runtime/configuration>
+# https://bun.sh/docs/runtime/configuration
 
 [install]
 
@@ -15,7 +15,7 @@ exact = false
 # Cache configuration
 
 cache = true
-registry = "<https://registry.npmjs.org>"
+registry = "https://registry.npmjs.org"
 
 # Optional: configure global directories
 
@@ -27,9 +27,9 @@ registry = "<https://registry.npmjs.org>"
 
 # Optimize for our common scopes
 
-"@outfitter" = { registry = "<https://registry.npmjs.org>" }
-"@biomejs" = { registry = "<https://registry.npmjs.org>" }
-"@changesets" = { registry = "<https://registry.npmjs.org>" }
+"@outfitter" = { registry = "https://registry.npmjs.org" }
+"@biomejs" = { registry = "https://registry.npmjs.org" }
+"@changesets" = { registry = "https://registry.npmjs.org" }
 
 [test]
 
