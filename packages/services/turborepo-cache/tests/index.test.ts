@@ -34,7 +34,7 @@ describe('remote-cache worker', () => {
 
   it('should respond to the ping route by simulating the worker', async () => {
     const response = await SELF.fetch(
-      '<https://turborepo-remote-cache.com/ping>'
+      'https://turborepo-remote-cache.com/ping'
     );
     expect(response).toBeTruthy();
     expect(response.status).toBe(200);

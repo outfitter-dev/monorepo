@@ -81,7 +81,7 @@ describe('clean command', () => {
 
   it('should detect Flint-generated configurations', async () => {
     ctx.mockFs['biome.json'] =
-      '{"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json"}>';
+      '{"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json"}';
     ctx.mockFs['oxlint.json'] = '{}';
     ctx.mockFs['.markdownlint.json'] = '{}';
 
