@@ -52,6 +52,8 @@ export class AdapterRegistry {
       }
 
       this.adapters.set('json', prettierAdapter);
+      // Map YAML files to PrettierAdapter as well
+      this.adapters.set('yaml', prettierAdapter);
     }
 
     // Stylelint for CSS (only when enabled)

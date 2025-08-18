@@ -1,4 +1,10 @@
-import { failure, makeError, type Result, success } from '@outfitter/contracts';
+import {
+  ErrorCode,
+  failure,
+  makeError,
+  type Result,
+  success,
+} from '@outfitter/contracts';
 import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import type {
   CommandOptions,
@@ -11,6 +17,30 @@ import type {
 import { AdapterRegistry } from './adapter-registry.js';
 import { ConfigLoader } from './config-loader.js';
 import { FileMatcher, type FileType } from './file-matcher.js';
+
+/**
+ * Normalize --only aliases to full type names
+ */
+const ALIAS_MAP: Record<string, FileType> = {
+  ts: 'typescript',
+  js: 'typescript',
+  md: 'markdown',
+  yml: 'yaml',
+  yaml: 'yaml',
+  css: 'css',
+  json: 'json',
+  typescript: 'typescript',
+  markdown: 'markdown',
+} as const;
+
+/**
+ * Normalize command line aliases to FileType names
+ */
+function normalizeFileTypes(aliases: readonly string[]): FileType[] {
+  return aliases
+    .map((alias) => ALIAS_MAP[alias.toLowerCase()])
+    .filter((type): type is FileType => type !== undefined);
+}
 
 /**
 
@@ -88,6 +118,11 @@ export class Orchestrator {
         } as OrchestrationResult);
       }
 
+      // Ensure config is available (this should never happen due to earlier check)
+      if (!this.currentConfig) {
+        throw new Error('Configuration not loaded - this should not happen');
+      }
+
       const categorized = this.fileMatcher.categorizeFiles(
         files,
         this.currentConfig
@@ -95,7 +130,7 @@ export class Orchestrator {
 
       // Filter by --only flag if specified
       const fileTypes = options.only
-        ? (options.only as FileType[])
+        ? normalizeFileTypes(options.only)
         : (Object.keys(categorized) as FileType[]);
 
       // Execute tools in parallel - only for types with registered adapters and files
@@ -132,8 +167,10 @@ export class Orchestrator {
     } catch (error) {
       return failure(
         makeError(
-          'INTERNAL_ERROR',
-          `Format orchestration failed: ${(error as Error).message}`
+          ErrorCode.INTERNAL_ERROR,
+          `Format orchestration failed: ${(error as Error).message}`,
+          undefined,
+          error as Error
         )
       );
     }
@@ -180,6 +217,11 @@ export class Orchestrator {
         } as OrchestrationResult);
       }
 
+      // Ensure config is available (this should never happen due to earlier check)
+      if (!this.currentConfig) {
+        throw new Error('Configuration not loaded - this should not happen');
+      }
+
       const categorized = this.fileMatcher.categorizeFiles(
         files,
         this.currentConfig
@@ -187,7 +229,7 @@ export class Orchestrator {
 
       // Filter by --only flag if specified
       const fileTypes = options.only
-        ? (options.only as FileType[])
+        ? normalizeFileTypes(options.only)
         : (Object.keys(categorized) as FileType[]);
 
       // Execute tools in parallel - only for types with registered adapters and files
@@ -222,8 +264,10 @@ export class Orchestrator {
     } catch (error) {
       return failure(
         makeError(
-          'INTERNAL_ERROR',
-          `Lint orchestration failed: ${(error as Error).message}`
+          ErrorCode.INTERNAL_ERROR,
+          `Lint orchestration failed: ${(error as Error).message}`,
+          undefined,
+          error as Error
         )
       );
     }
