@@ -65,20 +65,17 @@ console.log('Fixing declaration file imports...');
 const declarationFiles = await glob('./dist/**/*.d.ts');
 for (const file of declarationFiles) {
   let content = fs.readFileSync(file, 'utf8');
-  
+
   // Replace .js extensions with .d.ts in import statements
   // Patterns to match: from './file.js', from "./file.js", from './path/file.js'
-  content = content.replace(
-    /(from\s+['"]\.[^'"]*?)\.js(['"])/g,
-    '$1$2'
-  );
-  
+  content = content.replace(/(from\s+['"]\.[^'"]*?)\.js(['"])/g, '$1$2');
+
   // Replace export *from './file.js' with export* from './file'
   content = content.replace(
     /(export\s+\*\s+from\s+['"]\.[^'"]*?)\.js(['"])/g,
     '$1$2'
   );
-  
+
   fs.writeFileSync(file, content);
 }
 
