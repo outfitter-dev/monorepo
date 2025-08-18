@@ -101,7 +101,7 @@ export class MigrationReporter {
     } = options;
 
     const timestamp = new Date().toISOString();
-    const date = timestamp.split['T'](0);
+    const date = timestamp.split('T')[0];
     const filename = `flint-migration-report-${date}.md`;
 
     const content = this.generateMarkdownContent({
