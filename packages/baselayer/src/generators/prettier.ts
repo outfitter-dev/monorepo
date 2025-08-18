@@ -120,10 +120,23 @@ export function generatePrettierIgnore(config?: BaselayerConfig): string {
 
   // If TypeScript is disabled, don't ignore JS files
   if (config?.features?.typescript === false) {
-    const jsIndex = ignore.indexOf('*.js');
-    if (jsIndex > 0) {
-      // Remove JS-related ignores
-      ignore.splice(jsIndex - 1, 6); // Remove comment and JS extensions
+    // Remove JS-related patterns and comments via targeted removal
+    const jsExtensions = ['*.js', '*.jsx', '*.mjs', '*.cjs'];
+    const biomeCommentIndex = ignore.indexOf(
+      '# Biome handles these (TypeScript enabled by default)'
+    );
+
+    // Remove the comment if it exists
+    if (biomeCommentIndex >= 0) {
+      ignore.splice(biomeCommentIndex, 1);
+    }
+
+    // Remove JS extensions
+    for (const ext of jsExtensions) {
+      const index = ignore.indexOf(ext);
+      if (index >= 0) {
+        ignore.splice(index, 1);
+      }
     }
   }
 

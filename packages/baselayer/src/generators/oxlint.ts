@@ -201,7 +201,12 @@ export async function generateOxlintConfig(): Promise<Result<void, Error>> {
       },
       overrides: [
         {
-          files: ['_.test.ts', '_.test.tsx', '_.spec.ts', '_.spec.tsx'],
+          files: [
+            '**/*.test.ts',
+            '**/*.test.tsx',
+            '**/*.spec.ts',
+            '**/*.spec.tsx',
+          ],
           rules: {
             'no-console': 'off',
           },

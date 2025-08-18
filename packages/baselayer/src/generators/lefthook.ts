@@ -45,16 +45,16 @@ export async function generateLefthookConfig(
 
     const preCommitCommands: Record<string, unknown> = {};
 
-    // TypeScript/JavaScript formatting and linting (Ultracite)
+    // TypeScript/JavaScript formatting and linting (Biome)
     if (features.typescript !== false) {
-      preCommitCommands['ultracite-lint'] = {
+      preCommitCommands['biome-lint'] = {
         glob: '*.{js,jsx,ts,tsx,mjs,cjs}',
-        run: `${pmx} ultracite lint {staged_files}`,
+        run: `${packageManager} run lint {staged_files}`,
       };
 
-      preCommitCommands['ultracite-format'] = {
+      preCommitCommands['biome-format'] = {
         glob: '*.{js,jsx,ts,tsx,mjs,cjs}',
-        run: `${pmx} ultracite format --write {staged_files} && git add {staged_files}`,
+        run: `${packageManager} run format {staged_files} && git add {staged_files}`,
       };
     }
 
@@ -117,26 +117,16 @@ export async function generateLefthookConfig(
     if (!skipPrePush) {
       const prePushCommands: Record<string, unknown> = {};
 
-      // Add test command based on package manager
-      if (packageManager === 'bun') {
-        prePushCommands.test = {
-          run: 'bun test --run',
-          skip: [{ ref: 'refs/heads/wip' }, { ref: 'refs/heads/draft' }],
-        };
-      } else {
-        prePushCommands.test = {
-          run: `${packageManager} test`,
-          skip: [{ ref: 'refs/heads/wip' }, { ref: 'refs/heads/draft' }],
-        };
-      }
+      // Add test command via package scripts
+      prePushCommands.test = {
+        run: `${packageManager} run test`,
+        skip: [{ ref: 'refs/heads/wip' }, { ref: 'refs/heads/draft' }],
+      };
 
       // Add type check if TypeScript is enabled
       if (features.typescript !== false) {
         prePushCommands['type-check'] = {
-          run:
-            packageManager === 'bun'
-              ? 'bun run type-check'
-              : `${packageManager} run type-check`,
+          run: `${packageManager} run type-check`,
           skip: [{ ref: 'refs/heads/wip' }, { ref: 'refs/heads/draft' }],
         };
       }
@@ -155,7 +145,7 @@ export async function generateLefthookConfig(
     // Add header comment
     const fullContent = `# Lefthook configuration
 
-# <https://github.com/evilmartians/lefthook>
+# https://github.com/evilmartians/lefthook
 
 ${yamlContent}`;
 

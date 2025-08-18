@@ -1,5 +1,5 @@
 {
-  "$schema": "<https://oxlint.rs/schema/oxlintrc.json>",
+  "$schema": "https://oxlint.rs/schema/oxlintrc.json",
   "plugins": ["import", "jest", "vitest", "typescript", "react"],
   "env": {
     "browser": true,

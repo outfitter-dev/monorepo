@@ -38,6 +38,13 @@ async function mergeVSCodeSettings(
     const readResult = await readJSON(settingsPath);
     if (isSuccess(readResult)) {
       existingSettings = readResult.data as Record<string, unknown>;
+    } else {
+      // Propagate read failure instead of using defaults
+      return failure(
+        new Error(
+          `Failed to read existing settings: ${readResult.error.message}`
+        )
+      );
     }
   }
 
@@ -75,6 +82,13 @@ async function mergeVSCodeExtensions(newExtensions: {
     const readResult = await readJSON(extensionsPath);
     if (isSuccess(readResult)) {
       existingExtensions = readResult.data as { recommendations: string[] };
+    } else {
+      // Propagate read failure instead of using defaults
+      return failure(
+        new Error(
+          `Failed to read existing extensions: ${readResult.error.message}`
+        )
+      );
     }
   }
 

@@ -26,7 +26,7 @@ export interface TurboPipeline {
  */
 export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
   const turboConfig: TurboConfig = {
-    $schema: '<https://turbo.build/schema.json>',
+    $schema: 'https://turbo.build/schema.json',
     ui: 'tui',
     pipeline: {},
     globalDependencies: [
@@ -78,7 +78,9 @@ export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
       inputs: [
         'src/**',
         'test/**',
-        '**tests**/**',
+        '__tests__/**',
+        'tests/**',
+        'mocks/**',
         '**/*.test.*',
         '**/*.spec.*',
         'vitest.config.*',
@@ -93,7 +95,9 @@ export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
       inputs: [
         'src/**',
         'test/**',
-        '**tests**/**',
+        '__tests__/**',
+        'tests/**',
+        'mocks/**',
         '**/*.test.*',
         '**/*.spec.*',
         'vitest.config.*',
