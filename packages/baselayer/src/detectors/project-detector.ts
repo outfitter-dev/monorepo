@@ -65,8 +65,8 @@ export async function detectProjectInfo(
     // Detect framework
     let framework: ProjectInfo['framework'];
     const deps = {
-      ...packageJson.dependencies,
-      ...packageJson.devDependencies,
+      ...(packageJson.dependencies ?? {}),
+      ...(packageJson.devDependencies ?? {}),
     };
     if (deps.react || deps['@types/react']) {
       if (deps.next) {

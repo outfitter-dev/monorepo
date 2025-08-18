@@ -25,7 +25,7 @@ import {
 
 export interface AddOptions {
   /** Tools/features to add */
-  tools: string[];
+  tools: Array<string>;
   /**Show what would be added without making changes */
   dryRun?: boolean;
   /** Enable verbose logging */
@@ -40,11 +40,11 @@ export interface AddOptions {
 export async function add(options: AddOptions): Promise<FlintResult<void>> {
   try {
     // Input validation
-    if (!options || typeof options !== 'object') {
+    if (!options || typeof options !== 'object' || Array.isArray(options)) {
       return failure(
         makeError(
-          'VALIDATION_ERROR',
-          `Invalid options: expected object, got ${typeof options}`
+          ErrorCode.VALIDATION_ERROR,
+          `Invalid options: expected object, got ${options === null ? 'null' : typeof options}`
         )
       );
     }
@@ -52,8 +52,8 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     if (!Array.isArray(options.tools)) {
       return failure(
         makeError(
-          'VALIDATION_ERROR',
-          `Invalid tools: expected array, got ${typeof options.tools}`
+          ErrorCode.VALIDATION_ERROR,
+          `Invalid tools: expected array, got ${options.tools === null ? 'null' : typeof options.tools}`
         )
       );
     }

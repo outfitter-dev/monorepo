@@ -73,7 +73,7 @@ export const logger = new Logger({
 });
 
 // Usage with Outfitter's Result pattern
-import { Result, failure } from '@outfitter/contracts';
+import { Result, success, failure } from '@outfitter/contracts';
 
 export async function fetchUserData(
   id: string,
@@ -126,6 +126,7 @@ export type Role = (typeof Role)[keyof typeof Role];
 // ✅ Alternative: Union type
 export type Role = 'admin' | 'user' | 'guest';
 
+import { z } from 'zod';
 // With Zod (Outfitter's validation library)
 const roleSchema = z.enum(['admin', 'user', 'guest']); // This is fine - it's not a TS enum
 type Role = z.infer<typeof roleSchema>;
@@ -294,8 +295,31 @@ Create a `biome.json` that aligns with Outfitter standards:
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
-  "extends": ["ultracite"]
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "es5"
+    }
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": ["**/*", "!dist/**", "!coverage/**", "!node_modules/**"]
+  },
+  "vcs": {
+    "useIgnoreFile": true
+  }
 }
 ```
 
@@ -306,8 +330,8 @@ Add scripts that run both Ultracite and other tools:
 ```json
 {
   "scripts": {
-    "lint": "ultracite lint && tsc --noEmit",
-    "lint:fix": "ultracite format",
+    "lint": "biome check --write=false . && tsc --noEmit",
+    "lint:fix": "biome format .",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "check:all": "pnpm lint && pnpm test:coverage"

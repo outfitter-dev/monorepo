@@ -21,7 +21,7 @@ import { backupFile, writeJSON } from '../utils/file-system.js';
 
 export interface RemoveOptions {
   /** Tools/features to remove */
-  tools: string[];
+  tools: Array<string>;
   /**Show what would be removed without making changes */
   dryRun?: boolean;
   /** Enable verbose logging */
