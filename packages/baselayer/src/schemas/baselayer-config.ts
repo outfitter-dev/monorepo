@@ -66,7 +66,7 @@ export const ProjectContextSchema = z
       .optional()
       .describe('Project type for context-aware configuration'),
     framework: z
-      .enum(['react', 'vue', 'svelte', 'next', 'astro'])
+      .enum(['react', 'vue', 'svelte', 'next', 'astro', 'angular'])
       .optional()
       .describe('Primary framework being used'),
     packageManager: z
@@ -179,15 +179,62 @@ export const BASELAYER_JSON_SCHEMA = {
         docs: { type: 'boolean', default: false },
       },
     },
+    overrides: {
+      type: 'object',
+      description: 'Tool-specific configuration overrides',
+      properties: {
+        biome: {
+          type: 'object',
+          description: 'Biome configuration overrides',
+          properties: {
+            formatter: { type: 'object' },
+            linter: { type: 'object' },
+            organizeImports: { type: 'object' },
+          },
+        },
+        prettier: {
+          type: 'object',
+          description: 'Prettier configuration overrides',
+        },
+        stylelint: {
+          type: 'object',
+          description: 'Stylelint configuration overrides',
+        },
+        markdownlint: {
+          type: 'object',
+          description: 'Markdownlint configuration overrides',
+        },
+      },
+    },
     project: {
       type: 'object',
       description: 'Project context information',
       properties: {
-        type: { enum: ['monorepo', 'library', 'application'] },
-        framework: { enum: ['react', 'vue', 'svelte', 'next', 'astro'] },
-        packageManager: { enum: ['npm', 'yarn', 'pnpm', 'bun'] },
+        type: { type: 'string', enum: ['monorepo', 'library', 'application'] },
+        framework: {
+          type: 'string',
+          enum: ['react', 'vue', 'svelte', 'next', 'astro', 'angular'],
+        },
+        packageManager: {
+          type: 'string',
+          enum: ['npm', 'yarn', 'pnpm', 'bun'],
+        },
         rootDir: { type: 'string' },
       },
+    },
+    ignore: {
+      type: 'array',
+      description: 'Files and patterns to ignore across all tools',
+      items: { type: 'string' },
+    },
+    extends: {
+      oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }],
+      description: 'Extend from other configuration files or presets',
+    },
+    presets: {
+      type: 'array',
+      description: 'Apply predefined configuration presets',
+      items: { type: 'string' },
     },
   },
 };
