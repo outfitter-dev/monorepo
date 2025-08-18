@@ -1,12 +1,16 @@
-#!/bin/bash
+# !/bin/bash
 
 # Install Lefthook
+
 npm install --save-dev lefthook
 
 # Create lefthook.yml configuration
+
 cat > lefthook.yml << 'EOF'
+
 # Lefthook configuration
-# https://github.com/evilmartians/lefthook
+
+# <https://github.com/evilmartians/lefthook>
 
 pre-commit:
   parallel: true
@@ -34,17 +38,22 @@ commit-msg:
       run: npx commitlint --edit {1}
 
 # Skip hooks in CI
+
 skip:
-  - ci: test
-  - rebase: true
-  - merge: true
+
+- ci: test
+- rebase: true
+- merge: true
 EOF
 
 # Install Lefthook git hooks
+
 npx lefthook install
 
 # Add lint-staged configuration to package.json
+
 # (This would normally be done programmatically)
+
 echo "Add this to your package.json:"
 echo '
 {
@@ -63,6 +72,7 @@ echo '
 }'
 
 # Verify installation
+
 echo ""
 echo "✅ Lefthook installed successfully!"
 echo "Run 'npx lefthook run pre-commit' to test pre-commit hooks"

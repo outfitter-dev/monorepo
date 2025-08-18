@@ -1,11 +1,17 @@
 # ---
+
 # slug: testing-github-actions
+
 # title: GitHub Actions CI/CD pipeline with testing and coverage
-# description: Complete GitHub Actions workflow for testing, coverage, and deployment.
+
+# description: Complete GitHub Actions workflow for testing, coverage, and deployment
+
 # type: template
+
 # ---
 
 # GitHub Actions - Comprehensive Testing Pipeline
+
 name: Test & Release
 
 on:
@@ -15,7 +21,9 @@ on:
     branches: [main, dev]
 
 jobs:
-  # Run tests across multiple Node versions
+
+# Run tests across multiple Node versions
+
   test:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -70,7 +78,8 @@ jobs:
             coverage/
             test-results/
 
-  # Run E2E tests separately
+# Run E2E tests separately
+
   e2e:
     runs-on: ubuntu-latest
     needs: test
@@ -101,7 +110,8 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-  # Monorepo testing with changesets
+# Monorepo testing with changesets
+
   monorepo-test:
     if: github.repository_owner == 'your-org' # Replace with your org
     runs-on: ubuntu-latest
@@ -141,7 +151,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  # Security and quality checks
+# Security and quality checks
+
   quality:
     runs-on: ubuntu-latest
 
@@ -163,10 +174,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 # Reusable workflow for other repos
+
 # Save as .github/workflows/test-template.yml
-# Then call with:
-# jobs:
-#   test:
-#     uses: your-org/workflows/.github/workflows/test-template.yml@main
-#     secrets: inherit
+
+# Then call with
+
+# jobs
+
+# test
+
+# uses: your-org/workflows/.github/workflows/test-template.yml@main
+
+# secrets: inherit

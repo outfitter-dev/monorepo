@@ -1,5 +1,6 @@
 /**
- * Standard remark preset for balanced markdown linting and formatting
+
+- Standard remark preset for balanced markdown linting and formatting
  */
 
 import type { RemarkConfig } from '../types.js';

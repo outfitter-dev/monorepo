@@ -21,16 +21,17 @@ interface OutfitterConfig {
 }
 
 /**
- * Imports or exports a fieldguide configuration file based on the specified action.
- *
- * For 'export', writes the current local fieldguide configuration to a specified output file, including metadata and supporting legacy keys.
- * For 'import', reads a configuration file, validates its structure, and prepares to initialize or update the local configuration.
- *
- * @param action - The operation to perform: 'export' or 'import'.
- * @param options - Options for the chosen action. For 'export', specifies the output file path; for 'import', specifies the input file path.
- *
- * @remark
- * Exits the process with code 1 if required files are missing or if the configuration format is invalid.
+
+- Imports or exports a fieldguide configuration file based on the specified action.
+-
+- For 'export', writes the current local fieldguide configuration to a specified output file, including metadata and supporting legacy keys.
+- For 'import', reads a configuration file, validates its structure, and prepares to initialize or update the local configuration.
+-
+- @param action - The operation to perform: 'export' or 'import'.
+- @param options - Options for the chosen action. For 'export', specifies the output file path; for 'import', specifies the input file path.
+-
+- @remark
+- Exits the process with code 1 if required files are missing or if the configuration format is invalid.
  */
 export async function manageFieldguideConfig(
   action: 'export' | 'import',
@@ -99,7 +100,7 @@ export async function manageFieldguideConfig(
     ).length;
     console.log(
       chalk.green('✓') +
-        ` Imported ${fieldguideCount} fieldguides from ${chalk.cyan(importConfig.name)}`
+        `Imported ${fieldguideCount} fieldguides from ${chalk.cyan(importConfig.name)}`
     );
   }
 }

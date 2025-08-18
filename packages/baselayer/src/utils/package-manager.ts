@@ -1,5 +1,6 @@
 /**
- * Package manager detection and operations
+
+- Package manager detection and operations
  */
 
 import * as path from 'node:path';
@@ -67,7 +68,8 @@ const COMMANDS = {
 };
 
 /**
- * Detect package manager from lock file
+
+- Detect package manager from lock file
  */
 export async function detectPackageManager(
   cwd: string = process.cwd()
@@ -104,14 +106,16 @@ export async function detectPackageManager(
 }
 
 /**
- * Get install command for package manager
+
+- Get install command for package manager
  */
 export function getInstallCommand(pm: PackageManager): string {
   return COMMANDS.install[pm];
 }
 
 /**
- * Get add command for package manager
+
+- Get add command for package manager
  */
 export function getAddCommand(
   pm: PackageManager,
@@ -123,7 +127,8 @@ export function getAddCommand(
 }
 
 /**
- * Get remove command for package manager
+
+- Get remove command for package manager
  */
 export function getRemoveCommand(
   pm: PackageManager,
@@ -133,24 +138,28 @@ export function getRemoveCommand(
 }
 
 /**
- * Get run command for package manager
+
+- Get run command for package manager
  */
 export function getRunCommand(pm: PackageManager, script: string): string {
   return `${COMMANDS.run[pm]} ${script}`;
 }
 
 /**
- * Get exec command for package manager
+
+- Get exec command for package manager
  */
 export function getExecCommand(pm: PackageManager, command: string): string {
   return `${COMMANDS.exec[pm]} ${command}`;
 }
 
 /**
- * Check if user prefers a specific package manager from env or config
+
+- Check if user prefers a specific package manager from env or config
  */
 export async function getPreferredPackageManager(): Promise<
   Result<PackageManager | null, PackageManagerError>
+
 > {
   // Check environment variable
   const pmFromEnv = process.env.FLINT_PACKAGE_MANAGER;
@@ -178,14 +187,16 @@ export async function getPreferredPackageManager(): Promise<
 }
 
 /**
- * Validate package manager type
+
+- Validate package manager type
  */
 function isValidPackageManager(pm: string): boolean {
   return ['npm', 'yarn', 'pnpm', 'bun'].includes(pm);
 }
 
 /**
- * Get package manager with fallback to preference or detection
+
+- Get package manager with fallback to preference or detection
  */
 export async function getPackageManager(
   cwd?: string
@@ -204,7 +215,8 @@ export async function getPackageManager(
 }
 
 /**
- * Check if running in CI environment
+
+- Check if running in CI environment
  */
 export function isCI(): boolean {
   return (
@@ -218,7 +230,8 @@ export function isCI(): boolean {
 }
 
 /**
- * Get appropriate install flags for CI
+
+- Get appropriate install flags for CI
  */
 export function getCIFlags(pm: PackageManager): string {
   const flags: Record<PackageManager, string> = {

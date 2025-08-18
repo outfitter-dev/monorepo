@@ -1,8 +1,9 @@
 /**
- * @outfitter/biome-config
- *
- * Shared Biome configuration for the Outfitter monorepo.
- * Provides both static config and programmatic generation.
+
+- @outfitter/biome-config
+-
+- Shared Biome configuration for the Outfitter monorepo.
+- Provides both static config and programmatic generation.
  */
 
 // Base Biome configuration
@@ -70,31 +71,33 @@ const baseConfig = {
 export const config = baseConfig;
 
 /**
- * Configuration options for generating Biome config
+
+- Configuration options for generating Biome config
  */
 export interface BiomeConfigOptions {
-  /** Indentation settings */
+  /**Indentation settings */
   indentation?: {
     style: 'space' | 'tab';
     width: number;
   };
   /** Line width for formatting */
   lineWidth?: number;
-  /** Quote style settings */
+  /**Quote style settings */
   quotes?: {
     style: 'single' | 'double';
     jsx: 'single' | 'double';
   };
   /** Semicolon usage */
   semicolons?: 'always' | 'asNeeded' | boolean;
-  /** Trailing comma settings */
+  /**Trailing comma settings */
   trailingComma?: 'all' | 'es5' | 'none';
   /** Arrow parentheses */
   arrowParens?: 'always' | 'asNeeded';
 }
 
 /**
- * Generate a Biome configuration based on preset config
+
+- Generate a Biome configuration based on preset config
  */
 export function generate(presetConfig: BiomeConfigOptions = {}) {
   const result = JSON.parse(JSON.stringify(baseConfig)); // Deep clone

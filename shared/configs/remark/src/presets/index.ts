@@ -1,5 +1,6 @@
 /**
- * Remark preset exports
+
+- Remark preset exports
  */
 
 export { relaxed } from './relaxed.js';
@@ -12,7 +13,8 @@ import { standard } from './standard.js';
 import { strict } from './strict.js';
 
 /**
- * Generate a remark configuration based on preset and options
+
+- Generate a remark configuration based on preset and options
  */
 export function generate(options: RemarkConfigOptions = {}): RemarkConfig {
   const {

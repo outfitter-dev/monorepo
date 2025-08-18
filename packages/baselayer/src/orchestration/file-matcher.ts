@@ -3,7 +3,8 @@ import { glob } from 'glob';
 import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 
 /**
- * Base file type mappings - tools handle these extensions by default
+
+- Base file type mappings - tools handle these extensions by default
  */
 export const BASE_FILE_HANDLERS = {
   typescript: ['.ts', '.tsx', '.js', '.jsx'], // Biome/Ultracite
@@ -16,8 +17,9 @@ export const BASE_FILE_HANDLERS = {
 export type FileType = keyof typeof BASE_FILE_HANDLERS;
 
 /**
- * Dynamic file handlers that adjust based on configuration
- * When tools are disabled, their files are handled by fallback tools
+
+- Dynamic file handlers that adjust based on configuration
+- When tools are disabled, their files are handled by fallback tools
  */
 export function getFileHandlers(
   config: BaselayerConfig
@@ -49,24 +51,27 @@ export function getFileHandlers(
 }
 
 /**
- * Utility class for matching files to appropriate tools
- * Handles file discovery, filtering, and categorization with configuration awareness
+
+- Utility class for matching files to appropriate tools
+- Handles file discovery, filtering, and categorization with configuration awareness
  */
 export class FileMatcher {
   private fileHandlers: Record<FileType, readonly string[]> =
     BASE_FILE_HANDLERS;
 
   /**
-   * Update file handlers based on configuration
-   * Must be called before categorizing files
+
+- Update file handlers based on configuration
+- Must be called before categorizing files
    */
   updateHandlers(config: BaselayerConfig): void {
     this.fileHandlers = getFileHandlers(config);
   }
 
   /**
-   * Categorize files by type for tool processing
-   * Uses dynamic handlers based on current configuration
+
+- Categorize files by type for tool processing
+- Uses dynamic handlers based on current configuration
    */
   categorizeFiles(
     files: readonly string[],
@@ -100,8 +105,9 @@ export class FileMatcher {
   }
 
   /**
-   * Find files matching specific patterns
-   * Supports glob patterns and respects gitignore
+
+- Find files matching specific patterns
+- Supports glob patterns and respects gitignore
    */
   async findFiles(
     patterns: readonly string[],
@@ -145,8 +151,9 @@ export class FileMatcher {
   }
 
   /**
-   * Get staged files from git
-   * Used for pre-commit hooks and --staged flag
+
+- Get staged files from git
+- Used for pre-commit hooks and --staged flag
    */
   private async getStagedFiles(cwd: string): Promise<string[]> {
     try {
@@ -176,8 +183,9 @@ export class FileMatcher {
   }
 
   /**
-   * Filter files by type
-   * Useful for --only flag implementation
+
+- Filter files by type
+- Useful for --only flag implementation
    */
   filterByType(files: readonly string[], types: readonly FileType[]): string[] {
     const filtered: string[] = [];
@@ -197,8 +205,9 @@ export class FileMatcher {
   }
 
   /**
-   * Get file type for a single file
-   * Uses current configuration-aware handlers
+
+- Get file type for a single file
+- Uses current configuration-aware handlers
    */
   getFileType(filePath: string): FileType | null {
     const ext = extname(filePath);
@@ -213,8 +222,9 @@ export class FileMatcher {
   }
 
   /**
-   * Get all supported file patterns for current configuration
-   * Useful for glob patterns
+
+- Get all supported file patterns for current configuration
+- Useful for glob patterns
    */
   getAllPatterns(): string[] {
     const extensions = Object.values(this.fileHandlers).flat();
@@ -222,7 +232,8 @@ export class FileMatcher {
   }
 
   /**
-   * Get active handlers (for debugging/introspection)
+
+- Get active handlers (for debugging/introspection)
    */
   getActiveHandlers(): Record<FileType, readonly string[]> {
     return { ...this.fileHandlers };

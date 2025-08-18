@@ -1,5 +1,6 @@
 /**
- * Integration tests for @outfitter/types
+
+- Integration tests for @outfitter/types
  */
 
 import { describe, expect, it } from 'vitest';

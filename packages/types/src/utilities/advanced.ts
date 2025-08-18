@@ -1,11 +1,13 @@
 /**
- * Advanced TypeScript utilities that complement type-fest
- *
- * Utilities for advanced patterns not covered by type-fest.
+
+- Advanced TypeScript utilities that complement type-fest
+-
+- Utilities for advanced patterns not covered by type-fest.
  */
 
 /**
- * Get all paths to properties in a nested object as string literals
+
+- Get all paths to properties in a nested object as string literals
  */
 export type DeepKeys<T> = T extends object
   ? {
@@ -18,7 +20,8 @@ export type DeepKeys<T> = T extends object
   : never;
 
 /**
- * Get the type at a specific deep path in an object
+
+- Get the type at a specific deep path in an object
  */
 export type DeepGet<T, P extends string> = P extends `${infer K}.${infer Rest}`
   ? K extends keyof T
@@ -29,8 +32,9 @@ export type DeepGet<T, P extends string> = P extends `${infer K}.${infer Rest}`
     : never;
 
 /**
- * Template literal type for URL path parameters
- * Extract parameters like :id from "/users/:id/posts/:postId"
+
+- Template literal type for URL path parameters
+- Extract parameters like :id from "/users/:id/posts/:postId"
  */
 export type ExtractRouteParams<T extends string> =
   T extends `${infer _Start}:${infer Param}/${infer Rest}`
@@ -40,7 +44,8 @@ export type ExtractRouteParams<T extends string> =
       : never;
 
 /**
- * Template literal type for environment variable patterns
+
+- Template literal type for environment variable patterns
  */
 export type EnvVarPattern<T extends string> =
   T extends `${infer Prefix}_${infer Suffix}`
@@ -48,11 +53,13 @@ export type EnvVarPattern<T extends string> =
     : Uppercase<T>;
 
 /**
- * Type-safe string interpolation for known patterns
+
+- Type-safe string interpolation for known patterns
  */
 export type Interpolate<
   T extends string,
   Values extends Record<string, string | number>,
+
 > = T extends `${infer Before}{${infer Key}}${infer After}`
   ? Key extends keyof Values
     ? `${Before}${Values[Key]}${Interpolate<After, Values>}`
@@ -60,7 +67,8 @@ export type Interpolate<
   : T;
 
 /**
- * Utilities for discriminated unions
+
+- Utilities for discriminated unions
  */
 export type DiscriminatedUnion<T, K extends keyof T> = T extends Record<
   K,
@@ -72,7 +80,8 @@ export type DiscriminatedUnion<T, K extends keyof T> = T extends Record<
   : never;
 
 /**
- * Extract discriminator values from a discriminated union
+
+- Extract discriminator values from a discriminated union
  */
 export type DiscriminatorValues<T, K extends keyof T> = T extends Record<
   K,
@@ -82,12 +91,14 @@ export type DiscriminatorValues<T, K extends keyof T> = T extends Record<
   : never;
 
 /**
- * Create a type-safe switch for discriminated unions
+
+- Create a type-safe switch for discriminated unions
  */
 export type Switch<
   T,
   K extends keyof T,
   Cases extends Record<PropertyKey, unknown>,
+
 > = T extends Record<K, infer V>
   ? V extends keyof Cases
     ? Cases[V]

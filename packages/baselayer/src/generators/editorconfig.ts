@@ -3,7 +3,8 @@ import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import { writeFile } from '../utils/file-system.js';
 
 /**
- * Generate .editorconfig content based on configuration
+
+- Generate .editorconfig content based on configuration
  */
 export function generateEditorconfigContent(config?: BaselayerConfig): string {
   const sections = [
@@ -137,7 +138,8 @@ export function generateEditorconfigContent(config?: BaselayerConfig): string {
 }
 
 /**
- * Write .editorconfig file based on configuration
+
+- Write .editorconfig file based on configuration
  */
 export async function generateEditorconfigConfig(
   config?: BaselayerConfig

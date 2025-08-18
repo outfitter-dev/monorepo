@@ -22,15 +22,16 @@ import { backupFile, writeJSON } from '../utils/file-system.js';
 export interface RemoveOptions {
   /** Tools/features to remove */
   tools: string[];
-  /** Show what would be removed without making changes */
+  /**Show what would be removed without making changes */
   dryRun?: boolean;
   /** Enable verbose logging */
   verbose?: boolean;
 }
 
 /**
- * Remove command - Removes tools/features from existing baselayer config
- * Validates tool names, disables features, and optionally removes configuration files
+
+- Remove command - Removes tools/features from existing baselayer config
+- Validates tool names, disables features, and optionally removes configuration files
  */
 export async function remove(
   options: RemoveOptions
@@ -223,11 +224,11 @@ export async function remove(
     if (dryRun) {
       console.log('🧪 DRY RUN - Would make the following changes:');
       console.log(
-        `   • Disable features: ${toolsToRemove.map((tool) => TOOL_TO_FEATURE[tool]).join(', ')}`
+        `• Disable features: ${toolsToRemove.map((tool) => TOOL_TO_FEATURE[tool]).join(', ')}`
       );
       if (configFilesToRemove.length > 0) {
         console.log(
-          `   • Remove configuration files: ${configFilesToRemove.join(', ')}`
+          `• Remove configuration files: ${configFilesToRemove.join(', ')}`
         );
       }
       console.log('   • Update baselayer.jsonc');
@@ -387,7 +388,8 @@ export async function remove(
 }
 
 /**
- * List tools that are currently enabled and can be removed
+
+- List tools that are currently enabled and can be removed
  */
 export async function getRemovableTools(): Promise<FlintResult<string[]>> {
   try {
@@ -414,7 +416,8 @@ export async function getRemovableTools(): Promise<FlintResult<string[]>> {
 }
 
 /**
- * Check what configuration files would be affected by removing tools
+
+- Check what configuration files would be affected by removing tools
  */
 export async function previewRemoval(tools: string[]): Promise<
   FlintResult<{
@@ -422,6 +425,7 @@ export async function previewRemoval(tools: string[]): Promise<
     configFiles: string[];
     warnings: string[];
   }>
+
 > {
   try {
     const warnings: string[] = [];

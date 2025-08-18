@@ -1,5 +1,6 @@
 /**
- * Framework-specific detection utilities
+
+- Framework-specific detection utilities
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -15,7 +16,8 @@ export interface FrameworkConfig {
 }
 
 /**
- * Detect framework-specific configurations and requirements
+
+- Detect framework-specific configurations and requirements
  */
 export async function detectFrameworkConfig(
   framework: string,

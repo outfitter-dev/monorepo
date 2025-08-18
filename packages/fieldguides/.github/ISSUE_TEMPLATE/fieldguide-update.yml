@@ -4,12 +4,13 @@ title: '[Update]: '
 labels: ['type/improvement', 'area/docs', 'needs/review']
 assignees: []
 body:
-  - type: markdown
+
+- type: markdown
     attributes:
       value: |
         Thank you for helping improve our fieldguides! Your real-world experience helps keep our documentation current and valuable.
 
-  - type: dropdown
+- type: dropdown
     id: fieldguide
     attributes:
       label: Which Fieldguide?
@@ -22,7 +23,7 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+- type: dropdown
     id: update_type
     attributes:
       label: Type of Update
@@ -37,7 +38,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: current_issue
     attributes:
       label: Current Issue
@@ -46,7 +47,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: proposed_solution
     attributes:
       label: Proposed Solution
@@ -59,7 +60,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: justification
     attributes:
       label: Justification
@@ -72,7 +73,7 @@ body:
     validations:
       required: true
 
-  - type: input
+- type: input
     id: section
     attributes:
       label: Affected Section
@@ -81,7 +82,7 @@ body:
     validations:
       required: false
 
-  - type: textarea
+- type: textarea
     id: breaking_changes
     attributes:
       label: Breaking Changes
@@ -90,7 +91,7 @@ body:
     validations:
       required: false
 
-  - type: checkboxes
+- type: checkboxes
     id: validation
     attributes:
       label: Update Validation

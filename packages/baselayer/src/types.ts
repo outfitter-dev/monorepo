@@ -11,7 +11,7 @@ export interface OutfitterConfig {
     commits?: boolean; // Commitlint via Lefthook
     packages?: boolean; // Publint (opt-in for libraries)
   };
-  /** Tool-specific overrides only when needed */
+  /**Tool-specific overrides only when needed*/
   overrides?: {
     biome?: Record<string, unknown>;
     prettier?: Record<string, unknown>;

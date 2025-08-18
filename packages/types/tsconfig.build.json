@@ -8,5 +8,5 @@
     "noEmit": false
   },
   "include": ["src/**/*"],
-  "exclude": ["**/*.test.ts", "**/__tests__/**/*", "dist", "node_modules"]
+  "exclude": ["**/*.test.ts", "**/**tests**/**/*", "dist", "node_modules"]
 }

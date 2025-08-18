@@ -72,8 +72,8 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "dev": "tsc --project tsconfig.build.json --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "test": "vitest",
     "test:run": "vitest --run",
@@ -91,6 +91,7 @@
   "devDependencies": {
     "@outfitter/baselayer": "workspace:*",
     "@types/node": "24.3.0",
+    "tsup": "^8.3.0",
     "typescript": "5.9.2",
     "vitest": "3.2.4"
   },
@@ -105,7 +106,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "url": "<https://github.com/outfitter-dev/monorepo.git>",
     "directory": "packages/types"
   }
 }

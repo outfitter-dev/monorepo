@@ -1,9 +1,9 @@
-export * from './assert.js';
-export * from './error.js';
-export * from './errors/index.js';
-export * from './result.js';
-export * from './types/index.js';
-export * as Types from './types/index.js';
+export *from './assert.js';
+export* from './error.js';
+export *from './errors/index.js';
+export* from './result.js';
+export *from './types/index.js';
+export* as Types from './types/index.js';
 export {
   type AppError,
   isAppError,

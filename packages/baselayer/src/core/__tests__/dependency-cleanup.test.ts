@@ -7,8 +7,8 @@ import {
   success,
 } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import * as console from '../../utils/console';
-import * as fs from '../../utils/file-system';
+import *as console from '../../utils/console';
+import* as fs from '../../utils/file-system';
 import * as pm from '../../utils/package-manager';
 import {
   cleanupDependencies,

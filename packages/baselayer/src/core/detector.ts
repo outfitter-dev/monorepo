@@ -1,5 +1,6 @@
 /**
- * Detect existing tools and configurations
+
+- Detect existing tools and configurations
  */
 
 import { join } from 'node:path';
@@ -88,7 +89,8 @@ const TOOL_PATTERNS: Record<string, string[]> = {
 };
 
 /**
- * Detect all existing tool configurations
+
+- Detect all existing tool configurations
  */
 export async function detectExistingTools(
   cwd: string = process.cwd()
@@ -159,7 +161,8 @@ export async function detectExistingTools(
 }
 
 /**
- * Detect if ESLint is configured
+
+- Detect if ESLint is configured
  */
 export async function detectEslintConfig(
   cwd: string = process.cwd()
@@ -173,7 +176,8 @@ export async function detectEslintConfig(
 }
 
 /**
- * Detect if Prettier is configured
+
+- Detect if Prettier is configured
  */
 export async function detectPrettierConfig(
   cwd: string = process.cwd()
@@ -187,7 +191,8 @@ export async function detectPrettierConfig(
 }
 
 /**
- * Detect if project uses TypeScript
+
+- Detect if project uses TypeScript
  */
 export async function detectTypeScript(
   cwd: string = process.cwd()
@@ -211,7 +216,8 @@ export async function detectTypeScript(
 }
 
 /**
- * Detect if project uses React
+
+- Detect if project uses React
  */
 export async function detectReact(
   cwd: string = process.cwd()
@@ -235,7 +241,8 @@ export async function detectReact(
 }
 
 /**
- * Detect if project uses CSS/SCSS/Less
+
+- Detect if project uses CSS/SCSS/Less
  */
 export async function detectStyles(
   cwd: string = process.cwd()
@@ -256,7 +263,8 @@ export async function detectStyles(
 }
 
 /**
- * Detect if project has markdown files
+
+- Detect if project has markdown files
  */
 export async function detectMarkdown(
   cwd: string = process.cwd()
@@ -274,7 +282,8 @@ export async function detectMarkdown(
 }
 
 /**
- * Detect if VS Code is used
+
+- Detect if VS Code is used
  */
 export async function detectVSCode(
   cwd: string = process.cwd()
@@ -288,7 +297,8 @@ export async function detectVSCode(
 }
 
 /**
- * Detect git hooks setup
+
+- Detect git hooks setup
  */
 export async function detectGitHooks(
   cwd: string = process.cwd()
@@ -320,7 +330,8 @@ export async function detectGitHooks(
 }
 
 /**
- * Get all configurations that need to be cleaned up
+
+- Get all configurations that need to be cleaned up
  */
 export async function getConfigsToCleanup(
   cwd: string = process.cwd()

@@ -1,10 +1,12 @@
 /*
 ---
+
 slug: testing-react-utils
 title: React Testing Library utilities with dual Jest/Vitest support
 description: Custom render functions and utilities for testing React components with MSW 2.0.
 type: template
 ---
+
 */
 // Custom test utilities for React applications with dual Jest/Vitest support
 
@@ -78,7 +80,7 @@ function createTestQueryClient() {
     },
   });
 }
-function _AllTheProviders({ children, initialEntries = ['/'] }) {
+function_AllTheProviders({ children, initialEntries = ['/'] }) {
   const queryClient = createTestQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
@@ -156,9 +158,9 @@ export function createMockUser(overrides = {}) {
   const now = new Date().toISOString();
   return {
     id: '1',
-    email: 'test@example.com',
+    email: '<test@example.com>',
     name: 'Test User',
-    avatar: 'https://example.com/avatar.jpg',
+    avatar: '<https://example.com/avatar.jpg>',
     role: 'user',
     createdAt: now,
     updatedAt: now,
@@ -216,7 +218,7 @@ import { UserProfile } from '@/components/UserProfile';
 describe('UserProfile', () => {
   it('should display user information', async () => {
     const { user } = render(<UserProfile userId="1" />);
-    
+
     // Wait for data to load
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -239,7 +241,7 @@ describe('UserProfile', () => {
         );
       })
     );
-    
+
     render(<UserProfile userId="999" />);
     
     await waitFor(() => {

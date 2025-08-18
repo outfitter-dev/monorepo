@@ -1,7 +1,8 @@
 /**
- * @outfitter/fieldguides
- *
- * Living documentation system that equips AI agents with consistent development practices
+
+- @outfitter/fieldguides
+-
+- Living documentation system that equips AI agents with consistent development practices
  */
 
 // Export metadata about the package
@@ -38,4 +39,4 @@ export const categories = [
   'operations',
 ] as const;
 
-export type Category = (typeof categories)[number];
+export type Category = [typeof categories](number);

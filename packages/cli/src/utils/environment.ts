@@ -35,8 +35,9 @@ const MINIMUM_VERSIONS = {
 };
 
 /**
- * Extract version from command output.
- * Handles common version string formats.
+
+- Extract version from command output.
+- Handles common version string formats.
  */
 function extractVersion(output: string): string | null {
   // Try to match semantic version pattern
@@ -45,7 +46,8 @@ function extractVersion(output: string): string | null {
 }
 
 /**
- * Get Git version information.
+
+- Get Git version information.
  */
 async function getGitVersion(): Promise<Result<string, Error>> {
   try {
@@ -61,10 +63,12 @@ async function getGitVersion(): Promise<Result<string, Error>> {
 }
 
 /**
- * Detect the primary package manager in use.
+
+- Detect the primary package manager in use.
  */
 async function detectPackageManager(): Promise<
   EnvironmentInfo['packageManager']
+
 > {
   // Check for package manager executables
   const managers = ['pnpm', 'yarn', 'bun'];
@@ -94,11 +98,13 @@ async function detectPackageManager(): Promise<
 }
 
 /**
- * Validate the current environment meets minimum requirements.
- * @returns Result containing environment information or validation errors
+
+- Validate the current environment meets minimum requirements.
+- @returns Result containing environment information or validation errors
  */
 export async function validateEnvironment(): Promise<
   Result<EnvironmentInfo, Error>
+
 > {
   const errors: string[] = [];
 
@@ -179,7 +185,8 @@ export async function validateEnvironment(): Promise<
 }
 
 /**
- * Format environment information for display.
+
+- Format environment information for display.
  */
 export function formatEnvironmentInfo(info: EnvironmentInfo): string {
   const lines = [

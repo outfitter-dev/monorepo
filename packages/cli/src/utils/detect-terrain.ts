@@ -54,13 +54,14 @@ export interface TerrainFeatures {
 }
 
 /**
- * Determines whether a given npm package is listed as a dependency in the project's `package.json`.
- *
- * Checks for the presence of the specified package in the `dependencies`, `devDependencies`, or `peerDependencies` fields of `package.json` within the provided directory.
- *
- * @param packageName - The name of the npm package to check for.
- * @param cwd - The directory to search in. Defaults to the current working directory.
- * @returns `true` if the package is found in any dependency section; otherwise, `false`.
+
+- Determines whether a given npm package is listed as a dependency in the project's `package.json`.
+-
+- Checks for the presence of the specified package in the `dependencies`, `devDependencies`, or `peerDependencies` fields of `package.json` within the provided directory.
+-
+- @param packageName - The name of the npm package to check for.
+- @param cwd - The directory to search in. Defaults to the current working directory.
+- @returns `true` if the package is found in any dependency section; otherwise, `false`.
  */
 async function hasPackage(
   packageName: string,
@@ -92,11 +93,12 @@ async function hasPackage(
 }
 
 /**
- * Checks if a file exists at the specified path within a given directory.
- *
- * @param filePath - Relative path to the file to check.
- * @param cwd - Directory to resolve {@link filePath} from. Defaults to the current working directory.
- * @returns `true` if the file exists, otherwise `false`.
+
+- Checks if a file exists at the specified path within a given directory.
+-
+- @param filePath - Relative path to the file to check.
+- @param cwd - Directory to resolve {@link filePath} from. Defaults to the current working directory.
+- @returns `true` if the file exists, otherwise `false`.
  */
 async function fileExists(
   filePath: string,
@@ -106,12 +108,13 @@ async function fileExists(
 }
 
 /**
- * Detects the presence of common frameworks, languages, tools, and features in a project directory.
- *
- * Inspects the specified directory for configuration files and package dependencies to determine which development environment features are present. Returns a {@link TerrainFeatures} object with boolean flags for each detected feature.
- *
- * @param cwd - The directory to analyze. Defaults to the current working directory.
- * @returns An object indicating detected frameworks, languages, testing tools, state management libraries, build tools, project features, and package managers.
+
+- Detects the presence of common frameworks, languages, tools, and features in a project directory.
+-
+- Inspects the specified directory for configuration files and package dependencies to determine which development environment features are present. Returns a {@link TerrainFeatures} object with boolean flags for each detected feature.
+-
+- @param cwd - The directory to analyze. Defaults to the current working directory.
+- @returns An object indicating detected frameworks, languages, testing tools, state management libraries, build tools, project features, and package managers.
  */
 export async function detectTerrain(
   cwd: string = process.cwd()

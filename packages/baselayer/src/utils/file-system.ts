@@ -1,9 +1,10 @@
 /**
- * File system operations with Result pattern
+
+- File system operations with Result pattern
  */
 
-import * as fs from 'node:fs/promises';
-import * as path from 'node:path';
+import *as fs from 'node:fs/promises';
+import* as path from 'node:path';
 import { failure, isSuccess, type Result, success } from '@outfitter/contracts';
 import { glob } from 'glob';
 
@@ -28,7 +29,8 @@ function makeFileSystemError(
 }
 
 /**
- * Check if a file exists
+
+- Check if a file exists
  */
 export async function fileExists(
   filePath: string
@@ -47,7 +49,8 @@ export async function fileExists(
 }
 
 /**
- * Read a text file
+
+- Read a text file
  */
 export async function readFile(
   filePath: string
@@ -67,7 +70,8 @@ export async function readFile(
 }
 
 /**
- * Write a text file
+
+- Write a text file
  */
 export async function writeFile(
   filePath: string,
@@ -88,7 +92,8 @@ export async function writeFile(
 }
 
 /**
- * Read and parse JSON file
+
+- Read and parse JSON file
  */
 export async function readJSON<T = unknown>(
   filePath: string
@@ -113,7 +118,8 @@ export async function readJSON<T = unknown>(
 }
 
 /**
- * Write JSON file
+
+- Write JSON file
  */
 export async function writeJSON(
   filePath: string,
@@ -134,7 +140,8 @@ export async function writeJSON(
 }
 
 /**
- * Ensure directory exists
+
+- Ensure directory exists
  */
 export async function ensureDir(
   dirPath: string
@@ -154,7 +161,8 @@ export async function ensureDir(
 }
 
 /**
- * Remove file or directory
+
+- Remove file or directory
  */
 export async function remove(
   targetPath: string
@@ -174,7 +182,8 @@ export async function remove(
 }
 
 /**
- * Copy file
+
+- Copy file
  */
 export async function copyFile(
   src: string,
@@ -191,7 +200,8 @@ export async function copyFile(
 }
 
 /**
- * Move/rename file
+
+- Move/rename file
  */
 export async function moveFile(
   src: string,
@@ -208,7 +218,8 @@ export async function moveFile(
 }
 
 /**
- * List files in directory
+
+- List files in directory
  */
 export async function listFiles(
   dirPath: string
@@ -228,7 +239,8 @@ export async function listFiles(
 }
 
 /**
- * Get file stats
+
+- Get file stats
  */
 export async function getStats(
   filePath: string
@@ -248,7 +260,8 @@ export async function getStats(
 }
 
 /**
- * Find files matching glob pattern
+
+- Find files matching glob pattern
  */
 export async function findFiles(
   pattern: string,
@@ -269,16 +282,19 @@ export async function findFiles(
 }
 
 /**
- * Read package.json from current directory
+
+- Read package.json from current directory
  */
 export async function readPackageJson(): Promise<
   Result<Record<string, unknown>, FileSystemError>
+
 > {
   return readJSON('package.json');
 }
 
 /**
- * Write package.json to current directory
+
+- Write package.json to current directory
  */
 export async function writePackageJson(
   data: Record<string, unknown>
@@ -287,7 +303,8 @@ export async function writePackageJson(
 }
 
 /**
- * Create a backup of file content
+
+- Create a backup of file content
  */
 export async function backupFile(
   filePath: string,

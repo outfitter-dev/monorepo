@@ -1,5 +1,6 @@
 /**
- * Migration report generator
+
+- Migration report generator
  */
 
 import {
@@ -36,7 +37,8 @@ export class MigrationReporter {
   private backupPath?: string;
 
   /**
-   * Add a migration step
+
+- Add a migration step
    */
   addStep(step: Omit<MigrationStep, 'duration'>): void {
     this.steps.push({
@@ -46,42 +48,48 @@ export class MigrationReporter {
   }
 
   /**
-   * Record installed tool
+
+- Record installed tool
    */
   addInstalledTool(tool: string): void {
     this.toolsInstalled.add(tool);
   }
 
   /**
-   * Record removed tool
+
+- Record removed tool
    */
   addRemovedTool(tool: string): void {
     this.toolsRemoved.add(tool);
   }
 
   /**
-   * Record created configuration
+
+- Record created configuration
    */
   addCreatedConfig(config: string): void {
     this.configsCreated.push(config);
   }
 
   /**
-   * Record removed configuration
+
+- Record removed configuration
    */
   addRemovedConfig(config: string): void {
     this.configsRemoved.push(config);
   }
 
   /**
-   * Set backup file path
+
+- Set backup file path
    */
   setBackupPath(path: string): void {
     this.backupPath = path;
   }
 
   /**
-   * Generate migration report
+
+- Generate migration report
    */
   async generateReport(
     options: MigrationReportOptions = {}
@@ -93,7 +101,7 @@ export class MigrationReporter {
     } = options;
 
     const timestamp = new Date().toISOString();
-    const date = timestamp.split('T')[0];
+    const date = timestamp.split['T'](0);
     const filename = `flint-migration-report-${date}.md`;
 
     const content = this.generateMarkdownContent({
@@ -117,7 +125,8 @@ export class MigrationReporter {
   }
 
   /**
-   * Generate markdown content
+
+- Generate markdown content
    */
   private generateMarkdownContent(options: {
     timestamp: string;
@@ -314,7 +323,8 @@ export class MigrationReporter {
   }
 
   /**
-   * Get summary statistics
+
+- Get summary statistics
    */
   getSummary(): {
     total: number;
@@ -335,7 +345,8 @@ export class MigrationReporter {
   }
 
   /**
-   * Check if migration was successful
+
+- Check if migration was successful
    */
   isSuccessful(): boolean {
     return this.steps.filter((s) => s.status === 'error').length === 0;

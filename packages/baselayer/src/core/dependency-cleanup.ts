@@ -1,5 +1,6 @@
 /**
- * Clean up unwanted dependencies
+
+- Clean up unwanted dependencies
  */
 
 import { execSync } from 'node:child_process';
@@ -47,7 +48,8 @@ const KEEP_LIST = [
 ];
 
 /**
- * Find dependencies to remove
+
+- Find dependencies to remove
  */
 export async function findDependenciesToRemove(
   options: DependencyCleanupOptions = {}
@@ -92,7 +94,8 @@ export async function findDependenciesToRemove(
 }
 
 /**
- * Remove unwanted dependencies
+
+- Remove unwanted dependencies
  */
 export async function cleanupDependencies(
   options: DependencyCleanupOptions = {}
@@ -171,7 +174,8 @@ export async function cleanupDependencies(
 }
 
 /**
- * Remove specific dependency
+
+- Remove specific dependency
  */
 export async function removeDependency(
   packageName: string,
@@ -220,10 +224,12 @@ export async function removeDependency(
 }
 
 /**
- * Get list of ESLint-related dependencies
+
+- Get list of ESLint-related dependencies
  */
 export async function getEslintDependencies(): Promise<
   Result<string[], DependencyCleanupError>
+
 > {
   const pkgResult = await readPackageJson();
   if (isFailure(pkgResult)) {

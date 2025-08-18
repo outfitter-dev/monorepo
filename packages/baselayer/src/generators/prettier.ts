@@ -3,7 +3,8 @@ import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import { writeFile, writeJSON } from '../utils/file-system.js';
 
 /**
- * Generate .prettierrc.json configuration with smart file handling
+
+- Generate .prettierrc.json configuration with smart file handling
  */
 export function generatePrettierConfigObject(
   config?: BaselayerConfig
@@ -79,7 +80,8 @@ export function generatePrettierConfigObject(
 }
 
 /**
- * Generate .prettierignore content with smart exclusions
+
+- Generate .prettierignore content with smart exclusions
  */
 export function generatePrettierIgnore(config?: BaselayerConfig): string {
   const ignore = [
@@ -145,7 +147,8 @@ export function generatePrettierIgnore(config?: BaselayerConfig): string {
 }
 
 /**
- * Write Prettier configuration files
+
+- Write Prettier configuration files
  */
 export async function generatePrettierConfig(
   config?: BaselayerConfig

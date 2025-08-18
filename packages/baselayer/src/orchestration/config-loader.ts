@@ -14,8 +14,9 @@ import {
 import type { FlintError } from '../types.js';
 
 /**
- * Default configuration for Baselayer
- * Based on bun-monorepo template - single opinionated preset
+
+- Default configuration for Baselayer
+- Based on bun-monorepo template - single opinionated preset
  */
 const DEFAULT_CONFIG: BaselayerConfig = {
   features: {
@@ -32,7 +33,8 @@ const DEFAULT_CONFIG: BaselayerConfig = {
 };
 
 /**
- * Format Zod validation errors into user-friendly error details
+
+- Format Zod validation errors into user-friendly error details
  */
 function formatValidationErrors(zodError: import('zod').ZodError) {
   return zodError.issues.map((issue) => {
@@ -63,8 +65,9 @@ function formatValidationErrors(zodError: import('zod').ZodError) {
 
 export class ConfigLoader {
   /**
-   * Load configuration from baselayer.jsonc or use defaults
-   * Supports JSONC format with comments and trailing commas
+
+- Load configuration from baselayer.jsonc or use defaults
+- Supports JSONC format with comments and trailing commas
    */
   async loadConfig(
     cwd: string = process.cwd()
@@ -157,7 +160,8 @@ export class ConfigLoader {
   }
 
   /**
-   * Parse JSONC content (JSON with comments and trailing commas)
+
+- Parse JSONC content (JSON with comments and trailing commas)
    */
   private parseJsonc(content: string): unknown {
     // Simple JSONC parser - removes single line comments and trailing commas
@@ -173,8 +177,9 @@ export class ConfigLoader {
   }
 
   /**
-   * Merge user configuration with defaults
-   * Deep merge with user overrides taking precedence
+
+- Merge user configuration with defaults
+- Deep merge with user overrides taking precedence
    */
   private mergeWithDefaults(
     userConfig: Partial<BaselayerConfig>
@@ -206,15 +211,17 @@ export class ConfigLoader {
   }
 
   /**
-   * Get default configuration
-   * Useful for migration tools and init commands
+
+- Get default configuration
+- Useful for migration tools and init commands
    */
   getDefaultConfig(): BaselayerConfig {
     return structuredClone(DEFAULT_CONFIG);
   }
 
   /**
-   * Get tool-specific overrides from configuration
+
+- Get tool-specific overrides from configuration
    */
   getToolOverrides<T = Record<string, unknown>>(
     config: BaselayerConfig,
@@ -224,7 +231,8 @@ export class ConfigLoader {
   }
 
   /**
-   * Check if a feature is enabled in the configuration
+
+- Check if a feature is enabled in the configuration
    */
   isFeatureEnabled(
     config: BaselayerConfig,
@@ -234,8 +242,9 @@ export class ConfigLoader {
   }
 
   /**
-   * Validate arbitrary configuration object against schema
-   * Useful for testing and configuration validation in external tools
+
+- Validate arbitrary configuration object against schema
+- Useful for testing and configuration validation in external tools
    */
   validateConfigurationObject(
     config: unknown

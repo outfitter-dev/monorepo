@@ -16,18 +16,20 @@
     "MD024": {
       "siblings_only": true
     },
-    "MD029": {
-      "style": "ordered"
-    },
+    "MD025": false,
+    "MD029": false,
     "MD033": false,
     "MD036": false,
     "MD041": false,
     "MD043": false,
     "MD046": {
       "style": "fenced"
-    }
+    },
+    "MD040": false
   },
-  "globs": [],
+  "globs": ["**/*.md", "**/*.mdx", "**/*.mdc"],
+  "gitignore": true,
+  "frontMatter": "^---\\n[\\s\\S]*?\\n---\\n?",
   "ignores": [
     "**/node_modules",
     "**/.git",

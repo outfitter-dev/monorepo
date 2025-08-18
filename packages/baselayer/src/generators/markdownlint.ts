@@ -3,11 +3,13 @@ import * as yaml from 'yaml';
 import { writeFile } from '../utils/file-system.js';
 
 /**
- * Generates markdownlint-cli2 configuration
- * Provides sensible defaults for Markdown linting
+
+- Generates markdownlint-cli2 configuration
+- Provides sensible defaults for Markdown linting
  */
 export async function generateMarkdownlintConfig(): Promise<
   Result<void, Error>
+
 > {
   try {
     const config = {

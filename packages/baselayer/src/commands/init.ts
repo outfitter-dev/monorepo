@@ -59,7 +59,8 @@ interface InitContext {
 }
 
 /**
- * Initialize baselayer with interactive smart picker
+
+- Initialize baselayer with interactive smart picker
  */
 export async function init(options: InitOptions): Promise<Result<void, Error>> {
   try {
@@ -297,7 +298,7 @@ function showDetectionSummary(
   }
 
   for (const item of items) {
-    console.log(`  • ${item}`);
+    console.log(`• ${item}`);
   }
 }
 
@@ -505,11 +506,11 @@ function showConfigSummary(
     .filter(([, enabled]) => enabled)
     .map(([feature]) => feature);
 
-  console.log(`  Enabled features: ${features.join(', ')}`);
+  console.log(`Enabled features: ${features.join(', ')}`);
 
   if (Object.keys(config.overrides || {}).length > 0) {
     console.log(
-      `  Custom overrides: ${Object.keys(config.overrides || {}).join(', ')}`
+      `Custom overrides: ${Object.keys(config.overrides || {}).join(', ')}`
     );
   }
 }
@@ -782,7 +783,7 @@ function showCompletionSummary(
   console.log('  • Run "npm run format" to format all files');
   console.log('  • Run "npm run lint" to check for issues');
   console.log('  • Customize rules in baselayer.jsonc if needed');
-  console.log(`  • View the generated configs in ${projectRoot}`);
+  console.log(`• View the generated configs in ${projectRoot}`);
 }
 
 // Legacy helper functions (updated to work with new context structure)

@@ -20,6 +20,12 @@ export {
 } from './prettier.js';
 export { generateStylelintConfig } from './stylelint.js';
 export {
+  generateSyncpackConfig,
+  generateSyncpackConfigObject,
+  installSyncpackConfig,
+  type SyncpackConfig,
+} from './syncpack.js';
+export {
   generateProjectTurboConfig,
   generateTurboConfig,
   generateTurboConfigFile,

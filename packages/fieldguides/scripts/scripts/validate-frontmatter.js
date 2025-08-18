@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+# !/usr/bin/env node
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { glob } from 'glob';
@@ -45,7 +46,7 @@ const validationRules = {
     validate: (value) => {
       if (typeof value !== 'string') return 'Must be a string';
       if (value.length > 72)
-        return `Too long (${value.length} chars) - max 72 characters`;
+        return`Too long (${value.length} chars) - max 72 characters`;
       if (!value.endsWith('.')) return 'Should end with a period';
       return null;
     },
@@ -193,7 +194,7 @@ function validateFile(filePath) {
     if (dataSlug && dataSlug !== expectedSlug) {
       errors.push({
         field: 'slug',
-        error: `slug "${dataSlug}" doesn't match filename "${expectedSlug}"`,
+        error:`slug "${dataSlug}" doesn't match filename "${expectedSlug}"`,
       });
     }
     return {
@@ -207,7 +208,7 @@ function validateFile(filePath) {
       errors: [
         {
           field: 'file',
-          error: `Error parsing file: ${error instanceof Error ? error.message : String(error)}`,
+          error:`Error parsing file: ${error instanceof Error ? error.message : String(error)}`,
         },
       ],
       isStandardsFile: false,
@@ -231,7 +232,7 @@ async function main() {
   if (validFiles.length > 0) {
     console.log(
       `${colors.green}✓ Valid files (${validFiles.length}):${colors.reset}`
-    );
+);
     validFiles.forEach((result) => {
       console.log(`  ${colors.dim}${result.file}${colors.reset}`);
     });
@@ -240,7 +241,7 @@ async function main() {
   if (invalidFiles.length > 0) {
     console.log(
       `${colors.red}✗ Invalid files (${invalidFiles.length}):${colors.reset}`
-    );
+);
     invalidFiles.forEach((result) => {
       console.log(`  ${colors.red}${result.file}${colors.reset}`);
       result.errors.forEach((error) => {

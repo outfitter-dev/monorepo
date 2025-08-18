@@ -1,5 +1,6 @@
 /**
- * @type {import('eslint').Linter.FlatConfig[]}
+
+- @type {import('eslint').Linter.FlatConfig[]}
  */
 import biome from 'eslint-config-biome';
 

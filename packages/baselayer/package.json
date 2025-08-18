@@ -87,13 +87,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "url": "<https://github.com/outfitter-dev/monorepo.git>",
     "directory": "packages/baselayer"
   },
   "bugs": {
-    "url": "https://github.com/outfitter-dev/monorepo/issues"
+    "url": "<https://github.com/outfitter-dev/monorepo/issues>"
   },
-  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/baselayer",
+  "homepage": "<https://github.com/outfitter-dev/monorepo/tree/main/packages/baselayer>",
   "publishConfig": {
     "access": "public"
   },

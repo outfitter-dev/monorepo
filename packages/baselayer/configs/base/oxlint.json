@@ -1,5 +1,5 @@
 {
-  "$schema": "https://oxlint.rs/schema/oxlintrc.json",
+  "$schema": "<https://oxlint.rs/schema/oxlintrc.json>",
   "plugins": ["import", "jest", "vitest", "typescript", "react"],
   "env": {
     "browser": true,
@@ -90,7 +90,7 @@
   },
   "overrides": [
     {
-      "files": ["*.test.ts", "*.test.tsx", "*.spec.ts", "*.spec.tsx"],
+      "files": ["_.test.ts", "_.test.tsx", "_.spec.ts", "_.spec.tsx"],
       "rules": {
         "no-console": "off"
       }

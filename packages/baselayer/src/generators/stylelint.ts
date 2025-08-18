@@ -2,8 +2,9 @@ import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import { writeFile, writeJSON } from '../utils/file-system.js';
 
 /**
- * Generates Stylelint configuration
- * Configured for modern CSS with Tailwind CSS support
+
+- Generates Stylelint configuration
+- Configured for modern CSS with Tailwind CSS support
  */
 export async function generateStylelintConfig(): Promise<Result<void, Error>> {
   try {

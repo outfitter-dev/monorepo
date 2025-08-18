@@ -1,13 +1,14 @@
-#!/usr/bin/env bun
+# !/usr/bin/env bun
 
 /**
- * Initialize turborepo cache with auto-generated secure secrets
- *
- * Generates:
- * - TURBO_TOKEN: 64-character secure random token
- * - TURBO_REMOTE_CACHE_SIGNATURE_KEY: 128-character signature key
- *
- * Writes to both .dev.vars (local development) and .env (monorepo root)
+
+- Initialize turborepo cache with auto-generated secure secrets
+-
+- Generates:
+- - TURBO_TOKEN: 64-character secure random token
+- - TURBO_REMOTE_CACHE_SIGNATURE_KEY: 128-character signature key
+-
+- Writes to both .dev.vars (local development) and .env (monorepo root)
  */
 
 import { randomBytes } from 'node:crypto';
@@ -33,38 +34,47 @@ function log(message: string, color: keyof typeof colors = 'reset') {
 }
 
 /**
- * Generate cryptographically secure random token
+
+- Generate cryptographically secure random token
  */
 function generateSecureToken(length = 32): string {
   return randomBytes(length).toString('hex');
 }
 
 /**
- * Generate environment variables content
+
+- Generate environment variables content
  */
 function generateEnvContent(turboToken: string, signatureKey: string): string {
   return `# Auto-generated turborepo cache secrets
+
 # Generated on ${new Date().toISOString()}
+
 # Do not commit this file to version control
 
 # Turborepo remote cache configuration
-TURBO_API=http://localhost:5173
+
+TURBO_API=<http://localhost:5173>
 TURBO_TEAM=team_outfitter
 TURBO_TOKEN=${turboToken}
 TURBO_REMOTE_CACHE_SIGNATURE_KEY=${signatureKey}
 
 # Cloudflare Workers development
+
 ENVIRONMENT=development
 BUCKET_OBJECT_EXPIRATION_HOURS=720
 `;
 }
 
 /**
- * Generate .dev.vars content for Cloudflare Workers
+
+- Generate .dev.vars content for Cloudflare Workers
  */
 function generateDevVarsContent(turboToken: string): string {
   return `# Auto-generated Cloudflare Workers development variables
+
 # Generated on ${new Date().toISOString()}
+
 # Do not commit this file to version control
 
 TURBO_TOKEN=${turboToken}
@@ -74,7 +84,8 @@ BUCKET_OBJECT_EXPIRATION_HOURS=720
 }
 
 /**
- * Check if file exists and ask for confirmation before overwriting
+
+- Check if file exists and ask for confirmation before overwriting
  */
 async function confirmOverwrite(filePath: string): Promise<boolean> {
   if (!existsSync(filePath)) {
@@ -89,7 +100,8 @@ async function confirmOverwrite(filePath: string): Promise<boolean> {
 }
 
 /**
- * Backup existing file if it exists
+
+- Backup existing file if it exists
  */
 async function backupExistingFile(filePath: string): Promise<void> {
   if (!existsSync(filePath)) {

@@ -4,11 +4,12 @@ import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import type { FileSystemError } from '../utils/file-system.js';
 
 /**
- * Generate biome.json configuration with Ultracite base and smart overrides
+
+- Generate biome.json configuration with Ultracite base and smart overrides
  */
 export function generateBiomeConfig(config?: BaselayerConfig): string {
   const base = {
-    $schema: 'https://biomejs.dev/schemas/1.9.4/schema.json',
+    $schema: '<https://biomejs.dev/schemas/1.9.4/schema.json>',
     extends: ['ultracite'],
   };
 
@@ -53,7 +54,8 @@ export function generateBiomeConfig(config?: BaselayerConfig): string {
 }
 
 /**
- * Install Biome via Ultracite and create configuration
+
+- Install Biome via Ultracite and create configuration
  */
 export async function installBiomeConfig(
   _config?: BaselayerConfig
