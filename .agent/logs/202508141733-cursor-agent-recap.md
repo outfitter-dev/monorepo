@@ -50,9 +50,10 @@ Result
 - Hooks now scope to staged files only and perform safe automatic fixes
 - Minimal surface area to avoid repo-wide failures during unrelated changes
 
-Next steps
+## Next Steps
 
-- Push `chore/hooks-and-lint-fixes` and open a PR into `refactor/baselayer-ts-config-consolidation`. If the base branch is missing on origin, create it first.
-- In follow-up, consider:
-  - Aligning ultracite/biome versions and enabling linter where desired
-  - Addressing remaining markdown issues incrementally via staged-only approach
+- [ ] Push `chore/hooks-and-lint-fixes` branch and open PR
+- [ ] Verify base branch `refactor/baselayer-ts-config-consolidation` exists on origin
+- [ ] Align ultracite/biome versions in follow-up work
+- [ ] Address remaining markdown issues incrementally via staged-only approach
+- [ ] Consider enabling linter rules where appropriate
