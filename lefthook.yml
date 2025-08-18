@@ -22,6 +22,6 @@ commit-msg:
 pre-push:
   commands:
     types:
-      run: turbo run typecheck
+      run: turbo run typecheck --filter="[origin/main]"
     test:
-      run: turbo run test
+      run: turbo run test --filter="[origin/main]"
