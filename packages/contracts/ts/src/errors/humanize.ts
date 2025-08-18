@@ -56,8 +56,8 @@ const errorMessages: Record<ErrorCode, string> = {
 - @example
 
 - ```ts
-- const error = makeError(ErrorCode.AUTH_EXPIRED, 'Token expired at 2024-01-01');
-- const message = humanize(error); // "Your session has expired. Please log in again."
+- const error = makeError(ErrorCode.UNAUTHORIZED, 'Token expired at 2024-01-01');
+- const message = humanize(error); // "Please log in to continue."
 
 - ```
 
