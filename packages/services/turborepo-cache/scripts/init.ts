@@ -116,7 +116,7 @@ async function backupExistingFile(filePath: string): Promise<void> {
 
   try {
     const content = await readFileAsync(filePath, 'utf-8');
-    await writeFileAsync(backupPath, content);
+    await writeFileAsync(backupPath, content, { mode: 0o600 });
     log(`📁 Backed up existing file to ${backupPath}`, 'blue');
   } catch (error) {
     log(`❌ Failed to backup ${filePath}: ${(error as Error).message}`, 'red');
@@ -152,7 +152,7 @@ async function main() {
     log('📝 Writing Cloudflare Workers development variables...', 'blue');
     if (await confirmOverwrite(devVarsPath)) {
       await backupExistingFile(devVarsPath);
-      await writeFileAsync(devVarsPath, devVarsContent);
+      await writeFileAsync(devVarsPath, devVarsContent, { mode: 0o600 });
       log(`✅ Created ${devVarsPath}`, 'green');
     }
 
@@ -160,7 +160,7 @@ async function main() {
     log('📝 Writing monorepo environment variables...', 'blue');
     if (await confirmOverwrite(envPath)) {
       await backupExistingFile(envPath);
-      await writeFileAsync(envPath, envContent);
+      await writeFileAsync(envPath, envContent, { mode: 0o600 });
       log(`✅ Created ${envPath}`, 'green');
     }
 
