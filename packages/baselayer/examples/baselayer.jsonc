@@ -1,5 +1,5 @@
 {
-  "$schema": "<https://raw.githubusercontent.com/outfitter-dev/baselayer/main/schema.json>",
+  "$schema": "https://raw.githubusercontent.com/outfitter-dev/baselayer/main/schema.json",
 
   // Feature flags - enable/disable specific development tools
   "features": {

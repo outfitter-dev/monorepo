@@ -162,7 +162,9 @@ export function generateProjectTypeScriptConfigs(
       exclude: [
         '**/*.test.*',
         '**/*.spec.*',
-        '**/**tests**/**',
+        '__tests__/**',
+        'tests/**',
+        'mocks/**',
         'vitest.config.*',
         'vite.config.*',
       ],

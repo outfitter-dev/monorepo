@@ -10,7 +10,7 @@ cat > lefthook.yml << 'EOF'
 
 # Lefthook configuration
 
-# <https://github.com/evilmartians/lefthook>
+# https://github.com/evilmartians/lefthook
 
 pre-commit:
   parallel: true
@@ -59,8 +59,8 @@ echo '
 {
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "bunx ultracite format --write --no-errors-on-unmatched",
-      "bunx ultracite lint --no-errors-on-unmatched"
+      "npm run format --no-errors-on-unmatched",
+      "npm run lint --no-errors-on-unmatched"
     ],
     "*.{json,md,yml,yaml}": [
       "prettier --write"

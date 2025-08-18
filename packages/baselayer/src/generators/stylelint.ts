@@ -9,8 +9,7 @@ import { writeFile, writeJSON } from '../utils/file-system.js';
 export async function generateStylelintConfig(): Promise<Result<void, Error>> {
   try {
     const config = {
-      extends: ['stylelint-config-standard'],
-      plugins: ['stylelint-config-tailwindcss'],
+      extends: ['stylelint-config-standard', 'stylelint-config-tailwindcss'],
       rules: {
         'at-rule-no-unknown': [
           true,
