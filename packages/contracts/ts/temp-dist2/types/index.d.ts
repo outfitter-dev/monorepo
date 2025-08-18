@@ -56,7 +56,6 @@ export type ValueOf<T> = T[keyof T];
 export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
   T,
   Exclude<keyof T, Keys>
-
 > &
   {
     [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
@@ -88,5 +87,5 @@ export type Jsonify<T> = T extends JsonValue
             [K in keyof T]: Jsonify<T[K]>;
           }
         : never;
-export* from './branded';
+export * from './branded';
 //# sourceMappingURL=index.d.ts.map

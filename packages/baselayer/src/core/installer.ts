@@ -47,7 +47,6 @@ const REQUIRED_DEPENDENCIES = [
  */
 export async function getMissingDependencies(): Promise<
   Result<string[], InstallerError>
-
 > {
   const pkgJsonResult = await readPackageJson();
   if (isFailure(pkgJsonResult)) {

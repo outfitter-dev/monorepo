@@ -25,6 +25,7 @@
       "includes": [
         "packages/cli/src/**",
         "packages/baselayer/src/cli.ts",
+        "packages/baselayer/src/commands/**",
         "scripts/**",
         "*.mjs",
         "**/*.test.ts",

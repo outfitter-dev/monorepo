@@ -100,7 +100,6 @@ export const TOOL_TO_FEATURE: Record<string, keyof FeaturesConfig> = {
 export const TOOL_GENERATORS: Record<
   string,
   () => Promise<Result<void, FileSystemError>>
-
 > = {
   biome: () => installBiomeConfig(),
   prettier: wrapGenerator(() => generatePrettierConfig()),
@@ -221,7 +220,7 @@ export const TOOL_GROUPS: Record<string, readonly string[]> = {
  */
 export function isValidTool(
   tool: string
-): tool is [typeof VALID_TOOLS](number) {
+): tool is (typeof VALID_TOOLS)[number] {
   return (VALID_TOOLS as readonly string[]).includes(tool);
 }
 

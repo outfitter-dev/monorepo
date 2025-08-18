@@ -9,7 +9,6 @@ import { writeFile } from '../utils/file-system.js';
  */
 export async function generateMarkdownlintConfig(): Promise<
   Result<void, Error>
-
 > {
   try {
     const config = {

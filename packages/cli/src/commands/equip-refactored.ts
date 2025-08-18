@@ -1,10 +1,10 @@
 import { Command } from 'commander';
 import { getRecommendedFieldguides } from '../config/fieldguide-mappings.js';
-import *as configApplier from '../services/configuration-applier.js';
-import* as packageManager from '../services/package-manager.js';
-import *as packageSelector from '../services/package-selector.js';
+import * as configApplier from '../services/configuration-applier.js';
+import * as packageManager from '../services/package-manager.js';
+import * as packageSelector from '../services/package-selector.js';
 import type { EquipOptions } from '../types/index.js';
-import* as ui from '../ui/console.js';
+import * as ui from '../ui/console.js';
 import * as prompts from '../ui/prompts.js';
 import { detectTerrain } from '../utils/detect-terrain.js';
 

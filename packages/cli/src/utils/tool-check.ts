@@ -87,7 +87,6 @@ export async function checkOptionalTools(): Promise<Map<string, boolean>> {
  */
 export async function getNodeInfo(): Promise<
   Result<ToolVersion & { npm: string }, Error>
-
 > {
   const nodeResult = await checkTool('node');
   if (!nodeResult.success) {

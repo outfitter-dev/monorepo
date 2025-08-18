@@ -159,7 +159,6 @@ export function getExecCommand(pm: PackageManager, command: string): string {
  */
 export async function getPreferredPackageManager(): Promise<
   Result<PackageManager | null, PackageManagerError>
-
 > {
   // Check environment variable
   const pmFromEnv = process.env.FLINT_PACKAGE_MANAGER;

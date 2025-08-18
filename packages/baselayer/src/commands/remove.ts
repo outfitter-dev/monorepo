@@ -425,7 +425,6 @@ export async function previewRemoval(tools: string[]): Promise<
     configFiles: string[];
     warnings: string[];
   }>
-
 > {
   try {
     const warnings: string[] = [];

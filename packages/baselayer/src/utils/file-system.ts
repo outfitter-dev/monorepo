@@ -3,8 +3,8 @@
 - File system operations with Result pattern
  */
 
-import *as fs from 'node:fs/promises';
-import* as path from 'node:path';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 import { failure, isSuccess, type Result, success } from '@outfitter/contracts';
 import { glob } from 'glob';
 
@@ -287,7 +287,6 @@ export async function findFiles(
  */
 export async function readPackageJson(): Promise<
   Result<Record<string, unknown>, FileSystemError>
-
 > {
   return readJSON('package.json');
 }

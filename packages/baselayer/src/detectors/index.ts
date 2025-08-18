@@ -6,5 +6,5 @@
 - frameworks, and existing configuration files.
  */
 
-export *from './framework-detector.js';
-export* from './project-detector.js';
+export * from './framework-detector.js';
+export * from './project-detector.js';

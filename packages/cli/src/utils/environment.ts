@@ -68,7 +68,6 @@ async function getGitVersion(): Promise<Result<string, Error>> {
  */
 async function detectPackageManager(): Promise<
   EnvironmentInfo['packageManager']
-
 > {
   // Check for package manager executables
   const managers = ['pnpm', 'yarn', 'bun'];
@@ -104,7 +103,6 @@ async function detectPackageManager(): Promise<
  */
 export async function validateEnvironment(): Promise<
   Result<EnvironmentInfo, Error>
-
 > {
   const errors: string[] = [];
 

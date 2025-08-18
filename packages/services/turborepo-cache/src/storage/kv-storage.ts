@@ -14,7 +14,7 @@ export class KvStorage implements StorageInterface {
   constructor(kvNamespace: KVNamespace, expirationInHours?: number) {
     this.KV_STORE = kvNamespace;
     this.EXPIRATION_IN_SECONDS = expirationInHours
-      ? expirationInHours *60* 60
+      ? expirationInHours * 60 * 60
       : undefined;
   }
 
