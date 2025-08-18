@@ -1,4 +1,10 @@
-import { failure, isSuccess, makeError, success } from '@outfitter/contracts';
+import {
+  ErrorCode,
+  failure,
+  isSuccess,
+  makeError,
+  success,
+} from '@outfitter/contracts';
 import type { MockedFunction } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as fs from '../file-system';
@@ -11,6 +17,7 @@ import {
   getPackageManager,
   getPreferredPackageManager,
   getRemoveCommand,
+  getRemoveCommandArgs,
   getRunCommand,
   isCI,
 } from '../package-manager';
@@ -23,13 +30,14 @@ describe('package-manager utilities', () => {
     vi.spyOn(fs, 'fileExists').mockImplementation(vi.fn());
     vi.spyOn(fs, 'readFile').mockImplementation(vi.fn());
     // Clear all CI-related environment variables
-    process.env.FLINT_PACKAGE_MANAGER = undefined;
-    process.env.CI = undefined;
-    process.env.CONTINUOUS_INTEGRATION = undefined;
-    process.env.TRAVIS = undefined;
-    process.env.CIRCLECI = undefined;
-    process.env.JENKINS_URL = undefined;
-    process.env.GITHUB_ACTIONS = undefined;
+    delete process.env.FLINT_PACKAGE_MANAGER;
+    delete process.env.CI;
+    delete process.env.CONTINUOUS_INTEGRATION;
+    delete process.env.TRAVIS;
+    delete process.env.CIRCLECI;
+    delete process.env.JENKINS_URL;
+    delete process.env.GITHUB_ACTIONS;
+    delete process.env.GITLAB_CI;
   });
 
   describe('detectPackageManager', () => {
@@ -145,6 +153,19 @@ describe('package-manager utilities', () => {
       expect(getInstallCommand('pnpm')).toBe('pnpm install');
       expect(getInstallCommand('bun')).toBe('bun install');
     });
+
+    it('should return npm ci for npm in CI environment', () => {
+      process.env.CI = 'true';
+      expect(getInstallCommand('npm')).toBe('npm ci');
+      expect(getInstallCommand('yarn')).toBe('yarn install');
+      expect(getInstallCommand('pnpm')).toBe('pnpm install');
+      expect(getInstallCommand('bun')).toBe('bun install');
+    });
+
+    it('should return npm ci for npm when GITHUB_ACTIONS is set', () => {
+      process.env.GITHUB_ACTIONS = 'true';
+      expect(getInstallCommand('npm')).toBe('npm ci');
+    });
   });
 
   describe('getAddCommand', () => {
@@ -202,6 +223,54 @@ describe('package-manager utilities', () => {
     });
   });
 
+  describe('getRemoveCommandArgs', () => {
+    it('should return correct command and args for npm', () => {
+      const packages = ['eslint', 'prettier'];
+      const [command, args] = getRemoveCommandArgs('npm', packages);
+
+      expect(command).toBe('npm');
+      expect(args).toEqual(['uninstall', 'eslint', 'prettier']);
+    });
+
+    it('should return correct command and args for yarn', () => {
+      const packages = ['eslint', 'prettier'];
+      const [command, args] = getRemoveCommandArgs('yarn', packages);
+
+      expect(command).toBe('yarn');
+      expect(args).toEqual(['remove', 'eslint', 'prettier']);
+    });
+
+    it('should return correct command and args for pnpm', () => {
+      const packages = ['eslint', 'prettier'];
+      const [command, args] = getRemoveCommandArgs('pnpm', packages);
+
+      expect(command).toBe('pnpm');
+      expect(args).toEqual(['remove', 'eslint', 'prettier']);
+    });
+
+    it('should return correct command and args for bun', () => {
+      const packages = ['eslint', 'prettier'];
+      const [command, args] = getRemoveCommandArgs('bun', packages);
+
+      expect(command).toBe('bun');
+      expect(args).toEqual(['remove', 'eslint', 'prettier']);
+    });
+
+    it('should handle single package', () => {
+      const [command, args] = getRemoveCommandArgs('npm', ['eslint']);
+
+      expect(command).toBe('npm');
+      expect(args).toEqual(['uninstall', 'eslint']);
+    });
+
+    it('should handle empty package list', () => {
+      const [command, args] = getRemoveCommandArgs('npm', []);
+
+      expect(command).toBe('npm');
+      expect(args).toEqual(['uninstall']);
+    });
+  });
+
   describe('getRunCommand', () => {
     it('should return correct run command', () => {
       expect(getRunCommand('npm', 'test')).toBe('npm run test');
@@ -233,7 +302,7 @@ describe('package-manager utilities', () => {
     it('should ignore invalid environment value', async () => {
       process.env.FLINT_PACKAGE_MANAGER = 'invalid';
       (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
-        failure(makeError('FILE_NOT_FOUND', 'File not found'))
+        failure(makeError(ErrorCode.INTERNAL_ERROR, 'File not found'))
       );
 
       const result = await getPreferredPackageManager();
@@ -266,7 +335,7 @@ describe('package-manager utilities', () => {
 
     it('should return null if no preference found', async () => {
       (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
-        failure(makeError('FILE_NOT_FOUND', 'File not found'))
+        failure(makeError(ErrorCode.INTERNAL_ERROR, 'File not found'))
       );
 
       const result = await getPreferredPackageManager();
@@ -295,7 +364,7 @@ describe('package-manager utilities', () => {
       );
 
       (fs.readFile as MockedFunction<typeof fs.readFile>).mockResolvedValue(
-        failure(makeError('FILE_NOT_FOUND', 'File not found'))
+        failure(makeError(ErrorCode.INTERNAL_ERROR, 'File not found'))
       );
 
       const result = await getPackageManager();
@@ -343,7 +412,7 @@ describe('package-manager utilities', () => {
 
   describe('getCIFlags', () => {
     it('should return correct CI flags for each package manager', () => {
-      expect(getCIFlags('npm')).toBe('--ci');
+      expect(getCIFlags('npm')).toBe(''); // npm ci is used directly, no flags needed
       expect(getCIFlags('yarn')).toBe('--frozen-lockfile');
       expect(getCIFlags('pnpm')).toBe('--frozen-lockfile');
       expect(getCIFlags('bun')).toBe('');

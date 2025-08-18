@@ -1,4 +1,3 @@
-import { execSync } from 'node:child_process';
 import {
   ErrorCode,
   failure,
@@ -17,6 +16,28 @@ import {
   removeDependency,
 } from '../dependency-cleanup';
 
+// Mock spawn
+vi.mock('node:child_process', () => ({
+  spawn: vi.fn(),
+}));
+
+// Helper to mock spawn with success/failure
+function mockSpawn(shouldSucceed: boolean = true) {
+  const { spawn } = require('node:child_process');
+  const mockChild = {
+    on: vi.fn((event: string, callback: Function) => {
+      if (event === 'close') {
+        // Simulate successful or failed execution
+        setImmediate(() => callback(shouldSucceed ? 0 : 1));
+      }
+      return mockChild;
+    }),
+  };
+
+  vi.mocked(spawn).mockReturnValue(mockChild as any);
+  return mockChild;
+}
+
 describe('dependency-cleanup', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -30,10 +51,7 @@ describe('dependency-cleanup', () => {
     vi.spyOn(console.logger, 'warning').mockImplementation(() => {});
     vi.spyOn(console.logger, 'section').mockImplementation(() => {});
     vi.spyOn(console.logger, 'step').mockImplementation(() => {});
-    // Mock execSync
-    vi.spyOn(require('node:child_process'), 'execSync').mockImplementation(
-      vi.fn()
-    );
+    // Spawn is already mocked by vi.mock above
   });
 
   describe('findDependenciesToRemove', () => {
@@ -207,7 +225,7 @@ describe('dependency-cleanup', () => {
         success({ type: 'pnpm', lockFile: 'pnpm-lock.yaml' })
       );
 
-      vi.mocked(execSync).mockImplementation(() => '');
+      mockSpawn(true);
 
       const result = await cleanupDependencies();
 
@@ -215,9 +233,14 @@ describe('dependency-cleanup', () => {
       if (isSuccess(result)) {
         expect(result.data).toEqual(['eslint', 'tslint']);
       }
-      expect(execSync).toHaveBeenCalledWith(
-        'pnpm remove eslint tslint',
-        expect.objectContaining({ stdio: 'inherit' })
+      const { spawn } = require('node:child_process');
+      expect(spawn).toHaveBeenCalledWith(
+        'pnpm',
+        ['remove', 'eslint', 'tslint'],
+        expect.objectContaining({
+          stdio: 'inherit',
+          shell: false,
+        })
       );
     });
 
@@ -236,7 +259,8 @@ describe('dependency-cleanup', () => {
       if (isSuccess(result)) {
         expect(result.data).toEqual([]);
       }
-      expect(execSync).not.toHaveBeenCalled();
+      const { spawn } = require('node:child_process');
+      expect(spawn).not.toHaveBeenCalled();
     });
 
     it('should not execute in dry run mode', async () => {
@@ -254,7 +278,8 @@ describe('dependency-cleanup', () => {
       if (isSuccess(result)) {
         expect(result.data).toEqual(['eslint']);
       }
-      expect(execSync).not.toHaveBeenCalled();
+      const { spawn } = require('node:child_process');
+      expect(spawn).not.toHaveBeenCalled();
     });
 
     it('should suppress output when silent', async () => {
@@ -270,14 +295,19 @@ describe('dependency-cleanup', () => {
         success({ type: 'npm', lockFile: 'package-lock.json' })
       );
 
-      vi.mocked(execSync).mockImplementation(() => '');
+      mockSpawn(true);
 
       const result = await cleanupDependencies({ silent: true });
 
       expect(isSuccess(result)).toBe(true);
-      expect(execSync).toHaveBeenCalledWith(
-        'npm uninstall eslint',
-        expect.objectContaining({ stdio: 'ignore' })
+      const { spawn } = require('node:child_process');
+      expect(spawn).toHaveBeenCalledWith(
+        'npm',
+        ['uninstall', 'eslint'],
+        expect.objectContaining({
+          stdio: 'ignore',
+          shell: false,
+        })
       );
       expect(console.logger.section).not.toHaveBeenCalled();
     });
@@ -295,15 +325,13 @@ describe('dependency-cleanup', () => {
         success({ type: 'npm', lockFile: 'package-lock.json' })
       );
 
-      vi.mocked(execSync).mockImplementation(() => {
-        throw new Error('Command failed');
-      });
+      mockSpawn(false); // Simulate failure
 
       const result = await cleanupDependencies();
 
       expect(isFailure(result)).toBe(true);
       if (isFailure(result)) {
-        expect(result.error.code).toBe(ErrorCode.INTERNAL_ERROR);
+        expect(result.error.code).toBe('REMOVE_FAILED');
       }
     });
 
@@ -320,9 +348,7 @@ describe('dependency-cleanup', () => {
         success({ type: 'npm', lockFile: 'package-lock.json' })
       );
 
-      vi.mocked(execSync).mockImplementation(() => {
-        throw new Error('Command failed');
-      });
+      mockSpawn(false); // Simulate failure
 
       const result = await cleanupDependencies({ force: true });
 
@@ -340,14 +366,19 @@ describe('dependency-cleanup', () => {
         success({ type: 'yarn', lockFile: 'yarn.lock' })
       );
 
-      vi.mocked(execSync).mockImplementation(() => '');
+      mockSpawn(true);
 
       const result = await removeDependency('eslint');
 
       expect(isSuccess(result)).toBe(true);
-      expect(execSync).toHaveBeenCalledWith(
-        'yarn remove eslint',
-        expect.objectContaining({ stdio: 'inherit' })
+      const { spawn } = require('node:child_process');
+      expect(spawn).toHaveBeenCalledWith(
+        'yarn',
+        ['remove', 'eslint'],
+        expect.objectContaining({
+          stdio: 'inherit',
+          shell: false,
+        })
       );
     });
 
@@ -355,7 +386,8 @@ describe('dependency-cleanup', () => {
       const result = await removeDependency('eslint', { dryRun: true });
 
       expect(isSuccess(result)).toBe(true);
-      expect(execSync).not.toHaveBeenCalled();
+      const { spawn } = require('node:child_process');
+      expect(spawn).not.toHaveBeenCalled();
     });
 
     it('should fail when command fails', async () => {
@@ -363,15 +395,13 @@ describe('dependency-cleanup', () => {
         success({ type: 'npm', lockFile: 'package-lock.json' })
       );
 
-      vi.mocked(execSync).mockImplementation(() => {
-        throw new Error('Command failed');
-      });
+      mockSpawn(false); // Simulate failure
 
       const result = await removeDependency('eslint');
 
       expect(isFailure(result)).toBe(true);
       if (isFailure(result)) {
-        expect(result.error.code).toBe(ErrorCode.INTERNAL_ERROR);
+        expect(result.error.code).toBe('REMOVE_FAILED');
       }
     });
   });
@@ -431,7 +461,7 @@ describe('dependency-cleanup', () => {
     it('should fail when package.json cannot be read', async () => {
       vi.mocked(fs.readPackageJson).mockResolvedValue(
         failure({
-          code: ErrorCode.INTERNAL_ERROR,
+          code: 'PACKAGE_READ_FAILED',
           message: 'Not found',
         })
       );
@@ -440,7 +470,7 @@ describe('dependency-cleanup', () => {
 
       expect(isFailure(result)).toBe(true);
       if (isFailure(result)) {
-        expect(result.error.code).toBe(ErrorCode.INTERNAL_ERROR);
+        expect(result.error.code).toBe('PACKAGE_READ_FAILED');
       }
     });
   });

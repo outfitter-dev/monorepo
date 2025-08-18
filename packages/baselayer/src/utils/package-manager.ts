@@ -110,6 +110,10 @@ export async function detectPackageManager(
 - Get install command for package manager
  */
 export function getInstallCommand(pm: PackageManager): string {
+  // In CI environments, use `npm ci` for npm for better security and reproducibility
+  if (isCI() && pm === 'npm') {
+    return 'npm ci';
+  }
   return COMMANDS.install[pm];
 }
 
@@ -135,6 +139,25 @@ export function getRemoveCommand(
   packages: string[]
 ): string {
   return `${COMMANDS.remove[pm]} ${packages.join(' ')}`;
+}
+
+/**
+
+- Get remove command arguments for safer execution with spawn/execFile
+- Returns [command, args] tuple to avoid shell injection
+ */
+export function getRemoveCommandArgs(
+  pm: PackageManager,
+  packages: string[]
+): [string, string[]] {
+  const commands: Record<PackageManager, [string, string[]]> = {
+    npm: ['npm', ['uninstall', ...packages]],
+    yarn: ['yarn', ['remove', ...packages]],
+    pnpm: ['pnpm', ['remove', ...packages]],
+    bun: ['bun', ['remove', ...packages]],
+  };
+
+  return commands[pm];
 }
 
 /**
@@ -234,7 +257,8 @@ export function isCI(): boolean {
  */
 export function getCIFlags(pm: PackageManager): string {
   const flags: Record<PackageManager, string> = {
-    npm: '--ci',
+    // No flags needed for npm since getInstallCommand() returns 'npm ci' directly in CI
+    npm: '',
     yarn: '--frozen-lockfile',
     pnpm: '--frozen-lockfile',
     bun: '',

@@ -3,13 +3,14 @@
 - Clean up unwanted dependencies
  */
 
-import { execSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import { logger } from '../utils/console.js';
 import { readPackageJson } from '../utils/file-system.js';
 import {
   getPackageManager,
   getRemoveCommand,
+  getRemoveCommandArgs,
 } from '../utils/package-manager.js';
 
 export interface DependencyCleanupOptions {
@@ -94,6 +95,34 @@ export async function findDependenciesToRemove(
 }
 
 /**
+- Execute a command safely using spawn with shell: false
+ */
+function executeCommand(
+  command: string,
+  args: string[],
+  options: { silent: boolean }
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, {
+      stdio: options.silent ? 'ignore' : 'inherit',
+      shell: false, // Important: disable shell to prevent injection
+    });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`Command failed with exit code ${code}`));
+      }
+    });
+
+    child.on('error', (error) => {
+      reject(error);
+    });
+  });
+}
+
+/**
 
 - Remove unwanted dependencies
  */
@@ -136,17 +165,14 @@ export async function cleanupDependencies(
   }
 
   const pm = pmResult.data.type;
-  const command = getRemoveCommand(pm, depsToRemove);
+  const [command, args] = getRemoveCommandArgs(pm, depsToRemove);
 
   if (!silent) {
     logger.info(`Removing ${depsToRemove.length} dependencies...`);
   }
 
   try {
-    execSync(command, {
-      stdio: silent ? 'ignore' : 'inherit',
-      encoding: 'utf-8',
-    });
+    await executeCommand(command, args, { silent });
 
     if (!silent) {
       logger.success(
@@ -200,13 +226,10 @@ export async function removeDependency(
   }
 
   const pm = pmResult.data.type;
-  const command = getRemoveCommand(pm, [packageName]);
+  const [command, args] = getRemoveCommandArgs(pm, [packageName]);
 
   try {
-    execSync(command, {
-      stdio: silent ? 'ignore' : 'inherit',
-      encoding: 'utf-8',
-    });
+    await executeCommand(command, args, { silent });
 
     if (!silent) {
       logger.success(`Removed ${packageName}`);
