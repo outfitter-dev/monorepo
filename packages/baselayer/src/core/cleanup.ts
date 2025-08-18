@@ -1,5 +1,6 @@
 /**
- * Remove old configs and dependencies
+
+- Remove old configs and dependencies
  */
 import {
   ErrorCode,
@@ -9,7 +10,7 @@ import {
   type Result,
   success,
 } from '@outfitter/contracts';
-import { console } from '../utils/console';
+import { logger } from '../utils/console';
 import { fileExists, remove } from '../utils/file-system';
 import { getConfigsToCleanup } from './detector';
 
@@ -20,12 +21,13 @@ export interface CleanupOptions {
 }
 
 /**
- * Remove old configuration files
+
+- Remove old configuration files
  */
 export async function removeOldConfigs(
   configs: string[],
   options: CleanupOptions = {}
-): Promise<Result<string[], any>> {
+): Promise<Result<string[], Error>> {
   const { dryRun = false, force = false, silent = false } = options;
   const removed: string[] = [];
 
@@ -40,7 +42,7 @@ export async function removeOldConfigs(
     }
 
     if (!silent) {
-      console.step(`Removing ${config}...`);
+      logger.step(`Removing ${config}...`);
     }
 
     if (dryRun) {
@@ -56,7 +58,7 @@ export async function removeOldConfigs(
             )
           );
         }
-        console.warning(`Failed to remove ${config}, continuing...`);
+        logger.warning(`Failed to remove ${config}, continuing...`);
       } else {
         removed.push(config);
       }
@@ -64,18 +66,19 @@ export async function removeOldConfigs(
   }
 
   if (!silent && removed.length > 0) {
-    console.success(`Removed ${removed.length} old configuration files`);
+    logger.success(`Removed ${removed.length} old configuration files`);
   }
 
   return success(removed);
 }
 
 /**
- * Clean up all old tool configurations
+
+- Clean up all old tool configurations
  */
 export async function cleanupOldTools(
   options: CleanupOptions = {}
-): Promise<Result<string[], any>> {
+): Promise<Result<string[], Error>> {
   const configsResult = await getConfigsToCleanup();
   if (isFailure(configsResult)) {
     return failure(
@@ -90,12 +93,13 @@ export async function cleanupOldTools(
 }
 
 /**
- * Remove specific tool configurations
+
+- Remove specific tool configurations
  */
 export async function removeToolConfigs(
   tool: string,
   options: CleanupOptions = {}
-): Promise<Result<string[], any>> {
+): Promise<Result<string[], Error>> {
   const toolConfigs: Record<string, string[]> = {
     eslint: [
       '.eslintrc',
@@ -153,9 +157,10 @@ export async function removeToolConfigs(
 }
 
 /**
- * Clean up VS Code settings for old tools
+
+- Clean up VS Code settings for old tools
  */
-export async function cleanupVSCodeSettings(): Promise<Result<void, any>> {
+export async function cleanupVSCodeSettings(): Promise<Result<void, Error>> {
   const settingsPath = '.vscode/settings.json';
   const existsResult = await fileExists(settingsPath);
 
@@ -169,17 +174,18 @@ export async function cleanupVSCodeSettings(): Promise<Result<void, any>> {
 }
 
 /**
- * Remove old git hooks
+
+- Remove old git hooks
  */
 export async function removeOldGitHooks(
   hookType: 'husky' | 'simple-git-hooks',
   options: CleanupOptions = {}
-): Promise<Result<void, any>> {
+): Promise<Result<void, Error>> {
   const { dryRun = false, silent = false } = options;
 
   if (hookType === 'husky') {
     if (!silent) {
-      console.step('Removing husky configuration...');
+      logger.step('Removing husky configuration...');
     }
 
     if (!dryRun) {

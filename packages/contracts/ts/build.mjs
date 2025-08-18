@@ -1,9 +1,11 @@
-#!/usr/bin/env bun
+# !/usr/bin/env bun
 
 // Bun build script for @outfitter/contracts
 // Replaces tsup with native Bun build for improved performance
 
 import { $ } from 'bun';
+import { glob } from 'glob';
+import fs from 'fs';
 
 const entryPoints = [
   'src/index.ts',
@@ -56,5 +58,28 @@ try {
 // Generate TypeScript declarations for all files
 console.log('Generating TypeScript declarations...');
 await $`../../../node_modules/.bin/tsc --emitDeclarationOnly`;
+
+// Fix TypeScript declaration imports to use .d.ts extensions instead of .js
+console.log('Fixing declaration file imports...');
+
+const declarationFiles = await glob('./dist/**/*.d.ts');
+for (const file of declarationFiles) {
+  let content = fs.readFileSync(file, 'utf8');
+  
+  // Replace .js extensions with .d.ts in import statements
+  // Patterns to match: from './file.js', from "./file.js", from './path/file.js'
+  content = content.replace(
+    /(from\s+['"]\.[^'"]*?)\.js(['"])/g,
+    '$1$2'
+  );
+  
+  // Replace export *from './file.js' with export* from './file'
+  content = content.replace(
+    /(export\s+\*\s+from\s+['"]\.[^'"]*?)\.js(['"])/g,
+    '$1$2'
+  );
+  
+  fs.writeFileSync(file, content);
+}
 
 console.log('✓ Build complete');

@@ -1,6 +1,7 @@
 /**
- * Check for barrel imports from @outfitter/contracts
- * Encourages use of sub-path imports for better tree-shaking
+
+- Check for barrel imports from @outfitter/contracts
+- Encourages use of sub-path imports for better tree-shaking
  */
 
 import { readFileSync } from 'node:fs';
@@ -24,9 +25,10 @@ interface ImportIssue {
 }
 
 /**
- * Scans source files for barrel imports from `@outfitter/contracts` and reports any occurrences.
- *
- * If barrel imports are found, logs detailed error messages with file locations and suggests using sub-path imports instead. Exits the process with a non-zero status code if issues are detected.
+
+- Scans source files for barrel imports from `@outfitter/contracts` and reports any occurrences.
+-
+- If barrel imports are found, logs detailed error messages with file locations and suggests using sub-path imports instead. Exits the process with a non-zero status code if issues are detected.
  */
 function checkImports(): void {
   const files = globSync('**/*.{ts,tsx,js,jsx,mjs,cjs}', {
@@ -58,8 +60,8 @@ function checkImports(): void {
   if (foundIssues) {
     console.error('\n❌ Found barrel imports from @outfitter/contracts:\n');
     issues.forEach(({ file, line, import: imp }) => {
-      console.error(`  ${file}:${line}`);
-      console.error(`    ${imp}`);
+      console.error(`${file}:${line}`);
+      console.error(`${imp}`);
     });
     console.error('\n💡 Use sub-path imports instead:');
     console.error('  - @outfitter/contracts/error');

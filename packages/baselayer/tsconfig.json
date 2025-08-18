@@ -1,5 +1,5 @@
 {
-  "extends": "@outfitter/baselayer/typescript/base.json",
+  "extends": "./configs/typescript/base.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",

@@ -18,19 +18,14 @@ import { Orchestrator } from './orchestration/orchestrator.js';
 
 // Read version from package.json
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const__dirname = dirname(__filename);
 const packageJson = JSON.parse(
   readFileSync(join(__dirname, '../package.json'), 'utf-8')
 );
 const version = packageJson.version;
 
-// Initialize orchestrator and register adapters
+// Initialize orchestrator - adapters are registered automatically via configuration
 const orchestrator = new Orchestrator();
-orchestrator.registerAdapter('typescript', new UltraciteAdapter());
-orchestrator.registerAdapter('json', new PrettierAdapter());
-orchestrator.registerAdapter('yaml', new PrettierAdapter());
-orchestrator.registerAdapter('css', new StylelintAdapter());
-orchestrator.registerAdapter('markdown', new MarkdownlintAdapter());
 
 const program = new Command();
 

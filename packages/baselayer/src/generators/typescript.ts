@@ -5,6 +5,7 @@ import { writeJSON } from '../utils/file-system.js';
 export type TypeScriptPreset = 'strict' | 'standard' | 'minimal';
 
 export interface TypeScriptConfig {
+  extends?: string;
   compilerOptions: Record<string, unknown>;
   include?: string[];
   exclude?: string[];
@@ -12,7 +13,8 @@ export interface TypeScriptConfig {
 }
 
 /**
- * Get TypeScript compiler options for different presets
+
+- Get TypeScript compiler options for different presets
  */
 function getPresetCompilerOptions(
   preset: TypeScriptPreset
@@ -68,7 +70,8 @@ function getPresetCompilerOptions(
 }
 
 /**
- * Generate tsconfig.json configuration
+
+- Generate tsconfig.json configuration
  */
 export function generateTypeScriptConfig(
   config?: BaselayerConfig,
@@ -135,7 +138,8 @@ export function generateTypeScriptConfig(
 }
 
 /**
- * Generate tsconfig for different project types
+
+- Generate tsconfig for different project types
  */
 export function generateProjectTypeScriptConfigs(
   config?: BaselayerConfig
@@ -158,7 +162,7 @@ export function generateProjectTypeScriptConfigs(
       exclude: [
         '**/*.test.*',
         '**/*.spec.*',
-        '**/__tests__/**',
+        '**/**tests**/**',
         'vitest.config.*',
         'vite.config.*',
       ],
@@ -181,7 +185,8 @@ export function generateProjectTypeScriptConfigs(
 }
 
 /**
- * Write TypeScript configuration files
+
+- Write TypeScript configuration files
  */
 export async function generateAllTypeScriptConfigs(
   config?: BaselayerConfig
@@ -192,7 +197,7 @@ export async function generateAllTypeScriptConfigs(
     for (const [filename, tsConfig] of Object.entries(configs)) {
       const result = await writeJSON(filename, tsConfig);
       if (isFailure(result)) {
-        return failure(result.error);
+        return failure(new Error(result.error.message));
       }
     }
 
@@ -203,7 +208,8 @@ export async function generateAllTypeScriptConfigs(
 }
 
 /**
- * Write single tsconfig.json file
+
+- Write single tsconfig.json file
  */
 export async function generateTypeScriptConfigFile(
   config?: BaselayerConfig,
@@ -214,7 +220,7 @@ export async function generateTypeScriptConfigFile(
 
     const result = await writeJSON('tsconfig.json', tsConfig);
     if (isFailure(result)) {
-      return failure(result.error);
+      return failure(new Error(result.error.message));
     }
 
     return success(undefined);

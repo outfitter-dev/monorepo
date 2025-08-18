@@ -8,9 +8,10 @@ interface ToolVersion {
 }
 
 /**
- * Check if a command-line tool is available in the system PATH.
- * @param tool The name of the tool to check
- * @returns Result containing tool information or an error
+
+- Check if a command-line tool is available in the system PATH.
+- @param tool The name of the tool to check
+- @returns Result containing tool information or an error
  */
 async function checkTool(tool: string): Promise<Result<ToolVersion, Error>> {
   try {
@@ -37,8 +38,9 @@ async function checkTool(tool: string): Promise<Result<ToolVersion, Error>> {
 }
 
 /**
- * Check that all required tools are available.
- * @returns Result with void on success or an error describing missing tools
+
+- Check that all required tools are available.
+- @returns Result with void on success or an error describing missing tools
  */
 export async function checkRequiredTools(): Promise<Result<void, Error>> {
   const requiredTools = ['git', 'node'];
@@ -62,8 +64,9 @@ export async function checkRequiredTools(): Promise<Result<void, Error>> {
 }
 
 /**
- * Check for optional tools and return their availability.
- * @returns Map of tool names to their availability
+
+- Check for optional tools and return their availability.
+- @returns Map of tool names to their availability
  */
 export async function checkOptionalTools(): Promise<Map<string, boolean>> {
   const optionalTools = ['pnpm', 'yarn', 'bun'];
@@ -78,11 +81,13 @@ export async function checkOptionalTools(): Promise<Map<string, boolean>> {
 }
 
 /**
- * Get detailed information about the Node.js environment.
- * @returns Result containing Node.js version info or an error
+
+- Get detailed information about the Node.js environment.
+- @returns Result containing Node.js version info or an error
  */
 export async function getNodeInfo(): Promise<
   Result<ToolVersion & { npm: string }, Error>
+
 > {
   const nodeResult = await checkTool('node');
   if (!nodeResult.success) {

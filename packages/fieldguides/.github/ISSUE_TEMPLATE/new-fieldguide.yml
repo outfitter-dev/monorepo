@@ -4,12 +4,13 @@ title: '[Fieldguide]: '
 labels: ['type/feature', 'area/docs', 'needs/triage']
 assignees: []
 body:
-  - type: markdown
+
+- type: markdown
     attributes:
       value: |
         Thank you for requesting a new fieldguide! This will help expand Agent Outfitter's coverage of development practices.
 
-  - type: input
+- type: input
     id: topic
     attributes:
       label: Fieldguide Topic
@@ -18,7 +19,7 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+- type: dropdown
     id: category
     attributes:
       label: Category
@@ -32,7 +33,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: scope
     attributes:
       label: Scope and Coverage
@@ -46,7 +47,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: target_audience
     attributes:
       label: Target Audience
@@ -55,7 +56,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: existing_patterns
     attributes:
       label: Existing Patterns
@@ -64,7 +65,7 @@ body:
     validations:
       required: false
 
-  - type: textarea
+- type: textarea
     id: examples
     attributes:
       label: Example Use Cases
@@ -76,7 +77,7 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
+- type: checkboxes
     id: requirements
     attributes:
       label: Requirements Checklist

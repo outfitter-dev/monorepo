@@ -3,11 +3,13 @@ import * as yaml from 'yaml';
 import { writeFile } from '../utils/file-system.js';
 
 /**
- * Generates markdownlint-cli2 configuration
- * Provides sensible defaults for Markdown linting
+
+- Generates markdownlint-cli2 configuration
+- Provides sensible defaults for Markdown linting
  */
 export async function generateMarkdownlintConfig(): Promise<
   Result<void, Error>
+
 > {
   try {
     const config = {
@@ -43,7 +45,7 @@ export async function generateMarkdownlintConfig(): Promise<
     const yamlContent = yaml.stringify(config);
     const writeResult = await writeFile('.markdownlint-cli2.yaml', yamlContent);
     if (isFailure(writeResult)) {
-      return failure(writeResult.error);
+      return failure(new Error(writeResult.error.message));
     }
     return success(undefined);
   } catch (error) {

@@ -2,8 +2,9 @@ import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import { writeFile, writeJSON } from '../utils/file-system.js';
 
 /**
- * Generates Stylelint configuration
- * Configured for modern CSS with Tailwind CSS support
+
+- Generates Stylelint configuration
+- Configured for modern CSS with Tailwind CSS support
  */
 export async function generateStylelintConfig(): Promise<Result<void, Error>> {
   try {
@@ -69,13 +70,13 @@ export async function generateStylelintConfig(): Promise<Result<void, Error>> {
     // Write .stylelintrc.json
     const configResult = await writeJSON('.stylelintrc.json', config);
     if (isFailure(configResult)) {
-      return failure(configResult.error);
+      return failure(new Error(configResult.error.message));
     }
 
     // Write .stylelintignore
     const ignoreResult = await writeFile('.stylelintignore', ignore.join('\n'));
     if (isFailure(ignoreResult)) {
-      return failure(ignoreResult.error);
+      return failure(new Error(ignoreResult.error.message));
     }
     return success(undefined);
   } catch (error) {

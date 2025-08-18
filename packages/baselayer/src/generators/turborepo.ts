@@ -21,11 +21,12 @@ export interface TurboPipeline {
 }
 
 /**
- * Generate Turborepo configuration for monorepos
+
+- Generate Turborepo configuration for monorepos
  */
 export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
   const turboConfig: TurboConfig = {
-    $schema: 'https://turbo.build/schema.json',
+    $schema: '<https://turbo.build/schema.json>',
     ui: 'tui',
     pipeline: {},
     globalDependencies: [
@@ -77,7 +78,7 @@ export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
       inputs: [
         'src/**',
         'test/**',
-        '__tests__/**',
+        '**tests**/**',
         '**/*.test.*',
         '**/*.spec.*',
         'vitest.config.*',
@@ -92,7 +93,7 @@ export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
       inputs: [
         'src/**',
         'test/**',
-        '__tests__/**',
+        '**tests**/**',
         '**/*.test.*',
         '**/*.spec.*',
         'vitest.config.*',
@@ -199,7 +200,8 @@ export function generateTurboConfig(config?: BaselayerConfig): TurboConfig {
 }
 
 /**
- * Generate Turborepo configuration optimized for different project types
+
+- Generate Turborepo configuration optimized for different project types
  */
 export function generateProjectTurboConfig(
   config?: BaselayerConfig
@@ -237,7 +239,8 @@ export function generateProjectTurboConfig(
 }
 
 /**
- * Write turbo.json configuration file
+
+- Write turbo.json configuration file
  */
 export async function generateTurboConfigFile(
   config?: BaselayerConfig
@@ -252,7 +255,7 @@ export async function generateTurboConfigFile(
 
     const result = await writeJSON('turbo.json', turboConfig);
     if (isFailure(result)) {
-      return failure(result.error);
+      return failure(new Error(result.error.message));
     }
 
     return success(undefined);

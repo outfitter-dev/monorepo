@@ -13,7 +13,8 @@ interface ToolVersion {
 }
 
 /**
- * Diagnose configuration issues
+
+- Diagnose configuration issues
  */
 export async function doctor(): Promise<Result<DoctorReport, Error>> {
   try {
@@ -31,7 +32,7 @@ export async function doctor(): Promise<Result<DoctorReport, Error>> {
       return success({ issues });
     }
 
-    let packageJson;
+    let packageJson: Record<string, unknown>;
     try {
       packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
     } catch (_error) {
@@ -140,10 +141,13 @@ export async function doctor(): Promise<Result<DoctorReport, Error>> {
       const nodeVersion = execSync('node --version', { encoding: 'utf-8' })
         .trim()
         .slice(1);
-      toolsToCheck[0].version = nodeVersion;
+      const nodeTool = toolsToCheck[0];
+      if (nodeTool) {
+        nodeTool.version = nodeVersion;
+      }
 
       const [major] = nodeVersion.split('.').map(Number);
-      if (major < 18) {
+      if (major && major < 18) {
         issues.push({
           description: `Node.js version ${nodeVersion} is below minimum required (18.0.0)`,
           severity: 'error',
@@ -161,9 +165,9 @@ export async function doctor(): Promise<Result<DoctorReport, Error>> {
     // Check if Flint tools are installed
     const flintDependencies = ['ultracite', 'oxlint', 'markdownlint-cli2'];
 
-    const installedDeps = {
-      ...(packageJson.dependencies || {}),
-      ...(packageJson.devDependencies || {}),
+    const installedDeps: Record<string, string> = {
+      ...((packageJson.dependencies as Record<string, string>) || {}),
+      ...((packageJson.devDependencies as Record<string, string>) || {}),
     };
 
     for (const dep of flintDependencies) {
@@ -239,7 +243,9 @@ export async function doctor(): Promise<Result<DoctorReport, Error>> {
     };
 
     const missingScripts = Object.entries(recommendedScripts)
-      .filter(([script]) => !packageJson.scripts?.[script])
+      .filter(
+        ([script]) => !(packageJson.scripts as Record<string, string>)?.[script]
+      )
       .map(([script, description]) => ({
         script,
         description,

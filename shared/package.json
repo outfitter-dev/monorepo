@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "build": "echo 'Shared configs - no build needed'",
-    "test": "echo 'Shared configs - no tests'"
+    "test": "echo 'Shared configs - no tests'",
+    "typecheck": "echo 'Shared configs - no typecheck needed'"
   },
   "devDependencies": {
     "typescript": "5.9.2",

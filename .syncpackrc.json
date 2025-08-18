@@ -29,6 +29,48 @@
       "dependencies": ["vitest"],
       "dependencyTypes": ["dev"],
       "range": ""
+    },
+    {
+      "label": "Keep tsup versions in sync",
+      "packages": ["**"],
+      "dependencies": ["tsup"],
+      "dependencyTypes": ["dev"],
+      "range": "^"
+    },
+    {
+      "label": "Keep @biomejs/biome versions in sync",
+      "packages": ["**"],
+      "dependencies": ["@biomejs/biome"],
+      "dependencyTypes": ["dev"],
+      "range": "^"
+    },
+    {
+      "label": "Keep prettier versions in sync",
+      "packages": ["**"],
+      "dependencies": ["prettier"],
+      "dependencyTypes": ["dev"],
+      "range": "^"
+    },
+    {
+      "label": "Keep markdownlint-cli2 versions in sync",
+      "packages": ["**"],
+      "dependencies": ["markdownlint-cli2"],
+      "dependencyTypes": ["dev"],
+      "range": "^"
+    },
+    {
+      "label": "Keep lefthook versions in sync",
+      "packages": ["**"],
+      "dependencies": ["lefthook"],
+      "dependencyTypes": ["dev"],
+      "range": "^"
+    },
+    {
+      "label": "Keep ultracite versions in sync",
+      "packages": ["**"],
+      "dependencies": ["ultracite"],
+      "dependencyTypes": ["dev"],
+      "range": "^"
     }
   ]
 }

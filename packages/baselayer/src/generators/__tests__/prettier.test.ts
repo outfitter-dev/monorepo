@@ -1,14 +1,13 @@
-import { isFailure, isSuccess } from '@outfitter/contracts';
+import { isFailure, isSuccess, type Result } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BaselayerConfig } from '../../schemas/baselayer-config.js';
+import type { FileSystemError } from '../../utils/file-system.js';
 import * as fileSystem from '../../utils/file-system.js';
 import {
   generatePrettierConfig,
   generatePrettierConfigObject,
   generatePrettierIgnore,
 } from '../prettier.js';
-
-vi.mock('../../utils/file-system.js');
 
 describe('generatePrettierConfigObject', () => {
   it('should generate basic prettier config', () => {
@@ -134,13 +133,16 @@ describe('generatePrettierIgnore', () => {
 describe('generatePrettierConfig', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock file system functions
+    vi.spyOn(fileSystem, 'writeJSON').mockImplementation(vi.fn());
+    vi.spyOn(fileSystem, 'writeFile').mockImplementation(vi.fn());
   });
 
   it('should generate prettierignore file', async () => {
     vi.mocked(fileSystem.writeJSON).mockResolvedValue({
       success: true,
       data: undefined,
-    } as any);
+    } as Result<void, FileSystemError>);
 
     let writtenIgnore: string;
     vi.mocked(fileSystem.writeFile).mockImplementation(
@@ -149,19 +151,19 @@ describe('generatePrettierConfig', () => {
         return {
           success: true,
           data: undefined,
-        } as any;
+        } as Result<void, FileSystemError>;
       }
     );
 
     const result = await generatePrettierConfig();
 
     expect(isSuccess(result)).toBe(true);
-    expect(writtenIgnore!).toContain('*.js');
-    expect(writtenIgnore!).toContain('*.jsx');
-    expect(writtenIgnore!).toContain('*.ts');
-    expect(writtenIgnore!).toContain('*.tsx');
-    expect(writtenIgnore!).toContain('node_modules/');
-    expect(writtenIgnore!).toContain('dist/');
+    expect(writtenIgnore).toContain('*.js');
+    expect(writtenIgnore).toContain('*.jsx');
+    expect(writtenIgnore).toContain('*.ts');
+    expect(writtenIgnore).toContain('*.tsx');
+    expect(writtenIgnore).toContain('node_modules/');
+    expect(writtenIgnore).toContain('dist/');
   });
 
   it('should handle write errors', async () => {
@@ -169,13 +171,13 @@ describe('generatePrettierConfig', () => {
     vi.mocked(fileSystem.writeJSON).mockResolvedValue({
       success: false,
       error,
-    } as any);
+    } as Result<void, FileSystemError>);
 
     const result = await generatePrettierConfig();
 
     expect(isFailure(result)).toBe(true);
     if (isFailure(result)) {
-      expect(result.error).toBe(error);
+      expect(result.error).toEqual(error);
     }
   });
 });

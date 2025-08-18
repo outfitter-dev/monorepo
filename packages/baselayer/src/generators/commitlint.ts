@@ -2,7 +2,8 @@ import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import { writeJSON } from '../utils/file-system.js';
 
 /**
- * Generates commitlint configuration for conventional commits
+
+- Generates commitlint configuration for conventional commits
  */
 export async function generateCommitlintConfig(): Promise<Result<void, Error>> {
   try {
@@ -147,7 +148,7 @@ export async function generateCommitlintConfig(): Promise<Result<void, Error>> {
 
     const writeResult = await writeJSON('.commitlintrc.json', config);
     if (isFailure(writeResult)) {
-      return failure(writeResult.error);
+      return failure(new Error(writeResult.error.message));
     }
     return success(undefined);
   } catch (error) {

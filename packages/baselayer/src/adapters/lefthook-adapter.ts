@@ -7,16 +7,18 @@ import type {
 import { BaseAdapter } from './base-adapter.js';
 
 /**
- * Lefthook adapter for Git hook management and commit validation
- * Handles hook installation, commit message validation, and hook execution
+
+- Lefthook adapter for Git hook management and commit validation
+- Handles hook installation, commit message validation, and hook execution
  */
 export class LefthookAdapter extends BaseAdapter {
   readonly name = 'lefthook';
   readonly extensions = [] as const; // Lefthook doesn't process specific files
 
   /**
-   * Format operation - not applicable for Lefthook
-   * Returns success with no files processed
+
+- Format operation - not applicable for Lefthook
+- Returns success with no files processed
    */
   async format(
     _files: readonly string[],
@@ -33,8 +35,9 @@ export class LefthookAdapter extends BaseAdapter {
   }
 
   /**
-   * Lint operation - not applicable for Lefthook
-   * Returns success with no files processed
+
+- Lint operation - not applicable for Lefthook
+- Returns success with no files processed
    */
   async lint(
     _files: readonly string[],
@@ -51,7 +54,8 @@ export class LefthookAdapter extends BaseAdapter {
   }
 
   /**
-   * Check operation - validates git hooks are installed and active
+
+- Check operation - validates git hooks are installed and active
    */
   async check(
     _files: readonly string[],
@@ -96,7 +100,8 @@ export class LefthookAdapter extends BaseAdapter {
   }
 
   /**
-   * Install git hooks using Lefthook
+
+- Install git hooks using Lefthook
    */
   async install(): Promise<ToolResult> {
     const result = await this.executeCommand('lefthook', ['install']);
@@ -108,7 +113,8 @@ export class LefthookAdapter extends BaseAdapter {
   }
 
   /**
-   * Uninstall git hooks
+
+- Uninstall git hooks
    */
   async uninstall(): Promise<ToolResult> {
     const result = await this.executeCommand('lefthook', ['uninstall']);
@@ -120,7 +126,8 @@ export class LefthookAdapter extends BaseAdapter {
   }
 
   /**
-   * Run specific hook manually (useful for testing)
+
+- Run specific hook manually (useful for testing)
    */
   async runHook(
     hookName: string,
@@ -141,7 +148,8 @@ export class LefthookAdapter extends BaseAdapter {
   }
 
   /**
-   * Validate commit message using commitlint
+
+- Validate commit message using commitlint
    */
   async validateCommitMessage(message: string): Promise<ToolResult> {
     // Create temporary file with commit message
@@ -188,14 +196,16 @@ export class LefthookAdapter extends BaseAdapter {
   }
 
   /**
-   * Run pre-commit hooks manually
+
+- Run pre-commit hooks manually
    */
   async runPreCommit(stagedFiles?: readonly string[]): Promise<ToolResult> {
     return this.runHook('pre-commit', stagedFiles);
   }
 
   /**
-   * Run pre-push hooks manually
+
+- Run pre-push hooks manually
    */
   async runPrePush(): Promise<ToolResult> {
     return this.runHook('pre-push');

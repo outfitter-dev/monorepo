@@ -2,15 +2,17 @@ import type { FormatOptions, LintOptions, ToolResult } from '../types.js';
 import { BaseAdapter } from './base-adapter.js';
 
 /**
- * Markdownlint adapter for Markdown linting and formatting
- * Based on bun-monorepo template configuration with markdownlint-cli2
+
+- Markdownlint adapter for Markdown linting and formatting
+- Based on bun-monorepo template configuration with markdownlint-cli2
  */
 export class MarkdownlintAdapter extends BaseAdapter {
   readonly name = 'markdownlint-cli2';
   readonly extensions = ['.md', '.mdx', '.mdc'] as const;
 
   /**
-   * Format Markdown files using markdownlint-cli2
+
+- Format Markdown files using markdownlint-cli2
    */
   async format(
     files: readonly string[],
@@ -47,7 +49,8 @@ export class MarkdownlintAdapter extends BaseAdapter {
   }
 
   /**
-   * Lint Markdown files using markdownlint-cli2
+
+- Lint Markdown files using markdownlint-cli2
    */
   async lint(
     files: readonly string[],

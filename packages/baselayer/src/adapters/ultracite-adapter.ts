@@ -2,15 +2,17 @@ import type { FormatOptions, LintOptions, ToolResult } from '../types.js';
 import { BaseAdapter } from './base-adapter.js';
 
 /**
- * Ultracite adapter for TypeScript/JavaScript formatting and linting
- * Uses bun x ultracite@latest for consistent behavior
+
+- Ultracite adapter for TypeScript/JavaScript formatting and linting
+- Uses bun x ultracite@latest for consistent behavior
  */
 export class UltraciteAdapter extends BaseAdapter {
   readonly name = 'ultracite';
   readonly extensions = ['.ts', '.tsx', '.js', '.jsx'] as const;
 
   /**
-   * Format TypeScript/JavaScript files using Ultracite
+
+- Format TypeScript/JavaScript files using Ultracite
    */
   async format(
     files: readonly string[],
@@ -45,7 +47,8 @@ export class UltraciteAdapter extends BaseAdapter {
   }
 
   /**
-   * Lint TypeScript/JavaScript files using Ultracite
+
+- Lint TypeScript/JavaScript files using Ultracite
    */
   async lint(
     files: readonly string[],

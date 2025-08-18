@@ -1,8 +1,9 @@
 /**
- * Modern branded types
- *
- * Re-exports branded types from @outfitter/contracts for single source of truth.
- * Provides additional web-specific branded types not covered in contracts.
+
+- Modern branded types
+-
+- Re-exports branded types from @outfitter/contracts for single source of truth.
+- Provides additional web-specific branded types not covered in contracts.
  */
 
 // Re-export core branded types from contracts
@@ -50,7 +51,8 @@ export type SemVer = Brand<string, 'SemVer'>;
 export type Port = Brand<number, 'Port'>;
 
 /**
- * Type guards for additional web-specific branded types
+
+- Type guards for additional web-specific branded types
  */
 export function isSlug(value: unknown): value is Slug {
   return typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
@@ -90,11 +92,13 @@ export function isPort(value: unknown): value is Port {
 }
 
 /**
- * Re-export Brand type with import for convenience
+
+- Re-export Brand type with import for convenience
  */
 import type { Brand } from '@outfitter/contracts/branded';
 
 /**
- * Utility to create custom branded types (re-exported from contracts)
+
+- Utility to create custom branded types (re-exported from contracts)
  */
 export { createBrandedType as brand } from '@outfitter/contracts/branded';

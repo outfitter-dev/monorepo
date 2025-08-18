@@ -10,7 +10,8 @@ import { type DetectedConfig, detectExistingTools } from '../core/detector.js';
 import type { CleanOptions } from '../types.js';
 
 /**
- * Clean up old configuration files
+
+- Clean up old configuration files
  */
 export async function clean(
   options: CleanOptions
@@ -28,7 +29,8 @@ export async function clean(
       );
     }
 
-    const _packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+    // Verify package.json exists and is readable
+    JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
     const detectionResult = await detectExistingTools(projectRoot);
     if (isFailure(detectionResult)) {
       return failure(

@@ -1,16 +1,11 @@
----
-globs: **/*.tsx,**/*.ts,**/*.jsx,**/*.js
-alwaysApply: false
----
-
-# Project Context
+# Ultracite Rules
 
 Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter.
 
 ## Key Principles
 
 - Zero configuration required
-- Subsecond performance
+- Sub-second performance
 - Maximum type safety
 - AI-friendly code generation
 

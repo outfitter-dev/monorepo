@@ -1,55 +1,60 @@
 /**
- * Type definitions for remark configuration
+
+- Type definitions for remark configuration
  */
 
 /**
- * Remark plugin configuration - can be a string or tuple with options
+
+- Remark plugin configuration - can be a string or tuple with options
  */
-export type RemarkPlugin = string | [string, ...any[]];
+export type RemarkPlugin = string | [string, ...unknown[]];
 
 /**
- * Remark configuration object
+
+- Remark configuration object
  */
 export interface RemarkConfig {
-  /** List of remark plugins to use */
+  /**List of remark plugins to use */
   plugins?: RemarkPlugin[];
   /** Settings for the unified processor */
   settings?: {
-    /** Bullet character for lists */
+    /**Bullet character for lists */
     bullet?: '-' | '*' | '+';
-    /** Emphasis marker */
-    emphasis?: '*' | '_';
+    /**Emphasis marker */
+    emphasis?: '*' | '*';
     /** Strong emphasis marker */
-    strong?: '*' | '_';
+    strong?: '*' | '*';
     /** List item indentation */
     listItemIndent?: 'one' | 'tab' | 'mixed';
     /** Fenced code marker */
     fence?: '`' | '~';
-    /** Rule marker */
+    /**Rule marker */
     rule?: '-' | '*' | '_';
-    /** Whether to use setext headings for h1 and h2 */
+    /** Whether to use setext headings for h1 and h2*/
     setext?: boolean;
   };
 }
 
 /**
- * Configuration options for generating remark config
+
+- Configuration options for generating remark config
  */
 export interface RemarkConfigOptions {
-  /** Base preset to extend */
+  /**Base preset to extend */
   preset?: 'standard' | 'strict' | 'relaxed';
   /** Additional plugins to include */
   additionalPlugins?: RemarkPlugin[];
-  /** Override settings */
+  /**Override settings */
   settings?: RemarkConfig['settings'];
   /** Maximum line length for linting */
   maxLineLength?: number;
-  /** Whether to enforce consistent terminology */
+  /**Whether to enforce consistent terminology*/
   enforceTerminology?: boolean;
 }
 
 /**
- * Function type for generating remark configurations
+
+- Function type for generating remark configurations
  */
 export type RemarkConfigGenerator = (
   options?: RemarkConfigOptions

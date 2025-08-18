@@ -1,5 +1,6 @@
 /**
- * Strict remark preset for rigorous markdown linting and formatting
+
+- Strict remark preset for rigorous markdown linting and formatting
  */
 
 import type { RemarkConfig } from '../types.js';

@@ -3,7 +3,8 @@ import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import { writeFile } from '../utils/file-system.js';
 
 /**
- * Generate vitest.config.ts configuration
+
+- Generate vitest.config.ts configuration
  */
 export function generateVitestConfig(config?: BaselayerConfig): string {
   const isReactProject =
@@ -49,7 +50,7 @@ export function generateVitestConfig(config?: BaselayerConfig): string {
       'test{,-*}.{js,cjs,mjs,ts,tsx,jsx}',
       '**/*{.,-}test.{js,cjs,mjs,ts,tsx,jsx}',
       '**/*{.,-}spec.{js,cjs,mjs,ts,tsx,jsx}',
-      '**/__tests__/**',
+      '**/**tests**/**',
       '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*',
       '**/.{eslint,mocha,prettier}rc.{js,cjs,yml}',
     ],
@@ -95,7 +96,8 @@ export default defineConfig(${configString})
 }
 
 /**
- * Generate test setup file content
+
+- Generate test setup file content
  */
 export function generateTestSetup(config?: BaselayerConfig): string {
   const isReactProject =
@@ -142,7 +144,8 @@ ${setup.join('\n\n')}
 }
 
 /**
- * Write Vitest configuration files
+
+- Write Vitest configuration files
  */
 export async function generateVitestConfigFiles(
   config?: BaselayerConfig
@@ -152,14 +155,14 @@ export async function generateVitestConfigFiles(
     const vitestConfig = generateVitestConfig(config);
     const vitestResult = await writeFile('vitest.config.ts', vitestConfig);
     if (isFailure(vitestResult)) {
-      return failure(vitestResult.error);
+      return failure(new Error(vitestResult.error.message));
     }
 
     // Generate test setup file if it doesn't exist
     const testSetup = generateTestSetup(config);
     const setupResult = await writeFile('src/test-setup.ts', testSetup);
     if (isFailure(setupResult)) {
-      return failure(setupResult.error);
+      return failure(new Error(setupResult.error.message));
     }
 
     return success(undefined);

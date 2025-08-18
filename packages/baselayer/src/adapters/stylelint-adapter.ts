@@ -2,15 +2,17 @@ import type { FormatOptions, LintOptions, ToolResult } from '../types.js';
 import { BaseAdapter } from './base-adapter.js';
 
 /**
- * Stylelint adapter for CSS/SCSS linting and formatting
- * Based on bun-monorepo template configuration
+
+- Stylelint adapter for CSS/SCSS linting and formatting
+- Based on bun-monorepo template configuration
  */
 export class StylelintAdapter extends BaseAdapter {
   readonly name = 'stylelint';
   readonly extensions = ['.css', '.scss', '.sass', '.less'] as const;
 
   /**
-   * Format CSS files using Stylelint
+
+- Format CSS files using Stylelint
    */
   async format(
     files: readonly string[],
@@ -51,7 +53,8 @@ export class StylelintAdapter extends BaseAdapter {
   }
 
   /**
-   * Lint CSS files using Stylelint
+
+- Lint CSS files using Stylelint
    */
   async lint(
     files: readonly string[],

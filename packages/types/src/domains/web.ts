@@ -1,7 +1,8 @@
 /**
- * Web-specific types
- *
- * Types commonly used in web applications and browsers.
+
+- Web-specific types
+-
+- Types commonly used in web applications and browsers.
  */
 
 import type { Brand } from '../core/branded.js';

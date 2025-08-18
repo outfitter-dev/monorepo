@@ -1,15 +1,14 @@
 /**
- * Smart config merging utilities
+
+- Smart config merging utilities
  */
+import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import {
-  ErrorCode,
-  failure,
-  isFailure,
-  makeError,
-  type Result,
-  success,
-} from '@outfitter/contracts';
-import { fileExists, readJSON, writeJSON } from '../utils/file-system';
+  type FileSystemError,
+  fileExists,
+  readJSON,
+  writeJSON,
+} from '../utils/file-system';
 
 export interface MergeOptions {
   strategy?: 'merge' | 'replace' | 'preserve';
@@ -18,9 +17,10 @@ export interface MergeOptions {
 }
 
 /**
- * Deep merge two objects
+
+- Deep merge two objects
  */
-export function deepMerge<T extends Record<string, any>>(
+export function deepMerge<T extends Record<string, unknown>>(
   target: T,
   source: Partial<T>,
   options: MergeOptions = {}
@@ -48,13 +48,18 @@ export function deepMerge<T extends Record<string, any>>(
     if (Array.isArray(sourceValue) && Array.isArray(targetValue)) {
       switch (arrays) {
         case 'concat':
-          result[key] = [...targetValue, ...sourceValue] as any;
+          result[key] = [...targetValue, ...sourceValue] as T[Extract<
+            keyof T,
+            string
+          >];
           break;
         case 'replace':
-          result[key] = sourceValue as any;
+          result[key] = sourceValue as T[Extract<keyof T, string>];
           break;
         case 'unique':
-          result[key] = [...new Set([...targetValue, ...sourceValue])] as any;
+          result[key] = [
+            ...new Set([...targetValue, ...sourceValue]),
+          ] as T[Extract<keyof T, string>];
           break;
       }
     } else if (
@@ -65,9 +70,13 @@ export function deepMerge<T extends Record<string, any>>(
       targetValue !== null &&
       !Array.isArray(targetValue)
     ) {
-      result[key] = deepMerge(targetValue, sourceValue, options) as any;
+      result[key] = deepMerge(
+        targetValue as Record<string, unknown>,
+        sourceValue as Record<string, unknown>,
+        options
+      ) as T[Extract<keyof T, string>];
     } else {
-      result[key] = sourceValue as any;
+      result[key] = sourceValue as T[Extract<keyof T, string>];
     }
   }
 
@@ -75,28 +84,24 @@ export function deepMerge<T extends Record<string, any>>(
 }
 
 /**
- * Merge JSON file with new data
+
+- Merge JSON file with new data
  */
 export async function mergeJSONFile(
   filePath: string,
-  newData: any,
+  newData: Record<string, unknown>,
   options: MergeOptions = {}
-): Promise<Result<void, any>> {
+): Promise<Result<void, FileSystemError>> {
   const existsResult = await fileExists(filePath);
   if (isFailure(existsResult)) {
     return failure(existsResult.error);
   }
 
-  let existingData = {};
+  let existingData: Record<string, unknown> = {};
   if (existsResult.data) {
-    const readResult = await readJSON(filePath);
+    const readResult = await readJSON<Record<string, unknown>>(filePath);
     if (isFailure(readResult)) {
-      return failure(
-        makeError(
-          ErrorCode.INTERNAL_ERROR,
-          `Failed to read existing file: ${readResult.error.message}`
-        )
-      );
+      return failure(readResult.error);
     }
     existingData = readResult.data;
   }
@@ -105,24 +110,20 @@ export async function mergeJSONFile(
 
   const writeResult = await writeJSON(filePath, merged);
   if (isFailure(writeResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to write merged file: ${writeResult.error.message}`
-      )
-    );
+    return failure(writeResult.error);
   }
 
   return success(undefined);
 }
 
 /**
- * Merge VS Code settings
+
+- Merge VS Code settings
  */
 export async function mergeVSCodeSettings(
-  newSettings: any,
+  newSettings: Record<string, unknown>,
   options: MergeOptions = {}
-): Promise<Result<void, any>> {
+): Promise<Result<void, FileSystemError>> {
   return mergeJSONFile('.vscode/settings.json', newSettings, {
     ...options,
     arrays: 'unique',
@@ -130,12 +131,13 @@ export async function mergeVSCodeSettings(
 }
 
 /**
- * Merge VS Code extensions
+
+- Merge VS Code extensions
  */
 export async function mergeVSCodeExtensions(
   newExtensions: { recommendations: string[] },
   options: MergeOptions = {}
-): Promise<Result<void, any>> {
+): Promise<Result<void, FileSystemError>> {
   return mergeJSONFile('.vscode/extensions.json', newExtensions, {
     ...options,
     arrays: 'unique',
@@ -143,53 +145,46 @@ export async function mergeVSCodeExtensions(
 }
 
 /**
- * Merge package.json scripts
+
+- Merge package.json scripts
  */
 export async function mergePackageScripts(
   newScripts: Record<string, string>,
   options: { overwrite?: boolean } = {}
-): Promise<Result<void, any>> {
+): Promise<Result<void, FileSystemError>> {
   const { overwrite = false } = options;
 
-  const pkgResult = await readJSON<any>('package.json');
+  const pkgResult = await readJSON<Record<string, unknown>>('package.json');
   if (isFailure(pkgResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to read package.json: ${pkgResult.error.message}`
-      )
-    );
+    return failure(pkgResult.error);
   }
 
   const pkg = pkgResult.data;
-  pkg.scripts = pkg.scripts || {};
+  const scripts = (pkg.scripts as Record<string, string>) || {};
+  pkg.scripts = scripts;
 
   for (const [name, command] of Object.entries(newScripts)) {
-    if (!pkg.scripts[name] || overwrite) {
-      pkg.scripts[name] = command;
+    if (!scripts[name] || overwrite) {
+      scripts[name] = command;
     }
   }
 
   const writeResult = await writeJSON('package.json', pkg);
   if (isFailure(writeResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to write package.json: ${writeResult.error.message}`
-      )
-    );
+    return failure(writeResult.error);
   }
 
   return success(undefined);
 }
 
 /**
- * Remove fields from JSON file
+
+- Remove fields from JSON file
  */
 export async function removeJSONFields(
   filePath: string,
   fields: string[]
-): Promise<Result<void, any>> {
+): Promise<Result<void, FileSystemError>> {
   const existsResult = await fileExists(filePath);
   if (isFailure(existsResult)) {
     return failure(existsResult.error);
@@ -199,14 +194,9 @@ export async function removeJSONFields(
     return success(undefined); // File doesn't exist, nothing to remove
   }
 
-  const readResult = await readJSON<any>(filePath);
+  const readResult = await readJSON<Record<string, unknown>>(filePath);
   if (isFailure(readResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to read file: ${readResult.error.message}`
-      )
-    );
+    return failure(readResult.error);
   }
 
   const data = readResult.data;
@@ -216,21 +206,20 @@ export async function removeJSONFields(
 
   const writeResult = await writeJSON(filePath, data);
   if (isFailure(writeResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to write file: ${writeResult.error.message}`
-      )
-    );
+    return failure(writeResult.error);
   }
 
   return success(undefined);
 }
 
 /**
- * Remove embedded configs from package.json
+
+- Remove embedded configs from package.json
  */
-export async function removeEmbeddedConfigs(): Promise<Result<void, any>> {
+export async function removeEmbeddedConfigs(): Promise<
+  Result<void, FileSystemError>
+
+> {
   const embeddedConfigs = [
     'eslintConfig',
     'prettier',

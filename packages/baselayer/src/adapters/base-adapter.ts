@@ -8,15 +8,17 @@ import type {
 } from '../types.js';
 
 /**
- * Base adapter class providing common functionality
- * All tool adapters extend this class
+
+- Base adapter class providing common functionality
+- All tool adapters extend this class
  */
 export abstract class BaseAdapter implements ToolAdapter {
   abstract readonly name: string;
   abstract readonly extensions: readonly string[];
 
   /**
-   * Check if this adapter can handle the given file
+
+- Check if this adapter can handle the given file
    */
   canHandle(filePath: string): boolean {
     const ext = extname(filePath);
@@ -24,7 +26,8 @@ export abstract class BaseAdapter implements ToolAdapter {
   }
 
   /**
-   * Execute a command and return structured result
+
+- Execute a command and return structured result
    */
   protected async executeCommand(
     command: string,
@@ -101,7 +104,8 @@ export abstract class BaseAdapter implements ToolAdapter {
   }
 
   /**
-   * Filter files that this adapter can handle
+
+- Filter files that this adapter can handle
    */
   protected filterFiles(files: readonly string[]): string[] {
     return files.filter((file) => this.canHandle(file));

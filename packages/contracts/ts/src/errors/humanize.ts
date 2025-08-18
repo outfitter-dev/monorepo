@@ -1,9 +1,10 @@
-import type { AppError } from '../error';
-import { ErrorCode } from '../error';
+import type { AppError } from '../error.js';
+import { ErrorCode } from '../error.js';
 
 /**
- * User-friendly error messages for each error code.
- * These messages are suitable for display in UI components.
+
+- User-friendly error messages for each error code.
+- These messages are suitable for display in UI components.
  */
 const errorMessages: Record<ErrorCode, string> = {
   [ErrorCode.VALIDATION_ERROR]: 'Please check your input and try again.',
@@ -32,20 +33,32 @@ const errorMessages: Record<ErrorCode, string> = {
     'Package manager operation failed. Please check your setup.',
   [ErrorCode.PROJECT_DETECTION_FAILED]:
     'Project detection failed. Please verify project structure.',
+  [ErrorCode.CHECK_FAILED]:
+    'Check operation failed. Please verify your configuration.',
+  [ErrorCode.TEARDOWN_FAILED]:
+    'Teardown operation failed. Please check the logs for details.',
+  [ErrorCode.CLEANUP_FAILED]:
+    'Cleanup operation failed. Please check permissions and try again.',
+  [ErrorCode.FRAMEWORK_DETECTION_FAILED]:
+    'Framework detection failed. Please verify project structure.',
 };
 
 /**
- * Convert an AppError to a user-friendly message suitable for display in UI.
- * Falls back to the error's message if no specific user-friendly message exists.
- *
- * @param error - The AppError to humanize
- * @returns A user-friendly error message
- *
- * @example
- * ```ts
- * const error = makeError(ErrorCode.AUTH_EXPIRED, 'Token expired at 2024-01-01');
- * const message = humanize(error); // "Your session has expired. Please log in again."
- * ```
+
+- Convert an AppError to a user-friendly message suitable for display in UI.
+- Falls back to the error's message if no specific user-friendly message exists.
+-
+- @param error - The AppError to humanize
+- @returns A user-friendly error message
+-
+- @example
+
+- ```ts
+- const error = makeError(ErrorCode.AUTH_EXPIRED, 'Token expired at 2024-01-01');
+- const message = humanize(error); // "Your session has expired. Please log in again."
+
+- ```
+
  */
 export function humanize(error: AppError): string {
   // Use the predefined user-friendly message if available
@@ -70,11 +83,12 @@ export function humanize(error: AppError): string {
 }
 
 /**
- * Convert an AppError to a detailed message suitable for developers/logs.
- * Includes error code, message, and relevant details.
- *
- * @param error - The AppError to format
- * @returns A detailed error message for debugging
+
+- Convert an AppError to a detailed message suitable for developers/logs.
+- Includes error code, message, and relevant details.
+-
+- @param error - The AppError to format
+- @returns A detailed error message for debugging
  */
 export function formatForDevelopers(error: AppError): string {
   const parts = [`[${error.code}] ${error.message}`];

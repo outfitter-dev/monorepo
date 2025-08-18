@@ -24,20 +24,21 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./typescript/base": "./configs/typescript/base.json",
-    "./typescript/next": "./configs/typescript/next.json",
-    "./typescript/vite": "./configs/typescript/vite.json"
+    "./typescript/base.json": "./configs/typescript/base.json",
+    "./typescript/next.json": "./configs/typescript/next.json",
+    "./typescript/vite.json": "./configs/typescript/vite.json"
   },
   "bin": {
     "baselayer": "./dist/cli.js"
   },
   "files": [
     "dist",
+    "dist-types",
     "configs",
     "templates"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp dist-types/index.d.ts dist/index.d.ts",
     "dev": "tsup --watch",
     "test": "vitest",
     "test:run": "vitest run",
@@ -86,13 +87,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "url": "<https://github.com/outfitter-dev/monorepo.git>",
     "directory": "packages/baselayer"
   },
   "bugs": {
-    "url": "https://github.com/outfitter-dev/monorepo/issues"
+    "url": "<https://github.com/outfitter-dev/monorepo/issues>"
   },
-  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/baselayer",
+  "homepage": "<https://github.com/outfitter-dev/monorepo/tree/main/packages/baselayer>",
   "publishConfig": {
     "access": "public"
   },

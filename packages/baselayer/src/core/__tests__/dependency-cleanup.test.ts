@@ -7,8 +7,8 @@ import {
   success,
 } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import * as console from '../../utils/console';
-import * as fs from '../../utils/file-system';
+import *as console from '../../utils/console';
+import* as fs from '../../utils/file-system';
 import * as pm from '../../utils/package-manager';
 import {
   cleanupDependencies,
@@ -17,19 +17,23 @@ import {
   removeDependency,
 } from '../dependency-cleanup';
 
-vi.mock('node:child_process');
-vi.mock('../../utils/file-system');
-vi.mock('../../utils/package-manager');
-vi.mock('../../utils/console');
-
 describe('dependency-cleanup', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(console.console.info).mockImplementation(() => {});
-    vi.mocked(console.console.success).mockImplementation(() => {});
-    vi.mocked(console.console.warning).mockImplementation(() => {});
-    vi.mocked(console.console.section).mockImplementation(() => {});
-    vi.mocked(console.console.step).mockImplementation(() => {});
+    // Mock file system functions
+    vi.spyOn(fs, 'readPackageJson').mockImplementation(vi.fn());
+    // Mock package manager functions
+    vi.spyOn(pm, 'getPackageManager').mockImplementation(vi.fn());
+    // Mock console logger functions
+    vi.spyOn(console.logger, 'info').mockImplementation(() => {});
+    vi.spyOn(console.logger, 'success').mockImplementation(() => {});
+    vi.spyOn(console.logger, 'warning').mockImplementation(() => {});
+    vi.spyOn(console.logger, 'section').mockImplementation(() => {});
+    vi.spyOn(console.logger, 'step').mockImplementation(() => {});
+    // Mock execSync
+    vi.spyOn(require('node:child_process'), 'execSync').mockImplementation(
+      vi.fn()
+    );
   });
 
   describe('findDependenciesToRemove', () => {
@@ -174,7 +178,7 @@ describe('dependency-cleanup', () => {
     it('should fail when package.json cannot be read', async () => {
       vi.mocked(fs.readPackageJson).mockResolvedValue(
         failure({
-          code: ErrorCode.INTERNAL_ERROR,
+          code: 'PACKAGE_READ_FAILED',
           message: 'Not found',
         })
       );
@@ -183,7 +187,7 @@ describe('dependency-cleanup', () => {
 
       expect(isFailure(result)).toBe(true);
       if (isFailure(result)) {
-        expect(result.error.code).toBe(ErrorCode.INTERNAL_ERROR);
+        expect(result.error.code).toBe('PACKAGE_READ_FAILED');
       }
     });
   });
@@ -275,7 +279,7 @@ describe('dependency-cleanup', () => {
         'npm uninstall eslint',
         expect.objectContaining({ stdio: 'ignore' })
       );
-      expect(console.console.section).not.toHaveBeenCalled();
+      expect(console.logger.section).not.toHaveBeenCalled();
     });
 
     it('should fail when command fails without force', async () => {
@@ -326,7 +330,7 @@ describe('dependency-cleanup', () => {
       if (isSuccess(result)) {
         expect(result.data).toEqual(['eslint']);
       }
-      expect(console.console.warning).toHaveBeenCalled();
+      expect(console.logger.warning).toHaveBeenCalled();
     });
   });
 

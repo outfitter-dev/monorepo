@@ -20,9 +20,9 @@
     "lint:fix": "bun run lint:md:fix",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!node_modules/**\" \"!.bun/**\"",
     "lint:md:fix": "markdownlint-cli2 \"**/*.md\" \"!node_modules/**\" \"!.bun/**\" --fix",
-    "format": "prettier --check \"**/*.md\"",
+    "format": "prettier --write \"**/*.md\"",
     "format:check": "prettier --check \"**/*.md\"",
-    "format:fix": "prettier --write \"**/*.md\""
+    "format:fix": "bun run format"
   },
   "devDependencies": {
     "@types/node": "24.3.0",
@@ -54,13 +54,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "url": "<https://github.com/outfitter-dev/monorepo.git>",
     "directory": "packages/fieldguides"
   },
   "bugs": {
-    "url": "https://github.com/outfitter-dev/monorepo/issues"
+    "url": "<https://github.com/outfitter-dev/monorepo/issues>"
   },
-  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/fieldguides#readme",
+  "homepage": "<https://github.com/outfitter-dev/monorepo/tree/main/packages/fieldguides#readme>",
   "publishConfig": {
     "access": "public"
   }

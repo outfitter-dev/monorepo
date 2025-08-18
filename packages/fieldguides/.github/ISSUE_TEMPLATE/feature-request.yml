@@ -4,12 +4,13 @@ title: '[Feature]: '
 labels: ['type/feature', 'needs/triage']
 assignees: []
 body:
-  - type: markdown
+
+- type: markdown
     attributes:
       value: |
         Thank you for suggesting a new feature! This helps us evolve Agent Outfitter to better serve AI agents and developers.
 
-  - type: dropdown
+- type: dropdown
     id: feature_category
     attributes:
       label: Feature Category
@@ -25,7 +26,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: problem_statement
     attributes:
       label: Problem Statement
@@ -38,7 +39,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: proposed_solution
     attributes:
       label: Proposed Solution
@@ -51,7 +52,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: user_stories
     attributes:
       label: User Stories
@@ -63,7 +64,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: alternatives
     attributes:
       label: Alternatives Considered
@@ -75,7 +76,7 @@ body:
     validations:
       required: false
 
-  - type: dropdown
+- type: dropdown
     id: priority
     attributes:
       label: Priority
@@ -87,7 +88,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: success_criteria
     attributes:
       label: Success Criteria
@@ -100,7 +101,7 @@ body:
     validations:
       required: true
 
-  - type: input
+- type: input
     id: timeline
     attributes:
       label: Desired Timeline
@@ -109,7 +110,7 @@ body:
     validations:
       required: false
 
-  - type: checkboxes
+- type: checkboxes
     id: scope_understanding
     attributes:
       label: Scope Understanding

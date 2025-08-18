@@ -4,26 +4,32 @@ import {
   failure,
   isFailure,
   makeError,
+  type Result,
   success,
 } from '@outfitter/contracts';
 import { DEFAULT_FEATURES, TOOL_GENERATORS } from '../constants/tools.js';
 import { ConfigLoader } from '../orchestration/config-loader.js';
 import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import type { FlintResult } from '../types.js';
-import { backupFile, writeJSON } from '../utils/file-system.js';
+import {
+  backupFile,
+  type FileSystemError,
+  writeJSON,
+} from '../utils/file-system.js';
 
 export interface UpdateOptions {
   /** Force update even if current version is newer */
   force?: boolean;
-  /** Show what would be updated without making changes */
+  /**Show what would be updated without making changes */
   dryRun?: boolean;
   /** Enable verbose logging */
   verbose?: boolean;
 }
 
 /**
- * Update command - Updates existing baselayer configuration to latest version
- * Detects current config and updates it intelligently while preserving customizations
+
+- Update command - Updates existing baselayer configuration to latest version
+- Detects current config and updates it intelligently while preserving customizations
  */
 export async function update(
   options: UpdateOptions = {}
@@ -90,7 +96,7 @@ export async function update(
     if (verbose) {
       console.log('✅ Loaded current configuration');
       console.log(
-        `   Features enabled: ${
+        `Features enabled: ${
           Object.entries(currentConfig.features ?? {})
             .filter(([, enabled]) => enabled)
             .map(([feature]) => feature)
@@ -118,7 +124,10 @@ export async function update(
     }
 
     // Step 3: Update tool configurations based on enabled features
-    const updateTasks: Array<{ name: string; task: () => Promise<any> }> = [];
+    const updateTasks: Array<{
+      name: string;
+      task: () => Promise<Result<void, FileSystemError>>;
+    }> = [];
 
     // Map features to their primary tools and display names
     const featureToTask = {
@@ -168,7 +177,7 @@ export async function update(
     if (dryRun) {
       console.log('🧪 DRY RUN - Would update the following configurations:');
       for (const task of updateTasks) {
-        console.log(`   • ${task.name}`);
+        console.log(`• ${task.name}`);
       }
       console.log('   • baselayer.jsonc (preserving custom overrides)');
     } else {
@@ -217,7 +226,7 @@ export async function update(
             } else {
               failed.push({
                 name: result.value.name,
-                error: result.value.error,
+                error: result.value.error || 'Unknown update error',
               });
             }
           } else {
@@ -256,7 +265,7 @@ export async function update(
 
       // Step 5: Update baselayer.jsonc with enhanced schema and preserve overrides
       const updatedConfig: BaselayerConfig = {
-        $schema: 'https://schemas.outfitter.dev/baselayer.json',
+        $schema: '<https://schemas.outfitter.dev/baselayer.json>',
         ...currentConfig,
         // Add any new default features that might have been added
         features: {
@@ -302,7 +311,8 @@ export async function update(
 }
 
 /**
- * Check if an update is available by comparing configurations
+
+- Check if an update is available by comparing configurations
  */
 export async function checkUpdateAvailable(): Promise<FlintResult<boolean>> {
   try {

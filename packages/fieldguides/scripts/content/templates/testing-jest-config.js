@@ -1,10 +1,12 @@
 /*
 ---
+
 slug: testing-jest-config
 title: Jest 29+ configuration with TypeScript and coverage
 description: Modern Jest configuration template for TypeScript projects with comprehensive coverage.
 type: template
 ---
+
 */
 import { pathsToModuleNameMapper } from 'ts-jest';
 import { compilerOptions } from './tsconfig.json';
@@ -16,12 +18,12 @@ const config = {
   testEnvironment: 'node',
   testEnvironmentOptions: {
     // For jsdom environment (React apps)
-    // url: 'http://localhost',
+    // url: '<http://localhost>',
   },
   // Test file locations
   roots: ['<rootDir>/src', '<rootDir>/tests'],
   testMatch: [
-    '**/__tests__/**/*.(test|spec).(ts|tsx|js|jsx)',
+    '**/**tests**/**/*.(test|spec).(ts|tsx|js|jsx)',
     '**/*.(test|spec).(ts|tsx|js|jsx)',
   ],
   // Module resolution
@@ -34,7 +36,7 @@ const config = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     // Handle static assets
     '\\.(jpg|jpeg|png|gif|svg|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/tests/__mocks__/fileMock.js',
+      '<rootDir>/tests/**mocks**/fileMock.js',
   },
   // Transform configuration
   transform: {

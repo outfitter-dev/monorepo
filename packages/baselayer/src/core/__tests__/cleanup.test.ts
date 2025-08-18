@@ -6,8 +6,8 @@ import {
   success,
 } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import * as console from '../../utils/console';
-import * as fs from '../../utils/file-system';
+import *as console from '../../utils/console';
+import* as fs from '../../utils/file-system';
 import {
   cleanupOldTools,
   cleanupVSCodeSettings,
@@ -17,16 +17,20 @@ import {
 } from '../cleanup';
 import * as detector from '../detector';
 
-vi.mock('../../utils/file-system');
-vi.mock('../detector');
-vi.mock('../../utils/console');
-
 describe('cleanup', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(console.console.step).mockImplementation(() => {});
-    vi.mocked(console.console.success).mockImplementation(() => {});
-    vi.mocked(console.console.warning).mockImplementation(() => {});
+    // Mock file system functions
+    vi.spyOn(fs, 'fileExists').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'readFile').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'remove').mockImplementation(vi.fn());
+    vi.spyOn(fs, 'findFiles').mockImplementation(vi.fn());
+    // Mock detector functions
+    vi.spyOn(detector, 'getConfigsToCleanup').mockImplementation(vi.fn());
+    // Mock console logger functions
+    vi.spyOn(console.logger, 'step').mockImplementation(() => {});
+    vi.spyOn(console.logger, 'success').mockImplementation(() => {});
+    vi.spyOn(console.logger, 'warning').mockImplementation(() => {});
   });
 
   describe('removeOldConfigs', () => {
@@ -117,7 +121,7 @@ describe('cleanup', () => {
       if (isSuccess(result)) {
         expect(result.data).toEqual(['.prettierrc']);
       }
-      expect(console.console.warning).toHaveBeenCalled();
+      expect(console.logger.warning).toHaveBeenCalled();
     });
 
     it('should suppress output when silent', async () => {
@@ -129,8 +133,8 @@ describe('cleanup', () => {
       const result = await removeOldConfigs(configs, { silent: true });
 
       expect(isSuccess(result)).toBe(true);
-      expect(console.console.step).not.toHaveBeenCalled();
-      expect(console.console.success).not.toHaveBeenCalled();
+      expect(console.logger.step).not.toHaveBeenCalled();
+      expect(console.logger.success).not.toHaveBeenCalled();
     });
   });
 
@@ -291,7 +295,7 @@ describe('cleanup', () => {
       const result = await removeOldGitHooks('husky', { silent: true });
 
       expect(isSuccess(result)).toBe(true);
-      expect(console.console.step).not.toHaveBeenCalled();
+      expect(console.logger.step).not.toHaveBeenCalled();
     });
 
     it('should handle simple-git-hooks (no directory to remove)', async () => {

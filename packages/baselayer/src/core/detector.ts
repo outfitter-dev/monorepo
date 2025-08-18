@@ -1,5 +1,6 @@
 /**
- * Detect existing tools and configurations
+
+- Detect existing tools and configurations
  */
 
 import { join } from 'node:path';
@@ -88,7 +89,8 @@ const TOOL_PATTERNS: Record<string, string[]> = {
 };
 
 /**
- * Detect all existing tool configurations
+
+- Detect all existing tool configurations
  */
 export async function detectExistingTools(
   cwd: string = process.cwd()
@@ -116,7 +118,7 @@ export async function detectExistingTools(
   }
 
   // Also check package.json for embedded configs
-  const pkgJsonResult = await readFile(path.join(cwd, 'package.json'));
+  const pkgJsonResult = await readFile(join(cwd, 'package.json'));
   if (isSuccess(pkgJsonResult)) {
     try {
       const pkg = JSON.parse(pkgJsonResult.data);
@@ -159,7 +161,8 @@ export async function detectExistingTools(
 }
 
 /**
- * Detect if ESLint is configured
+
+- Detect if ESLint is configured
  */
 export async function detectEslintConfig(
   cwd: string = process.cwd()
@@ -173,7 +176,8 @@ export async function detectEslintConfig(
 }
 
 /**
- * Detect if Prettier is configured
+
+- Detect if Prettier is configured
  */
 export async function detectPrettierConfig(
   cwd: string = process.cwd()
@@ -187,12 +191,13 @@ export async function detectPrettierConfig(
 }
 
 /**
- * Detect if project uses TypeScript
+
+- Detect if project uses TypeScript
  */
 export async function detectTypeScript(
   cwd: string = process.cwd()
 ): Promise<Result<boolean, DetectorError>> {
-  const tsconfigResult = await fileExists(path.join(cwd, 'tsconfig.json'));
+  const tsconfigResult = await fileExists(join(cwd, 'tsconfig.json'));
   if (isSuccess(tsconfigResult) && tsconfigResult.data) {
     return success(true);
   }
@@ -211,12 +216,13 @@ export async function detectTypeScript(
 }
 
 /**
- * Detect if project uses React
+
+- Detect if project uses React
  */
 export async function detectReact(
   cwd: string = process.cwd()
 ): Promise<Result<boolean, DetectorError>> {
-  const pkgJsonResult = await readFile(path.join(cwd, 'package.json'));
+  const pkgJsonResult = await readFile(join(cwd, 'package.json'));
   if (isFailure(pkgJsonResult)) {
     return success(false);
   }
@@ -235,7 +241,8 @@ export async function detectReact(
 }
 
 /**
- * Detect if project uses CSS/SCSS/Less
+
+- Detect if project uses CSS/SCSS/Less
  */
 export async function detectStyles(
   cwd: string = process.cwd()
@@ -256,7 +263,8 @@ export async function detectStyles(
 }
 
 /**
- * Detect if project has markdown files
+
+- Detect if project has markdown files
  */
 export async function detectMarkdown(
   cwd: string = process.cwd()
@@ -274,12 +282,13 @@ export async function detectMarkdown(
 }
 
 /**
- * Detect if VS Code is used
+
+- Detect if VS Code is used
  */
 export async function detectVSCode(
   cwd: string = process.cwd()
 ): Promise<Result<boolean, DetectorError>> {
-  const vscodeResult = await fileExists(path.join(cwd, '.vscode'));
+  const vscodeResult = await fileExists(join(cwd, '.vscode'));
   if (isSuccess(vscodeResult) && vscodeResult.data) {
     return success(true);
   }
@@ -288,25 +297,26 @@ export async function detectVSCode(
 }
 
 /**
- * Detect git hooks setup
+
+- Detect git hooks setup
  */
 export async function detectGitHooks(
   cwd: string = process.cwd()
 ): Promise<Result<string | null, DetectorError>> {
   // Check for husky
-  const huskyResult = await fileExists(path.join(cwd, '.husky'));
+  const huskyResult = await fileExists(join(cwd, '.husky'));
   if (isSuccess(huskyResult) && huskyResult.data) {
     return success('husky');
   }
 
   // Check for lefthook
-  const lefthookResult = await fileExists(path.join(cwd, 'lefthook.yml'));
+  const lefthookResult = await fileExists(join(cwd, 'lefthook.yml'));
   if (isSuccess(lefthookResult) && lefthookResult.data) {
     return success('lefthook');
   }
 
   // Check for simple-git-hooks
-  const pkgJsonResult = await readFile(path.join(cwd, 'package.json'));
+  const pkgJsonResult = await readFile(join(cwd, 'package.json'));
   if (isSuccess(pkgJsonResult)) {
     try {
       const pkg = JSON.parse(pkgJsonResult.data);
@@ -320,7 +330,8 @@ export async function detectGitHooks(
 }
 
 /**
- * Get all configurations that need to be cleaned up
+
+- Get all configurations that need to be cleaned up
  */
 export async function getConfigsToCleanup(
   cwd: string = process.cwd()
@@ -331,7 +342,7 @@ export async function getConfigsToCleanup(
   const allPatterns = Object.values(TOOL_PATTERNS).flat();
 
   for (const pattern of allPatterns) {
-    const filePath = path.join(cwd, pattern);
+    const filePath = join(cwd, pattern);
     const existsResult = await fileExists(filePath);
 
     if (isSuccess(existsResult) && existsResult.data) {

@@ -1,8 +1,9 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Agent Outfitter Documentation
-    url: https://github.com/maybe-good/mg-outfitter/blob/main/README.md
+
+- name: Agent Outfitter Documentation
+    url: <https://github.com/maybe-good/mg-outfitter/blob/main/README.md>
     about: Read the project documentation before creating an issue
-  - name: Claude Code Integration
-    url: https://github.com/maybe-good/mg-outfitter/blob/main/CLAUDE.md
+- name: Claude Code Integration
+    url: <https://github.com/maybe-good/mg-outfitter/blob/main/CLAUDE.md>
     about: Guidelines for working with Claude Code on this repository

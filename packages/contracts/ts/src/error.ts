@@ -1,8 +1,9 @@
-import type { DeepReadonly } from './types/index';
+import type { DeepReadonly } from './types/index.js';
 
 /**
- * Standard error codes for application errors
- * Using const object for better type safety than enum
+
+- Standard error codes for application errors
+- Using const object for better type safety than enum
  */
 export const ErrorCode = {
   VALIDATION_ERROR: 'VALIDATION_ERROR',
@@ -21,12 +22,17 @@ export const ErrorCode = {
   REMOVE_FAILED: 'REMOVE_FAILED',
   PACKAGE_MANAGER_ERROR: 'PACKAGE_MANAGER_ERROR',
   PROJECT_DETECTION_FAILED: 'PROJECT_DETECTION_FAILED',
+  CHECK_FAILED: 'CHECK_FAILED',
+  TEARDOWN_FAILED: 'TEARDOWN_FAILED',
+  CLEANUP_FAILED: 'CLEANUP_FAILED',
+  FRAMEWORK_DETECTION_FAILED: 'FRAMEWORK_DETECTION_FAILED',
 } as const;
 
-export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
+export type ErrorCode = [typeof ErrorCode](keyof typeof ErrorCode);
 
 /**
- * Error code categories for better organization
+
+- Error code categories for better organization
  */
 export const ErrorCategory = {
   VALIDATION: [ErrorCode.VALIDATION_ERROR],
@@ -35,19 +41,25 @@ export const ErrorCategory = {
   SYSTEM: [ErrorCode.INTERNAL_ERROR, ErrorCode.EXTERNAL_SERVICE_ERROR],
   RATE_LIMIT: [ErrorCode.RATE_LIMIT_EXCEEDED],
   FILE_OPERATIONS: [ErrorCode.FILE_OPERATION_FAILED],
-  MIGRATIONS: [ErrorCode.MIGRATION_FAILED],
+  MIGRATIONS: [ErrorCode.MIGRATION_FAILED, ErrorCode.CLEANUP_FAILED],
   SETUP_OPERATIONS: [
     ErrorCode.SETUP_FAILED,
     ErrorCode.ADD_FAILED,
     ErrorCode.REMOVE_FAILED,
     ErrorCode.UPDATE_FAILED,
+    ErrorCode.CHECK_FAILED,
+    ErrorCode.TEARDOWN_FAILED,
   ],
   PACKAGE_MANAGEMENT: [ErrorCode.PACKAGE_MANAGER_ERROR],
-  PROJECT_DETECTION: [ErrorCode.PROJECT_DETECTION_FAILED],
+  PROJECT_DETECTION: [
+    ErrorCode.PROJECT_DETECTION_FAILED,
+    ErrorCode.FRAMEWORK_DETECTION_FAILED,
+  ],
 } as const;
 
 /**
- * Check if an error code belongs to a category
+
+- Check if an error code belongs to a category
  */
 export function isErrorInCategory(
   code: ErrorCode,
@@ -57,7 +69,8 @@ export function isErrorInCategory(
 }
 
 /**
- * Application error with structured metadata
+
+- Application error with structured metadata
  */
 export interface AppError {
   readonly name: 'AppError';
@@ -69,7 +82,8 @@ export interface AppError {
 }
 
 /**
- * Create a structured app error
+
+- Create a structured app error
  */
 export function makeError(
   code: ErrorCode,
@@ -112,7 +126,8 @@ export function makeError(
 }
 
 /**
- * Safe version of makeError that returns a Result instead of throwing
+
+- Safe version of makeError that returns a Result instead of throwing
  */
 export function tryMakeError(
   code: unknown,
@@ -176,7 +191,8 @@ export function tryMakeError(
 }
 
 /**
- * Type guard to check if error is an AppError
+
+- Type guard to check if error is an AppError
  */
 export function isAppError(error: unknown): error is AppError {
   return (
@@ -189,7 +205,8 @@ export function isAppError(error: unknown): error is AppError {
 }
 
 /**
- * Convert any error to AppError
+
+- Convert any error to AppError
  */
 export function toAppError(error: unknown): AppError {
   if (isAppError(error)) {

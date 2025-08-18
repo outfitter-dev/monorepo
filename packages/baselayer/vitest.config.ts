@@ -9,5 +9,12 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       exclude: ['node_modules/**', 'dist/**', '*.config.*', 'src/**/*.d.ts'],
     },
+    // Clear mocks between tests
+    clearMocks: true,
+    restoreMocks: true,
+    // Enable mock modules for proper testing
+    mockReset: true,
+    // Configure test paths
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
 });

@@ -1,16 +1,10 @@
 /**
- * Create markdown backups of existing configurations
+
+- Create markdown backups of existing configurations
  */
 
 import * as path from 'node:path';
-import {
-  ErrorCode,
-  failure,
-  isFailure,
-  makeError,
-  type Result,
-  success,
-} from '@outfitter/contracts';
+import { failure, isFailure, type Result, success } from '@outfitter/contracts';
 import { ensureDir, writeFile } from '../utils/file-system';
 import type { DetectedConfig } from './detector';
 
@@ -26,7 +20,8 @@ export interface BackupError {
 }
 
 /**
- * Create a markdown backup of configurations
+
+- Create a markdown backup of configurations
  */
 export async function createBackup(
   configs: DetectedConfig[],
@@ -36,25 +31,26 @@ export async function createBackup(
     options;
 
   if (configs.length === 0) {
-    return failure(
-      makeError(ErrorCode.VALIDATION_ERROR, 'No configurations to backup')
-    );
+    return failure({
+      type: 'BACKUP_ERROR' as const,
+      code: 'VALIDATION_ERROR',
+      message: 'No configurations to backup',
+    });
   }
 
   // Ensure backup directory exists
   const ensureDirResult = await ensureDir(backupDir);
   if (isFailure(ensureDirResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to create backup directory: ${ensureDirResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'BACKUP_ERROR' as const,
+      code: 'INTERNAL_ERROR',
+      message: `Failed to create backup directory: ${ensureDirResult.error.message}`,
+    });
   }
 
   // Generate backup content
   const timestamp = new Date().toISOString();
-  const date = timestamp.split('T')[0];
+  const date = timestamp.split['T'](0);
   const filename = `flint-backup-${date}.md`;
   const backupPath = path.join(backupDir, filename);
 
@@ -67,19 +63,19 @@ export async function createBackup(
   // Write backup file
   const writeResult = await writeFile(backupPath, content);
   if (isFailure(writeResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to write backup file: ${writeResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'BACKUP_ERROR' as const,
+      code: 'INTERNAL_ERROR',
+      message: `Failed to write backup file: ${writeResult.error.message}`,
+    });
   }
 
   return success(backupPath);
 }
 
 /**
- * Generate markdown content for backup
+
+- Generate markdown content for backup
  */
 function generateBackupContent(
   configs: DetectedConfig[],
@@ -150,7 +146,7 @@ function generateBackupContent(
     lines.push('   rm -f biome.jsonc .oxlintrc.json .prettierrc.json');
     lines.push('   rm -f .markdownlint-cli2.yaml .stylelintrc.json');
     lines.push('   rm -f lefthook.yml .commitlintrc.json');
-    lines.push('   ```');
+    lines.push('```');
     lines.push('');
     lines.push('3. **Restore Package Dependencies**:');
     lines.push(
@@ -168,7 +164,8 @@ function generateBackupContent(
 }
 
 /**
- * Group configurations by tool
+
+- Group configurations by tool
  */
 function groupConfigsByTool(
   configs: DetectedConfig[]
@@ -179,14 +176,15 @@ function groupConfigsByTool(
     if (!grouped[config.tool]) {
       grouped[config.tool] = [];
     }
-    grouped[config.tool].push(config);
+    grouped[config.tool]?.push(config);
   }
 
   return grouped;
 }
 
 /**
- * Get file extension from path
+
+- Get file extension from path
  */
 function getFileExtension(filePath: string): string {
   const ext = path.extname(filePath);
@@ -194,7 +192,8 @@ function getFileExtension(filePath: string): string {
 }
 
 /**
- * Map file extension to language for syntax highlighting
+
+- Map file extension to language for syntax highlighting
  */
 function getLanguageFromExtension(ext: string): string {
   const languageMap: Record<string, string> = {
@@ -217,14 +216,16 @@ function getLanguageFromExtension(ext: string): string {
 }
 
 /**
- * Capitalize first letter of string
+
+- Capitalize first letter of string
  */
 function capitalizeFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 /**
- * Create a summary backup with just the list of configs
+
+- Create a summary backup with just the list of configs
  */
 export async function createBackupSummary(
   configs: DetectedConfig[],
@@ -250,12 +251,11 @@ export async function createBackupSummary(
 
   const writeResult = await writeFile(summaryPath, lines.join('\n'));
   if (isFailure(writeResult)) {
-    return failure(
-      makeError(
-        ErrorCode.INTERNAL_ERROR,
-        `Failed to write summary: ${writeResult.error.message}`
-      )
-    );
+    return failure({
+      type: 'BACKUP_ERROR' as const,
+      code: 'INTERNAL_ERROR',
+      message: `Failed to write summary: ${writeResult.error.message}`,
+    });
   }
 
   return success(summaryPath);

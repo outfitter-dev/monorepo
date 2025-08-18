@@ -8,12 +8,13 @@ export interface FieldguideRecommendation {
 }
 
 /**
- * Returns a prioritized list of recommended fieldguides based on detected terrain features.
- *
- * Generates fieldguide recommendations tailored to the provided {@link TerrainFeatures}, including core language, framework, testing, state management, monorepo, Docker, and security guides. Handles special cases such as Next.js implying React, and advanced combinations like Next.js with TypeScript and monorepo. Duplicate recommendations are deduplicated by retaining the highest priority, and the final list is sorted by priority.
- *
- * @param terrain - The detected terrain features of the project.
- * @returns An array of unique {@link FieldguideRecommendation} objects, sorted by descending priority.
+
+- Returns a prioritized list of recommended fieldguides based on detected terrain features.
+-
+- Generates fieldguide recommendations tailored to the provided {@link TerrainFeatures}, including core language, framework, testing, state management, monorepo, Docker, and security guides. Handles special cases such as Next.js implying React, and advanced combinations like Next.js with TypeScript and monorepo. Duplicate recommendations are deduplicated by retaining the highest priority, and the final list is sorted by priority.
+-
+- @param terrain - The detected terrain features of the project.
+- @returns An array of unique {@link FieldguideRecommendation} objects, sorted by descending priority.
  */
 export function getRecommendedFieldguides(
   terrain: TerrainFeatures
@@ -169,10 +170,11 @@ export function getRecommendedFieldguides(
 }
 
 /**
- * Returns the numeric weight corresponding to a given priority level.
- *
- * @param priority - The priority level: 'essential', 'recommended', or 'optional'.
- * @returns The numeric weight for the specified {@link priority} ('essential' = 3, 'recommended' = 2, 'optional' = 1).
+
+- Returns the numeric weight corresponding to a given priority level.
+-
+- @param priority - The priority level: 'essential', 'recommended', or 'optional'.
+- @returns The numeric weight for the specified {@link priority} ('essential' = 3, 'recommended' = 2, 'optional' = 1).
  */
 function getPriorityWeight(
   priority: 'essential' | 'recommended' | 'optional'
@@ -190,10 +192,11 @@ function getPriorityWeight(
 }
 
 /**
- * Returns the IDs of essential or recommended fieldguides for the given terrain features.
- *
- * @param terrain - The detected terrain features of the project.
- * @returns An array of fieldguide IDs with priority 'essential' or 'recommended'.
+
+- Returns the IDs of essential or recommended fieldguides for the given terrain features.
+-
+- @param terrain - The detected terrain features of the project.
+- @returns An array of fieldguide IDs with priority 'essential' or 'recommended'.
  */
 export function getRecommendedFieldguideIds(
   terrain: TerrainFeatures

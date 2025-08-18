@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import type { AppError, Result } from '@outfitter/contracts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getRemovableTools, previewRemoval, remove } from '../remove.js';
 
@@ -310,7 +311,9 @@ describe('remove command', () => {
                   code: 'CONFIG_LOAD_FAILED',
                 },
               }),
-            }) as any
+            }) as InstanceType<
+              typeof import('../../orchestration/config-loader.js').ConfigLoader
+            >
         );
 
         const result = await remove({
@@ -342,7 +345,7 @@ describe('remove command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'No space left on device', code: 'ENOSPC' },
-        } as any);
+        } as Result<void, AppError>);
 
         const result = await remove({
           tools: ['stylelint'],
@@ -373,7 +376,7 @@ describe('remove command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'Read-only file system', code: 'EROFS' },
-        } as any);
+        } as Result<void, AppError>);
 
         const result = await remove({
           tools: ['stylelint'],
@@ -417,7 +420,9 @@ describe('remove command', () => {
 
     describe('input validation edge cases', () => {
       it('should handle null options', async () => {
-        const result = await remove(null as any);
+        const result = await remove(
+          null as unknown as Parameters<typeof remove>[0]
+        );
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -426,7 +431,9 @@ describe('remove command', () => {
       });
 
       it('should handle undefined options', async () => {
-        const result = await remove(undefined as any);
+        const result = await remove(
+          undefined as unknown as Parameters<typeof remove>[0]
+        );
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -435,7 +442,9 @@ describe('remove command', () => {
       });
 
       it('should handle non-array tools', async () => {
-        const result = await remove({ tools: 'stylelint' as any });
+        const result = await remove({
+          tools: 'stylelint' as unknown as string[],
+        });
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -444,7 +453,7 @@ describe('remove command', () => {
       });
 
       it('should handle null tools array', async () => {
-        const result = await remove({ tools: null as any });
+        const result = await remove({ tools: null as unknown as string[] });
 
         expect(result.success).toBe(false);
         expect(result.error?.message).toContain(
@@ -455,7 +464,7 @@ describe('remove command', () => {
       it('should handle invalid dryRun type', async () => {
         const result = await remove({
           tools: ['stylelint'],
-          dryRun: 'true' as any,
+          dryRun: 'true' as unknown as boolean,
         });
 
         expect(result.success).toBe(false);
@@ -467,7 +476,7 @@ describe('remove command', () => {
       it('should handle invalid verbose type', async () => {
         const result = await remove({
           tools: ['stylelint'],
-          verbose: 1 as any,
+          verbose: 1 as unknown as boolean,
         });
 
         expect(result.success).toBe(false);
@@ -543,7 +552,7 @@ describe('remove command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'Backup failed' },
-        } as any);
+        } as Result<string, AppError>);
 
         const result = await remove({
           tools: ['stylelint'],
@@ -576,7 +585,7 @@ describe('remove command', () => {
         ).mockResolvedValue({
           success: false,
           error: { message: 'Cleanup failed' },
-        } as any);
+        } as Result<string[], AppError>);
 
         const result = await remove({
           tools: ['stylelint'],

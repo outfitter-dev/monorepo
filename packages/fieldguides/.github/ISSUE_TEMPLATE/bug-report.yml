@@ -4,12 +4,13 @@ title: '[Bug]: '
 labels: ['type/bug', 'needs/triage', 'area/docs']
 assignees: []
 body:
-  - type: markdown
+
+- type: markdown
     attributes:
       value: |
         Thank you for reporting a bug! This helps us maintain accurate and reliable fieldguides.
 
-  - type: input
+- type: input
     id: location
     attributes:
       label: Location
@@ -18,7 +19,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: bug_description
     attributes:
       label: Bug Description
@@ -30,7 +31,7 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+- type: dropdown
     id: bug_type
     attributes:
       label: Type of Bug
@@ -47,7 +48,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: expected_behavior
     attributes:
       label: Expected Behavior
@@ -56,7 +57,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: impact
     attributes:
       label: Impact
@@ -69,7 +70,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+- type: textarea
     id: evidence
     attributes:
       label: Evidence
@@ -82,7 +83,7 @@ body:
     validations:
       required: false
 
-  - type: input
+- type: input
     id: environment
     attributes:
       label: Environment
@@ -91,7 +92,7 @@ body:
     validations:
       required: false
 
-  - type: checkboxes
+- type: checkboxes
     id: verification
     attributes:
       label: Verification

@@ -9,15 +9,17 @@ import type { FileType } from './file-matcher.js';
 // import { LefthookAdapter } from '../adapters/lefthook-adapter.js';
 
 /**
- * Registry for dynamically managing tool adapters based on configuration
+
+- Registry for dynamically managing tool adapters based on configuration
  */
 export class AdapterRegistry {
   private adapters = new Map<FileType, ToolAdapter>();
   private currentConfig: BaselayerConfig | null = null;
 
   /**
-   * Configure adapters based on baselayer.jsonc configuration
-   * Dynamically registers/skips adapters based on enabled features
+
+- Configure adapters based on baselayer.jsonc configuration
+- Dynamically registers/skips adapters based on enabled features
    */
   configure(config: BaselayerConfig): void {
     this.currentConfig = config;
@@ -70,14 +72,16 @@ export class AdapterRegistry {
   }
 
   /**
-   * Get adapter for specific file type
+
+- Get adapter for specific file type
    */
   getAdapter(fileType: FileType): ToolAdapter | undefined {
     return this.adapters.get(fileType);
   }
 
   /**
-   * Get all registered adapters
+
+- Get all registered adapters
    */
   getAllAdapters(): Array<{ fileType: FileType; adapter: ToolAdapter }> {
     return Array.from(this.adapters.entries()).map(([fileType, adapter]) => ({
@@ -87,14 +91,16 @@ export class AdapterRegistry {
   }
 
   /**
-   * Check if a file type has an active adapter
+
+- Check if a file type has an active adapter
    */
   hasAdapter(fileType: FileType): boolean {
     return this.adapters.has(fileType);
   }
 
   /**
-   * Get configuration-specific overrides for a tool
+
+- Get configuration-specific overrides for a tool
    */
   getToolOverrides<T = Record<string, unknown>>(
     toolName: keyof NonNullable<BaselayerConfig['overrides']>
@@ -106,7 +112,8 @@ export class AdapterRegistry {
   }
 
   /**
-   * Apply tool-specific configuration overrides to adapters
+
+- Apply tool-specific configuration overrides to adapters
    */
   private configurePrettierAdapter(
     _adapter: PrettierAdapter,
@@ -119,14 +126,16 @@ export class AdapterRegistry {
   }
 
   /**
-   * Get current configuration
+
+- Get current configuration
    */
   getCurrentConfig(): BaselayerConfig | null {
     return this.currentConfig;
   }
 
   /**
-   * Get adapter summary for debugging
+
+- Get adapter summary for debugging
    */
   getSummary(): {
     totalAdapters: number;

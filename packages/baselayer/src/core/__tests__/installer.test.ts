@@ -7,8 +7,8 @@ import {
   success,
 } from '@outfitter/contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import * as console from '../../utils/console';
-import * as fs from '../../utils/file-system';
+import *as console from '../../utils/console';
+import* as fs from '../../utils/file-system';
 import * as pm from '../../utils/package-manager';
 import {
   getMissingDependencies,
@@ -20,17 +20,21 @@ import {
   runInstall,
 } from '../installer';
 
-vi.mock('node:child_process');
-vi.mock('../../utils/file-system');
-vi.mock('../../utils/package-manager');
-vi.mock('../../utils/console');
-
 describe('installer', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(console.console.info).mockImplementation(() => {});
-    vi.mocked(console.console.success).mockImplementation(() => {});
-    vi.mocked(console.console.step).mockImplementation(() => {});
+    // Mock file system functions
+    vi.spyOn(fs, 'readPackageJson').mockImplementation(vi.fn());
+    // Mock package manager functions
+    vi.spyOn(pm, 'getPackageManager').mockImplementation(vi.fn());
+    vi.spyOn(pm, 'isCI').mockImplementation(vi.fn());
+    vi.spyOn(pm, 'getCIFlags').mockImplementation(vi.fn());
+    // Mock console logger functions
+    vi.spyOn(console.logger, 'info').mockImplementation(() => {});
+    vi.spyOn(console.logger, 'success').mockImplementation(() => {});
+    vi.spyOn(console.logger, 'step').mockImplementation(() => {});
+    // Mock execSync
+    vi.mocked(execSync).mockImplementation(vi.fn());
   });
 
   describe('getMissingDependencies', () => {
@@ -108,7 +112,7 @@ describe('installer', () => {
   describe('installDependencies', () => {
     it('should install dependencies with package manager', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'pnpm', lockFile: 'pnpm-lock.yaml' })
+        success({ type: 'pnpm', lockFile: 'pnpm-lock.yaml' } as const)
       );
 
       vi.mocked(execSync).mockImplementation(() => '');
@@ -131,7 +135,7 @@ describe('installer', () => {
 
     it('should use exact versions when specified', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'npm', lockFile: 'package-lock.json' })
+        success({ type: 'npm', lockFile: 'package-lock.json' } as const)
       );
 
       vi.mocked(execSync).mockImplementation(() => '');
@@ -147,7 +151,7 @@ describe('installer', () => {
 
     it('should install as regular dependencies when dev is false', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'yarn', lockFile: 'yarn.lock' })
+        success({ type: 'yarn', lockFile: 'yarn.lock' } as const)
       );
 
       vi.mocked(execSync).mockImplementation(() => '');
@@ -163,7 +167,7 @@ describe('installer', () => {
 
     it('should suppress output when silent', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'bun', lockFile: 'bun.lockb' })
+        success({ type: 'bun', lockFile: 'bun.lockb' } as const)
       );
 
       vi.mocked(execSync).mockImplementation(() => '');
@@ -175,7 +179,7 @@ describe('installer', () => {
         'bun add --dev oxlint',
         expect.objectContaining({ stdio: 'ignore' })
       );
-      expect(console.console.info).not.toHaveBeenCalled();
+      expect(console.logger.info).not.toHaveBeenCalled();
     });
 
     it('should fail when package manager detection fails', async () => {
@@ -196,7 +200,7 @@ describe('installer', () => {
 
     it('should fail when installation command fails', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'npm', lockFile: 'package-lock.json' })
+        success({ type: 'npm', lockFile: 'package-lock.json' } as const)
       );
 
       vi.mocked(execSync).mockImplementation(() => {
@@ -216,7 +220,7 @@ describe('installer', () => {
   describe('runInstall', () => {
     it('should run install command', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'pnpm', lockFile: 'pnpm-lock.yaml' })
+        success({ type: 'pnpm', lockFile: 'pnpm-lock.yaml' } as const)
       );
 
       vi.mocked(pm.isCI).mockReturnValue(false);
@@ -233,7 +237,7 @@ describe('installer', () => {
 
     it('should add CI flags in CI environment', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'npm', lockFile: 'package-lock.json' })
+        success({ type: 'npm', lockFile: 'package-lock.json' } as const)
       );
 
       vi.mocked(pm.isCI).mockReturnValue(true);
@@ -251,7 +255,7 @@ describe('installer', () => {
 
     it('should suppress output when silent', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'yarn', lockFile: 'yarn.lock' })
+        success({ type: 'yarn', lockFile: 'yarn.lock' } as const)
       );
 
       vi.mocked(pm.isCI).mockReturnValue(false);
@@ -264,12 +268,12 @@ describe('installer', () => {
         'yarn install',
         expect.objectContaining({ stdio: 'ignore' })
       );
-      expect(console.console.info).not.toHaveBeenCalled();
+      expect(console.logger.info).not.toHaveBeenCalled();
     });
 
     it('should fail when command fails', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'npm', lockFile: 'package-lock.json' })
+        success({ type: 'npm', lockFile: 'package-lock.json' } as const)
       );
 
       vi.mocked(pm.isCI).mockReturnValue(false);
@@ -374,7 +378,7 @@ describe('installer', () => {
   describe('installPackage', () => {
     it('should install single package', async () => {
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'npm', lockFile: 'package-lock.json' })
+        success({ type: 'npm', lockFile: 'package-lock.json' } as const)
       );
 
       vi.mocked(execSync).mockImplementation(() => '');
@@ -400,7 +404,7 @@ describe('installer', () => {
       );
 
       vi.mocked(pm.getPackageManager).mockResolvedValue(
-        success({ type: 'pnpm', lockFile: 'pnpm-lock.yaml' })
+        success({ type: 'pnpm', lockFile: 'pnpm-lock.yaml' } as const)
       );
 
       vi.mocked(execSync).mockImplementation(() => '');
@@ -409,7 +413,7 @@ describe('installer', () => {
 
       expect(isSuccess(result)).toBe(true);
       expect(execSync).toHaveBeenCalled();
-      expect(console.console.info).toHaveBeenCalledWith(
+      expect(console.logger.info).toHaveBeenCalledWith(
         expect.stringContaining('missing dependencies')
       );
     });
@@ -436,7 +440,7 @@ describe('installer', () => {
 
       expect(isSuccess(result)).toBe(true);
       expect(execSync).not.toHaveBeenCalled();
-      expect(console.console.info).toHaveBeenCalledWith(
+      expect(console.logger.info).toHaveBeenCalledWith(
         'All required dependencies are already installed'
       );
     });

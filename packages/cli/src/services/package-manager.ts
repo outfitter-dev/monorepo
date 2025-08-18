@@ -6,9 +6,10 @@ import { execa } from 'execa';
 import type { InstallCommand, PackageManager } from '../types/index.js';
 
 /**
- * Detects if the current directory is a workspace/monorepo root.
- *
- * @returns True if the directory contains workspace configuration files.
+
+- Detects if the current directory is a workspace/monorepo root.
+-
+- @returns True if the directory contains workspace configuration files.
  */
 export async function isWorkspaceRoot(): Promise<boolean> {
   try {
@@ -35,11 +36,12 @@ export async function isWorkspaceRoot(): Promise<boolean> {
 }
 
 /**
- * Detects the package manager used in the current project directory.
- *
- * Checks for the presence of lock files to determine if the project uses pnpm, yarn, bun, or npm, returning the corresponding package manager name. Defaults to 'npm' if no recognized lock file is found.
- *
- * @returns The detected package manager: 'pnpm', 'yarn', 'bun', or 'npm'.
+
+- Detects the package manager used in the current project directory.
+-
+- Checks for the presence of lock files to determine if the project uses pnpm, yarn, bun, or npm, returning the corresponding package manager name. Defaults to 'npm' if no recognized lock file is found.
+-
+- @returns The detected package manager: 'pnpm', 'yarn', 'bun', or 'npm'.
  */
 export async function detectPackageManager(): Promise<PackageManager> {
   if (await pathExists('pnpm-lock.yaml')) return 'pnpm';
@@ -51,10 +53,11 @@ export async function detectPackageManager(): Promise<PackageManager> {
 }
 
 /**
- * Returns the install command details for a given package manager.
- *
- * @param manager - The package manager to retrieve command details for.
- * @returns An object containing the command name, install verb, and development flag for the specified package manager.
+
+- Returns the install command details for a given package manager.
+-
+- @param manager - The package manager to retrieve command details for.
+- @returns An object containing the command name, install verb, and development flag for the specified package manager.
  */
 export function getInstallCommand(manager: PackageManager): InstallCommand {
   switch (manager) {

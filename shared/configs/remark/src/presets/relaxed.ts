@@ -1,5 +1,6 @@
 /**
- * Relaxed remark preset for lenient markdown linting and formatting
+
+- Relaxed remark preset for lenient markdown linting and formatting
  */
 
 import type { RemarkConfig } from '../types.js';

@@ -4,6 +4,7 @@ import {
   failure,
   isFailure,
   makeError,
+  type Result,
   success,
 } from '@outfitter/contracts';
 import {
@@ -16,20 +17,25 @@ import {
 import { ConfigLoader } from '../orchestration/config-loader.js';
 import type { BaselayerConfig } from '../schemas/baselayer-config.js';
 import type { FlintResult } from '../types.js';
-import { backupFile, writeJSON } from '../utils/file-system.js';
+import {
+  backupFile,
+  type FileSystemError,
+  writeJSON,
+} from '../utils/file-system.js';
 
 export interface AddOptions {
   /** Tools/features to add */
   tools: string[];
-  /** Show what would be added without making changes */
+  /**Show what would be added without making changes */
   dryRun?: boolean;
   /** Enable verbose logging */
   verbose?: boolean;
 }
 
 /**
- * Add command - Adds new tools/features to existing baselayer config
- * Validates tool names and updates configuration and tool files accordingly
+
+- Add command - Adds new tools/features to existing baselayer config
+- Validates tool names and updates configuration and tool files accordingly
  */
 export async function add(options: AddOptions): Promise<FlintResult<void>> {
   try {
@@ -105,8 +111,9 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     if (configResult.success === false) {
       // Create default config if none exists
       currentConfig = {
-        $schema: 'https://schemas.outfitter.dev/baselayer.json',
+        $schema: '<https://schemas.outfitter.dev/baselayer.json>',
         features: DEFAULT_FEATURES,
+        overrides: {},
       };
 
       if (verbose) {
@@ -182,7 +189,7 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     for (const tool of toolsToAdd) {
       const feature = TOOL_TO_FEATURE[tool];
       if (feature && updatedConfig.features) {
-        (updatedConfig.features as any)[feature] = true;
+        updatedConfig.features[feature] = true;
       }
     }
 
@@ -193,7 +200,10 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     }
 
     // Step 7: Generate tool configurations
-    const configTasks: Array<{ name: string; task: () => Promise<any> }> = [];
+    const configTasks: Array<{
+      name: string;
+      task: () => Promise<Result<void, FileSystemError>>;
+    }> = [];
 
     for (const tool of toolsToAdd) {
       const generator = TOOL_GENERATORS[tool];
@@ -208,10 +218,10 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     if (dryRun) {
       console.log('🧪 DRY RUN - Would make the following changes:');
       console.log(
-        `   • Enable features: ${toolsToAdd.map((tool) => TOOL_TO_FEATURE[tool]).join(', ')}`
+        `• Enable features: ${toolsToAdd.map((tool) => TOOL_TO_FEATURE[tool]).join(', ')}`
       );
       console.log(
-        `   • Generate configurations for: ${configTasks.map((task) => task.name).join(', ')}`
+        `• Generate configurations for: ${configTasks.map((task) => task.name).join(', ')}`
       );
       console.log('   • Update baselayer.jsonc');
     } else {
@@ -237,7 +247,6 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
               return {
                 name,
                 success: true,
-                error: null,
               };
             } catch (error) {
               return {
@@ -260,7 +269,7 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
             } else {
               failed.push({
                 name: result.value.name,
-                error: result.value.error,
+                error: result.value.error as string,
               });
             }
           } else {
@@ -335,14 +344,16 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
 }
 
 /**
- * List available tools that can be added
+
+- List available tools that can be added
  */
 export function listAvailableTools(): FlintResult<readonly string[]> {
   return success(VALID_TOOLS);
 }
 
 /**
- * Check which tools are currently enabled
+
+- Check which tools are currently enabled
  */
 export async function getEnabledTools(): Promise<FlintResult<string[]>> {
   try {

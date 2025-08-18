@@ -21,7 +21,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'No tests for changeset config'"
   },
   "dependencies": {
     "@changesets/cli": "^2.27.11"
@@ -33,13 +34,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "url": "<https://github.com/outfitter-dev/monorepo.git>",
     "directory": "packages/changeset-config"
   },
   "bugs": {
-    "url": "https://github.com/outfitter-dev/monorepo/issues"
+    "url": "<https://github.com/outfitter-dev/monorepo/issues>"
   },
-  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/changeset-config#readme",
+  "homepage": "<https://github.com/outfitter-dev/monorepo/tree/main/packages/changeset-config#readme>",
   "publishConfig": {
     "access": "public"
   }

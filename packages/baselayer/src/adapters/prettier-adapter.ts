@@ -2,15 +2,17 @@ import type { FormatOptions, LintOptions, ToolResult } from '../types.js';
 import { BaseAdapter } from './base-adapter.js';
 
 /**
- * Prettier adapter for JSON and YAML formatting
- * Based on bun-monorepo template configuration
+
+- Prettier adapter for JSON and YAML formatting
+- Based on bun-monorepo template configuration
  */
 export class PrettierAdapter extends BaseAdapter {
   readonly name = 'prettier';
   readonly extensions = ['.json', '.yaml', '.yml'] as const;
 
   /**
-   * Format JSON/YAML files using Prettier
+
+- Format JSON/YAML files using Prettier
    */
   async format(
     files: readonly string[],
@@ -49,7 +51,8 @@ export class PrettierAdapter extends BaseAdapter {
   }
 
   /**
-   * Lint JSON/YAML files using Prettier (check mode)
+
+- Lint JSON/YAML files using Prettier (check mode)
    */
   async lint(
     files: readonly string[],
