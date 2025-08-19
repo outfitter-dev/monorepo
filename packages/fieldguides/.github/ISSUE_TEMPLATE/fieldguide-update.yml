@@ -6,102 +6,102 @@ assignees: []
 body:
 
 - type: markdown
-    attributes:
-      value: |
-        Thank you for helping improve our fieldguides! Your real-world experience helps keep our documentation current and valuable.
+  attributes:
+    value: |
+      Thank you for helping improve our fieldguides! Your real-world experience helps keep our documentation current and valuable.
 
 - type: dropdown
-    id: fieldguide
-    attributes:
-      label: Which Fieldguide?
-      description: Select the fieldguide that needs updating
-      options:
-        - standards/typescript-conventions.md
-        - standards/documentation.md
-        - standards/test-driven-development.md
-        - Other (specify in description)
-    validations:
-      required: true
+  id: fieldguide
+  attributes:
+    label: Which Fieldguide?
+    description: Select the fieldguide that needs updating
+    options:
+      - standards/typescript-conventions.md
+      - standards/documentation.md
+      - standards/test-driven-development.md
+      - Other (specify in description)
+  validations:
+    required: true
 
 - type: dropdown
-    id: update_type
-    attributes:
-      label: Type of Update
-      description: What kind of update is needed?
-      options:
-        - Add new pattern or practice
-        - Update existing pattern
-        - Fix incorrect information
-        - Improve clarity or examples
-        - Add missing use case
-        - Remove outdated practice
-    validations:
-      required: true
+  id: update_type
+  attributes:
+    label: Type of Update
+    description: What kind of update is needed?
+    options:
+      - Add new pattern or practice
+      - Update existing pattern
+      - Fix incorrect information
+      - Improve clarity or examples
+      - Add missing use case
+      - Remove outdated practice
+  validations:
+    required: true
 
 - type: textarea
-    id: current_issue
-    attributes:
-      label: Current Issue
-      description: What's wrong or missing in the current fieldguide?
-      placeholder: "Describe the specific problem, outdated information, or gap you've identified"
-    validations:
-      required: true
+  id: current_issue
+  attributes:
+    label: Current Issue
+    description: What's wrong or missing in the current fieldguide?
+    placeholder: "Describe the specific problem, outdated information, or gap you've identified"
+  validations:
+    required: true
 
 - type: textarea
-    id: proposed_solution
-    attributes:
-      label: Proposed Solution
-      description: How should this be improved?
-      placeholder: |
-        - Specific text changes
-        - New examples to add
-        - Patterns to include/exclude
-        - Restructuring suggestions
-    validations:
-      required: true
+  id: proposed_solution
+  attributes:
+    label: Proposed Solution
+    description: How should this be improved?
+    placeholder: |
+      - Specific text changes
+      - New examples to add
+      - Patterns to include/exclude
+      - Restructuring suggestions
+  validations:
+    required: true
 
 - type: textarea
-    id: justification
-    attributes:
-      label: Justification
-      description: Why is this change important? What evidence supports this approach?
-      placeholder: |
-        - Real-world experience with current approach
-        - Industry best practices
-        - Performance implications
-        - Compatibility considerations
-    validations:
-      required: true
+  id: justification
+  attributes:
+    label: Justification
+    description: Why is this change important? What evidence supports this approach?
+    placeholder: |
+      - Real-world experience with current approach
+      - Industry best practices
+      - Performance implications
+      - Compatibility considerations
+  validations:
+    required: true
 
 - type: input
-    id: section
-    attributes:
-      label: Affected Section
-      description: Which section of the fieldguide needs updating?
-      placeholder: 'e.g., Type Definitions, Error Handling, Common Patterns'
-    validations:
-      required: false
+  id: section
+  attributes:
+    label: Affected Section
+    description: Which section of the fieldguide needs updating?
+    placeholder: 'e.g., Type Definitions, Error Handling, Common Patterns'
+  validations:
+    required: false
 
 - type: textarea
-    id: breaking_changes
-    attributes:
-      label: Breaking Changes
-      description: Will this update change existing recommendations in a way that affects current users?
-      placeholder: 'Describe any breaking changes and migration considerations'
-    validations:
-      required: false
+  id: breaking_changes
+  attributes:
+    label: Breaking Changes
+    description: Will this update change existing recommendations in a way that affects current users?
+    placeholder: 'Describe any breaking changes and migration considerations'
+  validations:
+    required: false
 
 - type: checkboxes
-    id: validation
-    attributes:
-      label: Update Validation
-      description: Confirm your update meets fieldguide standards
-      options:
-        - label: The proposed changes maintain professional, theme-neutral language
-          required: true
-        - label: Examples are practical and tested
-          required: true
-        - label: Changes are opinionated with clear rationale
-          required: true
-        - label: Update considers both AI agent and human developer needs
-          required: true
+  id: validation
+  attributes:
+    label: Update Validation
+    description: Confirm your update meets fieldguide standards
+    options:
+      - label: The proposed changes maintain professional, theme-neutral language
+        required: true
+      - label: Examples are practical and tested
+        required: true
+      - label: Changes are opinionated with clear rationale
+        required: true
+      - label: Update considers both AI agent and human developer needs
+        required: true

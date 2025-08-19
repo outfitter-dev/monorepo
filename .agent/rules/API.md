@@ -4,7 +4,7 @@
 
 ### RESTful Design
 
-```typescript
+```text
 // Resource-based URLs
 GET    /api/users          // List users
 GET    /api/users/:id      // Get user

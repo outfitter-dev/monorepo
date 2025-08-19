@@ -6,88 +6,88 @@ assignees: []
 body:
 
 - type: markdown
-    attributes:
-      value: |
-        Thank you for requesting a new fieldguide! This will help expand Agent Outfitter's coverage of development practices.
+  attributes:
+    value: |
+      Thank you for requesting a new fieldguide! This will help expand Agent Outfitter's coverage of development practices.
 
 - type: input
-    id: topic
-    attributes:
-      label: Fieldguide Topic
-      description: What language, framework, or practice should this fieldguide cover?
-      placeholder: 'e.g., React Components, Python Standards, API Design'
-    validations:
-      required: true
+  id: topic
+  attributes:
+    label: Fieldguide Topic
+    description: What language, framework, or practice should this fieldguide cover?
+    placeholder: 'e.g., React Components, Python Standards, API Design'
+  validations:
+    required: true
 
 - type: dropdown
-    id: category
-    attributes:
-      label: Category
-      description: Which fieldguide category does this belong to?
-      options:
-        - standards (language/framework conventions)
-        - architecture (system design patterns)
-        - processes (development workflows)
-        - rules (strict guidelines)
-        - templates (code templates)
-    validations:
-      required: true
+  id: category
+  attributes:
+    label: Category
+    description: Which fieldguide category does this belong to?
+    options:
+      - standards (language/framework conventions)
+      - architecture (system design patterns)
+      - processes (development workflows)
+      - rules (strict guidelines)
+      - templates (code templates)
+  validations:
+    required: true
 
 - type: textarea
-    id: scope
-    attributes:
-      label: Scope and Coverage
-      description: What specific topics should this fieldguide cover?
-      placeholder: |
-        - Component structure and organization
-        - Props and state management patterns
-        - Event handling conventions
-        - Testing approaches
-        - Performance considerations
-    validations:
-      required: true
+  id: scope
+  attributes:
+    label: Scope and Coverage
+    description: What specific topics should this fieldguide cover?
+    placeholder: |
+      - Component structure and organization
+      - Props and state management patterns
+      - Event handling conventions
+      - Testing approaches
+      - Performance considerations
+  validations:
+    required: true
 
 - type: textarea
-    id: target_audience
-    attributes:
-      label: Target Audience
-      description: Who will primarily use this fieldguide?
-      placeholder: 'AI agents working on React projects, developers building component libraries, etc.'
-    validations:
-      required: true
+  id: target_audience
+  attributes:
+    label: Target Audience
+    description: Who will primarily use this fieldguide?
+    placeholder: 'AI agents working on React projects, developers building component libraries, etc.'
+  validations:
+    required: true
 
 - type: textarea
-    id: existing_patterns
-    attributes:
-      label: Existing Patterns
-      description: Are there existing patterns or standards you've seen work well that should be included?
-      placeholder: 'Reference any existing style guides, best practices, or proven approaches'
-    validations:
-      required: false
+  id: existing_patterns
+  attributes:
+    label: Existing Patterns
+    description: Are there existing patterns or standards you've seen work well that should be included?
+    placeholder: 'Reference any existing style guides, best practices, or proven approaches'
+  validations:
+    required: false
 
 - type: textarea
-    id: examples
-    attributes:
-      label: Example Use Cases
-      description: Provide specific examples of what this fieldguide should help with
-      placeholder: |
-        - How to structure a reusable Button component
-        - When to use controlled vs uncontrolled components
-        - Error boundary implementation patterns
-    validations:
-      required: true
+  id: examples
+  attributes:
+    label: Example Use Cases
+    description: Provide specific examples of what this fieldguide should help with
+    placeholder: |
+      - How to structure a reusable Button component
+      - When to use controlled vs uncontrolled components
+      - Error boundary implementation patterns
+  validations:
+    required: true
 
 - type: checkboxes
-    id: requirements
-    attributes:
-      label: Requirements Checklist
-      description: Confirm you understand the fieldguide requirements
-      options:
-        - label: This fieldguide will use professional, theme-neutral language
-          required: true
-        - label: Examples will be practical and executable
-          required: true
-        - label: Content will be opinionated with strong defaults
-          required: true
-        - label: Documentation will serve both AI agents and human developers
-          required: true
+  id: requirements
+  attributes:
+    label: Requirements Checklist
+    description: Confirm you understand the fieldguide requirements
+    options:
+      - label: This fieldguide will use professional, theme-neutral language
+        required: true
+      - label: Examples will be practical and executable
+        required: true
+      - label: Content will be opinionated with strong defaults
+        required: true
+      - label: Documentation will serve both AI agents and human developers
+        required: true
