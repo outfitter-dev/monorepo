@@ -1,5 +1,3 @@
-#!/usr/bin/env bun
-
 /**
 
 - Validates cross-references in fieldguides markdown files
