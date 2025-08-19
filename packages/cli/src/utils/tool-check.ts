@@ -49,8 +49,10 @@ export async function checkRequiredTools(): Promise<Result<void, Error>> {
   );
 
   const missing = results
-    .filter((result) => !result.success)
-    .map((_, index: number) => requiredTools[index]);
+    .filter((result: Result<ToolVersion, Error>) => !result.success)
+    .map(
+      (_: Result<ToolVersion, Error>, index: number) => requiredTools[index]
+    );
 
   if (missing.length > 0) {
     return failure(
