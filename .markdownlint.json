@@ -1,5 +1,4 @@
 {
-  "extends": null,
   "default": true,
   "MD003": {
     "style": "atx"
