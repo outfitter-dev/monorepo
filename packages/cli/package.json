@@ -11,11 +11,11 @@
     "templates"
   ],
   "scripts": {
-    "build": "bunx tsc -p .",
+    "build": "../../../node_modules/typescript/bin/tsc -p .",
     "dev": "bun src/index.ts",
     "test": "vitest",
     "test:run": "vitest run",
-    "typecheck": "bunx tsc --noEmit -p .",
+    "typecheck": "../../../node_modules/typescript/bin/tsc --noEmit -p .",
     "lint": "bunx ultracite lint",
     "lint:fix": "bunx ultracite lint --write",
     "format": "bunx ultracite format",
