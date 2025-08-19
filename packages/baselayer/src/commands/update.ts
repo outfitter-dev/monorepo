@@ -265,8 +265,8 @@ export async function update(
 
       // Step 5: Update baselayer.jsonc with enhanced schema and preserve overrides
       const updatedConfig: BaselayerConfig = {
-        $schema: '<https://schemas.outfitter.dev/baselayer.json>',
         ...currentConfig,
+        $schema: 'https://schemas.outfitter.dev/baselayer.json',
         // Add any new default features that might have been added
         features: {
           ...DEFAULT_FEATURES,

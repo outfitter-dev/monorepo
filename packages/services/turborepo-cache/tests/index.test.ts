@@ -34,7 +34,7 @@ describe('remote-cache worker', () => {
 
   it('should respond to the ping route by simulating the worker', async () => {
     const response = await SELF.fetch(
-      '<https://turborepo-remote-cache.com/ping>'
+      'https://turborepo-remote-cache.com/ping'
     );
     expect(response).toBeTruthy();
     expect(response.status).toBe(200);
@@ -43,13 +43,13 @@ describe('remote-cache worker', () => {
   });
 
   it('should respond to the ping route via invoking the app', async () => {
-    const request = new Request('<http://localhost/ping>');
+    const request = new Request('http://localhost/ping');
     const res = await app.fetch(request, workerEnv, ctx);
     expect(await res.text()).toBe('pong');
   });
 
   it('should respond to the throw-exception route via invoking the app', async () => {
-    const request = new Request('<http://localhost/throw-exception>');
+    const request = new Request('http://localhost/throw-exception');
     const res = await app.fetch(request, workerEnv, ctx);
     expect(res.status).toBe(500);
     expect(await res.json()).toEqual({
@@ -60,7 +60,7 @@ describe('remote-cache worker', () => {
   it('should throw a 500 error when the storage manager is not configured correctly', async () => {
     const badEnv = { ...workerEnv, R2_STORE: undefined, KV_STORE: undefined };
     const res = await workerHandler.fetch(
-      new Request('<http://localhost/ping>'),
+      new Request('http://localhost/ping'),
       badEnv,
       ctx
     );

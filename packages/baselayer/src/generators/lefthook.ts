@@ -155,7 +155,7 @@ export async function generateLefthookConfig(
     // Add header comment
     const fullContent = `# Lefthook configuration
 
-# <https://github.com/evilmartians/lefthook>
+# https://github.com/evilmartians/lefthook
 
 ${yamlContent}`;
 

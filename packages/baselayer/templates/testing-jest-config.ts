@@ -21,7 +21,7 @@ const config: Config = {
   testEnvironment: 'node',
   testEnvironmentOptions: {
     // For jsdom environment (React apps)
-    // url: '<http://localhost>',
+    // url: 'http://localhost',
   },
 
   // Test file locations

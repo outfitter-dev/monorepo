@@ -11,11 +11,11 @@
     "templates"
   ],
   "scripts": {
-    "build": "tsc -p .",
+    "build": "bun run ../../node_modules/.bin/tsc -p .",
     "dev": "bun src/index.ts",
     "test": "vitest",
     "test:run": "vitest run",
-    "typecheck": "tsc --noEmit -p .",
+    "typecheck": "bun run ../../node_modules/.bin/tsc --noEmit -p .",
     "lint": "bunx ultracite lint",
     "lint:fix": "bunx ultracite lint --write",
     "format": "bunx ultracite format",
@@ -41,7 +41,7 @@
     "@types/node": "24.3.0",
     "@types/semver": "^7.5.0",
     "tsx": "^4.7.0",
-    "typescript": "5.9.2",
+    "typescript": "^5.9.2",
     "vitest": "3.2.4"
   },
   "engines": {
@@ -59,13 +59,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "<https://github.com/outfitter-dev/monorepo.git>",
+    "url": "https://github.com/outfitter-dev/monorepo.git",
     "directory": "packages/cli"
   },
   "bugs": {
-    "url": "<https://github.com/outfitter-dev/monorepo/issues>"
+    "url": "https://github.com/outfitter-dev/monorepo/issues"
   },
-  "homepage": "<https://github.com/outfitter-dev/monorepo/tree/main/packages/cli#readme>",
+  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/cli#readme",
   "publishConfig": {
     "access": "public"
   }

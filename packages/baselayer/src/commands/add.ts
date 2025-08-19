@@ -111,7 +111,7 @@ export async function add(options: AddOptions): Promise<FlintResult<void>> {
     if (configResult.success === false) {
       // Create default config if none exists
       currentConfig = {
-        $schema: '<https://schemas.outfitter.dev/baselayer.json>',
+        $schema: 'https://schemas.outfitter.dev/baselayer.json',
         features: DEFAULT_FEATURES,
         overrides: {},
       };

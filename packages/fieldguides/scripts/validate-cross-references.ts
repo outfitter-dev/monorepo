@@ -1,4 +1,4 @@
-# !/usr/bin/env bun
+#!/usr/bin/env bun
 
 /**
 
@@ -49,6 +49,7 @@ function extractLinks(content: string, filePath: string): Array<LinkInfo> {
     let match: RegExpExecArray | null;
     const lineNumber = index + 1;
 
+    // biome-ignore lint/suspicious/noAssignInExpressions: Standard regex exec pattern
     while ((match = linkRegex.exec(line)) !== null) {
       const link = match[2];
 
@@ -85,6 +86,7 @@ function extractLinks(content: string, filePath: string): Array<LinkInfo> {
 }
 
 async function validateCrossReferences() {
+  // biome-ignore lint/suspicious/noConsole: Required for CLI output
   console.log('🔍 Validating cross-references in fieldguides...\n');
 
   const fieldguidesDir = resolve(__dirname, '..', 'fieldguides');
@@ -162,8 +164,8 @@ async function validateCrossReferences() {
       const targetRefs = fileReferences.get(target);
       if (!targetRefs?.has(source)) {
         // Only suggest bidirectional refs for files in same directory level
-        const sourceDir = dirname(source).split['/'](0);
-        const targetDir = dirname(target).split['/'](0);
+        const sourceDir = dirname(source).split('/')[0];
+        const targetDir = dirname(target).split('/')[0];
         if (sourceDir === targetDir) {
           missingReverse.push({ source, target });
         }

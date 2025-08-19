@@ -229,9 +229,9 @@ export function createMockUser(overrides: Partial<MockUser> = {}): MockUser {
   const now = new Date().toISOString();
   return {
     id: '1',
-    email: '<test@example.com>',
+    email: 'test@example.com',
     name: 'Test User',
-    avatar: '<https://example.com/avatar.jpg>',
+    avatar: 'https://example.com/avatar.jpg',
     role: 'user',
     createdAt: now,
     updatedAt: now,
