@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 # Install Husky and lint-staged
 

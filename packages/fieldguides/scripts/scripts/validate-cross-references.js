@@ -1,5 +1,7 @@
 #!/usr/bin/env bun
 
+// biome-ignore-all lint: This is a generated file
+
 /**
 
 - Validates cross-references in fieldguides markdown files
@@ -34,6 +36,7 @@ function extractLinks(content, filePath) {
   lines.forEach((line, index) => {
     let match;
     const lineNumber = index + 1;
+    // biome-ignore lint/suspicious/noAssignInExpressions: Standard regex exec pattern
     while ((match = linkRegex.exec(line)) !== null) {
       const link = match[2];
       // Skip if link is undefined or empty
@@ -48,7 +51,7 @@ function extractLinks(content, filePath) {
         continue;
       }
       // Extract the file path (remove anchor if present)
-      const target = link.split['#'](0);
+      const target = link.split('#')[0];
       if (!target) continue;
       const absoluteTarget = resolve(dirname(filePath), target);
       links.push({
@@ -63,6 +66,7 @@ function extractLinks(content, filePath) {
   return links;
 }
 async function validateCrossReferences() {
+  // biome-ignore lint/suspicious/noConsole: Required for CLI output
   console.log('🔍 Validating cross-references in fieldguides...\n');
   const fieldguidesDir = resolve(__dirname, '..', 'fieldguides');
   const markdownFiles = await findMarkdownFiles(fieldguidesDir);
@@ -121,8 +125,8 @@ async function validateCrossReferences() {
       const targetRefs = fileReferences.get(target);
       if (!targetRefs?.has(source)) {
         // Only suggest bidirectional refs for files in same directory level
-        const sourceDir = dirname(source).split['/'](0);
-        const targetDir = dirname(target).split['/'](0);
+        const sourceDir = dirname(source).split('/')[0];
+        const targetDir = dirname(target).split('/')[0];
         if (sourceDir === targetDir) {
           missingReverse.push({ source, target });
         }
