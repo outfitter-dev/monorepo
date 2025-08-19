@@ -35,12 +35,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/outfitter-dev/monorepo.git",
-    "directory": "packages/changeset-config"
+    "directory": "shared/configs/changeset"
   },
   "bugs": {
     "url": "https://github.com/outfitter-dev/monorepo/issues"
   },
-  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/changeset-config#readme",
+  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/shared/configs/changeset#readme",
   "publishConfig": {
     "access": "public"
   }

@@ -50,7 +50,7 @@ export async function createBackup(
 
   // Generate backup content
   const timestamp = new Date().toISOString();
-  const date = timestamp.split['T'](0);
+  const date = timestamp.split('T')[0];
   const filename = `flint-backup-${date}.md`;
   const backupPath = path.join(backupDir, filename);
 

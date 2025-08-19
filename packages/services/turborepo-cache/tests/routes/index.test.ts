@@ -13,7 +13,7 @@ describe('Homepage route', () => {
   });
 
   test('should return a 200 status code', async () => {
-    const request = new Request('<http://localhost/>', {
+    const request = new Request('http://localhost/', {
       method: 'GET',
     });
     const response = await app.fetch(request, workerEnv, ctx);
