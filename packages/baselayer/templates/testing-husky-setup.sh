@@ -12,7 +12,7 @@ npx husky init
 
 cat > .husky/pre-commit << 'EOF'
 
-# !/usr/bin/env sh
+#!/usr/bin/env sh
 
 . "$(dirname -- "$0")/_/husky.sh"
 
@@ -29,7 +29,7 @@ EOF
 
 cat > .husky/pre-push << 'EOF'
 
-# !/usr/bin/env sh
+#!/usr/bin/env sh
 
 . "$(dirname -- "$0")/_/husky.sh"
 
