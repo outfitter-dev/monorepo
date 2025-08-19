@@ -1,4 +1,4 @@
-# !/usr/bin/env sh
+#!/usr/bin/env sh
 
 [ "$HUSKY" = "2" ] && set -x
 n=$(basename "$0")

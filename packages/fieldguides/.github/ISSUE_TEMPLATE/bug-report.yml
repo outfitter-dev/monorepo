@@ -6,101 +6,101 @@ assignees: []
 body:
 
 - type: markdown
-    attributes:
-      value: |
-        Thank you for reporting a bug! This helps us maintain accurate and reliable fieldguides.
+  attributes:
+  value: |
+    Thank you for reporting a bug! This helps us maintain accurate and reliable fieldguides.
 
 - type: input
-    id: location
-    attributes:
-      label: Location
-      description: Which file contains the bug?
-      placeholder: 'e.g., fieldguides/standards/typescript-conventions.md, README.md'
-    validations:
-      required: true
+  id: location
+  attributes:
+  label: Location
+  description: Which file contains the bug?
+  placeholder: 'e.g., fieldguides/standards/typescript-conventions.md, README.md'
+  validations:
+  required: true
 
 - type: textarea
-    id: bug_description
-    attributes:
-      label: Bug Description
-      description: What is incorrect, outdated, or problematic?
-      placeholder: |
-        - Specific text or code that's wrong
-        - Line numbers if applicable
-        - Why it's incorrect
-    validations:
-      required: true
+  id: bug_description
+  attributes:
+  label: Bug Description
+  description: What is incorrect, outdated, or problematic?
+  placeholder: |
+    - Specific text or code that's wrong
+    - Line numbers if applicable
+    - Why it's incorrect
+  validations:
+  required: true
 
 - type: dropdown
-    id: bug_type
-    attributes:
-      label: Type of Bug
-      description: What kind of issue is this?
-      options:
-        - Incorrect code example
-        - Outdated information
-        - Broken link
-        - Inconsistent formatting
-        - Missing required information
-        - Contradictory guidance
-        - Typo or grammar error
-        - Other
-    validations:
-      required: true
+  id: bug_type
+  attributes:
+  label: Type of Bug
+  description: What kind of issue is this?
+  options:
+    - Incorrect code example
+    - Outdated information
+    - Broken link
+    - Inconsistent formatting
+    - Missing required information
+    - Contradictory guidance
+    - Typo or grammar error
+    - Other
+  validations:
+  required: true
 
 - type: textarea
-    id: expected_behavior
-    attributes:
-      label: Expected Behavior
-      description: What should the documentation say or do instead?
-      placeholder: 'Describe the correct information, working example, or proper formatting'
-    validations:
-      required: true
+  id: expected_behavior
+  attributes:
+  label: Expected Behavior
+  description: What should the documentation say or do instead?
+  placeholder: 'Describe the correct information, working example, or proper formatting'
+  validations:
+  required: true
 
 - type: textarea
-    id: impact
-    attributes:
-      label: Impact
-      description: How does this bug affect users?
-      placeholder: |
-        - Causes build errors
-        - Leads to poor practices
-        - Confuses developers
-        - Breaks AI agent understanding
-    validations:
-      required: true
+  id: impact
+  attributes:
+  label: Impact
+  description: How does this bug affect users?
+  placeholder: |
+    - Causes build errors
+    - Leads to poor practices
+    - Confuses developers
+    - Breaks AI agent understanding
+  validations:
+  required: true
 
 - type: textarea
-    id: evidence
-    attributes:
-      label: Evidence
-      description: What proves this is incorrect?
-      placeholder: |
-        - Official documentation links
-        - Working code examples
-        - Community best practices
-        - Tool output or error messages
-    validations:
-      required: false
+  id: evidence
+  attributes:
+  label: Evidence
+  description: What proves this is incorrect?
+  placeholder: |
+    - Official documentation links
+    - Working code examples
+    - Community best practices
+    - Tool output or error messages
+  validations:
+  required: false
 
 - type: input
-    id: environment
-    attributes:
-      label: Environment
-      description: What environment did you encounter this in?
-      placeholder: 'e.g., Node.js 20, TypeScript 5.2, VS Code'
-    validations:
-      required: false
+  id: environment
+  attributes:
+  label: Environment
+  description: What environment did you encounter this in?
+  placeholder: 'e.g., Node.js 20, TypeScript 5.2, VS Code'
+  validations:
+  required: false
 
 - type: checkboxes
-    id: verification
-    attributes:
-      label: Verification
-      description: Confirm you've verified this issue
-      options:
-        - label: I've confirmed this information is incorrect or problematic
-          required: true
-        - label: I've checked this isn't already reported in existing issues
-          required: true
-        - label: I've tested any code examples that are involved
-          required: false
+  id: verification
+  attributes:
+  label: Verification
+  description: Confirm you've verified this issue
+  options:
+    - label: I've confirmed this information is incorrect or problematic
+      required: true
+    - label: I've checked this isn't already reported in existing issues
+      required: true
+    - label: I've tested any code examples that are involved
+      required: false

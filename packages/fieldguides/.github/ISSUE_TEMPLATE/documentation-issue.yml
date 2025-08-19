@@ -6,108 +6,108 @@ assignees: []
 body:
 
 - type: markdown
-    attributes:
-      value: |
-        Thank you for helping improve our documentation quality! Clear, consistent documentation is essential for both AI agents and human developers.
+  attributes:
+    value: |
+      Thank you for helping improve our documentation quality! Clear, consistent documentation is essential for both AI agents and human developers.
 
 - type: input
-    id: affected_files
-    attributes:
-      label: Affected Files
-      description: Which documentation files have issues?
-      placeholder: 'e.g., README.md, fieldguides/standards/typescript-conventions.md'
-    validations:
-      required: true
+  id: affected_files
+  attributes:
+    label: Affected Files
+    description: Which documentation files have issues?
+    placeholder: 'e.g., README.md, fieldguides/standards/typescript-conventions.md'
+  validations:
+    required: true
 
 - type: dropdown
-    id: issue_type
-    attributes:
-      label: Issue Type
-      description: What kind of documentation issue is this?
-      options:
-        - Unclear explanation
-        - Missing examples
-        - Inconsistent formatting
-        - Incomplete information
-        - Poor organization
-        - Accessibility issues
-        - Cross-reference problems
-        - Outdated structure
-    validations:
-      required: true
+  id: issue_type
+  attributes:
+    label: Issue Type
+    description: What kind of documentation issue is this?
+    options:
+      - Unclear explanation
+      - Missing examples
+      - Inconsistent formatting
+      - Incomplete information
+      - Poor organization
+      - Accessibility issues
+      - Cross-reference problems
+      - Outdated structure
+  validations:
+    required: true
 
 - type: textarea
-    id: issue_description
-    attributes:
-      label: Issue Description
-      description: What specifically is unclear, missing, or problematic?
-      placeholder: |
-        - Specific sections that are confusing
-        - Missing information that would help users
-        - Formatting inconsistencies
-        - Organizational problems
-    validations:
-      required: true
+  id: issue_description
+  attributes:
+    label: Issue Description
+    description: What specifically is unclear, missing, or problematic?
+    placeholder: |
+      - Specific sections that are confusing
+      - Missing information that would help users
+      - Formatting inconsistencies
+      - Organizational problems
+  validations:
+    required: true
 
 - type: textarea
-    id: target_audience_impact
-    attributes:
-      label: Target Audience Impact
-      description: How does this affect different users?
-      placeholder: |
-        - Impact on AI agents using the documentation
-        - Impact on human developers
-        - Specific use cases that are affected
-    validations:
-      required: true
+  id: target_audience_impact
+  attributes:
+    label: Target Audience Impact
+    description: How does this affect different users?
+    placeholder: |
+      - Impact on AI agents using the documentation
+      - Impact on human developers
+      - Specific use cases that are affected
+  validations:
+    required: true
 
 - type: textarea
-    id: suggested_improvements
-    attributes:
-      label: Suggested Improvements
-      description: How could this documentation be improved?
-      placeholder: |
-        - Clearer explanations
-        - Additional examples
-        - Better organization
-        - Formatting fixes
-        - Missing sections to add
-    validations:
-      required: true
+  id: suggested_improvements
+  attributes:
+    label: Suggested Improvements
+    description: How could this documentation be improved?
+    placeholder: |
+      - Clearer explanations
+      - Additional examples
+      - Better organization
+      - Formatting fixes
+      - Missing sections to add
+  validations:
+    required: true
 
 - type: dropdown
-    id: urgency
-    attributes:
-      label: Urgency
-      description: How urgent is this documentation fix?
-      options:
-        - High - Blocks understanding of critical concepts
-        - Medium - Causes confusion but has workarounds
-        - Low - Minor improvement that would be nice to have
-    validations:
-      required: true
+  id: urgency
+  attributes:
+    label: Urgency
+    description: How urgent is this documentation fix?
+    options:
+      - High - Blocks understanding of critical concepts
+      - Medium - Causes confusion but has workarounds
+      - Low - Minor improvement that would be nice to have
+  validations:
+    required: true
 
 - type: textarea
-    id: context
-    attributes:
-      label: Context
-      description: What were you trying to accomplish when you found this issue?
-      placeholder: |
-        - Task you were working on
-        - How you discovered the problem
-        - What you expected to find
-    validations:
-      required: false
+  id: context
+  attributes:
+    label: Context
+    description: What were you trying to accomplish when you found this issue?
+    placeholder: |
+      - Task you were working on
+      - How you discovered the problem
+      - What you expected to find
+  validations:
+    required: false
 
 - type: checkboxes
-    id: standards_compliance
-    attributes:
-      label: Documentation Standards
-      description: Check applicable documentation standards concerns
-      options:
-        - label: Issue affects professional tone in fieldguides
-        - label: Issue affects expedition theme consistency in internal docs
-        - label: Issue affects AI agent comprehension
-        - label: Issue affects human developer usability
-        - label: Issue affects example code quality
-        - label: Issue affects cross-reference accuracy
+  id: standards_compliance
+  attributes:
+    label: Documentation Standards
+    description: Check applicable documentation standards concerns
+    options:
+      - label: Issue affects professional tone in fieldguides
+      - label: Issue affects expedition theme consistency in internal docs
+      - label: Issue affects AI agent comprehension
+      - label: Issue affects human developer usability
+      - label: Issue affects example code quality
+      - label: Issue affects cross-reference accuracy
