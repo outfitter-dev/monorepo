@@ -1,0 +1,154 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "created": "2025-01-14T00:00:00Z",
+    "lastUpdated": "2025-08-19T13:10:20.130Z",
+    "totalPatterns": 6,
+    "description": "Demo pattern database for CodeRabbit Feedback Loop System"
+  },
+  "patterns": {
+    "demo-pattern-1": {
+      "pattern": "Remove unused import",
+      "category": "auto-fixable",
+      "description": "Remove unused import `lodash` as it is not being used",
+      "frequency": 12,
+      "firstSeen": "2025-01-15T10:00:00Z",
+      "lastSeen": "2025-01-19T14:30:00Z",
+      "examples": [
+        {
+          "file": "src/utils/helpers.ts",
+          "line": 1,
+          "context": "import lodash from \"lodash\""
+        },
+        {
+          "file": "src/components/Button.tsx",
+          "line": 2,
+          "context": "import { debounce } from \"lodash\""
+        }
+      ]
+    },
+    "demo-pattern-2": {
+      "pattern": "Add missing await keyword",
+      "category": "auto-fixable",
+      "description": "Add missing `await` before async function call",
+      "frequency": 8,
+      "firstSeen": "2025-01-16T09:15:00Z",
+      "lastSeen": "2025-01-19T11:45:00Z",
+      "examples": [
+        {
+          "file": "src/api/client.ts",
+          "line": 25,
+          "context": "const response = fetch(\"/api/data\")"
+        },
+        {
+          "file": "src/services/auth.ts",
+          "line": 42,
+          "context": "const user = getUserProfile(id)"
+        }
+      ]
+    },
+    "demo-pattern-3": {
+      "pattern": "Use const instead of let",
+      "category": "auto-fixable",
+      "description": "Variable is never reassigned, use const instead of let",
+      "frequency": 15,
+      "firstSeen": "2025-01-14T16:20:00Z",
+      "lastSeen": "2025-01-19T13:10:00Z",
+      "examples": [
+        {
+          "file": "src/utils/format.ts",
+          "line": 10,
+          "context": "let result = processData(input)"
+        },
+        {
+          "file": "src/hooks/useApi.ts",
+          "line": 18,
+          "context": "let config = { timeout: 5000 }"
+        }
+      ]
+    },
+    "demo-pattern-4": {
+      "pattern": "Consider using state machine",
+      "category": "needs-human-review",
+      "description": "Consider using a state machine for managing this complex async flow",
+      "frequency": 3,
+      "firstSeen": "2025-01-17T14:00:00Z",
+      "lastSeen": "2025-01-19T10:20:00Z",
+      "examples": [
+        {
+          "file": "src/components/UploadFlow.tsx",
+          "line": 45,
+          "context": "Complex state management with multiple flags"
+        }
+      ]
+    },
+    "demo-pattern-5": {
+      "pattern": "Add accessibility attributes",
+      "category": "auto-fixable",
+      "description": "Missing aria-label attribute for better accessibility",
+      "frequency": 6,
+      "firstSeen": "2025-01-18T11:30:00Z",
+      "lastSeen": "2025-01-19T15:45:00Z",
+      "examples": [
+        {
+          "file": "src/components/IconButton.tsx",
+          "line": 12,
+          "context": "<button onClick={onClick}>"
+        },
+        {
+          "file": "src/components/Modal.tsx",
+          "line": 28,
+          "context": "<div className=\"modal-overlay\">"
+        }
+      ]
+    },
+    "demo-pattern-6": {
+      "pattern": "Performance: avoid inline objects",
+      "category": "pattern-to-learn",
+      "description": "Avoid creating objects inline in JSX props to prevent unnecessary re-renders",
+      "frequency": 7,
+      "firstSeen": "2025-01-16T13:15:00Z",
+      "lastSeen": "2025-01-19T12:00:00Z",
+      "examples": [
+        {
+          "file": "src/components/DataTable.tsx",
+          "line": 35,
+          "context": "style={{ margin: 10 }}"
+        },
+        {
+          "file": "src/pages/Dashboard.tsx",
+          "line": 67,
+          "context": "config={{ enabled: true }}"
+        }
+      ]
+    }
+  },
+  "statistics": {
+    "mostCommonCategories": {
+      "auto-fixable": 41,
+      "needs-human-review": 3,
+      "pattern-to-learn": 7
+    },
+    "mostCommonTypes": {
+      "unused-imports": 12,
+      "variable-declarations": 15,
+      "async-await": 8,
+      "accessibility": 6,
+      "performance": 7,
+      "architecture": 3
+    },
+    "confidenceTrends": [],
+    "fixSuccessRates": {
+      "unused-imports": 0.95,
+      "variable-declarations": 0.92,
+      "async-await": 0.88,
+      "accessibility": 0.85
+    }
+  },
+  "learningRules": {
+    "autoFixThreshold": 0.7,
+    "patternRecognitionMinOccurrences": 3,
+    "maxExamplesPerPattern": 5,
+    "dataRetentionDays": 365
+  }
+}

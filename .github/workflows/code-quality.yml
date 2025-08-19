@@ -1,0 +1,325 @@
+name: Code Quality Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  type-safety:
+    name: Type Safety & Linting
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.19
+      
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+            packages/*/node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+      
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      
+      - name: Run enhanced Biome checks
+        id: biome-check
+        run: |
+          echo "Running enhanced Biome linting..."
+          bun bunx @biomejs/biome check --config-path=./biome.enhanced.json --reporter=github
+        continue-on-error: true
+      
+      - name: Run TypeScript strict checks
+        id: typescript-check
+        run: |
+          echo "Running TypeScript strict type checking..."
+          bun run typecheck
+        continue-on-error: true
+      
+      - name: Check Result pattern usage
+        id: result-pattern-check
+        run: |
+          echo "Checking Result pattern usage..."
+          bun ./scripts/check-contracts-imports.ts
+        continue-on-error: true
+      
+      - name: Generate quality report
+        if: always()
+        run: |
+          echo "## 📊 Code Quality Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.biome-check.outcome }}" == "success" ]; then
+            echo "✅ **Biome Checks:** Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Biome Checks:** Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ steps.typescript-check.outcome }}" == "success" ]; then
+            echo "✅ **TypeScript Checks:** Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **TypeScript Checks:** Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ steps.result-pattern-check.outcome }}" == "success" ]; then
+            echo "✅ **Result Pattern:** Correctly used" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Result Pattern:** Issues found" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Fail if critical checks failed
+        if: |
+          steps.biome-check.outcome == 'failure' ||
+          steps.typescript-check.outcome == 'failure' ||
+          steps.result-pattern-check.outcome == 'failure'
+        run: |
+          echo "Critical quality checks failed. Please review the errors above."
+          exit 1
+
+  security-scan:
+    name: Security & Dependency Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.19
+      
+      - name: Check for hardcoded secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.pull_request.base.sha || github.event.before }}
+          head: ${{ github.event.pull_request.head.sha || github.sha }}
+          extra_args: --only-verified
+      
+      - name: Run dependency audit
+        run: |
+          echo "Checking for known vulnerabilities..."
+          bun audit || true
+      
+      - name: Check for outdated dependencies
+        run: |
+          echo "Checking for significantly outdated dependencies..."
+          bunx npm-check-updates --target minor --dep prod,dev --reject "type-fest" || true
+
+  documentation-check:
+    name: Documentation & Comments
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.19
+      
+      - name: Check JSDoc coverage
+        run: |
+          echo "Checking JSDoc coverage for exported functions..."
+          # Find all TypeScript files and check for exported functions without JSDoc
+          find packages -name "*.ts" -not -path "*/node_modules/*" -not -name "*.test.ts" -not -name "*.spec.ts" | while read file; do
+            if grep -q "^export \(async \)\?function" "$file"; then
+              # Check if the line before contains */
+              grep -B1 "^export \(async \)\?function" "$file" | grep -q "\*/" || echo "Missing JSDoc: $file"
+            fi
+          done
+      
+      - name: Check README files
+        run: |
+          echo "Checking for README files in packages..."
+          for dir in packages/*/; do
+            if [ ! -f "$dir/README.md" ]; then
+              echo "⚠️ Missing README: $dir"
+            fi
+          done
+
+  import-analysis:
+    name: Import & Export Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.19
+      
+      - name: Analyze import changes
+        run: |
+          echo "Analyzing import patterns in changed files..."
+          
+          # Get changed TypeScript files
+          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx)$' | while read file; do
+            if [ -f "$file" ]; then
+              echo "Checking $file..."
+              
+              # Check for type imports without 'import type'
+              grep -n "^import {.*\(Result\|AppError\|PackageJson\)" "$file" | grep -v "import type" && echo "  ⚠️ Use 'import type' for type-only imports" || true
+              
+              # Check for missing .js extensions in relative imports
+              grep -n "from '\.\/" "$file" | grep -v "\.js'" && echo "  ⚠️ Missing .js extension in import" || true
+              
+              # Check for circular dependency risks
+              grep -n "export \* from" "$file" && echo "  ⚠️ Barrel export detected - check for circular dependencies" || true
+            fi
+          done
+
+  auto-fix:
+    name: Auto-fix Suggestions
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.ref }}
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.19
+      
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      
+      - name: Run auto-fixable checks
+        id: auto-fix
+        run: |
+          echo "Attempting auto-fixes..."
+          
+          # Run Biome format fix
+          bun bunx @biomejs/biome format --write .
+          
+          # Run Biome lint fix for safe fixes
+          bun bunx @biomejs/biome lint --write --only-safe .
+          
+          # Check if there are changes
+          if git diff --quiet; then
+            echo "No auto-fixable issues found."
+            echo "has_fixes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Auto-fixes applied."
+            echo "has_fixes=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create fix commit
+        if: steps.auto-fix.outputs.has_fixes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git commit -m "fix: auto-fix linting and formatting issues [skip ci]"
+          git push
+
+  quality-summary:
+    name: Quality Summary
+    runs-on: ubuntu-latest
+    needs: [type-safety, security-scan, documentation-check, import-analysis]
+    if: always()
+    
+    steps:
+      - name: Generate PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const typeSafety = '${{ needs.type-safety.result }}';
+            const security = '${{ needs.security-scan.result }}';
+            const docs = '${{ needs.documentation-check.result }}';
+            const imports = '${{ needs.import-analysis.result }}';
+            
+            let comment = '## 🤖 Automated Code Quality Report\n\n';
+            comment += '| Check | Status |\n';
+            comment += '|-------|--------|\n';
+            comment += `| Type Safety & Linting | ${typeSafety === 'success' ? '✅ Passed' : '❌ Failed'} |\n`;
+            comment += `| Security Scan | ${security === 'success' ? '✅ Passed' : '⚠️ Review'} |\n`;
+            comment += `| Documentation | ${docs === 'success' ? '✅ Complete' : '⚠️ Needs attention'} |\n`;
+            comment += `| Import Analysis | ${imports === 'success' ? '✅ Clean' : '⚠️ Issues found'} |\n`;
+            
+            comment += '\n### 📝 Next Steps\n';
+            if (typeSafety !== 'success') {
+              comment += '- Fix type safety and linting errors\n';
+            }
+            if (security !== 'success') {
+              comment += '- Review security scan results\n';
+            }
+            if (docs !== 'success') {
+              comment += '- Add missing documentation\n';
+            }
+            if (imports !== 'success') {
+              comment += '- Review import patterns\n';
+            }
+            
+            if (typeSafety === 'success' && security === 'success' && docs === 'success' && imports === 'success') {
+              comment += '✨ All checks passed! Ready for human review.\n';
+            }
+            
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('Automated Code Quality Report')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment,
+              });
+            }

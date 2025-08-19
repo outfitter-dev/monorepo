@@ -1,0 +1,249 @@
+name: CodeRabbit Feedback Loop
+
+on:
+  issue_comment:
+    types: [created, edited]
+  pull_request_review_comment:
+    types: [created, edited]
+
+jobs:
+  process-coderabbit-feedback:
+    name: Process CodeRabbit Feedback
+    runs-on: ubuntu-latest
+    if: |
+      github.event.comment.user.login == 'coderabbitai[bot]' || 
+      github.event.comment.user.login == 'coderabbitai'
+    
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for better AST analysis
+          fetch-depth: 0
+          # Use the GitHub token to enable pushing changes back
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.2.19'
+          
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+        
+      - name: Extract PR information
+        id: pr-info
+        run: |
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            # Issue comment - need to find associated PR
+            PR_NUMBER="${{ github.event.issue.number }}"
+            echo "pr_number=${PR_NUMBER}" >> $GITHUB_OUTPUT
+            echo "comment_type=issue" >> $GITHUB_OUTPUT
+          else
+            # PR review comment
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+            echo "pr_number=${PR_NUMBER}" >> $GITHUB_OUTPUT
+            echo "comment_type=review" >> $GITHUB_OUTPUT
+          fi
+          echo "comment_id=${{ github.event.comment.id }}" >> $GITHUB_OUTPUT
+          
+      - name: Process CodeRabbit feedback
+        id: process-feedback
+        run: |
+          bun scripts/process-coderabbit-feedback.ts \
+            --pr-number "${{ steps.pr-info.outputs.pr_number }}" \
+            --comment-id "${{ steps.pr-info.outputs.comment_id }}" \
+            --comment-type "${{ steps.pr-info.outputs.comment_type }}" \
+            --github-token "${{ secrets.GITHUB_TOKEN }}" \
+            --dry-run false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            git status --porcelain
+          fi
+          
+      - name: Commit and push fixes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "CodeRabbit Feedback Bot"
+          
+          git add .
+          git commit -m "fix: apply CodeRabbit suggestions automatically
+
+          🤖 Generated with CodeRabbit Feedback Loop
+          
+          Applied fixes for:
+          - CodeRabbit comment #${{ steps.pr-info.outputs.comment_id }}
+          - PR #${{ steps.pr-info.outputs.pr_number }}
+          
+          Co-Authored-By: CodeRabbit <noreply@coderabbit.ai>"
+          
+          git push
+          
+      - name: Update PR with feedback results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read the results file created by the processing script
+            const resultsPath = path.join(process.env.GITHUB_WORKSPACE, '.coderabbit-results.json');
+            let results = {};
+            
+            try {
+              if (fs.existsSync(resultsPath)) {
+                results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+              }
+            } catch (error) {
+              console.log('No results file found or parsing failed:', error.message);
+            }
+            
+            const prNumber = parseInt('${{ steps.pr-info.outputs.pr_number }}');
+            const hasChanges = '${{ steps.changes.outputs.has_changes }}' === 'true';
+            
+            let comment = '## 🤖 CodeRabbit Feedback Processing Results\n\n';
+            
+            if (hasChanges) {
+              comment += '✅ **Auto-fixes applied successfully!**\n\n';
+              
+              if (results.fixesApplied && results.fixesApplied.length > 0) {
+                comment += '### Applied Fixes:\n';
+                for (const fix of results.fixesApplied) {
+                  comment += `- **${fix.type}**: ${fix.description}\n`;
+                  if (fix.file) comment += `  - File: \`${fix.file}\`\n`;
+                  if (fix.line) comment += `  - Line: ${fix.line}\n`;
+                }
+                comment += '\n';
+              }
+            } else {
+              comment += 'ℹ️ **No auto-fixable issues found in this feedback**\n\n';
+            }
+            
+            if (results.patternsLearned && results.patternsLearned.length > 0) {
+              comment += '### 📚 New Patterns Learned:\n';
+              for (const pattern of results.patternsLearned) {
+                comment += `- ${pattern.description} (Category: ${pattern.category})\n`;
+              }
+              comment += '\n';
+            }
+            
+            if (results.requiresHumanReview && results.requiresHumanReview.length > 0) {
+              comment += '### 👤 Requires Human Review:\n';
+              for (const item of results.requiresHumanReview) {
+                comment += `- ${item.description}\n`;
+                if (item.reasoning) comment += `  - ${item.reasoning}\n`;
+              }
+              comment += '\n';
+            }
+            
+            comment += `### Processing Details:
+            - **Processed at**: ${new Date().toISOString()}
+            - **Comment ID**: ${{ steps.pr-info.outputs.comment_id }}
+            - **Processing time**: ${results.processingTimeMs || 'N/A'}ms
+            - **Changes committed**: ${hasChanges ? 'Yes' : 'No'}
+            
+            ---
+            *This comment was automatically generated by the CodeRabbit Feedback Loop system.*`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
+            
+      - name: Update pattern database
+        if: always()
+        run: |
+          # Commit pattern database updates if any
+          if ! git diff --quiet scripts/pattern-database.json; then
+            git config --local user.email "action@github.com"
+            git config --local user.name "CodeRabbit Learning Bot"
+            
+            git add scripts/pattern-database.json
+            git commit -m "data: update CodeRabbit pattern database
+
+            🧠 Learning from CodeRabbit feedback
+            
+            Updated patterns based on:
+            - PR #${{ steps.pr-info.outputs.pr_number }}
+            - Comment #${{ steps.pr-info.outputs.comment_id }}"
+            
+            git push
+          fi
+
+  # Separate job for updating tooling configuration
+  update-tooling:
+    name: Update Development Tooling
+    runs-on: ubuntu-latest
+    needs: process-coderabbit-feedback
+    if: success()
+    
+    permissions:
+      contents: write
+      pull-requests: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.2.19'
+          
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+        
+      - name: Update tooling based on patterns
+        run: |
+          bun scripts/update-tooling-from-patterns.ts
+          
+      - name: Check for tooling changes
+        id: tooling-changes
+        run: |
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in tooling files:"
+            git status --porcelain
+          fi
+          
+      - name: Commit tooling updates
+        if: steps.tooling-changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "CodeRabbit Tooling Bot"
+          
+          git add .
+          git commit -m "feat: update development tooling based on CodeRabbit patterns
+
+          🔧 Enhanced tooling configuration
+          
+          Updated based on learned patterns from CodeRabbit feedback:
+          - Enhanced linting rules
+          - Updated Biome configuration
+          - Improved validation scripts
+          
+          Co-Authored-By: CodeRabbit <noreply@coderabbit.ai>"
+          
+          git push

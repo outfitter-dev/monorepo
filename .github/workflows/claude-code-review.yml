@@ -42,14 +42,42 @@ jobs:
 
           # Direct prompt for automated review (no @claude mention needed)
           direct_prompt: |
-            Please review this pull request and provide feedback on:
-            - Code quality and best practices
-            - Potential bugs or issues
-            - Performance considerations
-            - Security concerns
-            - Test coverage
+            Review this PR focusing on patterns that commonly need attention:
             
-            Be constructive and helpful in your feedback.
+            **Type Safety & Error Handling:**
+            - Check for proper Result pattern usage from @outfitter/contracts
+            - Verify all async functions return Result<T, AppError>
+            - Look for any 'any' types or missing type annotations
+            - Ensure proper null/undefined handling
+            
+            **Import/Export Patterns:**
+            - Verify 'import type' is used for type-only imports
+            - Check for .js extensions in TypeScript relative imports
+            - Look for potential circular dependencies in barrel exports
+            
+            **Code Quality:**
+            - Check for missing JSDoc on exported functions/classes
+            - Verify complex functions have explanatory comments
+            - Look for console.log in library code (should use Pino)
+            - Check for proper error boundaries and fallbacks
+            
+            **Security:**
+            - Look for hardcoded secrets or API keys
+            - Check for eval(), innerHTML, or other risky patterns
+            - Verify input validation and sanitization
+            
+            **Testing:**
+            - Check if new functions have corresponding tests
+            - Verify tests have proper assertions
+            - Look for test structure issues
+            
+            **Monorepo Specific:**
+            - Verify workspace imports are used instead of relative paths between packages
+            - Check that contracts package patterns are followed
+            - Ensure logging follows our hybrid approach (console for CLI, Pino for libs)
+            
+            Provide actionable feedback with code examples where helpful.
+            Focus on issues that would block merge or cause production problems.
 
           # Optional: Use sticky comments to make Claude reuse the same comment on subsequent pushes to the same PR
           # use_sticky_comment: true

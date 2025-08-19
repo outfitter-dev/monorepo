@@ -2,6 +2,9 @@
 pre-commit:
   parallel: false
   commands:
+    validation:
+      run: bun ./scripts/pre-commit-validation.ts
+      fail_text: "Pre-commit validation failed. Please fix the issues above."
     ultracite-lint:
       glob: "*.{js,ts,jsx,tsx}"
       run: bunx ultracite lint --fix {staged_files}
@@ -16,6 +19,10 @@ pre-commit:
         bunx prettier --write {staged_files} &&
         bunx markdownlint-cli2 --fix {staged_files}
       stage_fixed: true
+    custom-lint:
+      glob: "*.{js,ts,jsx,tsx}"
+      run: bun ./scripts/custom-lint-rules.ts {staged_files}
+      fail_text: "Custom lint rules failed. Review the violations above."
 
 commit-msg:
   commands:

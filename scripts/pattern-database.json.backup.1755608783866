@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "created": "2025-01-19T00:00:00.000Z",
+    "lastUpdated": "2025-01-19T00:00:00.000Z",
+    "totalPatterns": 0,
+    "description": "CodeRabbit feedback pattern learning database for automated improvement"
+  },
+  "patterns": {},
+  "statistics": {
+    "mostCommonCategories": {},
+    "mostCommonTypes": {},
+    "confidenceTrends": [],
+    "fixSuccessRates": {}
+  },
+  "learningRules": {
+    "autoFixThreshold": 0.7,
+    "patternRecognitionMinOccurrences": 3,
+    "maxExamplesPerPattern": 5,
+    "dataRetentionDays": 365
+  }
+}
