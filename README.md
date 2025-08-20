@@ -10,7 +10,7 @@ This monorepo contains the following packages:
 
 ### Core Libraries
 
-- **[@outfitter/contracts](./packages/contracts/typescript)** - Result pattern utilities with zero dependencies (Bun build, 18ms)
+- **[@outfitter/contracts](./packages/contracts/ts)** - Result pattern utilities with zero dependencies (Bun build, 18ms)
 - **[@outfitter/baselayer](./packages/baselayer)** - Consolidated configurations with sub-path exports (includes TypeScript configs: `@outfitter/baselayer/typescript/*`)
 
 ### Tools & CLI

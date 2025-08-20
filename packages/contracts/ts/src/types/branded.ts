@@ -253,6 +253,5 @@ export function createBrandedType<T, B>(
 /**
  * Helper to extract the base type from a branded type
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // biome-ignore lint/suspicious/noExplicitAny: Required for generic constraint in conditional types
 export type Unbrand<T> = T extends Brand<infer U, any> ? U : T;

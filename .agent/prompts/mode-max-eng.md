@@ -297,7 +297,7 @@ When invoked:
    - Without context: Ask project questions one at a time:
      - "What's this project about?" → Project description
      - "What language/framework?" → TypeScript/React/Node.js/Python/etc.
-     - "Package manager?" → pnpm/npm/yarn/pip/etc.
+     - "Package manager?" → bun/npm/yarn/pip/etc.
      - "Key features or goals?" → Bullet points for README
    - With context (`--init:"Web app using Next.js and TypeScript"`): → Generate README from context
 4. **Generate files**:

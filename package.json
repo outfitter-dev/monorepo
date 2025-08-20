@@ -50,7 +50,7 @@
     "turbo": "^2.5.5",
     "type-fest": "^4.41.0",
     "typescript": "^5.9.2",
-    "ultracite": "^5.1.5",
+    "ultracite": "^5.2.4",
     "vitest": "^1.6.1"
   },
   "license": "MIT",

@@ -4,25 +4,24 @@
 
 ```bash
 # Build/test/lint
-pnpm ci:local          # Full CI check
-pnpm test              # Run tests in watch mode
-pnpm test --run        # Single test run
-pnpm test packages/contracts/typescript/src/__tests__/result.test.ts
-pnpm test --filter @outfitter/contracts  # Test specific package
-pnpm build             # Build all packages
-pnpm lint              # ESLint check
-pnpm format:fix        # Auto-fix formatting
+bun run ci:local       # Full CI check
+bun test               # Run tests in watch mode
+bun test --run         # Single test run
+bun test packages/contracts/ts/src/__tests__/result.test.ts
+bun run test --filter @outfitter/contracts  # Test specific package
+bun run build          # Build all packages
+bun run lint           # Biome lint check
+bun run format:fix     # Auto-fix formatting
 ```
 
 ## Architecture
 
-Monorepo with 8 packages using pnpm workspaces. Build order: `contracts/typescript` first (zero deps), then others. Core packages: `contracts/typescript` (Result pattern utilities), `packlist` (config manager), `cli` (globally installable tool). Configuration packages: `eslint-config`, `typescript-config`, `husky-config`, `changeset-config`. Documentation: `fieldguides`.
+Monorepo with packages using Bun workspaces. Build order: `contracts/ts` first (zero deps), then others. Core packages: `contracts/ts` (Result pattern utilities), `packlist` (config manager), `cli` (globally installable tool). Configuration packages: `typescript-config`, `husky-config`, `changeset-config`. Documentation: `fieldguides`.
 
 ## Code Style
 
-- Always use pnpm, never npm/yarn
-- Result pattern mandatory for error handling:
-`import { Result, success, failure, makeError } from '@outfitter/contracts'`
+- Always use Bun, never npm/yarn/pnpm
+- Result pattern mandatory for error handling: `import { Result, success, failure, makeError } from '@outfitter/contracts'`
 - TypeScript strict mode, prefer `Array<T>` over `T[]`, no `I` prefix on interfaces
 - Workspace dependencies use `workspace:*` protocol
 - Conventional commits: `type(scope): subject` (feat, fix, docs, etc.)

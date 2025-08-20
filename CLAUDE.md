@@ -78,7 +78,7 @@ bun run test packages/contracts/ts/src/__tests__/result.test.ts
 The monorepo follows a clear separation of concerns:
 
 1. **Core Libraries** (must build first):
-   - `contracts/typescript`: Zero-dependency utilities using Result pattern for error handling (renamed from typescript-utils)
+   - `contracts/ts`: Zero-dependency utilities using Result pattern for error handling (renamed from typescript-utils)
    - `packlist`: Configuration manager that orchestrates development setup
 
 2. **Configuration Packages** (shared configs):
@@ -94,7 +94,7 @@ The monorepo follows a clear separation of concerns:
 
 Due to TypeScript project references, packages must build in this order:
 
-1. `contracts/typescript` (no dependencies)
+1. `contracts/ts` (no dependencies)
 2. All other packages (may depend on contracts)
 
 ### Key Design Patterns

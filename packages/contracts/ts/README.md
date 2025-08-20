@@ -7,7 +7,7 @@
 ```bash
 npm install @outfitter/contracts
 # or
-pnpm add @outfitter/contracts
+bun add @outfitter/contracts
 
 # For Zod integration, also install Zod as a peer dependency:
 npm install zod
@@ -302,16 +302,16 @@ This package is part of the [@outfitter/monorepo](https://github.com/outfitter-d
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Run tests
-pnpm test
+bun test
 
 # Build the package
-pnpm build
+bun run build
 
 # Type check
-pnpm type-check
+bun run type-check
 ```
 
 ## License

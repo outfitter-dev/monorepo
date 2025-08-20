@@ -4,11 +4,11 @@ pre-commit:
   commands:
     ultracite-lint:
       glob: "*.{js,ts,jsx,tsx}"
-      run: bunx ultracite lint --fix {staged_files}
-      stage_fixed: true
+      run: bunx ultracite lint {staged_files}
+      stage_fixed: false
     ultracite-format:
       glob: "*.{js,ts,jsx,tsx}"
-      run: bunx ultracite format {staged_files}
+      run: bunx ultracite format --write {staged_files}
       stage_fixed: true
     markdown:
       glob: "*.{md,mdx,mdc}"

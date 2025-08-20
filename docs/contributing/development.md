@@ -4,8 +4,7 @@ This guide covers development workflows for the Outfitter monorepo and all its p
 
 ## Prerequisites
 
-- Node.js 18+
-- pnpm 8+ (required for workspace management)
+- Bun 1.2.19+ (package manager and runtime)
 - Git
 
 ## Getting Started
@@ -16,10 +15,10 @@ git clone https://github.com/outfitter-dev/monorepo
 cd monorepo
 
 # Install dependencies
-pnpm install
+bun install
 
 # Build all packages
-pnpm build
+bun run build
 ```
 
 ## Development Workflow
@@ -30,13 +29,13 @@ Due to TypeScript project references, packages must build in order:
 
 ```bash
 # Build all packages
-pnpm build
+bun run build
 
 # Build specific package
-pnpm build --filter @outfitter/contracts
+bun run build --filter @outfitter/contracts
 
 # Build with dependencies
-pnpm build --filter @outfitter/cli...
+bun run build --filter @outfitter/cli...
 ```
 
 **Build Order**:
@@ -48,35 +47,35 @@ pnpm build --filter @outfitter/cli...
 
 ```bash
 # Run all tests in watch mode
-pnpm test
+bun test
 
 # Run tests once
-pnpm test --run
+bun test --run
 
 # Test specific package
-pnpm test --filter @outfitter/packlist
+bun run test --filter @outfitter/packlist
 
 # Run specific test file
-pnpm test packages/contracts/typescript/src/__tests__/result.test.ts
+bun test packages/contracts/ts/src/__tests__/result.test.ts
 ```
 
 ### 3. Linting and Formatting
 
 ```bash
-# ESLint
-pnpm lint
+# Biome lint
+bun run lint
 
 # Markdown lint
-pnpm lint:md
+bun run lint:md
 
 # Check formatting
-pnpm format
+bun run format
 
 # Fix formatting
-pnpm format:fix
+bun run format:fix
 
 # Type checking
-pnpm type-check
+bun run type-check
 ```
 
 ### 4. Pre-commit Checks
@@ -84,13 +83,13 @@ pnpm type-check
 Always run before committing:
 
 ```bash
-pnpm ci:local
+bun run ci:local
 ```
 
 This runs:
 
 - `format:fix` - Auto-fix formatting
-- `lint` - ESLint checks
+- `lint` - Biome checks
 - `lint:md` - Markdown linting
 - `type-check` - TypeScript validation
 - `test --run` - All tests
@@ -101,23 +100,23 @@ This runs:
 
 ```bash
 # Add to root (dev dependencies only)
-pnpm add -D <package>
+bun add -D <package>
 
 # Add to specific package
-pnpm add <package> --filter @outfitter/cli
+bun add <package> --filter @outfitter/cli
 
 # Add dev dependency to package
-pnpm add -D <package> --filter @outfitter/eslint-config
+bun add -D <package> --filter @outfitter/typescript-config
 ```
 
 ### Updating Dependencies
 
 ```bash
-# Interactive update
-pnpm update --interactive --latest
+# Update all dependencies
+bun update
 
 # Update specific package
-pnpm update <package> --latest
+bun update <package>
 ```
 
 ## Creating a New Package
@@ -132,7 +131,7 @@ pnpm update <package> --latest
 2. Initialize package:
 
    ```bash
-   pnpm init
+   bun init
    ```
 
 3. Set up package.json:
@@ -207,7 +206,7 @@ git commit -m "docs(packlist): update API examples"
 
 ```bash
 # Interactive changeset creation
-pnpm changeset
+bun run changeset
 
 # Select packages that changed
 # Choose version bump type (patch/minor/major)
@@ -218,7 +217,7 @@ pnpm changeset
 
 ```bash
 # Apply changesets (usually done in CI)
-pnpm changeset:version
+bun run changeset:version
 
 # This updates:
 # - Package versions
@@ -230,7 +229,7 @@ pnpm changeset:version
 
 ```bash
 # Publish all changed packages
-pnpm changeset:publish
+bun run changeset:publish
 ```
 
 ## Troubleshooting
@@ -240,27 +239,26 @@ pnpm changeset:publish
 1. Clean and rebuild:
 
    ```bash
-   pnpm clean
-   pnpm install
-   pnpm build
+   bun run clean
+   bun install
+   bun run build
    ```
 
 2. Check for circular dependencies:
 
    ```bash
-   pnpm ls --depth=0
+   bun pm ls --depth=0
    ```
 
 ### Type Errors
 
 1. Restart TypeScript server in VS Code:
-
    - Cmd+Shift+P → "TypeScript: Restart TS Server"
 
 2. Clean TypeScript cache:
 
    ```bash
-   pnpm tsc --build --clean
+   bunx tsc --build --clean
    ```
 
 ### Test Failures
@@ -268,13 +266,13 @@ pnpm changeset:publish
 1. Update snapshots if needed:
 
    ```bash
-   pnpm test -- -u
+   bun test -- -u
    ```
 
 2. Run tests in isolation:
 
    ```bash
-   pnpm test --filter @outfitter/package-name -- --no-coverage
+   bun run test --filter @outfitter/package-name -- --no-coverage
    ```
 
 ## Tips
@@ -282,4 +280,4 @@ pnpm changeset:publish
 1. **Use the workspace protocol**: Always use `workspace:*` for internal dependencies
 2. **Run targeted commands**: Use `--filter` to run commands for specific packages
 3. **Leverage Turbo cache**: Build outputs are cached automatically
-4. **Check before pushing**: Always run `pnpm ci:local` before pushing
+4. **Check before pushing**: Always run `bun run ci:local` before pushing

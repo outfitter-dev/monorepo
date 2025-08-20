@@ -24,19 +24,19 @@ Welcome to the Outfitter monorepo contributing guide!
 2. **Install dependencies**:
 
    ```bash
-   pnpm install
+   bun install
    ```
 
 3. **Build all packages**:
 
    ```bash
-   pnpm build
+   bun run build
    ```
 
 4. **Run tests**:
 
    ```bash
-   pnpm test
+   bun test
    ```
 
 See the [Development Guide](development.md) for detailed instructions.

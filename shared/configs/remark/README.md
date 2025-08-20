@@ -5,7 +5,7 @@ Shared Remark configuration for consistent Markdown processing across Outfitter 
 ## Installation
 
 ```bash
-pnpm add @outfitter/remark-config
+bun add @outfitter/remark-config
 ```
 
 ## Usage
@@ -106,16 +106,16 @@ plugins:
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Build the package
-pnpm build
+bun run build
 
 # Run tests
-pnpm test
+bun test
 
 # Type check
-pnpm type-check
+bun run type-check
 ```
 
 ## License
