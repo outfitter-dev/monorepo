@@ -1,4 +1,4 @@
-# !/usr/bin/env node
+#!/usr/bin/env node
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,14 +23,14 @@ const VALID_TYPES = [
   'template',
   'reference',
 ] as const;
-type ValidType = [typeof VALID_TYPES](number);
+type ValidType = (typeof VALID_TYPES)[number];
 
 // Files that should NOT have frontmatter
 const STANDARDS_FILES = ['CODING.md', 'SECURITY.md', 'TESTING.md'] as const;
 
 // Valid statuses
 const VALID_STATUSES = ['draft', 'stable', 'deprecated'] as const;
-type ValidStatus = [typeof VALID_STATUSES](number);
+type ValidStatus = (typeof VALID_STATUSES)[number];
 
 // Frontmatter schema
 interface FrontmatterData {
@@ -82,7 +82,7 @@ const validationRules: Record<string, ValidationRule> = {
     validate: (value: unknown): string | null => {
       if (typeof value !== 'string') return 'Must be a string';
       if (value.length > 72)
-        return`Too long (${value.length} chars) - max 72 characters`;
+        return `Too long (${value.length} chars) - max 72 characters`;
       if (!value.endsWith('.')) return 'Should end with a period';
       return null;
     },
