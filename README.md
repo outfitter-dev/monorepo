@@ -33,7 +33,7 @@ import { prettierConfig } from '@outfitter/baselayer/prettier-config';
 import { changesetConfig } from '@outfitter/baselayer/changeset-config';
 ```
 
-## Development
+## Quick Start
 
 **Requirements:**
 
@@ -41,7 +41,12 @@ import { changesetConfig } from '@outfitter/baselayer/changeset-config';
 - Node.js 18+ LTS
 
 ```bash
-# Install dependencies
+# One-command setup (installs tools, dependencies, and verifies setup)
+bun run setup
+# or
+./scripts/setup.sh
+
+# Manual setup
 bun install
 
 # Build all packages (contracts builds first, then everything else)
