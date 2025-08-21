@@ -1,6 +1,5 @@
-import { platform } from 'node:os';
 import { failure, type Result, success } from '@outfitter/contracts';
-import { $ } from 'bun';
+import { execa } from 'execa';
 
 interface ToolVersion {
   name: string;
@@ -9,26 +8,21 @@ interface ToolVersion {
 }
 
 /**
-
-- Check if a command-line tool is available in the system PATH.
-- @param tool The name of the tool to check
-- @returns Result containing tool information or an error
+ * Check if a command-line tool is available in the system PATH.
+ * @param tool The name of the tool to check
+ * @returns Result containing tool information or an error
  */
 async function checkTool(tool: string): Promise<Result<ToolVersion, Error>> {
   try {
-    // Cross-platform discovery: 'where' on Windows; 'command -v' via sh on POSIX
-    const isWindows = platform() === 'win32';
-    const path = isWindows
-      ? (await $`where ${tool}`.text()).split(/\r?\n/)[0].trim()
-      : // 'command' is a shell builtin; invoke through sh -c
-        (await $`sh -c ${['command', '-v', tool]}`.text()).trim();
+    // Use 'which' to find the tool's path
+    const { stdout: path } = await execa('which', [tool]);
 
     // Try to get version information
     let version = 'unknown';
     try {
-      const stdout = await $`${tool} --version`.text();
+      const { stdout } = await execa(tool, ['--version'], { timeout: 5000 });
       // Extract version number from output (handles common formats)
-      const versionMatch = stdout.match(/\bv?(\d+\.\d+\.\d+(?:[-+][\w.-]+)?)/);
+      const versionMatch = stdout.match(/(\d+\.\d+\.\d+)/);
       if (versionMatch) {
         version = versionMatch[1];
       }
@@ -43,9 +37,8 @@ async function checkTool(tool: string): Promise<Result<ToolVersion, Error>> {
 }
 
 /**
-
-- Check that all required tools are available.
-- @returns Result with void on success or an error describing missing tools
+ * Check that all required tools are available.
+ * @returns Result with void on success or an error describing missing tools
  */
 export async function checkRequiredTools(): Promise<Result<void, Error>> {
   const requiredTools = ['git', 'node'];
@@ -54,10 +47,8 @@ export async function checkRequiredTools(): Promise<Result<void, Error>> {
   );
 
   const missing = results
-    .filter((result: Result<ToolVersion, Error>) => !result.success)
-    .map(
-      (_: Result<ToolVersion, Error>, index: number) => requiredTools[index]
-    );
+    .filter((result) => !result.success)
+    .map((_, index: number) => requiredTools[index]);
 
   if (missing.length > 0) {
     return failure(
@@ -71,9 +62,8 @@ export async function checkRequiredTools(): Promise<Result<void, Error>> {
 }
 
 /**
-
-- Check for optional tools and return their availability.
-- @returns Map of tool names to their availability
+ * Check for optional tools and return their availability.
+ * @returns Map of tool names to their availability
  */
 export async function checkOptionalTools(): Promise<Map<string, boolean>> {
   const optionalTools = ['pnpm', 'yarn', 'bun'];
@@ -88,9 +78,8 @@ export async function checkOptionalTools(): Promise<Map<string, boolean>> {
 }
 
 /**
-
-- Get detailed information about the Node.js environment.
-- @returns Result containing Node.js version info or an error
+ * Get detailed information about the Node.js environment.
+ * @returns Result containing Node.js version info or an error
  */
 export async function getNodeInfo(): Promise<
   Result<ToolVersion & { npm: string }, Error>
@@ -102,7 +91,9 @@ export async function getNodeInfo(): Promise<
 
   try {
     // Get npm version as well
-    const npmVersion = await $`npm --version`.text();
+    const { stdout: npmVersion } = await execa('npm', ['--version'], {
+      timeout: 5000,
+    });
 
     return success({
       ...nodeResult.data,

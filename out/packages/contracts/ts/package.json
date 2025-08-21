@@ -1,0 +1,86 @@
+{
+  "name": "@outfitter/contracts",
+  "version": "1.1.0",
+  "description": "Core contracts for building type-safe applications, including Result, AppError, and domain types.",
+  "keywords": [
+    "typescript",
+    "utilities",
+    "result",
+    "error-handling",
+    "type-safe",
+    "contracts"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./error": {
+      "types": "./dist/error.d.ts",
+      "default": "./dist/error.js"
+    },
+    "./result": {
+      "types": "./dist/result.d.ts",
+      "default": "./dist/result.js"
+    },
+    "./assert": {
+      "types": "./dist/assert.d.ts",
+      "default": "./dist/assert.js"
+    },
+    "./branded": {
+      "types": "./dist/types/branded.d.ts",
+      "default": "./dist/types/branded.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/types/index.js"
+    },
+    "./zod": {
+      "types": "./dist/zod/index.d.ts",
+      "default": "./dist/zod/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "./build.mjs",
+    "dev": "bun build src/index.ts src/error.ts src/result.ts src/assert.ts src/types/index.ts src/types/branded.ts src/zod/index.ts --outdir=dist --format=esm --sourcemap=external --watch",
+    "test": "bun test",
+    "test:ui": "bun test --ui",
+    "type-check": "npx tsc --noEmit"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "zod": "^3.23.8"
+  },
+  "peerDependenciesMeta": {
+    "zod": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4",
+    "zod": "^3.23.8"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "directory": "packages/contracts/ts"
+  },
+  "bugs": {
+    "url": "https://github.com/outfitter-dev/monorepo/issues"
+  },
+  "homepage": "https://github.com/outfitter-dev/monorepo/tree/main/packages/contracts/ts#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

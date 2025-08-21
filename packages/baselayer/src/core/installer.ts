@@ -11,7 +11,7 @@ import {
   type Result,
   success,
 } from '@outfitter/contracts';
-import { console } from '../utils/console';
+import { logger as console } from '../utils/console';
 import { readPackageJson } from '../utils/file-system';
 import {
   getCIFlags,

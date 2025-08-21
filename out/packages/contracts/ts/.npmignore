@@ -1,0 +1,49 @@
+# Source files
+src/
+
+# TypeScript config
+tsconfig.json
+
+# Build config
+tsup.config.ts
+vitest.config.ts
+
+# Development files
+node_modules/
+.DS_Store
+*.log
+*.swp
+*.swo
+*~
+CLAUDE.md
+
+# Build artifacts (except dist)
+*.tsbuildinfo
+
+# Test files
+__tests__/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+
+# Development/build configs
+jest.config.js
+rollup.config.js
+webpack.config.js
+
+# Git files
+.git/
+.gitignore
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+
+# Misc
+.env
+.env.local
+.env.*.local
+coverage/
+.nyc_output/
