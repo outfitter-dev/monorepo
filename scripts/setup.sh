@@ -33,7 +33,7 @@ command_exists() {
 # Main setup function
 main() {
     log_info "Setting up Outfitter monorepo development environment..."
-    
+
     # Check Node.js version
     if command_exists node; then
         NODE_VERSION=$(node --version | cut -d'v' -f2)
@@ -47,7 +47,7 @@ main() {
         log_error "Node.js not found. Please install Node.js >= 20"
         exit 1
     fi
-    
+
     # Install Bun if not present
     if ! command_exists bun; then
         log_info "Installing Bun..."
@@ -57,10 +57,10 @@ main() {
     else
         log_success "Bun $(bun --version) detected"
     fi
-    
+
     # Install global development tools
     log_info "Installing global development tools..."
-    
+
     # Install Wrangler (Cloudflare Workers CLI)
     if ! command_exists wrangler; then
         log_info "Installing Wrangler..."
@@ -69,7 +69,7 @@ main() {
     else
         log_success "Wrangler $(wrangler --version | head -n1) detected"
     fi
-    
+
     # Install Graphite CLI
     if ! command_exists gt; then
         log_info "Installing Graphite CLI..."
@@ -78,16 +78,34 @@ main() {
     else
         log_success "Graphite CLI $(gt --version) detected"
     fi
-    
+
+    # Configure Graphite to use batcat as pager
+    if command_exists gt && command_exists batcat; then
+        gt user pager --set batcat >/dev/null 2>&1 || true
+        log_success "Graphite configured to use bat as pager"
+    fi
+
     # Install other useful global tools
     log_info "Installing additional development tools..."
     bun add -g @biomejs/biome prettier markdownlint-cli2
-    
+
+    # Install bat (better cat with syntax highlighting)
+    if ! command_exists batcat && ! command_exists bat; then
+        log_info "Installing bat..."
+        sudo apt install bat -y >/dev/null 2>&1 || log_warning "Could not install bat"
+        if command_exists batcat; then
+            echo 'alias bat="batcat"' >> ~/.bashrc
+            log_success "bat installed (available as batcat and bat alias)"
+        fi
+    else
+        log_success "bat already available"
+    fi
+
     # Install project dependencies
     log_info "Installing project dependencies..."
     bun install
     log_success "Dependencies installed"
-    
+
     # Set up direnv if available
     if command_exists direnv; then
         if [ -f ".envrc" ]; then
@@ -99,24 +117,24 @@ main() {
         log_warning "direnv not found. Environment variables from .envrc won't be automatically loaded."
         log_info "Install direnv for automatic environment variable loading: https://direnv.net/"
     fi
-    
+
     # Verify setup
     log_info "Verifying setup..."
-    
+
     # Check if linting works
     if bun run lint:md >/dev/null 2>&1; then
         log_success "Markdown linting works"
     else
         log_warning "Markdown linting has issues"
     fi
-    
+
     # Check TypeScript
     if bun run type-check >/dev/null 2>&1; then
         log_success "TypeScript checking works"
     else
         log_warning "TypeScript checking has issues"
     fi
-    
+
     # Check CLI tool
     if cd packages/cli && bun run dev --help >/dev/null 2>&1; then
         log_success "CLI tool works"
@@ -125,7 +143,7 @@ main() {
         log_warning "CLI tool has issues"
         cd ../.. 2>/dev/null || true
     fi
-    
+
     echo ""
     log_success "Setup complete! 🎉"
     echo ""
@@ -136,7 +154,7 @@ main() {
     echo "  • Use 'gt' for Graphite workflow management"
     echo "  • Use 'wrangler' for Cloudflare Workers development"
     echo ""
-    
+
     if [ -f ".envrc" ] && command_exists direnv; then
         log_info "Environment variables will be automatically loaded when you cd into this directory"
     fi
