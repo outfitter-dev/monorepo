@@ -25,6 +25,6 @@ commit-msg:
 pre-push:
   commands:
     types:
-      run: turbo run type-check --affected
+      run: bunx turbo run type-check --affected
     test:
-      run: turbo run test --affected
+      run: bunx turbo run test --affected
