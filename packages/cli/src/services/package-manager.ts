@@ -2,7 +2,7 @@ import fsExtra from 'fs-extra';
 
 const { pathExists } = fsExtra;
 
-import { execa } from 'execa';
+import { $ } from 'bun';
 import type { InstallCommand, PackageManager } from '../types/index.js';
 
 /**
@@ -114,7 +114,6 @@ export async function installPackages(
 
   args.push(...packages);
 
-  await execa(command, args, {
-    stdio: 'inherit',
-  });
+  // Pass arguments safely; arrays are expanded by Bun.$ into individual argv elements
+  await $`${command} ${args}`;
 }

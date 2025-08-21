@@ -183,25 +183,51 @@ export function getExecCommand(pm: PackageManager, command: string): string {
 export async function getPreferredPackageManager(): Promise<
   Result<PackageManager | null, PackageManagerError>
 > {
-  // Check environment variable
-  const pmFromEnv = process.env.FLINT_PACKAGE_MANAGER;
+  // Check environment variable (support both new and legacy names)
+  const pmFromEnvRaw =
+    process.env.OUTFITTER_PACKAGE_MANAGER ||
+    process.env.BASELAYER_PACKAGE_MANAGER ||
+    process.env.FLINT_PACKAGE_MANAGER;
+  const pmFromEnv = pmFromEnvRaw?.trim();
   if (pmFromEnv && isValidPackageManager(pmFromEnv)) {
     return success(pmFromEnv as PackageManager);
   }
 
-  // Check for .flintrc file
-  const flintrcResult = await readFile('.flintrc');
-  if (isSuccess(flintrcResult)) {
-    try {
-      const config = JSON.parse(flintrcResult.data);
-      if (
-        config.packageManager &&
-        isValidPackageManager(config.packageManager)
-      ) {
-        return success(config.packageManager as PackageManager);
+  // Check package.json "packageManager" (e.g., "pnpm@8.7.1")
+  {
+    const pkgResult = await readFile('package.json');
+    if (isSuccess(pkgResult)) {
+      try {
+        const pkg = JSON.parse(pkgResult.data);
+        if (typeof pkg.packageManager === 'string') {
+          const tool = (pkg.packageManager.split('@')[0] || '').trim();
+          if (isValidPackageManager(tool)) {
+            return success(tool as PackageManager);
+          }
+        }
+      } catch {
+        // Ignore parse errors
       }
-    } catch {
-      // Ignore parse errors
+    }
+  }
+
+  // Check for config files (support both new and legacy names)
+  const configFiles = ['.outfitterrc', '.baselayerrc', '.flintrc'];
+
+  for (const configFile of configFiles) {
+    const configResult = await readFile(configFile);
+    if (isSuccess(configResult)) {
+      try {
+        const config = JSON.parse(configResult.data);
+        if (
+          config.packageManager &&
+          isValidPackageManager(config.packageManager)
+        ) {
+          return success(config.packageManager as PackageManager);
+        }
+      } catch {
+        // Ignore parse errors
+      }
     }
   }
 

@@ -84,7 +84,7 @@ const config: Config = {
       statements: 80,
     },
     // Per-file thresholds
-    './src/utils/': {
+    '<rootDir>/src/utils/**/*.{ts,tsx}': {
       branches: 90,
       functions: 90,
       lines: 90,

@@ -280,7 +280,7 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 - Don't use octal escape sequences in string literals.
 - Don't use Object.prototype builtins directly.
 - Don't redeclare variables, functions, classes, and types in the same scope.
-- Don't have redundant "use strict".
+- Don't add "use strict" in ES modules or TypeScript source files—modules are strict by default and compilers/bundlers inject it for CommonJS outputs.
 - Don't compare things where both sides are exactly the same.
 - Don't let identifiers shadow restricted names.
 - Don't use sparse arrays (arrays with holes).
@@ -297,7 +297,7 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 - Make sure for-in loops include an if statement.
 - Use Array.isArray() instead of instanceof Array.
 - Make sure to use the digits argument with Number#toFixed().
-- Make sure to use the "use strict" directive in script files.
+- For hand-authored CommonJS .js entry points, include `"use strict"`. Don't add it to .ts sources—your compiler/bundler will emit it where needed.
 
 ### Next.js Specific Rules
 
@@ -322,19 +322,23 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 ## Example: Error Handling
 
 ```typescript
-// ✅ Good: Comprehensive error handling
+// ✅ Good: Comprehensive error handling with structured logging
+import { logger } from '@/utils/logger';
+
 try {
   const result = await fetchData();
   return { success: true, data: result };
-} catch (error) {
-  console.error('API call failed:', error);
-  return { success: false, error: error.message };
+} catch (err: unknown) {
+  const e =
+    err instanceof Error ? err : new Error('Unknown error', { cause: err });
+  logger.error('API call failed', { err: e, stack: e.stack });
+  return { success: false, error: e.message };
 }
 
 // ❌ Bad: Swallowing errors
 try {
   return await fetchData();
 } catch (e) {
-  console.log(e);
+  // Silent failure - never do this
 }
 ```

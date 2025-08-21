@@ -19,28 +19,27 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactElement, ReactNode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
-// Detect test runner
-const isVitest =
-  typeof (globalThis as Record<string, unknown>).vi !== 'undefined';
-const isJest = typeof jest !== 'undefined';
+// Detect test runner (single cast avoids unknown-property issues)
+const g = globalThis as any;
+const isVitest = typeof g.vi !== 'undefined';
+const isJest = typeof g.jest !== 'undefined';
 
 // Export appropriate mocking utilities
-export const vi = isVitest
-  ? (globalThis as Record<string, unknown>).vi
-  : undefined;
-export const mockFn = isVitest
-  ? vi.fn
+export const vi = isVitest ? (g.vi as unknown) : undefined;
+type MockFn = (...args: any[]) => any;
+export const mockFn: MockFn = isVitest
+  ? g.vi.fn
   : isJest
-    ? jest.fn
+    ? g.jest.fn
     : () => {
         throw new Error('No test runner detected');
       };
-export const spyOn = isVitest
-  ? vi.spyOn
+export const spyOn: (...args: any[]) => any = isVitest
+  ? g.vi.spyOn
   : isJest
-    ? jest.spyOn
+    ? g.jest.spyOn
     : () => {
         throw new Error('No test runner detected');
       };
@@ -111,7 +110,7 @@ function _AllTheProviders({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
     </QueryClientProvider>
   );
 }
@@ -132,14 +131,14 @@ function ExtendedProviders({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        {/*Add your app-specific providers here */}
+      <MemoryRouter initialEntries={initialEntries}>
+        {/* Add your app-specific providers here */}
         {/* <ThemeProvider theme={theme}> */}
         {/* <AuthContext.Provider value={{ user }}> */}
         {children}
         {/* </AuthContext.Provider> */}
-        {/* </ThemeProvider>*/}
-      </BrowserRouter>
+        {/* </ThemeProvider> */}
+      </MemoryRouter>
     </QueryClientProvider>
   );
 }

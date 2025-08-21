@@ -1,5 +1,6 @@
+import { platform } from 'node:os';
 import { failure, type Result, success } from '@outfitter/contracts';
-import { execa } from 'execa';
+import { $ } from 'bun';
 
 interface ToolVersion {
   name: string;
@@ -15,15 +16,19 @@ interface ToolVersion {
  */
 async function checkTool(tool: string): Promise<Result<ToolVersion, Error>> {
   try {
-    // Use 'which' to find the tool's path
-    const { stdout: path } = await execa('which', [tool]);
+    // Cross-platform discovery: 'where' on Windows; 'command -v' via sh on POSIX
+    const isWindows = platform() === 'win32';
+    const path = isWindows
+      ? (await $`where ${tool}`.text()).split(/\r?\n/)[0].trim()
+      : // 'command' is a shell builtin; invoke through sh -c
+        (await $`sh -c ${['command', '-v', tool]}`.text()).trim();
 
     // Try to get version information
     let version = 'unknown';
     try {
-      const { stdout } = await execa(tool, ['--version'], { timeout: 5000 });
+      const stdout = await $`${tool} --version`.timeout(5000).text();
       // Extract version number from output (handles common formats)
-      const versionMatch = stdout.match(/(\d+\.\d+\.\d+)/);
+      const versionMatch = stdout.match(/\bv?(\d+\.\d+\.\d+(?:[-+][\w.-]+)?)/);
       if (versionMatch) {
         version = versionMatch[1];
       }
@@ -97,9 +102,7 @@ export async function getNodeInfo(): Promise<
 
   try {
     // Get npm version as well
-    const { stdout: npmVersion } = await execa('npm', ['--version'], {
-      timeout: 5000,
-    });
+    const npmVersion = await $`npm --version`.timeout(5000).text();
 
     return success({
       ...nodeResult.data,
