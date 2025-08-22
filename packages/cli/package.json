@@ -11,10 +11,10 @@
     "templates"
   ],
   "scripts": {
-    "build": "npx tsc",
+    "build": "bunx tsc",
     "dev": "bun src/index.ts",
     "test": "bun test",
-    "type-check": "npx tsc --noEmit",
+    "type-check": "bunx tsc --noEmit",
     "prepare": "bun run build"
   },
   "dependencies": {

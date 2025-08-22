@@ -51,7 +51,7 @@
     "dev": "bun build src/index.ts src/error.ts src/result.ts src/assert.ts src/types/index.ts src/types/branded.ts src/zod/index.ts --outdir=dist --format=esm --sourcemap=external --watch",
     "test": "bun test",
     "test:ui": "bun test --ui",
-    "type-check": "npx tsc --noEmit"
+    "type-check": "bunx tsc --noEmit"
   },
   "dependencies": {},
   "peerDependencies": {

@@ -8,13 +8,24 @@ linkWorkspacePackages = true
 # Use exact versions for lockfile stability
 exact = false
 
-# Cache configuration
-cache = true
+# Registry configuration
 registry = "https://registry.npmjs.org"
 
-# Optional: configure global directories
-# globalDir = "~/.bun/install/global"
-# globalBinDir = "~/.bun/bin"
+# Performance optimizations
+auto = "fallback"  # Auto-install missing packages in dev
+frozenLockfile = false  # Allow lockfile updates in dev
+dryRun = false
+production = false
+
+[install.cache]
+# Enable aggressive caching for faster installs
+dir = "~/.bun/install/cache"
+disable = false
+
+[install.lockfile]
+# Save lockfile for reproducible builds
+save = true
+print = "yarn"  # Use yarn format for better compatibility
 
 [install.scopes]
 # Optimize for our common scopes
@@ -23,15 +34,29 @@ registry = "https://registry.npmjs.org"
 "@changesets" = { registry = "https://registry.npmjs.org" }
 
 [test]
-# Default test configuration
-preload = ["./shared/testing/vitest.config.base.ts"]
+# Default test configuration with performance optimizations
+# preload path removed - file doesn't exist
 coverage = true
 timeout = 10000
+# Parallel execution for faster tests
+bail = 1  # Stop after first test failure
+forceExit = true  # Force exit after tests complete
+# Watch mode optimizations
+watchIgnore = ["**/node_modules/**", "**/dist/**", "**/.git/**"]
 
 [run]
 # Set NODE_ENV if not already set
 env = { NODE_ENV = "development" }
+# Use system shell for execution
+shell = "system"
+# Silent mode to reduce output noise
+silent = false
+# Bail on first error
+bail = false
 
 [dev]
 # Enable hot reloading for development
 hot = true
+
+# Telemetry settings
+telemetry = false  # Disable telemetry for privacy
