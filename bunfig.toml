@@ -5,15 +5,15 @@
 # Match pnpm's behavior for workspace packages
 linkWorkspacePackages = true
 
-# Use exact versions for lockfile stability
+# Allow semver ranges in package.json; lockfile ensures exact resolution
 exact = false
 
 # Registry configuration
 registry = "https://registry.npmjs.org"
 
-# Performance optimizations
-auto = "fallback"  # Auto-install missing packages in dev
-frozenLockfile = false  # Allow lockfile updates in dev
+# Performance optimizations (consider security implications)
+# auto = "fallback" disabled for security - prevents auto-install of unintended packages
+frozenLockfile = false  # Allow lockfile updates in dev (consider true for production)
 dryRun = false
 production = false
 
@@ -40,9 +40,8 @@ coverage = true
 timeout = 10000
 # Parallel execution for faster tests
 bail = 1  # Stop after first test failure
-forceExit = true  # Force exit after tests complete
 # Watch mode optimizations
-watchIgnore = ["**/node_modules/**", "**/dist/**", "**/.git/**"]
+watchExclude = ["**/node_modules/**", "**/dist/**", "**/.git/**"]
 
 [run]
 # Set NODE_ENV if not already set
@@ -51,12 +50,11 @@ env = { NODE_ENV = "development" }
 shell = "system"
 # Silent mode to reduce output noise
 silent = false
-# Bail on first error
-bail = false
+# Note: bail at run-level may be ignored by Bun
+
+# Telemetry settings (moved to top-level)
+telemetry = false  # Disable telemetry for privacy
 
 [dev]
 # Enable hot reloading for development
 hot = true
-
-# Telemetry settings
-telemetry = false  # Disable telemetry for privacy

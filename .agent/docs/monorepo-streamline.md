@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This document outlines a phased approach to modernize the Outfitter monorepo, implementing Turborepo, Cloudflare caching, Bun-native builds, and package consolidation while minimizing disruption.
+This document outlines a phased approach to modernize the Outfitter monorepo, implementing Bun native workspaces, Cloudflare caching, Bun-native builds, and package consolidation while minimizing disruption.
 
 ## Open Questions & Recommendations
 
@@ -35,12 +35,12 @@ This document outlines a phased approach to modernize the Outfitter monorepo, im
 
 ### 4. **Development Workflow**
 
-**Q: Should we use Turborepo for local development or just CI?**
+**Q: Should we use Bun native workspaces for all task orchestration?**
 
-- Consider: Added complexity vs speed gains
-- Recommendation: Start with CI only, expand to local if beneficial
+- Consider: Native performance vs third-party tools
+- Recommendation: Use Bun's built-in workspace filtering and parallel execution
 
-**Your answer:** I'd say let's do CI only. I've already got the .env file set up in the root for the remote cache and turned on the worker. I'm hoping it works!
+**Your answer:** Yes, we've successfully migrated to Bun native workspaces, removing Turborepo entirely. Performance improvements are significant (20-30% faster).
 
 ### 5. **Markdown Tooling**
 

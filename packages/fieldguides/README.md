@@ -106,10 +106,10 @@ All guidebooks are automatically validated for consistency:
 
 ```bash
 # Run all validation (markdown + frontmatter)
-pnpm run lint
+bun run lint
 
 # Validate frontmatter only
-pnpm run lint:frontmatter
+bun run lint:frontmatter
 ```
 
 Every guidebook document (except STANDARDS) requires frontmatter metadata that is validated on commit and in CI/CD pipelines. See [docs/guidebooks/frontmatter-schema.md](docs/guidebooks/frontmatter-schema.md) for details.

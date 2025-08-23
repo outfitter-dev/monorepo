@@ -25,7 +25,7 @@ const mainBuild = await Bun.build({
 });
 
 if (!mainBuild.success) {
-  console.error('Build failed:', mainBuild.logs);
+  console.error('Build failed:\n' + mainBuild.logs.map(l => `${l.level?.toUpperCase() ?? 'LOG'}: ${l.message}`).join('\n'));
   process.exit(1);
 }
 
@@ -44,7 +44,7 @@ const cjsBuild = await Bun.build({
 });
 
 if (!cjsBuild.success) {
-  console.error('CJS build failed:', cjsBuild.logs);
+  console.error('CJS build failed:\n' + cjsBuild.logs.map(l => `${l.level?.toUpperCase() ?? 'LOG'}: ${l.message}`).join('\n'));
   process.exit(1);
 }
 
@@ -62,7 +62,7 @@ const cliBuild = await Bun.build({
 });
 
 if (!cliBuild.success) {
-  console.error('CLI build failed:', cliBuild.logs);
+  console.error('CLI build failed:\n' + cliBuild.logs.map(l => `${l.level?.toUpperCase() ?? 'LOG'}: ${l.message}`).join('\n'));
   process.exit(1);
 }
 

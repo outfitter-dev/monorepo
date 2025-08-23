@@ -315,9 +315,9 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 
 ## Common Tasks
 
-- `npx ultracite init` - Initialize Ultracite in your project
-- `npx ultracite format` - Format and fix code automatically
-- `npx ultracite lint` - Check for issues without fixing
+- `bunx ultracite init` - Initialize Ultracite in your project
+- `bunx ultracite format` - Format and fix code automatically
+- `bunx ultracite lint` - Check for issues without fixing
 
 ## Example: Error Handling
 

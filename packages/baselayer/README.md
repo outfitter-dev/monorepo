@@ -32,25 +32,22 @@ Available variants:
 ## Installation
 
 ```bash
-# Using pnpm (recommended)
-pnpm add -D @outfitter/baselayer
+# Using bun (recommended)
+bun add -D @outfitter/baselayer
 
 # Using npm
 npm install -D @outfitter/baselayer
-
-# Using bun
-bun add -D @outfitter/baselayer
 ```
 
 ## Quick Start
 
 ```bash
 # Initialize Baselayer in your project
-pnpm dlx @outfitter/baselayer init
+bunx @outfitter/baselayer init
 # Or using the baselayer command directly
 baselayer init
 
-# Or with npx
+# Or with npm
 npx @outfitter/baselayer init
 ```
 

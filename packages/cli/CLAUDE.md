@@ -11,33 +11,33 @@ This is the `outfitter` CLI package - a command-line tool for managing Outfitter
 ### Development
 
 ```bash
-# Install dependencies (use pnpm from monorepo root)
-pnpm install
+# Install dependencies (use bun from monorepo root)
+bun install
 
 # Build the CLI
-pnpm build
+bun run build
 
 # Run in development mode
-pnpm dev <command> <args>
+bun run dev <command> <args>
 
 # Run tests
-pnpm test              # Watch mode
-pnpm test --run        # Single run
+bun test              # Watch mode
+bun test --run        # Single run
 
 # Type checking
-pnpm type-check
+bun run type-check
 
 # Full CI check before committing (run from monorepo root)
-pnpm ci:local
+bun run ci:local
 ```
 
 ### Testing Specific Commands
 
 ```bash
 # Test a command in development
-pnpm dev init --preset react
-pnpm dev add typescript-standards
-pnpm dev list
+bun run dev init --preset react
+bun run dev add typescript-standards
+bun run dev list
 ```
 
 ## Architecture

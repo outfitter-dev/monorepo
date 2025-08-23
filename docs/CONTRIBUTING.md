@@ -45,7 +45,7 @@ This monorepo uses modern tooling for maximum performance:
 ### Build System
 
 - **Bun hybrid builds**: JavaScript bundling (18-24ms) + TypeScript declarations
-- **Turborepo**: Task orchestration with intelligent caching
+- **Bun native workspaces**: Fast parallel task execution with workspace filtering
 - **Cloudflare Workers**: Remote cache for CI/CD acceleration
 
 ### Package Management
@@ -131,10 +131,10 @@ The monorepo is optimized for speed. Current benchmarks:
 
 ### Cache Metrics
 
-Monitor Turborepo cache performance:
+Monitor build performance:
 
-- **Cloudflare Worker Dashboard**: [turborepo-remote-cache.galligan.workers.dev](https://turborepo-remote-cache.galligan.workers.dev)
-- **Local cache**: `.turbo/cache/` directory
+- **Bun's native caching**: Located in `~/.bun/install/cache`
+- **Workspace builds**: Use `bun --filter="*" run build` for parallel execution
 - **Cache hits**: Look for "cache hit, replaying logs" in build output
 
 ## Troubleshooting
@@ -145,7 +145,7 @@ Monitor Turborepo cache performance:
 
 ```bash
 # Clean and rebuild
-rm -rf node_modules .turbo
+rm -rf node_modules
 bun install --force
 bun run build
 ```

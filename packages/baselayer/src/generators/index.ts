@@ -29,13 +29,6 @@ export {
   type TypeScriptPreset
 } from './typescript.js';
 
-export {
-  generateTurboConfig,
-  generateProjectTurboConfig,
-  generateTurboConfigFile,
-  type TurboConfig,
-  type TurboPipeline
-} from './turborepo.js';
 
 export {
   generateVitestConfig,

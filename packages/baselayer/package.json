@@ -38,11 +38,11 @@
     "templates"
   ],
   "scripts": {
-    "build": "./build.mjs",
+    "build": "bun ./build.mjs",
     "dev": "bun --watch src/index.ts",
     "test": "bun test",
     "test:run": "bun test --run",
-    "type-check": "tsc --noEmit",
+    "type-check": "bunx tsc --noEmit",
     "lint": "bun x ultracite lint",
     "format": "bun x ultracite format",
     "ci": "bun run type-check && bun run test:run",
