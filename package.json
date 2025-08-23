@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "dev": "echo 'Use bun run dev in specific package directory'",
-    "build": "bun --filter=\"@outfitter/contracts\" run build && bun --filter=\"*\" run build",
+    "build": "bun --filter=\"@outfitter/contracts\" run build && bun --filter=\"@outfitter/baselayer\" run build && bun --filter=\"*\" run build",
     "build:all": "bun run build",
     "test:all": "bun --filter=\"*\" run test",
     "test": "bun test",
