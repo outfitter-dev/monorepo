@@ -17,7 +17,7 @@ jobs:
        github.event.comment &&
        contains(github.event.comment.body, '@claude review') &&
        (github.event.comment.user.type != 'Bot' ||
-        contains(fromJSON('["copilot[bot]", "devin[bot]", "coderabbitai[bot]"]'), github.event.comment.user.login)))
+        contains(fromJSON('["copilot[bot]", "devin[bot]", "coderabbitai[bot]", "devin-ai-integration[bot]"]'), github.event.comment.user.login)))
     
     runs-on: ubuntu-latest
     concurrency:
