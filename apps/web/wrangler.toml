@@ -1,0 +1,19 @@
+name = "outfitter-web"
+compatibility_date = "2024-01-01"
+
+[build]
+command = "bun run build"
+cwd = "apps/web"
+
+[site]
+bucket = "./dist"
+
+# Production deployment
+[env.production]
+routes = [
+  { pattern = "outfitter.dev", custom_domain = true }
+]
+
+# Preview deployments
+[env.preview]
+routes = []

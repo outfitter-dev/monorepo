@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>outfitter</title>
+    <style>
+      :root {
+        --bg: #edf2ee;
+        /* Base green (~Tailwind green-700 #15803d) as HSL components */
+        --fg-h: 152; /* hue */
+        --fg-s: 71%; /* saturation */
+        --fg-l: 29%; /* lightness */
+        /* Alphas for tinting */
+        --a-strong: 1;
+        --a-medium: 0.7;
+        --a-dim: 0.5;
+      }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        background: var(--bg);
+        color: hsla(var(--fg-h), var(--fg-s), var(--fg-l), var(--a-dim));
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .word {
+        letter-spacing: 0.02em;
+        user-select: text;
+        white-space: nowrap; /* keep it single-line */
+      }
+      /* JSON tinting */
+      .key { color: hsla(var(--fg-h), var(--fg-s), var(--fg-l), var(--a-strong)); }
+      .p, .q { color: hsla(var(--fg-h), var(--fg-s), var(--fg-l), var(--a-dim)); }
+      a.val, a.val:visited { color: hsla(var(--fg-h), var(--fg-s), var(--fg-l), var(--a-strong));
+        text-decoration: none;
+      }
+      a.val:hover, a.val:focus-visible {
+        color: hsla(var(--fg-h), var(--fg-s), var(--fg-l), var(--a-strong));
+        text-decoration: underline;
+        text-decoration-color: currentColor; /* underline matches tint */
+      }
+      /* Icon sizing/alignment */
+      .val .icon { width: 1.125em; height: 1.125em; vertical-align: -0.1em; } /* 25% larger */
+      .xglyph { font-size: 1.125em; vertical-align: -0.08em; font-family: ui-sans-serif, system-ui, "Segoe UI Symbol", "Noto Sans Math", "Apple Symbols", sans-serif; user-select: none; }
+      /* Keep label copyable but invisible; accessible name via aria-label/title */
+      .val .sr { font-size: 0; line-height: 0; }
+      /* Selection: invert colors (dark green bg, light text) */
+      ::selection { background: hsla(var(--fg-h), var(--fg-s), var(--fg-l), 1); color: var(--bg); text-shadow: none; }
+      ::-moz-selection { background: hsla(var(--fg-h), var(--fg-s), var(--fg-l), 1); color: var(--bg); text-shadow: none; }
+    </style>
+  </head>
+  <body>
+    <div class="word"><span class="p">{</span> <span class="q">"</span><span class="key">outfitter</span><span class="q">"</span><span class="p">:</span> <span class="p">[</span> <span class="q">"</span><a class="val" href="https://github.com/outfitter-dev/" target="_blank" rel="noopener noreferrer" aria-label="GitHub — outfitter" title="GitHub"><svg class="icon" viewBox="0 0 16 16" fill="currentColor" role="img" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38C13.71 14.53 16 11.54 16 8c0-4.42-3.58-8-8-8Z"/></svg><span class="sr">github</span></a><span class="q">"</span><span class="p">,</span> <span class="q">"</span><a class="val" href="https://x.com/outfitter_dev" target="_blank" rel="noopener noreferrer" aria-label="X — outfitter" title="X"><span class="xglyph" aria-hidden="true">𝕏</span><span class="sr">x</span></a><span class="q">"</span> <span class="p">]</span> <span class="p">}</span></div>
+  </body>
+</html>
