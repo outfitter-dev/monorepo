@@ -4,12 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bunx --bun vite",
-    "build": "bunx --bun vite build",
-    "preview": "bunx --bun vite preview",
+    "dev": "bunx serve -l 3000 public",
+    "build": "echo 'No build step required for static site'",
+    "preview": "bunx serve -l 4173 public",
     "serve": "bunx serve public"
-  },
-  "devDependencies": {
-    "vite": "^6.0.7"
   }
 }

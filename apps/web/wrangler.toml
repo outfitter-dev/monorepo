@@ -1,19 +1,9 @@
+# Cloudflare Pages project for outfitter.dev
 name = "outfitter-web"
-compatibility_date = "2024-01-01"
+compatibility_date = "2025-08-25"
 
-[build]
-command = "bun run build"
-cwd = "apps/web"
-
-[site]
-bucket = "./dist"
-
-# Production deployment
-[env.production]
-routes = [
-  { pattern = "outfitter.dev", custom_domain = true }
-]
-
-# Preview deployments
-[env.preview]
-routes = []
+# For static Pages deployment, run:
+# wrangler pages deploy public --project-name=outfitter-web
+# 
+# Custom domain is configured in the Cloudflare Pages dashboard,
+# not in this config file
