@@ -8,6 +8,7 @@ dist
 .env
 .env.local
 .env.production
+.dev.vars
 
 # IDE
 .vscode
@@ -19,3 +20,7 @@ dist
 # OS files
 .DS_Store
 Thumbs.db
+
+# Bun & Wrangler
+bun.lockb
+.wrangler

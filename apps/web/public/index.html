@@ -3,8 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>outfitter</title>
-    <meta name="description" content="Outfitter - Developer tools and utilities for modern web development" />
+    <title>Outfitter</title>
+    <meta name="description" content="Outfitter — build and ship faster with a simple, pragmatic toolchain." />
+    <link rel="canonical" href="https://outfitter.dev/">
+    <meta property="og:title" content="Outfitter" />
+    <meta property="og:description" content="Build and ship faster with a simple, pragmatic toolchain." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://outfitter.dev/" />
+    <meta name="theme-color" content="#15803d" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'self'; form-action 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://static.cloudflareinsights.com; font-src 'self'; frame-ancestors 'none'; manifest-src 'self'; media-src 'self'; object-src 'none'; script-src 'self' https://static.cloudflareinsights.com;">
     <!-- Cloudflare Web Analytics -->
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "YOUR_TOKEN_HERE"}'></script>
     <style>
@@ -19,6 +26,14 @@
         --a-medium: 0.7;
         --a-dim: 0.5;
       }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b1a12;
+          --fg-l: 80%;
+          --a-dim: 0.75;
+        }
+      }
+      :root { color-scheme: light dark; }
       html, body { height: 100%; }
       body {
         margin: 0;
@@ -28,15 +43,21 @@
         background: var(--bg);
         color: hsla(var(--fg-h), var(--fg-s), var(--fg-l), var(--a-dim));
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-        font-size: 14px;
-        line-height: 1;
+        font-size: 16px;
+        line-height: 1.4;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
       .word {
         letter-spacing: 0.02em;
         user-select: text;
-        white-space: nowrap; /* keep it single-line */
+        white-space: nowrap; /* keep it single-line by default */
+        overflow-x: auto;
+      }
+      @media (max-width: 420px) {
+        .word {
+          white-space: normal;
+        }
       }
       /* JSON tinting */
       .key { color: hsla(var(--fg-h), var(--fg-s), var(--fg-l), var(--a-strong)); }
@@ -48,18 +69,30 @@
         color: hsla(var(--fg-h), var(--fg-s), var(--fg-l), var(--a-strong));
         text-decoration: underline;
         text-decoration-color: currentColor; /* underline matches tint */
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
       }
       /* Icon sizing/alignment */
       .val .icon { width: 1.125em; height: 1.125em; vertical-align: -0.1em; } /* 25% larger */
       .xglyph { font-size: 1.125em; vertical-align: -0.08em; font-family: ui-sans-serif, system-ui, "Segoe UI Symbol", "Noto Sans Math", "Apple Symbols", sans-serif; user-select: none; }
-      /* Keep label copyable but invisible; accessible name via aria-label/title */
-      .val .sr { font-size: 0; line-height: 0; }
+      /* Visually hidden but accessible text */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
       /* Selection: invert colors (dark green bg, light text) */
       ::selection { background: hsla(var(--fg-h), var(--fg-s), var(--fg-l), 1); color: var(--bg); text-shadow: none; }
       ::-moz-selection { background: hsla(var(--fg-h), var(--fg-s), var(--fg-l), 1); color: var(--bg); text-shadow: none; }
     </style>
   </head>
   <body>
-    <div class="word"><span class="p">{</span> <span class="q">"</span><span class="key">outfitter</span><span class="q">"</span><span class="p">:</span> <span class="p">[</span> <span class="q">"</span><a class="val" href="https://github.com/outfitter-dev/" target="_blank" rel="noopener noreferrer" aria-label="GitHub — outfitter" title="GitHub"><svg class="icon" viewBox="0 0 16 16" fill="currentColor" role="img" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38C13.71 14.53 16 11.54 16 8c0-4.42-3.58-8-8-8Z"/></svg><span class="sr">github</span></a><span class="q">"</span><span class="p">,</span> <span class="q">"</span><a class="val" href="https://x.com/outfitter_dev" target="_blank" rel="noopener noreferrer" aria-label="X — outfitter" title="X"><span class="xglyph" aria-hidden="true">𝕏</span><span class="sr">x</span></a><span class="q">"</span> <span class="p">]</span> <span class="p">}</span></div>
+    <div class="word"><span class="p">{</span> <span class="q">"</span><span class="key">outfitter</span><span class="q">"</span><span class="p">:</span> <span class="p">[</span> <span class="q">"</span><a class="val" href="https://github.com/outfitter-dev/" target="_blank" rel="noopener noreferrer" aria-label="GitHub — outfitter" title="GitHub"><svg class="icon" viewBox="0 0 16 16" fill="currentColor" role="img" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38C13.71 14.53 16 11.54 16 8c0-4.42-3.58-8-8-8Z"/></svg><span class="sr-only">GitHub</span></a><span class="q">"</span><span class="p">,</span> <span class="q">"</span><a class="val" href="https://x.com/outfitter_dev" target="_blank" rel="noopener noreferrer" aria-label="X — outfitter" title="X"><span class="xglyph" aria-hidden="true">𝕏</span><span class="sr-only">X</span></a><span class="q">"</span> <span class="p">]</span> <span class="p">}</span></div>
   </body>
 </html>
