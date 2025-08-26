@@ -6,43 +6,25 @@ The main website for outfitter.dev - a simple static HTML site.
 
 ```bash
 # From monorepo root
-# Requires Bun >= 1.1
 bun install
 cd apps/web
 
-# Local development server (serves public/ at http://localhost:3000)
+# Local development preview (serves public/ at http://localhost:3030)
 bun run dev
-
-# Or serve directly with Bun
-bunx serve -l 3000 public
 ```
 
 ## Deployment
 
-This site is deployed to Cloudflare Pages as a static site. No build step is required.
+This site is deployed to Cloudflare Pages. The `public/` directory is served directly with no build step required.
 
 ### Manual Deployment
 
 ```bash
-# One-time login (skip if already authenticated)
-bunx wrangler login
+# Deploy to Cloudflare Pages
+bun run deploy
 
-# Deploy the public directory (creates the project on first run)
-bunx wrangler pages deploy public --project-name=outfitter-web
-```
-
-Tip: You can codify the project/output in wrangler.toml so flags aren't needed:
-
-```toml
-# apps/web/wrangler.toml
-name = "outfitter-web"
-pages_build_output_dir = "public"
-```
-
-Preview deploys (e.g. from a feature branch) can be created with:
-
-```bash
-bunx wrangler pages deploy --branch feature/my-branch
+# Or for preview deployments from feature branches:
+bunx wrangler pages deploy public --branch=feature/my-branch
 ```
 
 ### Automatic Deployment
@@ -52,6 +34,7 @@ bunx wrangler pages deploy --branch feature/my-branch
 Use a GitHub Actions workflow to automatically deploy to Cloudflare Pages. This approach provides better control and integrates with the monorepo structure.
 
 Prerequisites:
+
 1. Add repository secrets (Settings → Secrets and variables → Actions):
    - `CLOUDFLARE_API_TOKEN`: Create at [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens) with the smallest practical scope (typically "Cloudflare Pages: Edit" and "Account: Read")
    - `CLOUDFLARE_ACCOUNT_ID`: Found in your Cloudflare dashboard sidebar
@@ -59,6 +42,7 @@ Prerequisites:
 2. Create the workflow file `.github/workflows/deploy-web.yml` (see PR comments for complete workflow)
 
 The workflow will:
+
 - Deploy to production on pushes to `main` branch
 - Create preview deployments for pull requests
 - Only run when `apps/web/` files change
@@ -68,9 +52,9 @@ The workflow will:
 Alternatively, connect directly via Cloudflare Pages dashboard:
 
 - Production branch: `main`
-- Build command: (leave empty)
-- Build output directory: `public`
-- Root directory: `apps/web` (monorepo subfolder)
+- Build command: (leave empty - no build step)
+- Build output directory: `apps/web/public`
+- Root directory: `/` (monorepo root)
 - Preview deployments: enabled for PRs
 - Custom domain: connect `outfitter.dev` and enable "Always use HTTPS"
 
@@ -89,28 +73,7 @@ Since the site aims for near zero JS, you can strip the beacon on preview deploy
 ## Structure
 
 - `public/` - Static assets served directly
-  - `index.html` - Main landing page with inline CSS
-- `_headers` (optional) - Cache-control and security headers for Cloudflare Pages
-- `_redirects` (optional) - Static redirects (one per line)
-- `robots.txt` (optional) - Crawl directives
-- `favicon.ico` / `site.webmanifest` (optional) - Icons & PWA manifest
-- `404.html` (optional) - Custom 404 page for friendlier not-found handling
+  - `index.html` - Main landing page with inline CSS and minimal JavaScript
 - `wrangler.toml` - Cloudflare Pages deployment configuration
 
-Example `_headers`:
-
-```
-# HTML: revalidate fast to pick up content changes
-/*                # all paths default
-  Cache-Control: no-cache
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), microphone=(), usb=()
-  Content-Security-Policy: default-src 'self'; img-src 'self' data:; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-
-# Long-cache for static assets if/when added (hashed filenames recommended)
-/_assets/*
-  Cache-Control: public, max-age=31536000, immutable
-```
+Security headers can be configured via `public/_headers` file when needed.

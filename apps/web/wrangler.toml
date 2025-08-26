@@ -1,9 +1,2 @@
-# Cloudflare Pages project for outfitter.dev
 name = "outfitter-web"
 compatibility_date = "2025-08-25"
-
-# For static Pages deployment, run:
-# wrangler pages deploy public --project-name=outfitter-web
-# 
-# Custom domain is configured in the Cloudflare Pages dashboard,
-# not in this config file
