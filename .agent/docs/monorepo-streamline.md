@@ -1215,7 +1215,7 @@ pre-push:
     types:
       run: turbo run type-check --filter="...[origin/main]"
     test:
-      run: turbo run test --filter=origin/main
+      run: turbo run test --filter="...[origin/main]"
 ```
 
 ### Prettier Config
