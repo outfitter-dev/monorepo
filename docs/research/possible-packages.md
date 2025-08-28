@@ -367,7 +367,7 @@ Here, `outfitter-ci install-and-build` could be a CLI provided by our package th
 **Quick Win v0.1 Tasks:**
 
 - Write a script to set up PNPM on a CI runner (e.g. installing pnpm via corepack or npm). Although GitHub Actions offers `actions/setup-node` with pnpm support, we can encapsulate the steps.
-- Add a script for caching: maybe leveraging `turbo run print-affected` to only run needed builds/tests (or simply rely on turbo's built-in incremental logic).
+- Add a script for caching: maybe leveraging `--filter='[origin/main]'` to only run needed builds/tests (or simply rely on turbo's built-in incremental logic).
 - Provide a basic reusable GitHub Actions workflow YAML in the package (actions allows `uses: ./.github/workflows/xxx.yml@ref` but since our monorepo holds it, we might just document it).
 - Test the CI pipeline on a sample branch to ensure cache hits are happening (perhaps intentionally re-run a workflow to see speed gain).
 - Integrate Biome formatting and Vitest tests into the pipeline via this package's scripts, so that `outfitter-ci` can run "verify" (lint + test) easily. For example, `outfitter-ci verify` runs `pnpm biome check && pnpm turbo run test`. This ensures consistency across projects.
