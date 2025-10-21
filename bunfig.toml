@@ -1,0 +1,5 @@
+[install]
+peer-dependencies = "error"
+
+[workspace]
+inherit-scripts = true

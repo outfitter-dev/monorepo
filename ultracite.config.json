@@ -1,0 +1,35 @@
+{
+  "$schema": "https://unpkg.com/ultracite@5.6.4/schema.json",
+  "sources": ["."],
+  "format": {
+    "biome": {
+      "enabled": true
+    }
+  },
+  "lint": {
+    "biome": {
+      "enabled": true
+    }
+  },
+  "include": [
+    "apps/**/*",
+    "packages/**/*",
+    "scripts/**/*",
+    "*.ts",
+    "*.tsx",
+    "*.mts",
+    "*.cts",
+    "*.js",
+    "*.cjs",
+    "*.mjs",
+    "*.json"
+  ],
+  "exclude": [
+    "node_modules/**",
+    "dist/**",
+    "**/dist/**",
+    "packages/*/dist/**",
+    "apps/*/dist/**",
+    "coverage/**"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://oxc.rs/schema/oxlint.json",
+  "plugins": ["typescript", "unicorn", "oxc", "vitest"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "pedantic": "error",
+    "restriction": "error",
+    "style": "warn"
+  },
+  "rules": {
+    "no-console": "warn",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "TSNonNullExpression",
+        "message": "Avoid non-null assertions; rely on type-safe narrowing."
+      }
+    ],
+    "unicorn/no-null": "off",
+    "typescript/no-unnecessary-condition": "error",
+    "typescript/no-unsafe-declaration-merging": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-unsafe-return": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-explicit-any": "warn"
+  },
+  "ignorePatterns": ["node_modules/**", "dist/**", "coverage/**"]
+}
