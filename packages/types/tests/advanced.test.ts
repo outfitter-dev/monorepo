@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 import type {
   DeepGet,
   DeepKeys,
@@ -28,24 +28,21 @@ describe("Advanced type utilities", () => {
 
       type Keys = DeepKeys<User>;
 
-      // Type-level tests - these would fail at compile time if wrong
-      const key1: Keys = "name";
-      const key2: Keys = "age";
-      const key3: Keys = "address";
-      const key4: Keys = "address.city";
-      const key5: Keys = "address.zip";
-      const key6: Keys = "address.country";
-      const key7: Keys = "address.country.code";
-      const key8: Keys = "address.country.name";
+      const keys = [
+        "name",
+        "age",
+        "address",
+        "address.city",
+        "address.zip",
+        "address.country",
+        "address.country.code",
+        "address.country.name",
+      ] as const satisfies readonly Keys[];
 
-      expect(key1).toBe("name");
-      expect(key2).toBe("age");
-      expect(key3).toBe("address");
-      expect(key4).toBe("address.city");
-      expect(key5).toBe("address.zip");
-      expect(key6).toBe("address.country");
-      expect(key7).toBe("address.country.code");
-      expect(key8).toBe("address.country.name");
+      expect(keys).toContain("name");
+      expect(keys).toContain("address.city");
+      expect(keys).toContain("address.country.code");
+      expectTypeOf<Keys>().toEqualTypeOf<(typeof keys)[number]>();
     });
 
     it("should work with simple objects", () => {
@@ -159,11 +156,7 @@ describe("Advanced type utilities", () => {
     });
 
     it("should return never for routes without parameters", () => {
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test to verify compile-time behavior
-      type Params = ExtractRouteParams<"/users/list">;
-      // This type should be never, which means no valid values
-      // We can't create a variable of type never
-      expect(true).toBeTruthy();
+      expectTypeOf<ExtractRouteParams<"/users/list">>().toEqualTypeOf<never>();
     });
   });
 
