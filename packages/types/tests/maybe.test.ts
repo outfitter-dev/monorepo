@@ -270,6 +270,7 @@ describe("Maybe types", () => {
     });
 
     it("should preserve undefined", () => {
+      // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression -- Testing undefined return value
       const result = nullToUndefined(undefined);
       expect(result).toBeUndefined();
     });
