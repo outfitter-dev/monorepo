@@ -14,7 +14,7 @@ import {
 import { ERROR_CODES } from "../../src/error/codes.js";
 
 describe("categorizeError", () => {
-  describe("VALIDATION category (1000-1999)", () => {
+  describe("validation category (1000-1999)", () => {
     it("should categorize validation codes as VALIDATION", () => {
       expect(categorizeError(ERROR_CODES.INVALID_INPUT)).toBe("VALIDATION");
       expect(categorizeError(ERROR_CODES.SCHEMA_VALIDATION_FAILED)).toBe("VALIDATION");
@@ -29,7 +29,7 @@ describe("categorizeError", () => {
     });
   });
 
-  describe("RUNTIME category (2000-2999)", () => {
+  describe("runtime category (2000-2999)", () => {
     it("should categorize runtime codes as RUNTIME", () => {
       expect(categorizeError(ERROR_CODES.RUNTIME_EXCEPTION)).toBe("RUNTIME");
       expect(categorizeError(ERROR_CODES.INTERNAL_ERROR)).toBe("RUNTIME");
@@ -44,7 +44,7 @@ describe("categorizeError", () => {
     });
   });
 
-  describe("NETWORK category (3000-3999)", () => {
+  describe("network category (3000-3999)", () => {
     it("should categorize network codes as NETWORK", () => {
       expect(categorizeError(ERROR_CODES.CONNECTION_REFUSED)).toBe("NETWORK");
       expect(categorizeError(ERROR_CODES.CONNECTION_TIMEOUT)).toBe("NETWORK");
@@ -59,7 +59,7 @@ describe("categorizeError", () => {
     });
   });
 
-  describe("FILESYSTEM category (4000-4999)", () => {
+  describe("filesystem category (4000-4999)", () => {
     it("should categorize filesystem codes as FILESYSTEM", () => {
       expect(categorizeError(ERROR_CODES.FILE_NOT_FOUND)).toBe("FILESYSTEM");
       expect(categorizeError(ERROR_CODES.PERMISSION_DENIED)).toBe("FILESYSTEM");
@@ -74,7 +74,7 @@ describe("categorizeError", () => {
     });
   });
 
-  describe("CONFIGURATION category (5000-5999)", () => {
+  describe("configuration category (5000-5999)", () => {
     it("should categorize configuration codes as CONFIGURATION", () => {
       expect(categorizeError(ERROR_CODES.CONFIG_NOT_FOUND)).toBe("CONFIGURATION");
       expect(categorizeError(ERROR_CODES.CONFIG_INVALID)).toBe("CONFIGURATION");
@@ -89,7 +89,7 @@ describe("categorizeError", () => {
     });
   });
 
-  describe("SECURITY category (6000-6999)", () => {
+  describe("security category (6000-6999)", () => {
     it("should categorize security codes as SECURITY", () => {
       expect(categorizeError(ERROR_CODES.UNAUTHORIZED_ACCESS)).toBe("SECURITY");
       expect(categorizeError(ERROR_CODES.FORBIDDEN_OPERATION)).toBe("SECURITY");
@@ -104,7 +104,7 @@ describe("categorizeError", () => {
     });
   });
 
-  describe("TIMEOUT category (7000-7999)", () => {
+  describe("timeout category (7000-7999)", () => {
     it("should categorize timeout codes as TIMEOUT", () => {
       expect(categorizeError(ERROR_CODES.OPERATION_TIMEOUT)).toBe("TIMEOUT");
       expect(categorizeError(ERROR_CODES.REQUEST_TIMEOUT)).toBe("TIMEOUT");
@@ -119,7 +119,7 @@ describe("categorizeError", () => {
     });
   });
 
-  describe("RESOURCE category (8000-8999)", () => {
+  describe("resource category (8000-8999)", () => {
     it("should categorize resource codes as RESOURCE", () => {
       expect(categorizeError(ERROR_CODES.OUT_OF_MEMORY)).toBe("RESOURCE");
       expect(categorizeError(ERROR_CODES.CPU_LIMIT_EXCEEDED)).toBe("RESOURCE");
@@ -134,7 +134,7 @@ describe("categorizeError", () => {
     });
   });
 
-  describe("AUTH category (9000-9999)", () => {
+  describe("auth category (9000-9999)", () => {
     it("should categorize auth codes as AUTH", () => {
       expect(categorizeError(ERROR_CODES.AUTHENTICATION_FAILED)).toBe("AUTH");
       expect(categorizeError(ERROR_CODES.AUTHORIZATION_FAILED)).toBe("AUTH");
@@ -346,7 +346,7 @@ describe("isCriticalCategory", () => {
 describe("getCategoriesBySeverity", () => {
   it("should return SECURITY for CRITICAL severity", () => {
     const critical = getCategoriesBySeverity("CRITICAL");
-    expect(critical).toEqual(["SECURITY"]);
+    expect(critical).toStrictEqual(["SECURITY"]);
   });
 
   it("should return multiple categories for ERROR severity", () => {
@@ -357,19 +357,19 @@ describe("getCategoriesBySeverity", () => {
     expect(errors).toContain("CONFIGURATION");
     expect(errors).toContain("RESOURCE");
     expect(errors).toContain("AUTH");
-    expect(errors.length).toBe(6);
+    expect(errors).toHaveLength(6);
   });
 
   it("should return VALIDATION and TIMEOUT for WARNING severity", () => {
     const warnings = getCategoriesBySeverity("WARNING");
     expect(warnings).toContain("VALIDATION");
     expect(warnings).toContain("TIMEOUT");
-    expect(warnings.length).toBe(2);
+    expect(warnings).toHaveLength(2);
   });
 
   it("should return empty array for INFO severity (no categories use it)", () => {
     const info = getCategoriesBySeverity("INFO");
-    expect(info).toEqual([]);
+    expect(info).toStrictEqual([]);
   });
 
   describe("severity coverage", () => {

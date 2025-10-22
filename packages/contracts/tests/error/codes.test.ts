@@ -467,81 +467,81 @@ describe("getCodeCategory", () => {
 describe("isInCategory", () => {
   describe("valid category checks", () => {
     it("should return true for codes in VALIDATION category (1000)", () => {
-      expect(isInCategory(ERROR_CODES.INVALID_INPUT, 1000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.SCHEMA_VALIDATION_FAILED, 1000)).toBe(true);
-      expect(isInCategory(1500, 1000)).toBe(true);
-      expect(isInCategory(1999, 1000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.INVALID_INPUT, 1000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.SCHEMA_VALIDATION_FAILED, 1000)).toBeTruthy();
+      expect(isInCategory(1500, 1000)).toBeTruthy();
+      expect(isInCategory(1999, 1000)).toBeTruthy();
     });
 
     it("should return true for codes in RUNTIME category (2000)", () => {
-      expect(isInCategory(ERROR_CODES.RUNTIME_EXCEPTION, 2000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.INTERNAL_ERROR, 2000)).toBe(true);
-      expect(isInCategory(2500, 2000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.RUNTIME_EXCEPTION, 2000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.INTERNAL_ERROR, 2000)).toBeTruthy();
+      expect(isInCategory(2500, 2000)).toBeTruthy();
     });
 
     it("should return true for codes in NETWORK category (3000)", () => {
-      expect(isInCategory(ERROR_CODES.CONNECTION_REFUSED, 3000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.CONNECTION_TIMEOUT, 3000)).toBe(true);
-      expect(isInCategory(3500, 3000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.CONNECTION_REFUSED, 3000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.CONNECTION_TIMEOUT, 3000)).toBeTruthy();
+      expect(isInCategory(3500, 3000)).toBeTruthy();
     });
 
     it("should return true for codes in FILESYSTEM category (4000)", () => {
-      expect(isInCategory(ERROR_CODES.FILE_NOT_FOUND, 4000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.PERMISSION_DENIED, 4000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.FILE_NOT_FOUND, 4000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.PERMISSION_DENIED, 4000)).toBeTruthy();
     });
 
     it("should return true for codes in CONFIGURATION category (5000)", () => {
-      expect(isInCategory(ERROR_CODES.CONFIG_NOT_FOUND, 5000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.CONFIG_INVALID, 5000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.CONFIG_NOT_FOUND, 5000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.CONFIG_INVALID, 5000)).toBeTruthy();
     });
 
     it("should return true for codes in SECURITY category (6000)", () => {
-      expect(isInCategory(ERROR_CODES.UNAUTHORIZED_ACCESS, 6000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.FORBIDDEN_OPERATION, 6000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.UNAUTHORIZED_ACCESS, 6000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.FORBIDDEN_OPERATION, 6000)).toBeTruthy();
     });
 
     it("should return true for codes in TIMEOUT category (7000)", () => {
-      expect(isInCategory(ERROR_CODES.OPERATION_TIMEOUT, 7000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.REQUEST_TIMEOUT, 7000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.OPERATION_TIMEOUT, 7000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.REQUEST_TIMEOUT, 7000)).toBeTruthy();
     });
 
     it("should return true for codes in RESOURCE category (8000)", () => {
-      expect(isInCategory(ERROR_CODES.OUT_OF_MEMORY, 8000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.CPU_LIMIT_EXCEEDED, 8000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.OUT_OF_MEMORY, 8000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.CPU_LIMIT_EXCEEDED, 8000)).toBeTruthy();
     });
 
     it("should return true for codes in AUTH category (9000)", () => {
-      expect(isInCategory(ERROR_CODES.AUTHENTICATION_FAILED, 9000)).toBe(true);
-      expect(isInCategory(ERROR_CODES.AUTHORIZATION_FAILED, 9000)).toBe(true);
+      expect(isInCategory(ERROR_CODES.AUTHENTICATION_FAILED, 9000)).toBeTruthy();
+      expect(isInCategory(ERROR_CODES.AUTHORIZATION_FAILED, 9000)).toBeTruthy();
     });
   });
 
   describe("invalid category checks", () => {
     it("should return false for codes not in the specified category", () => {
-      expect(isInCategory(ERROR_CODES.INVALID_INPUT, 2000)).toBe(false);
-      expect(isInCategory(ERROR_CODES.CONNECTION_REFUSED, 1000)).toBe(false);
-      expect(isInCategory(ERROR_CODES.FILE_NOT_FOUND, 3000)).toBe(false);
+      expect(isInCategory(ERROR_CODES.INVALID_INPUT, 2000)).toBeFalsy();
+      expect(isInCategory(ERROR_CODES.CONNECTION_REFUSED, 1000)).toBeFalsy();
+      expect(isInCategory(ERROR_CODES.FILE_NOT_FOUND, 3000)).toBeFalsy();
     });
 
     it("should return false for boundary mismatches", () => {
       // 1999 is in 1000 category, not 2000
-      expect(isInCategory(1999, 2000)).toBe(false);
+      expect(isInCategory(1999, 2000)).toBeFalsy();
 
       // 2000 is in 2000 category, not 1000
-      expect(isInCategory(2000, 1000)).toBe(false);
+      expect(isInCategory(2000, 1000)).toBeFalsy();
     });
   });
 
   describe("edge cases", () => {
     it("should handle zero category", () => {
-      expect(isInCategory(0, 0)).toBe(true);
-      expect(isInCategory(500, 0)).toBe(true);
-      expect(isInCategory(999, 0)).toBe(true);
+      expect(isInCategory(0, 0)).toBeTruthy();
+      expect(isInCategory(500, 0)).toBeTruthy();
+      expect(isInCategory(999, 0)).toBeTruthy();
     });
 
     it("should handle codes outside defined ranges", () => {
-      expect(isInCategory(10_000, 10_000)).toBe(true);
-      expect(isInCategory(10_500, 10_000)).toBe(true);
+      expect(isInCategory(10_000, 10_000)).toBeTruthy();
+      expect(isInCategory(10_500, 10_000)).toBeTruthy();
     });
   });
 });

@@ -2,7 +2,7 @@
  * Tests for branded type utilities
  */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 import {
   type Brand,
   brand,
@@ -16,30 +16,27 @@ import { ERROR_CODES } from "../../src/error/codes.js";
 
 describe("brand", () => {
   it("should brand a value", () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Type is used for documentation
-    type UserId = Brand<string, "UserId">;
     const userId = brand<string, "UserId">("user-123");
+    expectTypeOf(userId).toEqualTypeOf<Brand<string, "UserId">>();
 
     // TypeScript should treat this as branded
     expect(userId).toBe("user-123");
   });
 
   it("should brand numbers", () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Type is used for documentation
-    type Age = Brand<number, "Age">;
     const age = brand<number, "Age">(25);
+    expectTypeOf(age).toEqualTypeOf<Brand<number, "Age">>();
 
     expect(age).toBe(25);
   });
 
   it("should create distinct types at compile time", () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Type is used for documentation
-    type UserId = Brand<string, "UserId">;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Type is used for documentation
-    type Username = Brand<string, "Username">;
-
     const userId = brand<string, "UserId">("user-123");
     const username = brand<string, "Username">("john_doe");
+
+    expectTypeOf(userId).toEqualTypeOf<Brand<string, "UserId">>();
+    expectTypeOf(username).toEqualTypeOf<Brand<string, "Username">>();
+    expectTypeOf(userId).not.toEqualTypeOf<typeof username>();
 
     // At runtime, these are just strings
     expect(typeof userId).toBe("string");
@@ -53,8 +50,6 @@ describe("brand", () => {
 
 describe("isBranded", () => {
   it("should validate branded types with type guard", () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Type is used for documentation
-    type PositiveInt = Brand<number, "PositiveInt">;
     // eslint-disable-next-line unicorn/consistent-function-scoping -- Test helper
     const isNumber = (v: unknown): v is number => typeof v === "number";
 
@@ -65,8 +60,6 @@ describe("isBranded", () => {
   });
 
   it("should work with string validators", () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Type is used for documentation
-    type Email = Brand<string, "Email">;
     // eslint-disable-next-line unicorn/consistent-function-scoping -- Test helper
     const isString = (v: unknown): v is string => typeof v === "string";
 
@@ -75,8 +68,6 @@ describe("isBranded", () => {
   });
 
   it("should work with custom validators", () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Type is used for documentation
-    type EvenNumber = Brand<number, "EvenNumber">;
     // eslint-disable-next-line unicorn/consistent-function-scoping -- Test helper
     const isEven = (v: unknown): v is number => typeof v === "number" && v % 2 === 0;
 
