@@ -504,3 +504,173 @@ export const tryCatchAsync = async <T, E = AppError>(
     return err(mappedError);
   }
 };
+
+/**
+ * Sequences an array of Results, collecting all successes or returning first error
+ *
+ * Processes Results sequentially, collecting all success values into an array.
+ * Returns the first error encountered, short-circuiting the rest.
+ *
+ * @param results - Array of Results to sequence
+ * @returns Result containing array of all values, or first error
+ *
+ * @example
+ * ```typescript
+ * import { ok, err, sequence } from '@outfitter/contracts';
+ *
+ * const allOk = sequence([ok(1), ok(2), ok(3)]);
+ * console.log(allOk); // { ok: true, value: [1, 2, 3] }
+ *
+ * const hasError = sequence([ok(1), err({ code: 1000, message: 'Error', name: 'Error' }), ok(3)]);
+ * console.log(hasError); // { ok: false, error: {...} }
+ * ```
+ */
+export const sequence = <T, E>(results: readonly Result<T, E>[]): Result<T[], E> => {
+  return collect(results);
+};
+
+/**
+ * Like sequence but processes Results in parallel (same semantics, different name for clarity)
+ *
+ * Conceptually processes Results in parallel, though the actual implementation
+ * is identical to sequence since Results are already evaluated. The name signals
+ * intent for async operations that were run in parallel before being sequenced.
+ *
+ * @param results - Array of Results to process in parallel
+ * @returns Result containing array of all values, or first error
+ *
+ * @example
+ * ```typescript
+ * import { ok, err, parallel } from '@outfitter/contracts';
+ *
+ * // Process multiple async operations in parallel, then sequence their results
+ * const results = await Promise.all([
+ *   fetchUser(1),
+ *   fetchUser(2),
+ *   fetchUser(3),
+ * ]);
+ * const combined = parallel(results);
+ * ```
+ */
+export const parallel = <T, E>(results: readonly Result<T, E>[]): Result<T[], E> => {
+  return collect(results);
+};
+
+/**
+ * Partitions Results into successes and failures
+ *
+ * Separates an array of Results into two arrays: one containing all
+ * success values, and one containing all error values.
+ *
+ * @param results - Array of Results to partition
+ * @returns Object with successes and failures arrays
+ *
+ * @example
+ * ```typescript
+ * import { ok, err, partition } from '@outfitter/contracts';
+ *
+ * const results = [
+ *   ok(1),
+ *   err({ code: 1000, message: 'Error 1', name: 'Error' }),
+ *   ok(3),
+ *   err({ code: 1001, message: 'Error 2', name: 'Error' }),
+ * ];
+ *
+ * const { successes, failures } = partition(results);
+ * console.log(successes); // [1, 3]
+ * console.log(failures); // [{ code: 1000, ... }, { code: 1001, ... }]
+ * ```
+ */
+export const partition = <T, E>(
+  results: readonly Result<T, E>[],
+): {
+  readonly successes: T[];
+  readonly failures: E[];
+} => {
+  const successes: T[] = [];
+  const failures: E[] = [];
+
+  for (const result of results) {
+    if (result.ok) {
+      successes.push(result.value);
+    } else {
+      failures.push(result.error);
+    }
+  }
+
+  return { successes, failures };
+};
+
+/**
+ * Combines two Results into a tuple
+ *
+ * Takes two Results and combines them into a single Result containing
+ * a tuple of both values. Returns the first error if either fails.
+ *
+ * @param r1 - First Result
+ * @param r2 - Second Result
+ * @returns Result containing tuple of both values, or first error
+ *
+ * @example
+ * ```typescript
+ * import { ok, err, combine2 } from '@outfitter/contracts';
+ *
+ * const result = combine2(ok(1), ok("hello"));
+ * console.log(result); // { ok: true, value: [1, "hello"] }
+ *
+ * const errorResult = combine2(ok(1), err({ code: 1000, message: 'Error', name: 'Error' }));
+ * console.log(errorResult); // { ok: false, error: {...} }
+ * ```
+ */
+export const combine2 = <T1, T2, E>(r1: Result<T1, E>, r2: Result<T2, E>): Result<[T1, T2], E> => {
+  if (!r1.ok) {
+    return r1;
+  }
+  if (!r2.ok) {
+    return r2;
+  }
+  return ok([r1.value, r2.value]);
+};
+
+/**
+ * Combines three Results into a tuple
+ *
+ * Takes three Results and combines them into a single Result containing
+ * a tuple of all values. Returns the first error if any fails.
+ *
+ * @param r1 - First Result
+ * @param r2 - Second Result
+ * @param r3 - Third Result
+ * @returns Result containing tuple of all values, or first error
+ *
+ * @example
+ * ```typescript
+ * import { ok, err, combine3 } from '@outfitter/contracts';
+ *
+ * const result = combine3(ok(1), ok("hello"), ok(true));
+ * console.log(result); // { ok: true, value: [1, "hello", true] }
+ *
+ * const errorResult = combine3(
+ *   ok(1),
+ *   err({ code: 1000, message: 'Error', name: 'Error' }),
+ *   ok(true)
+ * );
+ * console.log(errorResult); // { ok: false, error: {...} }
+ * ```
+ */
+export const combine3 = <T1, T2, T3, E>(
+  r1: Result<T1, E>,
+  r2: Result<T2, E>,
+  r3: Result<T3, E>,
+): Result<[T1, T2, T3], E> => {
+  if (!r1.ok) {
+    return r1;
+  }
+  if (!r2.ok) {
+    return r2;
+  }
+  if (!r3.ok) {
+    return r3;
+  }
+  return ok([r1.value, r2.value, r3.value]);
+};

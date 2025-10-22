@@ -288,39 +288,39 @@ describe("getSeverityForCode", () => {
 
 describe("isCriticalCategory", () => {
   it("should return true for SECURITY category", () => {
-    expect(isCriticalCategory("SECURITY")).toBe(true);
+    expect(isCriticalCategory("SECURITY")).toBeTruthy();
   });
 
   it("should return false for VALIDATION category", () => {
-    expect(isCriticalCategory("VALIDATION")).toBe(false);
+    expect(isCriticalCategory("VALIDATION")).toBeFalsy();
   });
 
   it("should return false for RUNTIME category", () => {
-    expect(isCriticalCategory("RUNTIME")).toBe(false);
+    expect(isCriticalCategory("RUNTIME")).toBeFalsy();
   });
 
   it("should return false for NETWORK category", () => {
-    expect(isCriticalCategory("NETWORK")).toBe(false);
+    expect(isCriticalCategory("NETWORK")).toBeFalsy();
   });
 
   it("should return false for FILESYSTEM category", () => {
-    expect(isCriticalCategory("FILESYSTEM")).toBe(false);
+    expect(isCriticalCategory("FILESYSTEM")).toBeFalsy();
   });
 
   it("should return false for CONFIGURATION category", () => {
-    expect(isCriticalCategory("CONFIGURATION")).toBe(false);
+    expect(isCriticalCategory("CONFIGURATION")).toBeFalsy();
   });
 
   it("should return false for TIMEOUT category", () => {
-    expect(isCriticalCategory("TIMEOUT")).toBe(false);
+    expect(isCriticalCategory("TIMEOUT")).toBeFalsy();
   });
 
   it("should return false for RESOURCE category", () => {
-    expect(isCriticalCategory("RESOURCE")).toBe(false);
+    expect(isCriticalCategory("RESOURCE")).toBeFalsy();
   });
 
   it("should return false for AUTH category", () => {
-    expect(isCriticalCategory("AUTH")).toBe(false);
+    expect(isCriticalCategory("AUTH")).toBeFalsy();
   });
 
   describe("all non-critical categories", () => {
@@ -337,7 +337,7 @@ describe("isCriticalCategory", () => {
       ];
 
       for (const category of nonCriticalCategories) {
-        expect(isCriticalCategory(category)).toBe(false);
+        expect(isCriticalCategory(category)).toBeFalsy();
       }
     });
   });
@@ -387,7 +387,7 @@ describe("getCategoriesBySeverity", () => {
   describe("return type", () => {
     it("should return array of ErrorCategory strings", () => {
       const result = getCategoriesBySeverity("ERROR");
-      expect(Array.isArray(result)).toBe(true);
+      expect(Array.isArray(result)).toBeTruthy();
 
       for (const cat of result) {
         expect(typeof cat).toBe("string");

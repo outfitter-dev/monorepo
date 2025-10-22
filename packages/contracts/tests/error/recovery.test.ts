@@ -210,7 +210,9 @@ describe("getRetryDelay", () => {
       expect(getRetryDelay(1, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(2000); // 1000 * 2^1
       expect(getRetryDelay(2, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(4000); // 1000 * 2^2
       expect(getRetryDelay(3, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(8000); // 1000 * 2^3
-      expect(getRetryDelay(4, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(16_000); // 1000 * 2^4
+      expect(getRetryDelay(4, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(
+        16_000,
+      ); // 1000 * 2^4
     });
 
     it("should use default baseDelay of 1000ms", () => {
@@ -226,12 +228,18 @@ describe("getRetryDelay", () => {
   describe("delay capping", () => {
     it("should cap delay at maxDelay", () => {
       // 1000 * 2^10 = 1,024,000 but should cap at 30,000
-      expect(getRetryDelay(10, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(30_000);
-      expect(getRetryDelay(20, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(30_000);
+      expect(getRetryDelay(10, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(
+        30_000,
+      );
+      expect(getRetryDelay(20, { baseDelay: 1000, maxDelay: 30_000, useJitter: false })).toBe(
+        30_000,
+      );
     });
 
     it("should respect custom maxDelay", () => {
-      expect(getRetryDelay(5, { baseDelay: 1000, maxDelay: 10_000, useJitter: false })).toBe(10_000);
+      expect(getRetryDelay(5, { baseDelay: 1000, maxDelay: 10_000, useJitter: false })).toBe(
+        10_000,
+      );
       expect(getRetryDelay(10, { baseDelay: 100, maxDelay: 5000, useJitter: false })).toBe(5000);
     });
   });
@@ -307,33 +315,59 @@ describe("getRetryDelay", () => {
 describe("getBackoffDelay", () => {
   describe("exponential backoff (default multiplier = 2)", () => {
     it("should match getRetryDelay with default multiplier", () => {
-      expect(getBackoffDelay(0, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false })).toBe(1000);
-      expect(getBackoffDelay(1, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false })).toBe(2000);
-      expect(getBackoffDelay(2, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false })).toBe(4000);
-      expect(getBackoffDelay(3, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false })).toBe(8000);
+      expect(
+        getBackoffDelay(0, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false }),
+      ).toBe(1000);
+      expect(
+        getBackoffDelay(1, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false }),
+      ).toBe(2000);
+      expect(
+        getBackoffDelay(2, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false }),
+      ).toBe(4000);
+      expect(
+        getBackoffDelay(3, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false }),
+      ).toBe(8000);
     });
   });
 
   describe("linear backoff (multiplier = 1)", () => {
     it("should calculate linear backoff correctly", () => {
       // With multiplier 1, should be baseDelay * 1^attemptCount = baseDelay
-      expect(getBackoffDelay(0, { baseDelay: 1000, multiplier: 1, maxDelay: 30_000, useJitter: false })).toBe(1000);
-      expect(getBackoffDelay(1, { baseDelay: 1000, multiplier: 1, maxDelay: 30_000, useJitter: false })).toBe(1000);
-      expect(getBackoffDelay(2, { baseDelay: 1000, multiplier: 1, maxDelay: 30_000, useJitter: false })).toBe(1000);
-      expect(getBackoffDelay(3, { baseDelay: 1000, multiplier: 1, maxDelay: 30_000, useJitter: false })).toBe(1000);
+      expect(
+        getBackoffDelay(0, { baseDelay: 1000, multiplier: 1, maxDelay: 30_000, useJitter: false }),
+      ).toBe(1000);
+      expect(
+        getBackoffDelay(1, { baseDelay: 1000, multiplier: 1, maxDelay: 30_000, useJitter: false }),
+      ).toBe(1000);
+      expect(
+        getBackoffDelay(2, { baseDelay: 1000, multiplier: 1, maxDelay: 30_000, useJitter: false }),
+      ).toBe(1000);
+      expect(
+        getBackoffDelay(3, { baseDelay: 1000, multiplier: 1, maxDelay: 30_000, useJitter: false }),
+      ).toBe(1000);
     });
   });
 
   describe("aggressive backoff (multiplier > 2)", () => {
     it("should calculate aggressive backoff with multiplier 3", () => {
-      expect(getBackoffDelay(0, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false })).toBe(1000); // 1000 * 3^0
-      expect(getBackoffDelay(1, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false })).toBe(3000); // 1000 * 3^1
-      expect(getBackoffDelay(2, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false })).toBe(9000); // 1000 * 3^2
-      expect(getBackoffDelay(3, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false })).toBe(27_000); // 1000 * 3^3
+      expect(
+        getBackoffDelay(0, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false }),
+      ).toBe(1000); // 1000 * 3^0
+      expect(
+        getBackoffDelay(1, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false }),
+      ).toBe(3000); // 1000 * 3^1
+      expect(
+        getBackoffDelay(2, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false }),
+      ).toBe(9000); // 1000 * 3^2
+      expect(
+        getBackoffDelay(3, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false }),
+      ).toBe(27_000); // 1000 * 3^3
     });
 
     it("should cap aggressive backoff at maxDelay", () => {
-      expect(getBackoffDelay(4, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false })).toBe(30_000); // Would be 81000, capped at 30000
+      expect(
+        getBackoffDelay(4, { baseDelay: 1000, multiplier: 3, maxDelay: 30_000, useJitter: false }),
+      ).toBe(30_000); // Would be 81000, capped at 30000
     });
   });
 
@@ -342,7 +376,12 @@ describe("getBackoffDelay", () => {
       const delays = new Set<number>();
 
       for (let i = 0; i < 10; i++) {
-        const delay = getBackoffDelay(2, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: true });
+        const delay = getBackoffDelay(2, {
+          baseDelay: 1000,
+          multiplier: 2,
+          maxDelay: 30_000,
+          useJitter: true,
+        });
         delays.add(delay);
 
         // 4000 ± 10% = 3600-4400
@@ -354,8 +393,18 @@ describe("getBackoffDelay", () => {
     });
 
     it("should not add jitter when disabled", () => {
-      const delay1 = getBackoffDelay(2, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false });
-      const delay2 = getBackoffDelay(2, { baseDelay: 1000, multiplier: 2, maxDelay: 30_000, useJitter: false });
+      const delay1 = getBackoffDelay(2, {
+        baseDelay: 1000,
+        multiplier: 2,
+        maxDelay: 30_000,
+        useJitter: false,
+      });
+      const delay2 = getBackoffDelay(2, {
+        baseDelay: 1000,
+        multiplier: 2,
+        maxDelay: 30_000,
+        useJitter: false,
+      });
 
       expect(delay1).toBe(4000);
       expect(delay2).toBe(4000);
@@ -364,21 +413,60 @@ describe("getBackoffDelay", () => {
 
   describe("delay capping", () => {
     it("should respect maxDelay parameter", () => {
-      expect(getBackoffDelay(10, { baseDelay: 1000, multiplier: 2, maxDelay: 10_000, useJitter: false })).toBe(10_000);
-      expect(getBackoffDelay(5, { baseDelay: 1000, multiplier: 3, maxDelay: 5000, useJitter: false })).toBe(5000);
+      expect(
+        getBackoffDelay(10, { baseDelay: 1000, multiplier: 2, maxDelay: 10_000, useJitter: false }),
+      ).toBe(10_000);
+      expect(
+        getBackoffDelay(5, { baseDelay: 1000, multiplier: 3, maxDelay: 5000, useJitter: false }),
+      ).toBe(5000);
     });
   });
 
   describe("fractional multipliers", () => {
     it("should work with multipliers less than 1", () => {
-      expect(getBackoffDelay(0, { baseDelay: 1000, multiplier: 0.5, maxDelay: 30_000, useJitter: false })).toBe(1000); // 1000 * 0.5^0
-      expect(getBackoffDelay(1, { baseDelay: 1000, multiplier: 0.5, maxDelay: 30_000, useJitter: false })).toBe(500); // 1000 * 0.5^1
-      expect(getBackoffDelay(2, { baseDelay: 1000, multiplier: 0.5, maxDelay: 30_000, useJitter: false })).toBe(250); // 1000 * 0.5^2
+      expect(
+        getBackoffDelay(0, {
+          baseDelay: 1000,
+          multiplier: 0.5,
+          maxDelay: 30_000,
+          useJitter: false,
+        }),
+      ).toBe(1000); // 1000 * 0.5^0
+      expect(
+        getBackoffDelay(1, {
+          baseDelay: 1000,
+          multiplier: 0.5,
+          maxDelay: 30_000,
+          useJitter: false,
+        }),
+      ).toBe(500); // 1000 * 0.5^1
+      expect(
+        getBackoffDelay(2, {
+          baseDelay: 1000,
+          multiplier: 0.5,
+          maxDelay: 30_000,
+          useJitter: false,
+        }),
+      ).toBe(250); // 1000 * 0.5^2
     });
 
     it("should work with decimal multipliers", () => {
-      expect(getBackoffDelay(1, { baseDelay: 1000, multiplier: 1.5, maxDelay: 30_000, useJitter: false })).toBe(1500);
-      expect(getBackoffDelay(2, { baseDelay: 1000, multiplier: 1.5, maxDelay: 30_000, useJitter: false })).toBe(2250);
+      expect(
+        getBackoffDelay(1, {
+          baseDelay: 1000,
+          multiplier: 1.5,
+          maxDelay: 30_000,
+          useJitter: false,
+        }),
+      ).toBe(1500);
+      expect(
+        getBackoffDelay(2, {
+          baseDelay: 1000,
+          multiplier: 1.5,
+          maxDelay: 30_000,
+          useJitter: false,
+        }),
+      ).toBe(2250);
     });
   });
 });

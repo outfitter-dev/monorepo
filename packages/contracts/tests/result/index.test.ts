@@ -27,7 +27,7 @@ describe("ok", () => {
   it("should create a successful result", () => {
     const result = ok(42);
 
-    expect(result.ok).toBe(true);
+    expect(result.ok).toBeTruthy();
     if (result.ok) {
       expect(result.value).toBe(42);
     }
@@ -39,18 +39,18 @@ describe("ok", () => {
     const objResult = ok({ foo: "bar" });
     const arrResult = ok([1, 2, 3]);
 
-    expect(numResult.ok).toBe(true);
-    expect(strResult.ok).toBe(true);
-    expect(objResult.ok).toBe(true);
-    expect(arrResult.ok).toBe(true);
+    expect(numResult.ok).toBeTruthy();
+    expect(strResult.ok).toBeTruthy();
+    expect(objResult.ok).toBeTruthy();
+    expect(arrResult.ok).toBeTruthy();
   });
 
   it("should work with null and undefined values", () => {
     const nullResult = ok(null);
     const undefinedResult = ok(undefined);
 
-    expect(nullResult.ok).toBe(true);
-    expect(undefinedResult.ok).toBe(true);
+    expect(nullResult.ok).toBeTruthy();
+    expect(undefinedResult.ok).toBeTruthy();
   });
 });
 
@@ -64,7 +64,7 @@ describe("err", () => {
 
     const result = err(error);
 
-    expect(result.ok).toBe(false);
+    expect(result.ok).toBeFalsy();
     if (!result.ok) {
       expect(result.error).toBe(error);
     }
@@ -80,21 +80,21 @@ describe("err", () => {
     const stringError = err<string>("string error");
     const numberError = err<number>(404);
 
-    expect(appError.ok).toBe(false);
-    expect(stringError.ok).toBe(false);
-    expect(numberError.ok).toBe(false);
+    expect(appError.ok).toBeFalsy();
+    expect(stringError.ok).toBeFalsy();
+    expect(numberError.ok).toBeFalsy();
   });
 });
 
 describe("isOk", () => {
   it("should return true for ok results", () => {
     const result = ok(42);
-    expect(isOk(result)).toBe(true);
+    expect(isOk(result)).toBeTruthy();
   });
 
   it("should return false for err results", () => {
     const result = err({ code: 1000, message: "Error", name: "Error" });
-    expect(isOk(result)).toBe(false);
+    expect(isOk(result)).toBeFalsy();
   });
 
   it("should narrow type correctly", () => {
@@ -111,12 +111,12 @@ describe("isOk", () => {
 describe("isErr", () => {
   it("should return true for err results", () => {
     const result = err({ code: 1000, message: "Error", name: "Error" });
-    expect(isErr(result)).toBe(true);
+    expect(isErr(result)).toBeTruthy();
   });
 
   it("should return false for ok results", () => {
     const result = ok(42);
-    expect(isErr(result)).toBe(false);
+    expect(isErr(result)).toBeFalsy();
   });
 
   it("should narrow type correctly", () => {
@@ -185,7 +185,7 @@ describe("unwrapOr", () => {
     unwrapOr(result, defaultValue);
     // Note: default is evaluated eagerly, so called will be true
     // This is expected behavior for unwrapOr
-    expect(called).toBe(true);
+    expect(called).toBeTruthy();
   });
 });
 
@@ -209,7 +209,7 @@ describe("unwrapOrElse", () => {
       return 0;
     });
 
-    expect(called).toBe(false);
+    expect(called).toBeFalsy();
   });
 
   it("should provide error to function", () => {
@@ -230,7 +230,7 @@ describe("map", () => {
     const result = ok(5);
     const mapped = map(result, (x) => x * 2);
 
-    expect(isOk(mapped)).toBe(true);
+    expect(isOk(mapped)).toBeTruthy();
     if (isOk(mapped)) {
       expect(mapped.value).toBe(10);
     }
@@ -241,7 +241,7 @@ describe("map", () => {
     const result = err(error);
     const mapped = map(result, (x) => x * 2);
 
-    expect(isErr(mapped)).toBe(true);
+    expect(isErr(mapped)).toBeTruthy();
     if (isErr(mapped)) {
       expect(mapped.error).toBe(error);
     }
@@ -251,7 +251,7 @@ describe("map", () => {
     const result = ok(42);
     const mapped = map(result, (x) => x.toString());
 
-    expect(isOk(mapped)).toBe(true);
+    expect(isOk(mapped)).toBeTruthy();
     if (isOk(mapped)) {
       expect(mapped.value).toBe("42");
       expect(typeof mapped.value).toBe("string");
@@ -267,7 +267,7 @@ describe("map", () => {
       return 0;
     });
 
-    expect(called).toBe(false);
+    expect(called).toBeFalsy();
   });
 });
 
@@ -279,7 +279,7 @@ describe("mapErr", () => {
       message: "Modified",
     }));
 
-    expect(isErr(mapped)).toBe(true);
+    expect(isErr(mapped)).toBeTruthy();
     if (isErr(mapped)) {
       expect(mapped.error.message).toBe("Modified");
     }
@@ -293,7 +293,7 @@ describe("mapErr", () => {
       message: "Should not see this",
     }));
 
-    expect(isOk(mapped)).toBe(true);
+    expect(isOk(mapped)).toBeTruthy();
     if (isOk(mapped)) {
       expect(mapped.value).toBe(42);
     }
@@ -307,7 +307,7 @@ describe("mapErr", () => {
       name: "Error",
     }));
 
-    expect(isErr(mapped)).toBe(true);
+    expect(isErr(mapped)).toBeTruthy();
     if (isErr(mapped)) {
       expect(mapped.error.message).toBe("string error");
     }
@@ -322,7 +322,7 @@ describe("mapErr", () => {
       return { code: 1000, message: "Error", name: "Error" };
     });
 
-    expect(called).toBe(false);
+    expect(called).toBeFalsy();
   });
 });
 
@@ -331,7 +331,7 @@ describe("andThen", () => {
     const result = ok(5);
     const chained = andThen(result, (x) => ok(x * 2));
 
-    expect(isOk(chained)).toBe(true);
+    expect(isOk(chained)).toBeTruthy();
     if (isOk(chained)) {
       expect(chained.value).toBe(10);
     }
@@ -346,8 +346,8 @@ describe("andThen", () => {
       return ok(0);
     });
 
-    expect(called).toBe(false);
-    expect(isErr(chained)).toBe(true);
+    expect(called).toBeFalsy();
+    expect(isErr(chained)).toBeTruthy();
   });
 
   it("should propagate errors from chained function", () => {
@@ -355,7 +355,7 @@ describe("andThen", () => {
     const error = { code: 1000, message: "Chained error", name: "Error" };
     const chained = andThen(result, () => err(error));
 
-    expect(isErr(chained)).toBe(true);
+    expect(isErr(chained)).toBeTruthy();
     if (isErr(chained)) {
       expect(chained.error).toBe(error);
     }
@@ -372,7 +372,7 @@ describe("andThen", () => {
       (x) => ok(x.toString()),
     );
 
-    expect(isOk(final)).toBe(true);
+    expect(isOk(final)).toBeTruthy();
     if (isOk(final)) {
       expect(final.value).toBe("12"); // (5 + 1) * 2 = 12
     }
@@ -389,7 +389,7 @@ describe("andThen", () => {
       },
     );
 
-    expect(isErr(final)).toBe(true);
+    expect(isErr(final)).toBeTruthy();
     if (isErr(final)) {
       expect(final.error).toBe(error);
     }
@@ -403,7 +403,7 @@ describe("orElse", () => {
 
     const final = orElse(result1, result2);
 
-    expect(isOk(final)).toBe(true);
+    expect(isOk(final)).toBeTruthy();
     if (isOk(final)) {
       expect(final.value).toBe(42);
     }
@@ -415,7 +415,7 @@ describe("orElse", () => {
 
     const final = orElse(result1, result2);
 
-    expect(isOk(final)).toBe(true);
+    expect(isOk(final)).toBeTruthy();
     if (isOk(final)) {
       expect(final.value).toBe(100);
     }
@@ -430,7 +430,7 @@ describe("orElse", () => {
 
     const final = orElse(result1, result2);
 
-    expect(isErr(final)).toBe(true);
+    expect(isErr(final)).toBeTruthy();
     if (isErr(final)) {
       expect(final.error).toBe(error2);
     }
@@ -508,7 +508,7 @@ describe("collect", () => {
     const results = [ok(1), ok(2), ok(3)];
     const collected = collect(results);
 
-    expect(isOk(collected)).toBe(true);
+    expect(isOk(collected)).toBeTruthy();
     if (isOk(collected)) {
       expect(collected.value).toEqual([1, 2, 3]);
     }
@@ -521,7 +521,7 @@ describe("collect", () => {
     const results = [ok(1), err(error1), ok(3), err(error2)];
     const collected = collect(results);
 
-    expect(isErr(collected)).toBe(true);
+    expect(isErr(collected)).toBeTruthy();
     if (isErr(collected)) {
       expect(collected.error).toBe(error1);
     }
@@ -530,7 +530,7 @@ describe("collect", () => {
   it("should handle empty array", () => {
     const collected = collect([]);
 
-    expect(isOk(collected)).toBe(true);
+    expect(isOk(collected)).toBeTruthy();
     if (isOk(collected)) {
       expect(collected.value).toEqual([]);
     }
@@ -538,14 +538,14 @@ describe("collect", () => {
 
   it("should handle single element", () => {
     const okCollected = collect([ok(42)]);
-    expect(isOk(okCollected)).toBe(true);
+    expect(isOk(okCollected)).toBeTruthy();
     if (isOk(okCollected)) {
       expect(okCollected.value).toEqual([42]);
     }
 
     const error = { code: 1000, message: "Error", name: "Error" };
     const errCollected = collect([err(error)]);
-    expect(isErr(errCollected)).toBe(true);
+    expect(isErr(errCollected)).toBeTruthy();
     if (isErr(errCollected)) {
       expect(errCollected.error).toBe(error);
     }
@@ -555,7 +555,7 @@ describe("collect", () => {
     const results = [ok("a"), ok("b"), ok("c")];
     const collected = collect(results);
 
-    expect(isOk(collected)).toBe(true);
+    expect(isOk(collected)).toBeTruthy();
     if (isOk(collected)) {
       expect(collected.value).toEqual(["a", "b", "c"]);
     }
@@ -566,7 +566,7 @@ describe("tryCatch", () => {
   it("should return ok for successful function", () => {
     const result = tryCatch(() => 42);
 
-    expect(isOk(result)).toBe(true);
+    expect(isOk(result)).toBeTruthy();
     if (isOk(result)) {
       expect(result.value).toBe(42);
     }
@@ -577,7 +577,7 @@ describe("tryCatch", () => {
       throw new Error("Test error");
     });
 
-    expect(isErr(result)).toBe(true);
+    expect(isErr(result)).toBeTruthy();
     if (isErr(result)) {
       expect(result.error.message).toContain("Test error");
     }
@@ -595,7 +595,7 @@ describe("tryCatch", () => {
       }),
     );
 
-    expect(isErr(result)).toBe(true);
+    expect(isErr(result)).toBeTruthy();
     if (isErr(result)) {
       expect(result.error.code).toBe(ERROR_CODES.RUNTIME_EXCEPTION);
       expect(result.error.name).toBe("CustomError");
@@ -609,7 +609,7 @@ describe("tryCatch", () => {
       throw "string error";
     });
 
-    expect(isErr(result)).toBe(true);
+    expect(isErr(result)).toBeTruthy();
     if (isErr(result)) {
       expect(result.error.message).toBe("string error");
     }
@@ -620,9 +620,9 @@ describe("tryCatch", () => {
     const objectResult = tryCatch(() => ({ foo: "bar" }));
     const arrayResult = tryCatch(() => [1, 2, 3]);
 
-    expect(isOk(stringResult)).toBe(true);
-    expect(isOk(objectResult)).toBe(true);
-    expect(isOk(arrayResult)).toBe(true);
+    expect(isOk(stringResult)).toBeTruthy();
+    expect(isOk(objectResult)).toBeTruthy();
+    expect(isOk(arrayResult)).toBeTruthy();
   });
 
   it("should use default error code without mapper", () => {
@@ -630,7 +630,7 @@ describe("tryCatch", () => {
       throw new Error("Test");
     });
 
-    expect(isErr(result)).toBe(true);
+    expect(isErr(result)).toBeTruthy();
     if (isErr(result)) {
       expect(result.error.code).toBe(2019); // INTERNAL_ERROR
       expect(result.error.name).toBe("RuntimeError");
@@ -642,7 +642,7 @@ describe("tryCatchAsync", () => {
   it("should return ok for successful async function", async () => {
     const result = await tryCatchAsync(async () => Promise.resolve(42));
 
-    expect(isOk(result)).toBe(true);
+    expect(isOk(result)).toBeTruthy();
     if (isOk(result)) {
       expect(result.value).toBe(42);
     }
@@ -653,7 +653,7 @@ describe("tryCatchAsync", () => {
       throw new Error("Async error");
     });
 
-    expect(isErr(result)).toBe(true);
+    expect(isErr(result)).toBeTruthy();
     if (isErr(result)) {
       expect(result.error.message).toContain("Async error");
     }
@@ -671,7 +671,7 @@ describe("tryCatchAsync", () => {
       }),
     );
 
-    expect(isErr(result)).toBe(true);
+    expect(isErr(result)).toBeTruthy();
     if (isErr(result)) {
       expect(result.error.name).toBe("NetworkError");
     }
@@ -683,7 +683,7 @@ describe("tryCatchAsync", () => {
       return "done";
     });
 
-    expect(isOk(result)).toBe(true);
+    expect(isOk(result)).toBeTruthy();
     if (isOk(result)) {
       expect(result.value).toBe("done");
     }
@@ -694,7 +694,7 @@ describe("tryCatchAsync", () => {
       return Promise.reject(new Error("Rejected"));
     });
 
-    expect(isErr(result)).toBe(true);
+    expect(isErr(result)).toBeTruthy();
     if (isErr(result)) {
       expect(result.error.message).toContain("Rejected");
     }
@@ -705,9 +705,9 @@ describe("tryCatchAsync", () => {
     const objectResult = await tryCatchAsync(async () => Promise.resolve({ foo: "bar" }));
     const arrayResult = await tryCatchAsync(async () => Promise.resolve([1, 2, 3]));
 
-    expect(isOk(stringResult)).toBe(true);
-    expect(isOk(objectResult)).toBe(true);
-    expect(isOk(arrayResult)).toBe(true);
+    expect(isOk(stringResult)).toBeTruthy();
+    expect(isOk(objectResult)).toBeTruthy();
+    expect(isOk(arrayResult)).toBeTruthy();
   });
 });
 
@@ -737,18 +737,18 @@ describe("Result type integration", () => {
 
     // Success path
     const success = andThen(divide(16, 4), sqrt);
-    expect(isOk(success)).toBe(true);
+    expect(isOk(success)).toBeTruthy();
     if (isOk(success)) {
       expect(success.value).toBe(2);
     }
 
     // Division by zero
     const divError = andThen(divide(16, 0), sqrt);
-    expect(isErr(divError)).toBe(true);
+    expect(isErr(divError)).toBeTruthy();
 
     // Negative sqrt
     const sqrtError = andThen(divide(4, -1), sqrt);
-    expect(isErr(sqrtError)).toBe(true);
+    expect(isErr(sqrtError)).toBeTruthy();
   });
 
   it("should work with validation pipelines", () => {
@@ -776,8 +776,8 @@ describe("Result type integration", () => {
 
     const validate = (n: number) => andThen(validatePositive(n), validateLessThan100);
 
-    expect(isOk(validate(50))).toBe(true);
-    expect(isErr(validate(-5))).toBe(true);
-    expect(isErr(validate(150))).toBe(true);
+    expect(isOk(validate(50))).toBeTruthy();
+    expect(isErr(validate(-5))).toBeTruthy();
+    expect(isErr(validate(150))).toBeTruthy();
   });
 });
