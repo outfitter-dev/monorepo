@@ -1,0 +1,60 @@
+{
+  "name": "@outfitter/types",
+  "description": "Comprehensive TypeScript utilities combining type-fest with domain-specific types",
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "bun@1.3.0",
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "directory": "packages/types"
+  },
+  "keywords": [
+    "types",
+    "typescript",
+    "type-fest",
+    "utilities",
+    "branded-types",
+    "result-pattern"
+  ],
+  "engines": {
+    "bun": ">=1.3.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun run build:tsc",
+    "build:tsc": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "dev": "tsc --project tsconfig.build.json --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "type-check": "tsc --noEmit",
+    "type-check:test": "tsc --project tsconfig.test.json --noEmit"
+  },
+  "dependencies": {
+    "type-fest": "^5.0.1"
+  },
+  "peerDependencies": {
+    "@outfitter/contracts": "1.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.0",
+    "@types/node": "^22.5.4",
+    "typescript": "5.9.3",
+    "vitest": "1.6.1"
+  }
+}

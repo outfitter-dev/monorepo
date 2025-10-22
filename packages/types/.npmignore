@@ -1,0 +1,33 @@
+# Source files (only ship dist/)
+src/
+tests/
+
+# Configuration files
+*.config.ts
+*.config.js
+tsconfig.json
+tsconfig.build.json
+vitest.config.ts
+
+# Development files
+*.test.ts
+*.spec.ts
+*.test.js
+*.spec.js
+
+# Build artifacts
+*.tsbuildinfo
+coverage/
+
+# Version control
+.git/
+.gitignore
+
+# Environment
+.env
+.env.*
+
+# Temporary files
+*.log
+*.tmp
+.DS_Store
