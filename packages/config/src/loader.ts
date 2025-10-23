@@ -10,12 +10,7 @@
  * @module loader
  */
 
-import {
-  createError,
-  ERROR_CODES,
-  err,
-  type Result,
-} from "@outfitter/contracts";
+import { createError, ERROR_CODES, err, type Result } from "@outfitter/contracts";
 import type { z } from "zod";
 import { loadJsonc } from "./loaders/jsonc.js";
 import { loadToml } from "./loaders/toml.js";

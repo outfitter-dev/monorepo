@@ -9,8 +9,7 @@
  * @module loaders
  */
 
+export type { Result } from "@outfitter/contracts";
 export { loadJsonc } from "./jsonc.js";
 export { loadToml } from "./toml.js";
 export { loadYaml } from "./yaml.js";
-
-export type { Result } from "@outfitter/contracts";

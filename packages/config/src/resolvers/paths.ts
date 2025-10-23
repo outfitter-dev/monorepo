@@ -195,9 +195,7 @@ export function resolvePaths(options: ResolvePathsOptions): string[] {
  * }
  * ```
  */
-export async function findConfigPath(
-  options: ResolvePathsOptions,
-): Promise<string | undefined> {
+export async function findConfigPath(options: ResolvePathsOptions): Promise<string | undefined> {
   const paths = resolvePaths(options);
 
   for (const path of paths) {

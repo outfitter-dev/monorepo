@@ -195,23 +195,15 @@ function createConfigError(error: unknown): ExtendedAppError {
   }
 
   if (error instanceof Error) {
-    return createError(
-      ERROR_CODES.CONFIG_PARSE_ERROR,
-      error.message,
-      {
-        name: "OutfitterConfigParseError",
-        cause: error,
-      },
-    );
+    return createError(ERROR_CODES.CONFIG_PARSE_ERROR, error.message, {
+      name: "OutfitterConfigParseError",
+      cause: error,
+    });
   }
 
-  return createError(
-    ERROR_CODES.CONFIG_PARSE_ERROR,
-    "Unknown configuration error",
-    {
-      name: "OutfitterConfigParseError",
-    },
-  );
+  return createError(ERROR_CODES.CONFIG_PARSE_ERROR, "Unknown configuration error", {
+    name: "OutfitterConfigParseError",
+  });
 }
 
 export type {
@@ -222,25 +214,31 @@ export type {
 };
 
 // Re-export universal loader APIs
-export { loadConfig, loadConfigFrom, findConfig, configExists, type LoadConfigOptions } from "./loader.js";
-export { loadToml, loadYaml, loadJsonc } from "./loaders/index.js";
 export {
-  resolvePaths,
-  findConfigPath,
-  getXdgConfigHome,
-  getXdgConfigDirs,
-  resolveXdgConfigPath,
+  configExists,
+  findConfig,
+  type LoadConfigOptions,
+  loadConfig,
+  loadConfigFrom,
+} from "./loader.js";
+export { loadJsonc, loadToml, loadYaml } from "./loaders/index.js";
+export {
   type ConfigFormat,
   type ConfigScope,
+  findConfigPath,
+  getXdgConfigDirs,
+  getXdgConfigHome,
   type ResolvePathsOptions,
+  resolvePaths,
+  resolveXdgConfigPath,
 } from "./resolvers/index.js";
 export {
-  validateConfig,
-  safeParseConfig,
-  validatePartialConfig,
   mergeAndValidate,
+  safeParseConfig,
   type ValidationError,
   type ValidationIssue,
+  validateConfig,
+  validatePartialConfig,
 } from "./schema-helpers.js";
 
 /**
@@ -312,9 +310,7 @@ export async function loadOutfitterConfig(options?: {
  * @param path - Path to configuration file
  * @returns Result containing OutfitterConfig or error
  */
-export async function loadOutfitterConfigFrom(
-  path: string,
-): Promise<OutfitterConfigParseResult> {
+export async function loadOutfitterConfigFrom(path: string): Promise<OutfitterConfigParseResult> {
   const result = await loadConfig({
     schema: OutfitterConfigSchema,
     searchPaths: [path],

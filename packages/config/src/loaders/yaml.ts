@@ -39,9 +39,7 @@ export async function loadYaml(path: string): Promise<Result<unknown, Error>> {
     return ok(parsed);
   } catch (error) {
     return err(
-      error instanceof Error
-        ? error
-        : new Error(`Failed to parse YAML: ${String(error)}`),
+      error instanceof Error ? error : new Error(`Failed to parse YAML: ${String(error)}`),
     );
   }
 }

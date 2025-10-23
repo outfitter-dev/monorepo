@@ -44,9 +44,7 @@ export async function loadToml(path: string): Promise<Result<unknown, Error>> {
     return ok(parsed);
   } catch (error) {
     return err(
-      error instanceof Error
-        ? error
-        : new Error(`Failed to parse TOML: ${String(error)}`),
+      error instanceof Error ? error : new Error(`Failed to parse TOML: ${String(error)}`),
     );
   }
 }

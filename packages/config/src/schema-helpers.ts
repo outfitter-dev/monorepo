@@ -8,9 +8,9 @@
 import {
   createError,
   ERROR_CODES,
+  type ExtendedAppError,
   err,
   ok,
-  type ExtendedAppError,
   type Result,
 } from "@outfitter/contracts";
 import { z } from "zod";

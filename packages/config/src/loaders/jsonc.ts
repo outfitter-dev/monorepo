@@ -41,9 +41,7 @@ export async function loadJsonc(path: string): Promise<Result<unknown, Error>> {
     return ok(parsed);
   } catch (error) {
     return err(
-      error instanceof Error
-        ? error
-        : new Error(`Failed to parse JSONC: ${String(error)}`),
+      error instanceof Error ? error : new Error(`Failed to parse JSONC: ${String(error)}`),
     );
   }
 }
