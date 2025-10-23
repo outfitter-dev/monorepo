@@ -29,21 +29,13 @@ describe("Advanced type utilities", () => {
       type Keys = DeepKeys<User>;
 
       // Type-level tests - these would fail at compile time if wrong
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key1: Keys = "name";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key2: Keys = "age";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key3: Keys = "address";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key4: Keys = "address.city";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key5: Keys = "address.zip";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key6: Keys = "address.country";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key7: Keys = "address.country.code";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key8: Keys = "address.country.name";
 
       expect(key1).toBe("name");
