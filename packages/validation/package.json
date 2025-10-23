@@ -1,7 +1,7 @@
 {
   "name": "@outfitter/validation",
   "description": "Zod schema registry, diagnostics, and JSON Schema helpers for Outfitter",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "packageManager": "bun@1.3.0",
   "sideEffects": false,
