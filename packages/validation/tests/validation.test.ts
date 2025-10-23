@@ -574,7 +574,9 @@ describe("@outfitter/validation", () => {
       const appError = diagnosticsToAppError(diagnostics);
 
       expect(appError.cause).toBeDefined();
-      expect((appError.cause as Error & { diagnostics?: readonly ValidationDiagnostic[] }).diagnostics).toEqual(diagnostics);
+      expect(
+        (appError.cause as Error & { diagnostics?: readonly ValidationDiagnostic[] }).diagnostics,
+      ).toEqual(diagnostics);
     });
   });
 });
