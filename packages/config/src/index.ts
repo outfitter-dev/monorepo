@@ -99,19 +99,19 @@ export function mergeOutfitterConfig(input?: OutfitterConfigInput): OutfitterCon
   const overridesInput = normalized.overrides ?? {};
   const overridesParts: Record<string, Record<string, unknown>> = {};
   if (overridesInput.biome !== undefined) {
-    overridesParts["biome"] = overridesInput.biome;
+    overridesParts.biome = overridesInput.biome;
   }
   if (overridesInput.prettier !== undefined) {
-    overridesParts["prettier"] = overridesInput.prettier;
+    overridesParts.prettier = overridesInput.prettier;
   }
   if (overridesInput.stylelint !== undefined) {
-    overridesParts["stylelint"] = overridesInput.stylelint;
+    overridesParts.stylelint = overridesInput.stylelint;
   }
   if (overridesInput.markdownlint !== undefined) {
-    overridesParts["markdownlint"] = overridesInput.markdownlint;
+    overridesParts.markdownlint = overridesInput.markdownlint;
   }
   if (overridesInput.lefthook !== undefined) {
-    overridesParts["lefthook"] = overridesInput.lefthook;
+    overridesParts.lefthook = overridesInput.lefthook;
   }
 
   // Build project object, excluding undefined fields
@@ -119,16 +119,16 @@ export function mergeOutfitterConfig(input?: OutfitterConfigInput): OutfitterCon
   const projectParts: Record<string, string> = {};
   if (projectInput !== undefined) {
     if (projectInput.type !== undefined) {
-      projectParts["type"] = projectInput.type;
+      projectParts.type = projectInput.type;
     }
     if (projectInput.framework !== undefined) {
-      projectParts["framework"] = projectInput.framework;
+      projectParts.framework = projectInput.framework;
     }
     if (projectInput.packageManager !== undefined) {
-      projectParts["packageManager"] = projectInput.packageManager;
+      projectParts.packageManager = projectInput.packageManager;
     }
     if (projectInput.rootDir !== undefined) {
-      projectParts["rootDir"] = projectInput.rootDir;
+      projectParts.rootDir = projectInput.rootDir;
     }
   }
 

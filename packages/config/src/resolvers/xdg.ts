@@ -23,7 +23,7 @@ import { join } from "node:path";
  * ```
  */
 export function getXdgConfigHome(): string {
-  return process.env["XDG_CONFIG_HOME"] ?? join(homedir(), ".config");
+  return process.env.XDG_CONFIG_HOME ?? join(homedir(), ".config");
 }
 
 /**
@@ -63,7 +63,7 @@ export function resolveXdgConfigPath(name: string, extension: string): string {
  */
 export function getXdgConfigDirs(): string[] {
   const configHome = getXdgConfigHome();
-  const configDirs = process.env["XDG_CONFIG_DIRS"]?.split(":").filter(Boolean) ?? ["/etc/xdg"];
+  const configDirs = process.env.XDG_CONFIG_DIRS?.split(":").filter(Boolean) ?? ["/etc/xdg"];
 
   return [configHome, ...configDirs];
 }
