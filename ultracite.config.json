@@ -30,6 +30,7 @@
     "**/dist/**",
     "packages/*/dist/**",
     "apps/*/dist/**",
-    "coverage/**"
+    "coverage/**",
+    "**/*.tsbuildinfo"
   ]
 }

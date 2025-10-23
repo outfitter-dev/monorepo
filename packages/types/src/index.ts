@@ -30,7 +30,6 @@ export type {
 export * as Config from "./config.js";
 // Maybe utilities
 export type { Maybe, Nullable, Optional } from "./maybe.js";
-export * as Maybe from "./maybe.js";
 export {
   chainMaybe,
   filterMaybe,
