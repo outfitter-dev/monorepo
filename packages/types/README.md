@@ -15,6 +15,9 @@ bun add @outfitter/types
 ## Features
 
 - **Type-Fest Integration**: Re-exports all type-fest utilities
+
+## Planned Features
+
 - **Config Types**: Types for configuration management (ConfigScope, ConfigFormat)
 - **Maybe Helpers**: Nullable, Optional, and Maybe type helpers
 - **Domain Types**: Outfitter-specific type utilities

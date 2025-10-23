@@ -22,7 +22,7 @@ bun add @outfitter/contracts
 
 ## Documentation
 
-Full documentation will be available once the package reaches v1.0.0 release.
+Full documentation will be available once the package reaches v2.0.0 release.
 
 ## License
 
