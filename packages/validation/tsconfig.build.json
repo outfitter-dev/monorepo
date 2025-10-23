@@ -16,8 +16,8 @@
     "removeComments": false,
     "importHelpers": false,
 
-    // Strip test-only types
-    "types": []
+    // Include Bun types for runtime features
+    "types": ["bun"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "tests", "**/*.test.ts", "**/*.spec.ts"]

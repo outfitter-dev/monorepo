@@ -12,6 +12,7 @@ import { config as loadDotEnvConfig } from "dotenv";
 import type { z } from "zod";
 import {
   type ValidationDiagnostic,
+  type ValidationError,
   validateWithDiagnostics,
   createEnvValidator as validationCreateEnvValidator,
 } from "../../validation/src/index.js";
@@ -34,9 +35,10 @@ export interface EnvProfileConfig {
 
 export interface LoadSecretsOptions {
   readonly namespace?: string;
+  readonly prefix?: string;
 }
 
-export interface ValidateEnvResult<T> extends Result<T, ExtendedAppError> {}
+export type ValidateEnvResult<T> = Result<T, ExtendedAppError>;
 
 const PROFILE_DEFAULTS: Record<EnvProfile, Record<string, string>> = {
   development: { NODE_ENV: "development" },
@@ -63,7 +65,7 @@ export function validateEnv<T>(
 export function createEnvValidator<T>(
   schema: z.ZodSchema<T>,
   options: EnvOptions = {},
-): ValidateEnvResult<T> {
+): Result<T, ValidationError> {
   const envRecord = collectEnvironment(options);
   const enrichedSchema = applyKeyOptions(schema, options);
   return validationCreateEnvValidator(enrichedSchema, {
@@ -76,14 +78,16 @@ export async function loadBunSecrets(
   secretNames: readonly string[],
   options: LoadSecretsOptions = {},
 ): Promise<Record<string, string>> {
-  const namespace = options.namespace ?? "default";
   const secrets: Record<string, string> = {};
 
   if (typeof Bun !== "undefined" && typeof Bun.secrets !== "undefined") {
     for (const name of secretNames) {
       const key = options.prefix ? `${options.prefix}${name}` : name;
-      const secret = Bun.secrets.get(key, namespace);
-      if (secret !== undefined) {
+      const secret = await Bun.secrets.get({
+        service: options.namespace ?? "default",
+        name: key,
+      });
+      if (secret !== null && secret !== undefined) {
         secrets[name] = secret;
       }
     }
@@ -115,12 +119,19 @@ function collectEnvironment(options: EnvOptions): Record<string, unknown> {
   const source = options.env ?? process?.env ?? {};
   const defaults = options.defaults ?? {};
 
-  const entries = Object.entries(defaults).map(([key, value]) => [key, value]);
+  const entries: Array<[string, unknown]> = Object.entries(defaults).map(([key, value]) => [
+    key,
+    value,
+  ]);
   for (const [key, value] of Object.entries(source)) {
     entries.push([key, value]);
   }
 
-  return entries.reduce<Record<string, unknown>>((acc, [key, value]) => {
+  return entries.reduce<Record<string, unknown>>((acc, entry) => {
+    const [key, value] = entry;
+    if (key === undefined) {
+      return acc;
+    }
     const normalizedKey = options.prefix ? key.replace(new RegExp(`^${options.prefix}`), "") : key;
     acc[normalizedKey] = value;
     return acc;
@@ -136,7 +147,7 @@ function applyKeyOptions<T>(schema: z.ZodSchema<T>, options: EnvOptions): z.ZodS
 
   for (const [key, type] of Object.entries(shape)) {
     if (required.has(key)) {
-      updatedShape[key] = "unwrap" in type ? (type as z.ZodOptional<unknown>).unwrap() : type;
+      updatedShape[key] = "unwrap" in type ? (type as z.ZodOptional<z.ZodTypeAny>).unwrap() : type;
     } else if (optional.has(key)) {
       updatedShape[key] = "unwrap" in type ? type : type.optional();
     } else {
@@ -144,7 +155,9 @@ function applyKeyOptions<T>(schema: z.ZodSchema<T>, options: EnvOptions): z.ZodS
     }
   }
 
-  return schema.extend(updatedShape) as z.ZodSchema<T>;
+  // Use type assertion since we know the shape is compatible
+  const zodObject = schema as unknown as z.ZodObject<z.ZodRawShape>;
+  return zodObject.extend(updatedShape) as unknown as z.ZodSchema<T>;
 }
 
 function extractSchemaShape(schema: z.ZodSchema<unknown>): Record<string, z.ZodTypeAny> {

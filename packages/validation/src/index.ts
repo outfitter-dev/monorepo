@@ -7,7 +7,11 @@ import {
   type Result,
 } from "@outfitter/contracts";
 import { z } from "zod";
-import { type JsonSchema7, type ZodToJsonSchemaOptions, zodToJsonSchema } from "zod-to-json-schema";
+import {
+  type JsonSchema7Type,
+  type Options as ZodToJsonSchemaOptions,
+  zodToJsonSchema,
+} from "zod-to-json-schema";
 
 export type ValidationSeverity = "error" | "warning";
 
@@ -27,12 +31,12 @@ export interface ValidationError {
 
 export interface SchemaRegistry {
   register<T>(name: string, schema: z.ZodSchema<T>): void;
-  get<T>(name: string): z.ZodSchema<T> | undefined;
-  validate<T>(name: string, data: unknown): Result<T, ValidationError>;
+  get<T = unknown>(name: string): z.ZodSchema<T> | undefined;
+  validate<T = unknown>(name: string, data: unknown): Result<T, ValidationError>;
   list(): readonly string[];
 }
 
-export type JsonSchema<T = unknown> = JsonSchema7<T>;
+export type JsonSchema = JsonSchema7Type;
 export type JsonSchemaOptions = ZodToJsonSchemaOptions;
 
 export interface EnvValidationOptions {
@@ -48,13 +52,13 @@ export function createSchemaRegistry(
   );
 
   return {
-    register(name, schema) {
-      registry.set(name, schema);
+    register<T>(name: string, schema: z.ZodSchema<T>): void {
+      registry.set(name, schema as z.ZodSchema<unknown>);
     },
-    get(name) {
-      return registry.get(name);
+    get<T = unknown>(name: string): z.ZodSchema<T> | undefined {
+      return registry.get(name) as z.ZodSchema<T> | undefined;
     },
-    validate(name, data) {
+    validate<T = unknown>(name: string, data: unknown): Result<T, ValidationError> {
       const schema = registry.get(name);
       if (!schema) {
         return err(createMissingSchemaError(name));
@@ -62,15 +66,15 @@ export function createSchemaRegistry(
 
       const parsed = schema.safeParse(data);
       if (parsed.success) {
-        return ok(parsed.data);
+        return ok(parsed.data as T);
       }
 
       return err(toValidationError(name, parsed.error));
     },
-    list() {
+    list(): readonly string[] {
       return Array.from(registry.keys());
     },
-  } satisfies SchemaRegistry;
+  };
 }
 
 export function validateWithDiagnostics<T>(
@@ -89,8 +93,8 @@ export function validateWithDiagnostics<T>(
 export function generateJsonSchema<T>(
   schema: z.ZodSchema<T>,
   options?: JsonSchemaOptions,
-): JsonSchema<T> {
-  return zodToJsonSchema(schema, options) as JsonSchema<T>;
+): JsonSchema {
+  return zodToJsonSchema(schema, options) as JsonSchema;
 }
 
 export function createEnvValidator<T>(
@@ -150,7 +154,10 @@ function formatPath(path: readonly string[]): string {
 }
 
 function inferSeverity(issue: z.ZodIssue): ValidationSeverity {
-  return issue.code === z.ZodIssueCode.custom && issue.params?.severity === "warning"
+  return issue.code === z.ZodIssueCode.custom &&
+    issue.params &&
+    "severity" in issue.params &&
+    issue.params["severity"] === "warning"
     ? "warning"
     : "error";
 }
@@ -170,5 +177,3 @@ function createMissingSchemaError(name: string): ValidationError {
     summary: `Schema "${name}" is not registered`,
   };
 }
-
-export type { ValidationDiagnostic, ValidationError, SchemaRegistry };
