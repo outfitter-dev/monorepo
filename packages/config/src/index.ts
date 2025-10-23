@@ -7,6 +7,7 @@ import {
   type Result,
 } from "@outfitter/contracts";
 import { z } from "zod";
+import { loadConfig } from "./loader.js";
 import {
   OUTFITTER_JSON_SCHEMA,
   type OutfitterConfigInput,
@@ -86,23 +87,79 @@ export function createDefaultOutfitterConfig(): OutfitterConfig {
   };
 }
 
-export function mergeOutfitterConfig(config?: OutfitterConfigInput): OutfitterConfig {
-  const normalized = config ?? {};
+export function mergeOutfitterConfig(input?: OutfitterConfigInput): OutfitterConfig {
+  const normalized = input ?? {};
 
   const mergedFeatures: OutfitterFeatures = {
     ...FEATURE_DEFAULTS,
     ...(normalized.features ?? {}),
   } as OutfitterFeatures;
 
-  return {
-    $schema: normalized.$schema,
+  // Build overrides object, excluding undefined fields
+  const overridesInput = normalized.overrides ?? {};
+  const overridesParts: Record<string, Record<string, unknown>> = {};
+  if (overridesInput.biome !== undefined) {
+    overridesParts["biome"] = overridesInput.biome;
+  }
+  if (overridesInput.prettier !== undefined) {
+    overridesParts["prettier"] = overridesInput.prettier;
+  }
+  if (overridesInput.stylelint !== undefined) {
+    overridesParts["stylelint"] = overridesInput.stylelint;
+  }
+  if (overridesInput.markdownlint !== undefined) {
+    overridesParts["markdownlint"] = overridesInput.markdownlint;
+  }
+  if (overridesInput.lefthook !== undefined) {
+    overridesParts["lefthook"] = overridesInput.lefthook;
+  }
+
+  // Build project object, excluding undefined fields
+  const projectInput = normalized.project;
+  const projectParts: Record<string, string> = {};
+  if (projectInput !== undefined) {
+    if (projectInput.type !== undefined) {
+      projectParts["type"] = projectInput.type;
+    }
+    if (projectInput.framework !== undefined) {
+      projectParts["framework"] = projectInput.framework;
+    }
+    if (projectInput.packageManager !== undefined) {
+      projectParts["packageManager"] = projectInput.packageManager;
+    }
+    if (projectInput.rootDir !== undefined) {
+      projectParts["rootDir"] = projectInput.rootDir;
+    }
+  }
+
+  // Build the final config object with all required fields
+  const result: {
+    features: OutfitterFeatures;
+    overrides: OutfitterOverrides;
+    ignore: readonly string[];
+    presets: readonly string[];
+    $schema?: string;
+    extends?: string | readonly string[];
+    project?: OutfitterProject;
+  } = {
     features: mergedFeatures,
-    overrides: { ...(normalized.overrides ?? {}) },
-    project: normalized.project,
+    overrides: overridesParts as OutfitterOverrides,
     ignore: normalized.ignore ?? [],
-    extends: normalized.extends,
     presets: normalized.presets ?? [],
   };
+
+  // Add optional fields only if they exist
+  if (normalized.$schema !== undefined) {
+    result.$schema = normalized.$schema;
+  }
+  if (normalized.extends !== undefined) {
+    result.extends = normalized.extends;
+  }
+  if (Object.keys(projectParts).length > 0) {
+    result.project = projectParts as OutfitterProject;
+  }
+
+  return result as OutfitterConfig;
 }
 
 export function parseOutfitterConfig(input: unknown): OutfitterConfig {
@@ -137,12 +194,22 @@ function createConfigError(error: unknown): ExtendedAppError {
     );
   }
 
+  if (error instanceof Error) {
+    return createError(
+      ERROR_CODES.CONFIG_PARSE_ERROR,
+      error.message,
+      {
+        name: "OutfitterConfigParseError",
+        cause: error,
+      },
+    );
+  }
+
   return createError(
     ERROR_CODES.CONFIG_PARSE_ERROR,
-    error instanceof Error ? error.message : "Unknown configuration error",
+    "Unknown configuration error",
     {
       name: "OutfitterConfigParseError",
-      cause: error instanceof Error ? error : undefined,
     },
   );
 }
@@ -153,3 +220,127 @@ export type {
   OutfitterOverridesInput,
   OutfitterProjectInput,
 };
+
+// Re-export universal loader APIs
+export { loadConfig, loadConfigFrom, findConfig, configExists, type LoadConfigOptions } from "./loader.js";
+export { loadToml, loadYaml, loadJsonc } from "./loaders/index.js";
+export {
+  resolvePaths,
+  findConfigPath,
+  getXdgConfigHome,
+  getXdgConfigDirs,
+  resolveXdgConfigPath,
+  type ConfigFormat,
+  type ConfigScope,
+  type ResolvePathsOptions,
+} from "./resolvers/index.js";
+export {
+  validateConfig,
+  safeParseConfig,
+  validatePartialConfig,
+  mergeAndValidate,
+  type ValidationError,
+  type ValidationIssue,
+} from "./schema-helpers.js";
+
+/**
+ * Load Outfitter configuration from filesystem with XDG resolution
+ *
+ * Searches for outfitter.config.{toml,jsonc,yaml} in:
+ * 1. Project: ./outfitter.config.{ext}, ./.config/outfitter/config.{ext}
+ * 2. User: ~/.config/outfitter/config.{ext}
+ * 3. Falls back to defaults if not found
+ *
+ * @param options - Load options
+ * @returns Result containing OutfitterConfig or error
+ */
+export async function loadOutfitterConfig(options?: {
+  readonly cwd?: string;
+  readonly required?: boolean;
+}): Promise<OutfitterConfigParseResult> {
+  const loadOptions: {
+    schema: typeof OutfitterConfigSchema;
+    name: string;
+    scope: "project";
+    formats: readonly ["toml", "jsonc", "yaml"];
+    defaults: Partial<OutfitterConfigInput>;
+    required: boolean;
+    cwd?: string;
+  } = {
+    schema: OutfitterConfigSchema,
+    name: "outfitter",
+    scope: "project",
+    formats: ["toml", "jsonc", "yaml"],
+    defaults: DEFAULT_OUTFITTER_CONFIG as Partial<OutfitterConfigInput>,
+    required: options?.required ?? false,
+  };
+
+  if (options?.cwd !== undefined) {
+    loadOptions.cwd = options.cwd;
+  }
+
+  const result = await loadConfig(loadOptions);
+
+  if (!result.ok) {
+    // Convert ValidationError to ExtendedAppError
+    const validationError = result.error;
+    const messages = (validationError.issues ?? [])
+      .map((issue) => {
+        const path = Array.isArray(issue.path) ? issue.path.join(".") : String(issue.path);
+        return path ? `${path}: ${issue.message}` : issue.message;
+      })
+      .join("; ");
+
+    return err(
+      createError(
+        ERROR_CODES.CONFIG_VALIDATION_FAILED,
+        messages || "Invalid Outfitter configuration",
+        {
+          name: "OutfitterConfigValidationError",
+          cause: validationError,
+        },
+      ),
+    );
+  }
+
+  return ok(mergeOutfitterConfig(result.value));
+}
+
+/**
+ * Load Outfitter configuration from a specific path
+ *
+ * @param path - Path to configuration file
+ * @returns Result containing OutfitterConfig or error
+ */
+export async function loadOutfitterConfigFrom(
+  path: string,
+): Promise<OutfitterConfigParseResult> {
+  const result = await loadConfig({
+    schema: OutfitterConfigSchema,
+    searchPaths: [path],
+    defaults: DEFAULT_OUTFITTER_CONFIG as Partial<OutfitterConfigInput>,
+  });
+
+  if (!result.ok) {
+    const validationError = result.error;
+    const messages = (validationError.issues ?? [])
+      .map((issue) => {
+        const path = Array.isArray(issue.path) ? issue.path.join(".") : String(issue.path);
+        return path ? `${path}: ${issue.message}` : issue.message;
+      })
+      .join("; ");
+
+    return err(
+      createError(
+        ERROR_CODES.CONFIG_VALIDATION_FAILED,
+        messages || "Invalid Outfitter configuration",
+        {
+          name: "OutfitterConfigValidationError",
+          cause: validationError,
+        },
+      ),
+    );
+  }
+
+  return ok(mergeOutfitterConfig(result.value));
+}

@@ -1,7 +1,7 @@
 {
   "name": "@outfitter/config",
   "description": "Outfitter configuration schema, defaults, and helpers",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "packageManager": "bun@1.3.0",
   "sideEffects": false,
@@ -29,6 +29,22 @@
     "./schema": {
       "types": "./dist/schema.d.ts",
       "default": "./dist/schema.js"
+    },
+    "./loader": {
+      "types": "./dist/loader.d.ts",
+      "default": "./dist/loader.js"
+    },
+    "./loaders": {
+      "types": "./dist/loaders/index.d.ts",
+      "default": "./dist/loaders/index.js"
+    },
+    "./resolvers": {
+      "types": "./dist/resolvers/index.d.ts",
+      "default": "./dist/resolvers/index.js"
+    },
+    "./schema-helpers": {
+      "types": "./dist/schema-helpers.d.ts",
+      "default": "./dist/schema-helpers.js"
     }
   },
   "main": "./dist/index.js",
@@ -49,6 +65,7 @@
     "type-check:test": "tsc --project tsconfig.test.json --noEmit"
   },
   "dependencies": {
+    "strip-json-comments": "^5.0.3",
     "zod": "^3.25.1"
   },
   "peerDependencies": {
