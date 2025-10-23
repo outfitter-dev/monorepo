@@ -674,3 +674,6 @@ export const combine3 = <T1, T2, T3, E>(
   }
   return ok([r1.value, r2.value, r3.value]);
 };
+
+// Re-export async combinators
+export { parallelAsync, sequenceAsync } from "./combinators.js";
