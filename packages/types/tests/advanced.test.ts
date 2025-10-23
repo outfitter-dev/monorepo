@@ -29,26 +29,23 @@ describe("Advanced type utilities", () => {
       type Keys = DeepKeys<User>;
 
       // Type-level tests - these would fail at compile time if wrong
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key1: Keys = "name";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key2: Keys = "age";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key3: Keys = "address";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key4: Keys = "address.city";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key5: Keys = "address.zip";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key6: Keys = "address.country";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key7: Keys = "address.country.code";
-      // biome-ignore lint/correctness/noUnusedVariables: Type-level test verifying compile-time behavior
       const key8: Keys = "address.country.name";
 
       expect(key1).toBe("name");
+      expect(key2).toBe("age");
+      expect(key3).toBe("address");
       expect(key4).toBe("address.city");
+      expect(key5).toBe("address.zip");
+      expect(key6).toBe("address.country");
       expect(key7).toBe("address.country.code");
+      expect(key8).toBe("address.country.name");
     });
 
     it("should work with simple objects", () => {
@@ -77,6 +74,7 @@ describe("Advanced type utilities", () => {
       const key3: Keys = "nested.values";
 
       expect(key1).toBe("items");
+      expect(key2).toBe("nested");
       expect(key3).toBe("nested.values");
     });
   });
