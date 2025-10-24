@@ -189,6 +189,15 @@ export const assertNonEmpty = <T>(
  *   'User must be at least 18 years old'
  * );
  *
+ * // Check with type guards
+ * const value: unknown = "test";
+ * const result4 = assertMatches(
+ *   value,
+ *   (v): v is string => typeof v === "string",
+ *   'Must be a string'
+ * );
+ * // result4.value is string if ok
+ *
  * // Chain multiple assertions
  * import { andThen } from '@outfitter/contracts/result';
  *
@@ -199,14 +208,24 @@ export const assertNonEmpty = <T>(
  *   );
  * ```
  */
-export const assertMatches = <T>(
+export function assertMatches<T, U extends T>(
+  value: T,
+  predicate: (v: T) => v is U,
+  message: string,
+): Result<U, ExtendedAppError>;
+export function assertMatches<T>(
   value: T,
   predicate: (v: T) => boolean,
   message: string,
-): Result<T, ExtendedAppError> => {
+): Result<T, ExtendedAppError>;
+export function assertMatches<T>(
+  value: T,
+  predicate: (v: T) => boolean,
+  message: string,
+): Result<T, ExtendedAppError> {
   if (predicate(value)) {
     return ok(value);
   }
 
   return err(createError(ERROR_CODES.ASSERTION_FAILED, message));
-};
+}

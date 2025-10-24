@@ -5,6 +5,7 @@
 import { describe, expect, it } from "vitest";
 import { ERROR_CODES } from "../../src/error/codes.js";
 import type { AppError } from "../../src/error/index.js";
+import type { Result } from "../../src/result/index.js";
 import {
   combine2,
   combine3,
@@ -48,7 +49,7 @@ describe("sequence", () => {
   });
 
   it("should handle empty array", () => {
-    const results: (typeof ok<number>)[] = [];
+    const results: Result<number>[] = [];
     const result = sequence(results);
 
     expect(result.ok).toBeTruthy();
@@ -115,7 +116,7 @@ describe("parallel", () => {
   });
 
   it("should handle empty array", () => {
-    const results: (typeof ok<number>)[] = [];
+    const results: Result<number>[] = [];
     const result = parallel(results);
 
     expect(result.ok).toBeTruthy();
@@ -173,7 +174,7 @@ describe("partition", () => {
   });
 
   it("should handle empty array", () => {
-    const results: (typeof ok<number>)[] = [];
+    const results: Result<number>[] = [];
     const { successes, failures } = partition(results);
 
     expect(successes).toEqual([]);
