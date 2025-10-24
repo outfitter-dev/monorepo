@@ -1,0 +1,97 @@
+{
+  "name": "@outfitter/contracts",
+  "description": "Type-safe contracts for errors, results, assertions, and branded types",
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "bun@1.3.0",
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "directory": "packages/contracts"
+  },
+  "keywords": [
+    "contracts",
+    "error-handling",
+    "result-pattern",
+    "branded-types",
+    "assertions",
+    "zod",
+    "typescript"
+  ],
+  "engines": {
+    "bun": ">=1.3.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./error": {
+      "types": "./dist/error/index.d.ts",
+      "default": "./dist/error/index.js"
+    },
+    "./error/categories": {
+      "types": "./dist/error/categories.d.ts",
+      "default": "./dist/error/categories.js"
+    },
+    "./error/codes": {
+      "types": "./dist/error/codes.d.ts",
+      "default": "./dist/error/codes.js"
+    },
+    "./error/recovery": {
+      "types": "./dist/error/recovery.d.ts",
+      "default": "./dist/error/recovery.js"
+    },
+    "./result": {
+      "types": "./dist/result/index.d.ts",
+      "default": "./dist/result/index.js"
+    },
+    "./result/combinators": {
+      "types": "./dist/result/combinators.d.ts",
+      "default": "./dist/result/combinators.js"
+    },
+    "./assert": {
+      "types": "./dist/assert/index.d.ts",
+      "default": "./dist/assert/index.js"
+    },
+    "./branded": {
+      "types": "./dist/branded/index.d.ts",
+      "default": "./dist/branded/index.js"
+    },
+    "./zod": {
+      "types": "./dist/zod/index.d.ts",
+      "default": "./dist/zod/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun run build:tsc",
+    "build:tsc": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "dev": "tsc --project tsconfig.build.json --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "type-check": "tsc --noEmit",
+    "type-check:test": "tsc --project tsconfig.test.json --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.25.1"
+  },
+  "peerDependencies": {
+    "type-fest": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.0",
+    "@types/node": "^22.5.4",
+    "typescript": "5.9.3",
+    "vitest": "1.6.1"
+  }
+}

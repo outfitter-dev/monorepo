@@ -18,6 +18,8 @@
       }
     ],
     "unicorn/no-null": "off",
+    "unicorn/require-module-specifiers": "off",
+    "sort-imports": "off",
     "typescript/no-unnecessary-condition": "error",
     "typescript/no-unsafe-declaration-merging": "error",
     "typescript/no-floating-promises": "error",
