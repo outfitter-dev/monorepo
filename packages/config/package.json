@@ -1,0 +1,80 @@
+{
+  "name": "@outfitter/config",
+  "description": "Outfitter configuration schema, defaults, and helpers",
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "bun@1.3.0",
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outfitter-dev/monorepo.git",
+    "directory": "packages/config"
+  },
+  "keywords": [
+    "outfitter",
+    "configuration",
+    "schema",
+    "zod",
+    "typescript"
+  ],
+  "engines": {
+    "bun": ">=1.3.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./dist/schema.js"
+    },
+    "./loader": {
+      "types": "./dist/loader.d.ts",
+      "default": "./dist/loader.js"
+    },
+    "./loaders": {
+      "types": "./dist/loaders/index.d.ts",
+      "default": "./dist/loaders/index.js"
+    },
+    "./resolvers": {
+      "types": "./dist/resolvers/index.d.ts",
+      "default": "./dist/resolvers/index.js"
+    },
+    "./schema-helpers": {
+      "types": "./dist/schema-helpers.d.ts",
+      "default": "./dist/schema-helpers.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun run build:tsc",
+    "build:tsc": "tsc --project tsconfig.build.json",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "dev": "tsc --project tsconfig.build.json --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "type-check": "tsc --noEmit",
+    "type-check:test": "tsc --project tsconfig.test.json --noEmit"
+  },
+  "dependencies": {
+    "strip-json-comments": "^5.0.3",
+    "zod": "^3.25.1"
+  },
+  "peerDependencies": {
+    "@outfitter/contracts": "2.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.0",
+    "@types/node": "^22.5.4",
+    "typescript": "5.9.3",
+    "vitest": "1.6.1"
+  }
+}

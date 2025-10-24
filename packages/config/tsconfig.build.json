@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Override for build - emit files
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+
+    // Build mode - standard resolution
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": false,
+
+    // Ensure build output is clean
+    "removeComments": false,
+    "importHelpers": false,
+
+    // Include Bun and Node types
+    "types": ["bun", "node"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "tests", "**/*.test.ts", "**/*.spec.ts"]
+}
