@@ -24,13 +24,5 @@
     "*.mjs",
     "*.json"
   ],
-  "exclude": [
-    "node_modules/**",
-    "dist/**",
-    "**/dist/**",
-    "packages/*/dist/**",
-    "apps/*/dist/**",
-    "coverage/**",
-    "**/*.tsbuildinfo"
-  ]
+  "exclude": ["node_modules/**", "**/dist/**", "coverage/**", "**/*.tsbuildinfo"]
 }
