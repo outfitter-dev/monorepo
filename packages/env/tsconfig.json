@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.strict.json",
+  "compilerOptions": {
+    // Environment setup
+    "lib": ["ESNext"],
+    "target": "ES2022",
+
+    // Bundler mode for development
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts", "tests"]
+}
