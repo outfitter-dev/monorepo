@@ -150,8 +150,8 @@ describe("unwrap", () => {
 
   it("should work with different value types", () => {
     expect(unwrap(ok("hello"))).toBe("hello");
-    expect(unwrap(ok({ foo: "bar" }))).toEqual({ foo: "bar" });
-    expect(unwrap(ok([1, 2, 3]))).toEqual([1, 2, 3]);
+    expect(unwrap(ok({ foo: "bar" }))).toStrictEqual({ foo: "bar" });
+    expect(unwrap(ok([1, 2, 3]))).toStrictEqual([1, 2, 3]);
   });
 });
 
@@ -170,8 +170,8 @@ describe("unwrapOr", () => {
     expect(unwrapOr(ok("hello"), "default")).toBe("hello");
     expect(unwrapOr(err("error"), "default")).toBe("default");
 
-    expect(unwrapOr(ok([1, 2]), [])).toEqual([1, 2]);
-    expect(unwrapOr(err("error"), [])).toEqual([]);
+    expect(unwrapOr(ok([1, 2]), [])).toStrictEqual([1, 2]);
+    expect(unwrapOr(err("error"), [])).toStrictEqual([]);
   });
 
   it("should not evaluate default if result is ok", () => {
@@ -510,7 +510,7 @@ describe("collect", () => {
 
     expect(isOk(collected)).toBeTruthy();
     if (isOk(collected)) {
-      expect(collected.value).toEqual([1, 2, 3]);
+      expect(collected.value).toStrictEqual([1, 2, 3]);
     }
   });
 
@@ -532,7 +532,7 @@ describe("collect", () => {
 
     expect(isOk(collected)).toBeTruthy();
     if (isOk(collected)) {
-      expect(collected.value).toEqual([]);
+      expect(collected.value).toStrictEqual([]);
     }
   });
 
@@ -540,7 +540,7 @@ describe("collect", () => {
     const okCollected = collect([ok(42)]);
     expect(isOk(okCollected)).toBeTruthy();
     if (isOk(okCollected)) {
-      expect(okCollected.value).toEqual([42]);
+      expect(okCollected.value).toStrictEqual([42]);
     }
 
     const error = { code: 1000, message: "Error", name: "Error" };
@@ -557,7 +557,7 @@ describe("collect", () => {
 
     expect(isOk(collected)).toBeTruthy();
     if (isOk(collected)) {
-      expect(collected.value).toEqual(["a", "b", "c"]);
+      expect(collected.value).toStrictEqual(["a", "b", "c"]);
     }
   });
 });
