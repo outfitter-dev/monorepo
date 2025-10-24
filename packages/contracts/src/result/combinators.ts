@@ -3,8 +3,7 @@
  * @module result/combinators
  */
 
-import type { Result } from "./index.js";
-import { ok } from "./index.js";
+import { ok, type Result } from "./index.js";
 
 /**
  * Sequences an array of Promise<Result> values sequentially

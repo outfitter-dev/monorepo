@@ -50,12 +50,12 @@ describe("createError", () => {
 
     it("should set recoverable and retryable flags correctly", () => {
       const validationError = createError(ERROR_CODES.INVALID_INPUT, "Test");
-      expect(validationError.isRecoverable).toBe(false);
-      expect(validationError.isRetryable).toBe(false);
+      expect(validationError.isRecoverable).toBeFalsy();
+      expect(validationError.isRetryable).toBeFalsy();
 
       const networkError = createError(ERROR_CODES.CONNECTION_TIMEOUT, "Test");
-      expect(networkError.isRecoverable).toBe(true);
-      expect(networkError.isRetryable).toBe(true);
+      expect(networkError.isRecoverable).toBeTruthy();
+      expect(networkError.isRetryable).toBeTruthy();
     });
 
     it("should generate correlation ID automatically", () => {
@@ -135,7 +135,7 @@ describe("createError", () => {
     it("should not include cause field if not provided", () => {
       const error = createError(ERROR_CODES.INVALID_INPUT, "Test");
 
-      expect("cause" in error).toBe(false);
+      expect("cause" in error).toBeFalsy();
     });
   });
 
@@ -196,8 +196,8 @@ describe("createErrorFromCode", () => {
     const error = createErrorFromCode(ERROR_CODES.CONNECTION_TIMEOUT);
 
     expect(error.severity).toBe("ERROR");
-    expect(error.isRecoverable).toBe(true);
-    expect(error.isRetryable).toBe(true);
+    expect(error.isRecoverable).toBeTruthy();
+    expect(error.isRetryable).toBeTruthy();
     expect(error.timestamp).toBeDefined();
     expect(error.correlationId).toBeDefined();
   });
@@ -212,7 +212,7 @@ describe("isAppError", () => {
         name: "TestError",
       };
 
-      expect(isAppError(error)).toBe(true);
+      expect(isAppError(error)).toBeTruthy();
     });
 
     it("should return true for AppError with cause", () => {
@@ -223,54 +223,54 @@ describe("isAppError", () => {
         cause: new Error("Cause"),
       };
 
-      expect(isAppError(error)).toBe(true);
+      expect(isAppError(error)).toBeTruthy();
     });
 
     it("should return true for ExtendedAppError", () => {
       const error = createError(ERROR_CODES.INVALID_INPUT, "Test");
-      expect(isAppError(error)).toBe(true);
+      expect(isAppError(error)).toBeTruthy();
     });
   });
 
   describe("invalid objects", () => {
     it("should return false for null", () => {
-      expect(isAppError(null)).toBe(false);
+      expect(isAppError(null)).toBeFalsy();
     });
 
     it("should return false for undefined", () => {
-      expect(isAppError(undefined)).toBe(false);
+      expect(isAppError(undefined)).toBeFalsy();
     });
 
     it("should return false for primitive values", () => {
-      expect(isAppError(42)).toBe(false);
-      expect(isAppError("error")).toBe(false);
-      expect(isAppError(true)).toBe(false);
+      expect(isAppError(42)).toBeFalsy();
+      expect(isAppError("error")).toBeFalsy();
+      expect(isAppError(true)).toBeFalsy();
     });
 
     it("should return false for standard Error", () => {
-      expect(isAppError(new Error("Test"))).toBe(false);
+      expect(isAppError(new Error("Test"))).toBeFalsy();
     });
 
     it("should return false for object missing code", () => {
-      expect(isAppError({ message: "Test", name: "Error" })).toBe(false);
+      expect(isAppError({ message: "Test", name: "Error" })).toBeFalsy();
     });
 
     it("should return false for object missing message", () => {
-      expect(isAppError({ code: 1000, name: "Error" })).toBe(false);
+      expect(isAppError({ code: 1000, name: "Error" })).toBeFalsy();
     });
 
     it("should return false for object missing name", () => {
-      expect(isAppError({ code: 1000, message: "Test" })).toBe(false);
+      expect(isAppError({ code: 1000, message: "Test" })).toBeFalsy();
     });
 
     it("should return false for object with wrong types", () => {
-      expect(isAppError({ code: "1000", message: "Test", name: "Error" })).toBe(false);
-      expect(isAppError({ code: 1000, message: 123, name: "Error" })).toBe(false);
-      expect(isAppError({ code: 1000, message: "Test", name: 123 })).toBe(false);
+      expect(isAppError({ code: "1000", message: "Test", name: "Error" })).toBeFalsy();
+      expect(isAppError({ code: 1000, message: 123, name: "Error" })).toBeFalsy();
+      expect(isAppError({ code: 1000, message: "Test", name: 123 })).toBeFalsy();
     });
 
     it("should return false for empty object", () => {
-      expect(isAppError({})).toBe(false);
+      expect(isAppError({})).toBeFalsy();
     });
   });
 });
@@ -279,7 +279,7 @@ describe("isExtendedAppError", () => {
   describe("valid ExtendedAppError objects", () => {
     it("should return true for createError output", () => {
       const error = createError(ERROR_CODES.INVALID_INPUT, "Test");
-      expect(isExtendedAppError(error)).toBe(true);
+      expect(isExtendedAppError(error)).toBeTruthy();
     });
 
     it("should return true for manually constructed ExtendedAppError", () => {
@@ -295,7 +295,7 @@ describe("isExtendedAppError", () => {
         isRetryable: false,
       };
 
-      expect(isExtendedAppError(error)).toBe(true);
+      expect(isExtendedAppError(error)).toBeTruthy();
     });
   });
 
@@ -307,16 +307,16 @@ describe("isExtendedAppError", () => {
         name: "Error",
       };
 
-      expect(isExtendedAppError(error)).toBe(false);
+      expect(isExtendedAppError(error)).toBeFalsy();
     });
 
     it("should return false for null/undefined", () => {
-      expect(isExtendedAppError(null)).toBe(false);
-      expect(isExtendedAppError(undefined)).toBe(false);
+      expect(isExtendedAppError(null)).toBeFalsy();
+      expect(isExtendedAppError(undefined)).toBeFalsy();
     });
 
     it("should return false for standard Error", () => {
-      expect(isExtendedAppError(new Error("Test"))).toBe(false);
+      expect(isExtendedAppError(new Error("Test"))).toBeFalsy();
     });
 
     it("should return false for AppError missing severity", () => {
@@ -331,7 +331,7 @@ describe("isExtendedAppError", () => {
         isRetryable: false,
       };
 
-      expect(isExtendedAppError(error)).toBe(false);
+      expect(isExtendedAppError(error)).toBeFalsy();
     });
 
     it("should return false for AppError with wrong field types", () => {
@@ -347,7 +347,7 @@ describe("isExtendedAppError", () => {
         isRetryable: false,
       };
 
-      expect(isExtendedAppError(error)).toBe(false);
+      expect(isExtendedAppError(error)).toBeFalsy();
     });
   });
 });
@@ -357,7 +357,7 @@ describe("fromError", () => {
     const original = new Error("Original error");
     const appError = fromError(original);
 
-    expect(isExtendedAppError(appError)).toBe(true);
+    expect(isExtendedAppError(appError)).toBeTruthy();
     expect(appError.message).toBe("Original error");
     expect(appError.code).toBe(ERROR_CODES.INTERNAL_ERROR);
     expect(appError.cause).toBe(original);
@@ -416,7 +416,7 @@ describe("toAppError", () => {
 
       const result = toAppError(appError);
 
-      expect(isExtendedAppError(result)).toBe(true);
+      expect(isExtendedAppError(result)).toBeTruthy();
       expect(result.code).toBe(ERROR_CODES.INVALID_INPUT);
       expect(result.message).toBe("Test message");
       expect(result.name).toBe("ValidationError");
@@ -467,7 +467,7 @@ describe("toAppError", () => {
       const error = new Error("Standard error");
       const result = toAppError(error);
 
-      expect(isExtendedAppError(result)).toBe(true);
+      expect(isExtendedAppError(result)).toBeTruthy();
       expect(result.message).toBe("Standard error");
       expect(result.code).toBe(ERROR_CODES.UNKNOWN_ERROR);
     });
@@ -484,7 +484,7 @@ describe("toAppError", () => {
     it("should convert string to ExtendedAppError", () => {
       const result = toAppError("String error message");
 
-      expect(isExtendedAppError(result)).toBe(true);
+      expect(isExtendedAppError(result)).toBeTruthy();
       expect(result.message).toBe("String error message");
       expect(result.code).toBe(ERROR_CODES.UNKNOWN_ERROR);
     });
@@ -541,8 +541,8 @@ describe("formatErrorForLog", () => {
     expect(formatted.severity).toBe("ERROR");
     expect(formatted.correlationId).toBe(error.correlationId);
     expect(formatted.timestamp).toBe(error.timestamp);
-    expect(formatted.isRecoverable).toBe(true);
-    expect(formatted.isRetryable).toBe(true);
+    expect(formatted.isRecoverable).toBeTruthy();
+    expect(formatted.isRetryable).toBeTruthy();
   });
 
   it("should include cause message if present", () => {
@@ -557,7 +557,7 @@ describe("formatErrorForLog", () => {
     const error = createError(ERROR_CODES.INVALID_INPUT, "Test");
     const formatted = formatErrorForLog(error);
 
-    expect("cause" in formatted).toBe(false);
+    expect("cause" in formatted).toBeFalsy();
   });
 
   it("should be JSON-serializable", () => {

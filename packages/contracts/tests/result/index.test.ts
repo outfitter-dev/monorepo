@@ -287,10 +287,10 @@ describe("mapErr", () => {
 
   it("should not transform ok value", () => {
     const result = ok(42);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    const mapped = mapErr(result, (e) => ({
-      ...e,
+    const mapped = mapErr(result, () => ({
+      code: 1000,
       message: "Should not see this",
+      name: "Error",
     }));
 
     expect(isOk(mapped)).toBeTruthy();
@@ -443,7 +443,7 @@ describe("match", () => {
 
     const output = match(result, {
       ok: (value) => `Success: ${value}`,
-      err: (error) => `Failed: ${error.message}`,
+      err: () => `Failed: unknown`,
     });
 
     expect(output).toBe("Success: 42");
@@ -713,9 +713,13 @@ describe("tryCatchAsync", () => {
 
 describe("Result type integration", () => {
   it("should compose multiple operations", () => {
+    type MathError =
+      | { code: 2012; message: string; name: string }
+      | { code: 1000; message: string; name: string };
+
     const divide = (a: number, b: number) => {
       if (b === 0) {
-        return err({
+        return err<MathError>({
           code: ERROR_CODES.DIVISION_BY_ZERO,
           message: "Cannot divide by zero",
           name: "MathError",
@@ -726,7 +730,7 @@ describe("Result type integration", () => {
 
     const sqrt = (n: number) => {
       if (n < 0) {
-        return err({
+        return err<MathError>({
           code: ERROR_CODES.INVALID_INPUT,
           message: "Cannot sqrt negative",
           name: "MathError",
@@ -752,9 +756,13 @@ describe("Result type integration", () => {
   });
 
   it("should work with validation pipelines", () => {
+    type ValidationError =
+      | { code: 1000; message: string; name: string }
+      | { code: 1007; message: string; name: string };
+
     const validatePositive = (n: number) => {
       if (n <= 0) {
-        return err({
+        return err<ValidationError>({
           code: ERROR_CODES.INVALID_INPUT,
           message: "Must be positive",
           name: "ValidationError",
@@ -765,7 +773,7 @@ describe("Result type integration", () => {
 
     const validateLessThan100 = (n: number) => {
       if (n >= 100) {
-        return err({
+        return err<ValidationError>({
           code: ERROR_CODES.VALUE_OUT_OF_RANGE,
           message: "Must be < 100",
           name: "ValidationError",

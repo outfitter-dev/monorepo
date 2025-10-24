@@ -48,7 +48,10 @@ import { err, ok } from "../result/index.js";
  * }
  * ```
  */
-export const parseZod = <T>(schema: z.ZodSchema<T>, data: unknown): Result<T, ExtendedAppError> => {
+export const parseZod = <Output, Def extends z.ZodTypeDef = z.ZodTypeDef, Input = Output>(
+  schema: z.ZodType<Output, Def, Input>,
+  data: unknown,
+): Result<Output, ExtendedAppError> => {
   const result = schema.safeParse(data);
 
   if (result.success) {
@@ -94,10 +97,10 @@ export const parseZod = <T>(schema: z.ZodSchema<T>, data: unknown): Result<T, Ex
  * }
  * ```
  */
-export const parseZodDetailed = <T>(
-  schema: z.ZodSchema<T>,
+export const parseZodDetailed = <Output, Def extends z.ZodTypeDef = z.ZodTypeDef, Input = Output>(
+  schema: z.ZodType<Output, Def, Input>,
   data: unknown,
-): Result<T, ExtendedAppError> => {
+): Result<Output, ExtendedAppError> => {
   const result = schema.safeParse(data);
 
   if (result.success) {
@@ -151,10 +154,14 @@ export const parseZodDetailed = <T>(
  * const result = await parseZodAsync(schema, { email: 'test@example.com' });
  * ```
  */
-export const parseZodAsync = async <T>(
-  schema: z.ZodSchema<T>,
+export const parseZodAsync = async <
+  Output,
+  Def extends z.ZodTypeDef = z.ZodTypeDef,
+  Input = Output,
+>(
+  schema: z.ZodType<Output, Def, Input>,
   data: unknown,
-): Promise<Result<T, ExtendedAppError>> => {
+): Promise<Result<Output, ExtendedAppError>> => {
   const result = await schema.safeParseAsync(data);
 
   if (result.success) {
@@ -200,9 +207,9 @@ export const parseZodAsync = async <T>(
  * const result2 = validateUser({ name: 'Bob', email: 'invalid' });
  * ```
  */
-export const createValidator = <T>(
-  schema: z.ZodSchema<T>,
-): ((data: unknown) => Result<T, ExtendedAppError>) => {
+export const createValidator = <Output, Def extends z.ZodTypeDef = z.ZodTypeDef, Input = Output>(
+  schema: z.ZodType<Output, Def, Input>,
+): ((data: unknown) => Result<Output, ExtendedAppError>) => {
   return (data: unknown) => parseZod(schema, data);
 };
 
@@ -234,8 +241,12 @@ export const createValidator = <T>(
  * const result = await validateUser({ email: 'test@example.com' });
  * ```
  */
-export const createAsyncValidator = <T>(
-  schema: z.ZodSchema<T>,
-): ((data: unknown) => Promise<Result<T, ExtendedAppError>>) => {
+export const createAsyncValidator = <
+  Output,
+  Def extends z.ZodTypeDef = z.ZodTypeDef,
+  Input = Output,
+>(
+  schema: z.ZodType<Output, Def, Input>,
+): ((data: unknown) => Promise<Result<Output, ExtendedAppError>>) => {
   return async (data: unknown) => parseZodAsync(schema, data);
 };

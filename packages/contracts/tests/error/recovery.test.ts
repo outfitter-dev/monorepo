@@ -16,62 +16,62 @@ import {
 describe("isRecoverable", () => {
   describe("non-recoverable categories", () => {
     it("should return false for SECURITY errors", () => {
-      expect(isRecoverable({ code: ERROR_CODES.UNAUTHORIZED_ACCESS })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.INJECTION_ATTEMPT })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.RATE_LIMIT_EXCEEDED })).toBe(false);
+      expect(isRecoverable({ code: ERROR_CODES.UNAUTHORIZED_ACCESS })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.INJECTION_ATTEMPT })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.RATE_LIMIT_EXCEEDED })).toBeFalsy();
     });
 
     it("should return false for AUTH errors", () => {
-      expect(isRecoverable({ code: ERROR_CODES.AUTHENTICATION_FAILED })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.SESSION_EXPIRED })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.INVALID_CREDENTIALS })).toBe(false);
+      expect(isRecoverable({ code: ERROR_CODES.AUTHENTICATION_FAILED })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.SESSION_EXPIRED })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.INVALID_CREDENTIALS })).toBeFalsy();
     });
 
     it("should return false for VALIDATION errors", () => {
-      expect(isRecoverable({ code: ERROR_CODES.INVALID_INPUT })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.SCHEMA_VALIDATION_FAILED })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.TYPE_MISMATCH })).toBe(false);
+      expect(isRecoverable({ code: ERROR_CODES.INVALID_INPUT })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.SCHEMA_VALIDATION_FAILED })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.TYPE_MISMATCH })).toBeFalsy();
     });
   });
 
   describe("recoverable categories", () => {
     it("should return true for NETWORK errors", () => {
-      expect(isRecoverable({ code: ERROR_CODES.CONNECTION_REFUSED })).toBe(true);
-      expect(isRecoverable({ code: ERROR_CODES.CONNECTION_TIMEOUT })).toBe(true);
-      expect(isRecoverable({ code: ERROR_CODES.DNS_LOOKUP_FAILED })).toBe(true);
-      expect(isRecoverable({ code: ERROR_CODES.SERVICE_UNAVAILABLE })).toBe(true);
+      expect(isRecoverable({ code: ERROR_CODES.CONNECTION_REFUSED })).toBeTruthy();
+      expect(isRecoverable({ code: ERROR_CODES.CONNECTION_TIMEOUT })).toBeTruthy();
+      expect(isRecoverable({ code: ERROR_CODES.DNS_LOOKUP_FAILED })).toBeTruthy();
+      expect(isRecoverable({ code: ERROR_CODES.SERVICE_UNAVAILABLE })).toBeTruthy();
     });
 
     it("should return true for TIMEOUT errors", () => {
-      expect(isRecoverable({ code: ERROR_CODES.OPERATION_TIMEOUT })).toBe(true);
-      expect(isRecoverable({ code: ERROR_CODES.REQUEST_TIMEOUT })).toBe(true);
-      expect(isRecoverable({ code: ERROR_CODES.DEADLINE_EXCEEDED })).toBe(true);
+      expect(isRecoverable({ code: ERROR_CODES.OPERATION_TIMEOUT })).toBeTruthy();
+      expect(isRecoverable({ code: ERROR_CODES.REQUEST_TIMEOUT })).toBeTruthy();
+      expect(isRecoverable({ code: ERROR_CODES.DEADLINE_EXCEEDED })).toBeTruthy();
     });
 
     it("should return true for RESOURCE errors", () => {
-      expect(isRecoverable({ code: ERROR_CODES.OUT_OF_MEMORY })).toBe(true);
-      expect(isRecoverable({ code: ERROR_CODES.POOL_EXHAUSTED })).toBe(true);
-      expect(isRecoverable({ code: ERROR_CODES.RESOURCE_UNAVAILABLE })).toBe(true);
+      expect(isRecoverable({ code: ERROR_CODES.OUT_OF_MEMORY })).toBeTruthy();
+      expect(isRecoverable({ code: ERROR_CODES.POOL_EXHAUSTED })).toBeTruthy();
+      expect(isRecoverable({ code: ERROR_CODES.RESOURCE_UNAVAILABLE })).toBeTruthy();
     });
   });
 
   describe("ambiguous categories", () => {
     it("should return false for RUNTIME errors (conservative default)", () => {
-      expect(isRecoverable({ code: ERROR_CODES.RUNTIME_EXCEPTION })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.INTERNAL_ERROR })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.UNKNOWN_ERROR })).toBe(false);
+      expect(isRecoverable({ code: ERROR_CODES.RUNTIME_EXCEPTION })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.INTERNAL_ERROR })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.UNKNOWN_ERROR })).toBeFalsy();
     });
 
     it("should return false for FILESYSTEM errors (conservative default)", () => {
-      expect(isRecoverable({ code: ERROR_CODES.FILE_NOT_FOUND })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.PERMISSION_DENIED })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.IO_ERROR })).toBe(false);
+      expect(isRecoverable({ code: ERROR_CODES.FILE_NOT_FOUND })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.PERMISSION_DENIED })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.IO_ERROR })).toBeFalsy();
     });
 
     it("should return false for CONFIGURATION errors (conservative default)", () => {
-      expect(isRecoverable({ code: ERROR_CODES.CONFIG_NOT_FOUND })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.CONFIG_INVALID })).toBe(false);
-      expect(isRecoverable({ code: ERROR_CODES.ENV_VAR_MISSING })).toBe(false);
+      expect(isRecoverable({ code: ERROR_CODES.CONFIG_NOT_FOUND })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.CONFIG_INVALID })).toBeFalsy();
+      expect(isRecoverable({ code: ERROR_CODES.ENV_VAR_MISSING })).toBeFalsy();
     });
   });
 });
@@ -79,52 +79,52 @@ describe("isRecoverable", () => {
 describe("isRetryable", () => {
   describe("retryable categories", () => {
     it("should return true for NETWORK errors", () => {
-      expect(isRetryable({ code: ERROR_CODES.CONNECTION_REFUSED })).toBe(true);
-      expect(isRetryable({ code: ERROR_CODES.CONNECTION_TIMEOUT })).toBe(true);
-      expect(isRetryable({ code: ERROR_CODES.NETWORK_UNREACHABLE })).toBe(true);
+      expect(isRetryable({ code: ERROR_CODES.CONNECTION_REFUSED })).toBeTruthy();
+      expect(isRetryable({ code: ERROR_CODES.CONNECTION_TIMEOUT })).toBeTruthy();
+      expect(isRetryable({ code: ERROR_CODES.NETWORK_UNREACHABLE })).toBeTruthy();
     });
 
     it("should return true for TIMEOUT errors", () => {
-      expect(isRetryable({ code: ERROR_CODES.OPERATION_TIMEOUT })).toBe(true);
-      expect(isRetryable({ code: ERROR_CODES.REQUEST_TIMEOUT })).toBe(true);
-      expect(isRetryable({ code: ERROR_CODES.DEADLINE_EXCEEDED })).toBe(true);
+      expect(isRetryable({ code: ERROR_CODES.OPERATION_TIMEOUT })).toBeTruthy();
+      expect(isRetryable({ code: ERROR_CODES.REQUEST_TIMEOUT })).toBeTruthy();
+      expect(isRetryable({ code: ERROR_CODES.DEADLINE_EXCEEDED })).toBeTruthy();
     });
   });
 
   describe("non-retryable categories", () => {
     it("should return false for VALIDATION errors", () => {
-      expect(isRetryable({ code: ERROR_CODES.INVALID_INPUT })).toBe(false);
-      expect(isRetryable({ code: ERROR_CODES.SCHEMA_VALIDATION_FAILED })).toBe(false);
+      expect(isRetryable({ code: ERROR_CODES.INVALID_INPUT })).toBeFalsy();
+      expect(isRetryable({ code: ERROR_CODES.SCHEMA_VALIDATION_FAILED })).toBeFalsy();
     });
 
     it("should return false for SECURITY errors", () => {
-      expect(isRetryable({ code: ERROR_CODES.UNAUTHORIZED_ACCESS })).toBe(false);
-      expect(isRetryable({ code: ERROR_CODES.INJECTION_ATTEMPT })).toBe(false);
+      expect(isRetryable({ code: ERROR_CODES.UNAUTHORIZED_ACCESS })).toBeFalsy();
+      expect(isRetryable({ code: ERROR_CODES.INJECTION_ATTEMPT })).toBeFalsy();
     });
 
     it("should return false for AUTH errors", () => {
-      expect(isRetryable({ code: ERROR_CODES.AUTHENTICATION_FAILED })).toBe(false);
-      expect(isRetryable({ code: ERROR_CODES.SESSION_EXPIRED })).toBe(false);
+      expect(isRetryable({ code: ERROR_CODES.AUTHENTICATION_FAILED })).toBeFalsy();
+      expect(isRetryable({ code: ERROR_CODES.SESSION_EXPIRED })).toBeFalsy();
     });
 
     it("should return false for RUNTIME errors", () => {
-      expect(isRetryable({ code: ERROR_CODES.RUNTIME_EXCEPTION })).toBe(false);
-      expect(isRetryable({ code: ERROR_CODES.INTERNAL_ERROR })).toBe(false);
+      expect(isRetryable({ code: ERROR_CODES.RUNTIME_EXCEPTION })).toBeFalsy();
+      expect(isRetryable({ code: ERROR_CODES.INTERNAL_ERROR })).toBeFalsy();
     });
 
     it("should return false for FILESYSTEM errors", () => {
-      expect(isRetryable({ code: ERROR_CODES.FILE_NOT_FOUND })).toBe(false);
-      expect(isRetryable({ code: ERROR_CODES.PERMISSION_DENIED })).toBe(false);
+      expect(isRetryable({ code: ERROR_CODES.FILE_NOT_FOUND })).toBeFalsy();
+      expect(isRetryable({ code: ERROR_CODES.PERMISSION_DENIED })).toBeFalsy();
     });
 
     it("should return false for CONFIGURATION errors", () => {
-      expect(isRetryable({ code: ERROR_CODES.CONFIG_NOT_FOUND })).toBe(false);
-      expect(isRetryable({ code: ERROR_CODES.ENV_VAR_MISSING })).toBe(false);
+      expect(isRetryable({ code: ERROR_CODES.CONFIG_NOT_FOUND })).toBeFalsy();
+      expect(isRetryable({ code: ERROR_CODES.ENV_VAR_MISSING })).toBeFalsy();
     });
 
     it("should return false for RESOURCE errors (recoverable but not auto-retryable)", () => {
-      expect(isRetryable({ code: ERROR_CODES.OUT_OF_MEMORY })).toBe(false);
-      expect(isRetryable({ code: ERROR_CODES.POOL_EXHAUSTED })).toBe(false);
+      expect(isRetryable({ code: ERROR_CODES.OUT_OF_MEMORY })).toBeFalsy();
+      expect(isRetryable({ code: ERROR_CODES.POOL_EXHAUSTED })).toBeFalsy();
     });
   });
 });
@@ -133,49 +133,49 @@ describe("shouldRetry", () => {
   describe("retryable errors within attempt limit", () => {
     it("should return true for first attempt (0) of retryable error", () => {
       const error = { code: ERROR_CODES.CONNECTION_TIMEOUT };
-      expect(shouldRetry(error, 0)).toBe(true);
+      expect(shouldRetry(error, 0)).toBeTruthy();
     });
 
     it("should return true for second attempt (1) of retryable error", () => {
       const error = { code: ERROR_CODES.CONNECTION_TIMEOUT };
-      expect(shouldRetry(error, 1)).toBe(true);
+      expect(shouldRetry(error, 1)).toBeTruthy();
     });
 
     it("should return true for third attempt (2) of retryable error", () => {
       const error = { code: ERROR_CODES.CONNECTION_TIMEOUT };
-      expect(shouldRetry(error, 2)).toBe(true);
+      expect(shouldRetry(error, 2)).toBeTruthy();
     });
   });
 
   describe("retryable errors exceeding attempt limit", () => {
     it("should return false when attempt count equals max attempts (default 3)", () => {
       const error = { code: ERROR_CODES.CONNECTION_TIMEOUT };
-      expect(shouldRetry(error, 3)).toBe(false);
+      expect(shouldRetry(error, 3)).toBeFalsy();
     });
 
     it("should return false when attempt count exceeds max attempts", () => {
       const error = { code: ERROR_CODES.CONNECTION_TIMEOUT };
-      expect(shouldRetry(error, 4)).toBe(false);
-      expect(shouldRetry(error, 10)).toBe(false);
+      expect(shouldRetry(error, 4)).toBeFalsy();
+      expect(shouldRetry(error, 10)).toBeFalsy();
     });
   });
 
   describe("non-retryable errors", () => {
     it("should return false for validation errors regardless of attempt count", () => {
       const error = { code: ERROR_CODES.INVALID_INPUT };
-      expect(shouldRetry(error, 0)).toBe(false);
-      expect(shouldRetry(error, 1)).toBe(false);
+      expect(shouldRetry(error, 0)).toBeFalsy();
+      expect(shouldRetry(error, 1)).toBeFalsy();
     });
 
     it("should return false for security errors regardless of attempt count", () => {
       const error = { code: ERROR_CODES.UNAUTHORIZED_ACCESS };
-      expect(shouldRetry(error, 0)).toBe(false);
-      expect(shouldRetry(error, 1)).toBe(false);
+      expect(shouldRetry(error, 0)).toBeFalsy();
+      expect(shouldRetry(error, 1)).toBeFalsy();
     });
 
     it("should return false for auth errors regardless of attempt count", () => {
       const error = { code: ERROR_CODES.AUTHENTICATION_FAILED };
-      expect(shouldRetry(error, 0)).toBe(false);
+      expect(shouldRetry(error, 0)).toBeFalsy();
     });
   });
 
@@ -183,22 +183,22 @@ describe("shouldRetry", () => {
     it("should respect custom maxAttempts parameter", () => {
       const error = { code: ERROR_CODES.CONNECTION_TIMEOUT };
 
-      expect(shouldRetry(error, 0, 1)).toBe(true); // First attempt, max 1
-      expect(shouldRetry(error, 1, 1)).toBe(false); // Second attempt, exceeded
+      expect(shouldRetry(error, 0, 1)).toBeTruthy(); // First attempt, max 1
+      expect(shouldRetry(error, 1, 1)).toBeFalsy(); // Second attempt, exceeded
 
-      expect(shouldRetry(error, 4, 5)).toBe(true); // Within custom limit
-      expect(shouldRetry(error, 5, 5)).toBe(false); // Exceeded custom limit
+      expect(shouldRetry(error, 4, 5)).toBeTruthy(); // Within custom limit
+      expect(shouldRetry(error, 5, 5)).toBeFalsy(); // Exceeded custom limit
     });
 
     it("should handle maxAttempts of 0 (no retries)", () => {
       const error = { code: ERROR_CODES.CONNECTION_TIMEOUT };
-      expect(shouldRetry(error, 0, 0)).toBe(false);
+      expect(shouldRetry(error, 0, 0)).toBeFalsy();
     });
 
     it("should handle large maxAttempts", () => {
       const error = { code: ERROR_CODES.CONNECTION_TIMEOUT };
-      expect(shouldRetry(error, 99, 100)).toBe(true);
-      expect(shouldRetry(error, 100, 100)).toBe(false);
+      expect(shouldRetry(error, 99, 100)).toBeTruthy();
+      expect(shouldRetry(error, 100, 100)).toBeFalsy();
     });
   });
 });
@@ -306,7 +306,7 @@ describe("getRetryDelay", () => {
     it("should return integer values with jitter", () => {
       for (let i = 0; i < 10; i++) {
         const delay = getRetryDelay(3, { baseDelay: 1000, maxDelay: 30_000, useJitter: true });
-        expect(Number.isInteger(delay)).toBe(true);
+        expect(Number.isInteger(delay)).toBeTruthy();
       }
     });
   });

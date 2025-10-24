@@ -7,10 +7,13 @@
  * @module error
  */
 
-import type { ErrorCategory, ErrorSeverity } from "./categories.js";
-import { categorizeError, getSeverity } from "./categories.js";
-import type { ErrorCode } from "./codes.js";
-import { ERROR_CODES, isErrorCode } from "./codes.js";
+import {
+  categorizeError,
+  type ErrorCategory,
+  type ErrorSeverity,
+  getSeverity,
+} from "./categories.js";
+import { ERROR_CODES, type ErrorCode, isErrorCode } from "./codes.js";
 import { isRecoverable, isRetryable } from "./recovery.js";
 
 // Re-export all types and utilities
