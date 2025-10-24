@@ -4,10 +4,11 @@
 
 ## What’s in place
 
-- Bun workspaces (`apps/*`, `packages/*`) with Bun `1.3.0`
-- Biome (`biome.json`) and Ultracite (`ultracite.config.json`) for linting/formatting
-- Lefthook pre-commit/push hooks wired to Ultracite and Bun test
-- Baseline scripts (`format`, `lint`, `test`) available at the workspace root
+- Bun workspaces (`apps/*`, `packages/*`) with Bun `1.2.22`
+- Biome (`biome.json`) + Ultracite and Oxlint (`.oxlintrc.json`) for formatting and linting (runs after dependency drift check)
+- Syncpack (`.syncpackrc.json`) to enforce semver ranges across workspaces
+- Lefthook pre-commit/push hooks wired to the composite lint + Bun test suite
+- Action tooling helpers: `scripts/actions/lint-actionlint.sh` (Docker-aware) and `scripts/actions/run-act.sh`
 
 ## Getting started
 
@@ -15,14 +16,23 @@
 # install dependencies & set up Git hooks
 bun install
 
+# check dependency versions are aligned
+bun run lint:deps
+
 # format everything with Ultracite + Biome
 bun run format
 
-# run lint checks
+# run lint checks (Syncpack → Ultracite → Oxlint)
 bun run lint
 
 # run tests (wire up packages/apps first)
 bun run test
+
+# lint GitHub Actions (requires actionlint or Docker)
+bun run actions:lint
+
+# run workflows locally (requires act)
+bun run actions:test -- --list
 ```
 
 ## Next steps

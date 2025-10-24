@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/syncpack@13.0.4/schema.json",
+  "packages": ["package.json", "packages/*/package.json", "apps/*/package.json"],
+  "customTypes": [
+    {
+      "name": "optional",
+      "path": "optionalDependencies",
+      "strategy": "versionsByName"
+    }
+  ],
+  "semverRange": "^"
+}
