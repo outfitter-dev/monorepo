@@ -1,0 +1,4 @@
+{
+  "extends": "@outfitter/tsconfig/react-lib.json",
+  "include": ["src/**/*"]
+}

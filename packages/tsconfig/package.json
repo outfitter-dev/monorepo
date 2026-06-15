@@ -1,0 +1,17 @@
+{
+  "name": "@outfitter/tsconfig",
+  "version": "0.0.0",
+  "private": false,
+  "license": "MIT",
+  "files": [
+    "base.json",
+    "react-lib.json",
+    "next.json"
+  ],
+  "type": "module",
+  "exports": {
+    "./base.json": "./base.json",
+    "./react-lib.json": "./react-lib.json",
+    "./next.json": "./next.json"
+  }
+}

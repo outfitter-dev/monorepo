@@ -1,0 +1,26 @@
+# Every command sets GIT_PAGER=cat. lefthook runs hooks in a PTY, and a
+# configured git pager (e.g. delta) makes pager-triggering git commands hang.
+# Hook-level env does not propagate to command children, so set it per command.
+
+pre-commit:
+  piped: true
+  commands:
+    format:
+      glob: "*.{ts,tsx,js,jsx,mjs,cjs,json,jsonc,css}"
+      run: bunx oxfmt --write {staged_files}
+      stage_fixed: true
+      env:
+        GIT_PAGER: cat
+    markdownlint:
+      glob: "*.md"
+      run: bunx markdownlint-cli2 --fix {staged_files}
+      stage_fixed: true
+      env:
+        GIT_PAGER: cat
+
+pre-push:
+  commands:
+    checks:
+      run: bun run format:check && bun run lint:md && bun run typecheck
+      env:
+        GIT_PAGER: cat

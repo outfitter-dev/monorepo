@@ -1,0 +1,21 @@
+/*
+ * @outfitter/config — Tailwind v4 theme bridge.
+ *
+ * Maps the framework-agnostic design tokens (@outfitter/tokens, authored as
+ * CSS custom properties) into Tailwind's theme namespace so utilities like
+ * `text-brand` / `font-mono` resolve to the token vars. `@theme inline` keeps
+ * the tokens as the source of truth — Tailwind references the var() rather
+ * than copying the value, so a token change flows through without a rebuild.
+ */
+@import "@outfitter/tokens/css";
+
+@theme inline {
+  --color-brand: var(--ot-color-brand);
+  --color-ink: var(--ot-color-ink);
+  --color-paper: var(--ot-color-paper);
+  --color-muted: var(--ot-color-muted);
+
+  --font-mono: var(--ot-font-mono);
+  --font-sans: var(--ot-font-sans);
+  --font-serif: var(--ot-font-serif);
+}

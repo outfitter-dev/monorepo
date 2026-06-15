@@ -1,0 +1,21 @@
+node_modules/
+.next/
+.turbo/
+dist/
+out/
+*.tsbuildinfo
+
+# Fumadocs generated source
+.source/
+
+# env
+.env
+.env.*
+!.env.example
+
+# vercel
+.vercel/
+
+# os / editor
+.DS_Store
+*.log

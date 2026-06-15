@@ -1,0 +1,7 @@
+{
+  "extends": "@outfitter/tsconfig/base.json",
+  "compilerOptions": {
+    "types": ["bun"]
+  },
+  "include": ["src/**/*", "scripts/**/*"]
+}

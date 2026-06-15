@@ -1,0 +1,29 @@
+{
+  // Markdown lint. .md only — .mdx is gated by the Fumadocs build, not here
+  // (markdownlint's CommonMark parser chokes on JSX/expressions). If structural
+  // linting of .mdx is ever wanted, add standalone remark-lint (no ESLint).
+  "gitignore": true,
+  "globs": ["**/*.md"],
+  "ignores": ["**/CHANGELOG.md"],
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD024": { "siblings_only": true },
+    "MD033": {
+      "allowed_elements": [
+        "details",
+        "summary",
+        "kbd",
+        "br",
+        "sup",
+        "sub",
+        "img",
+        "picture",
+        "source",
+        "a",
+      ],
+    },
+    "MD040": false,
+    "MD041": false,
+  },
+}

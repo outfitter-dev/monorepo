@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+/* Outfitter design tokens mapped into Tailwind's theme (see @outfitter/config). */
+@import "@outfitter/config/tailwind";
+
+/* Tailwind scans the Tier 1 component source for class names. */
+@source "../../../packages/ui/src/**/*.{ts,tsx}";

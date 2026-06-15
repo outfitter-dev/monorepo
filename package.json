@@ -1,0 +1,38 @@
+{
+  "name": "@outfitter/monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "typecheck": "turbo run typecheck",
+    "format": "ultracite fix",
+    "format:check": "ultracite check",
+    "lint:md": "markdownlint-cli2",
+    "lint:md:fix": "markdownlint-cli2 --fix",
+    "check": "ultracite check && bun run lint:md && bun run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.31.0",
+    "@types/node": "25.9.3",
+    "lefthook": "2.1.9",
+    "markdownlint-cli2": "0.22.1",
+    "oxfmt": "0.54.0",
+    "oxlint": "1.69.0",
+    "turbo": "2.9.18",
+    "typescript": "6.0.3",
+    "ultracite": "7.8.3"
+  },
+  "engines": {
+    "bun": ">=1.3.0"
+  },
+  "packageManager": "bun@1.3.14"
+}
