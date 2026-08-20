@@ -12,6 +12,8 @@ out/
 .env
 .env.*
 !.env.example
+.envrc*
+!.envrc.example
 
 # vercel
 .vercel/
