@@ -1,0 +1,13 @@
+# Turbo remote cache — enables local dev cache sharing with CI and other machines.
+# Copy this to .envrc and fill in the values from 1Password item
+# `Cloudflare Turborepo Cache` (vault `Dev`):
+#   op://Dev/Cloudflare Turborepo Cache/TURBO_TOKEN
+#   op://Dev/Cloudflare Turborepo Cache/TURBO_REMOTE_CACHE_SIGNATURE_KEY
+# direnv will auto-load .envrc when you cd into this directory.
+#
+# TURBO_TEAM must be exactly `outfitter` — it is the R2 object-key prefix.
+
+export TURBO_API=https://turbo-cache.outfitter.dev
+export TURBO_TEAM=outfitter
+export TURBO_TOKEN=<from 1Password: Cloudflare Turborepo Cache>
+export TURBO_REMOTE_CACHE_SIGNATURE_KEY=<from 1Password: Cloudflare Turborepo Cache>
