@@ -1,0 +1,193 @@
+# Changelog
+
+## 0.2.5
+
+### Patch Changes
+
+- a151534: Document intentional large-file exemptions and remove the remaining package-boundary lint violations that blocked repo verification across the affected runtime packages.
+- Updated dependencies [2d9e5fa]
+- Updated dependencies [2d9e5fa]
+- Updated dependencies [f4f5cdf]
+- Updated dependencies [e5ab5d0]
+- Updated dependencies [2d9e5fa]
+- Updated dependencies [c21b340]
+- Updated dependencies [56594cb]
+- Updated dependencies [2d9e5fa]
+- Updated dependencies [1359264]
+- Updated dependencies [5079ff4]
+- Updated dependencies [a151534]
+- Updated dependencies [cc525da]
+- Updated dependencies [cb36241]
+  - @outfitter/contracts@0.5.0
+  - @outfitter/types@0.2.5
+
+## 0.2.4
+
+### Patch Changes
+
+- debf2e2: Release catch-up for the current stack after a sustained run of merged changes
+  across CLI, tooling, runtime packages, and docs workflows.
+
+  This intentionally keeps `outfitter` in the `0.3.x` line for the next stable
+  publish while bumping the rest of the actively published `@outfitter/*`
+  packages in lockstep.
+
+- Updated dependencies [debf2e2]
+  - @outfitter/contracts@0.4.2
+  - @outfitter/types@0.2.4
+
+## 0.2.3
+
+### Patch Changes
+
+- 9fc51cc: Update devDependencies: Bun 1.3.9, biome 2.4.4, ultracite 7.2.3, bunup 0.16.29, lefthook 2.1.1, turbo 2.8.10. Mechanical interface member sorting from biome's new `useSortedInterfaceMembers` rule (formatting only, no behavior changes).
+- Updated dependencies [9fc51cc]
+  - @outfitter/contracts@0.4.1
+  - @outfitter/types@0.2.3
+
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [13b36de]
+  - @outfitter/contracts@0.4.0
+  - @outfitter/types@0.2.2
+
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [d683522]
+  - @outfitter/contracts@0.3.0
+  - @outfitter/types@0.2.1
+
+## 0.2.0
+
+### Minor Changes
+
+- Version alignment for v0.2.0 release
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @outfitter/contracts@0.2.0
+  - @outfitter/types@0.2.0
+
+## 0.1.0
+
+### Minor Changes
+
+- Release v0.1.0 - First stable release
+
+  This release graduates from release candidate to stable, consolidating all packages at v0.1.0.
+
+  Key changes in this release cycle:
+  - Plugin system with registry for Claude Code integration
+  - Tooling CLI with upgrade-bun and pre-push commands
+  - Renamed stack package to kit
+  - GitHub issue templates and label system
+
+### Patch Changes
+
+- 4f58c46: Add withSharedLock for reader-writer locking with meta-lock protection against race conditions
+- 7522622: Fix npm publish to resolve workspace:\* dependencies to actual version numbers
+- Updated dependencies [4f58c46]
+- Updated dependencies [7522622]
+- Updated dependencies
+- Updated dependencies [4f58c46]
+  - @outfitter/contracts@0.1.0
+  - @outfitter/types@0.1.0
+
+## 0.1.0-rc.4
+
+### Minor Changes
+
+- Release v0.1.0 - First stable release
+
+  This release graduates from release candidate to stable, consolidating all packages at v0.1.0.
+
+  Key changes in this release cycle:
+  - Plugin system with registry for Claude Code integration
+  - Tooling CLI with upgrade-bun and pre-push commands
+  - Renamed stack package to kit
+  - GitHub issue templates and label system
+
+### Patch Changes
+
+- Updated dependencies
+  - @outfitter/contracts@0.1.0-rc.3
+  - @outfitter/types@0.1.0-rc.4
+
+## 0.1.0-rc.3
+
+### Patch Changes
+
+- 7522622: Fix npm publish to resolve workspace:\* dependencies to actual version numbers
+- Updated dependencies [7522622]
+  - @outfitter/types@0.1.0-rc.3
+
+## 0.1.0-rc.2
+
+### Patch Changes
+
+- Add withSharedLock for reader-writer locking with meta-lock protection against race conditions
+- Updated dependencies
+- Updated dependencies
+  - @outfitter/contracts@0.1.0-rc.2
+  - @outfitter/types@0.1.0-rc.2
+
+All notable changes to `@outfitter/file-ops` will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.1.0] - 2026-01-22
+
+### Added
+
+#### Workspace Detection
+
+- `findWorkspaceRoot()` - Find project root by marker files (`.git`, `package.json`, or custom markers)
+- `getRelativePath()` - Get workspace-relative path from absolute path
+- `isInsideWorkspace()` - Check if path is within workspace boundaries
+
+#### Path Security
+
+- `securePath()` - Validate paths against traversal attacks, null bytes, and escape attempts
+- `isPathSafe()` - Quick boolean safety check for paths
+- `resolveSafePath()` - Safely join path segments with full validation
+
+#### Glob Patterns
+
+- `glob()` - Async file matching with Bun.Glob, supporting ignore patterns and negation
+- `globSync()` - Synchronous version of glob for simpler use cases
+
+#### File Locking
+
+- `acquireLock()` - Acquire advisory file lock with PID and timestamp tracking
+- `releaseLock()` - Release an acquired file lock
+- `withLock()` - Execute callback with automatic lock acquisition and release
+- `isLocked()` - Check if file is currently locked
+
+#### Atomic Writes
+
+- `atomicWrite()` - Write files atomically using temp-file-then-rename strategy
+- `atomicWriteJson()` - Atomic JSON file writes with serialization
+
+#### Types
+
+- `FindWorkspaceRootOptions` - Options for workspace detection
+- `GlobOptions` - Options for glob operations
+- `AtomicWriteOptions` - Options for atomic writes
+- `FileLock` - Lock metadata interface
+
+### Changed
+
+- Align package versions to 0.1.0
+
+### Dependencies
+
+- Updated dependencies
+  - @outfitter/contracts@0.1.0
+  - @outfitter/types@0.1.0

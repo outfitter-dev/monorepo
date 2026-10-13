@@ -1,0 +1,98 @@
+{
+  "name": "@outfitter/daemon",
+  "version": "0.2.6",
+  "description": "Daemon lifecycle, IPC, and health checks for Outfitter",
+  "keywords": [
+    "daemon",
+    "health",
+    "ipc",
+    "lifecycle",
+    "outfitter",
+    "typescript"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outfitter-dev/outfitter.git",
+    "directory": "packages/daemon"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./errors": {
+      "import": {
+        "types": "./dist/errors.d.ts",
+        "default": "./dist/errors.js"
+      }
+    },
+    "./health": {
+      "import": {
+        "types": "./dist/health.d.ts",
+        "default": "./dist/health.js"
+      }
+    },
+    "./ipc": {
+      "import": {
+        "types": "./dist/ipc.d.ts",
+        "default": "./dist/ipc.js"
+      }
+    },
+    "./lifecycle": {
+      "import": {
+        "types": "./dist/lifecycle.d.ts",
+        "default": "./dist/lifecycle.js"
+      }
+    },
+    "./locking": {
+      "import": {
+        "types": "./dist/locking.d.ts",
+        "default": "./dist/locking.js"
+      }
+    },
+    "./package.json": "./package.json",
+    "./platform": {
+      "import": {
+        "types": "./dist/platform.d.ts",
+        "default": "./dist/platform.js"
+      }
+    },
+    "./types": {
+      "import": {
+        "types": "./dist/types.d.ts",
+        "default": "./dist/types.js"
+      }
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "cd ../.. && bash ./scripts/run-bunup-with-lock.sh bunup --filter @outfitter/daemon",
+    "lint": "oxlint ./src",
+    "lint:fix": "oxlint --fix ./src",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "bun ../../scripts/check-publish-manifest.ts"
+  },
+  "dependencies": {
+    "@outfitter/contracts": "workspace:*",
+    "@outfitter/file-ops": "workspace:*",
+    "@outfitter/logging": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "typescript": "catalog:"
+  }
+}

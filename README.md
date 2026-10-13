@@ -17,6 +17,8 @@ packages/
 docs/
   adr/             # Architecture Decision Records
   architecture/    # Architecture notes (web platform, …)
+archive/
+  outfitter/       # Frozen snapshots of retired @outfitter/* packages (not built)
 ```
 
 Packages are **tiered by framework coupling** with one-way dependencies (Tier 0 → Tier 1 → app). Tier 0 is pure TypeScript / config and runtime-agnostic; Tier 1 is React-only with `react`/`react-dom` as peer deps; framework-specific glue stays at the app edge until a second consumer justifies extracting it. The tiering keeps the bulk of the code reusable by any frontend, not just the Next apps.
@@ -47,4 +49,4 @@ Publishable `@outfitter/*` packages release in lockstep via Changesets, gated by
 
 ## Status
 
-Early. The web platform is the current focus — see the [architecture doc](./docs/architecture/web-platform.md) for what's wired versus deferred. The legacy TypeScript-utilities monorepo (`@outfitter/contracts`, `@outfitter/core`, …) is preserved out-of-tree at `../monorepo.legacy-2026-06-15` and may be lifted forward on real need.
+Early. The web platform is the current focus — see the [architecture doc](./docs/architecture/web-platform.md) for what's wired versus deferred. The earlier Outfitter TypeScript framework (`@outfitter/contracts`, `cli`, `mcp`, `config`, and the rest, from [outfitter-dev/outfitter](https://github.com/outfitter-dev/outfitter)) is retired. [Trails](https://github.com/outfitter-dev/trails) (`@ontrails/*`) replaces it. A few of its packages with no Trails equivalent are kept as reference snapshots in [`archive/outfitter/`](./archive/outfitter/). They aren't built or published.

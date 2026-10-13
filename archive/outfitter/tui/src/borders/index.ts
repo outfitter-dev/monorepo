@@ -1,0 +1,36 @@
+/**
+ * Borders submodule for @outfitter/cli.
+ *
+ * Provides border character sets and line drawing utilities for tables and boxes.
+ *
+ * @example
+ * ```typescript
+ * import {
+ *   BORDERS,
+ *   getBorderCharacters,
+ *   drawHorizontalLine,
+ *   type BorderStyle,
+ *   type BorderCharacters,
+ * } from "@outfitter/tui/borders";
+ *
+ * // Get rounded border characters
+ * const chars = getBorderCharacters("rounded");
+ * console.log(chars.topLeft); // ╭
+ *
+ * // Draw a horizontal line
+ * const line = drawHorizontalLine(20, chars, "top");
+ * console.log(line); // ╭────────────────────╮
+ * ```
+ *
+ * @packageDocumentation
+ */
+
+// oxlint-disable-next-line oxc/no-barrel-file -- intentional re-exports for subpath API
+export {
+  BORDERS,
+  type BorderCharacters,
+  type BorderStyle,
+  drawHorizontalLine,
+  getBorderCharacters,
+  type LinePosition,
+} from "../render/borders.js";
