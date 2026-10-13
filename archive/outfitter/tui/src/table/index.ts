@@ -1,0 +1,21 @@
+/**
+ * Table submodule for @outfitter/cli.
+ *
+ * Provides table rendering utilities with Unicode box-drawing borders.
+ *
+ * @example
+ * ```typescript
+ * import { renderTable, type TableOptions } from "@outfitter/tui/table";
+ *
+ * const table = renderTable(
+ *   [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }],
+ *   { border: "rounded" }
+ * );
+ * console.log(table);
+ * ```
+ *
+ * @packageDocumentation
+ */
+
+// oxlint-disable-next-line oxc/no-barrel-file -- intentional re-exports for subpath API
+export { renderTable, type TableOptions } from "../render/table.js";
