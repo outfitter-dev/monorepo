@@ -2,7 +2,7 @@
 
 The Outfitter monorepo — the single home for Outfitter's shared `@outfitter/*` packages, applications, and tooling. Built once, reused across every Outfitter project.
 
-Today it centers on the **web platform** (the docs and marketing sites for Trails, Skillset, and Outfitter, plus the shared design and content packages behind them). It is also where org-wide decisions and release tooling live, and it will grow to hold more over time — additional shared packages and the Skillset-based agent setups.
+Today it centers on the **web platform** (the docs and marketing sites for Trails, Skillset, and Outfitter, plus the shared design and content packages behind them). It will grow to hold additional shared packages and the Skillset-based agent setups.
 
 ## Layout
 
@@ -25,7 +25,7 @@ Packages are **tiered by framework coupling** with one-way dependencies (Tier 0 
 
 - **Bun** owns the toolchain (install, run, test, CLIs).
 - **Node** runs Next (locally and on Vercel) — scripts never pass `--bun`.
-- **Turborepo** orchestrates builds; **Changesets** versions publishable packages in lockstep.
+- **Turborepo** orchestrates builds and type checks; **Changesets** provides local package versioning commands.
 - **Ultracite** (oxlint + oxfmt) formats and lints code; **markdownlint-cli2** lints Markdown; **lefthook** runs the pre-commit and pre-push gates.
 
 ## Develop
@@ -33,7 +33,7 @@ Packages are **tiered by framework coupling** with one-way dependencies (Tier 0 
 ```
 bun install
 bun run dev          # all apps via turbo
-bun run check        # format + markdown + typecheck
+bun run check        # code lint and format, Markdown lint, and type checks
 bun run build
 ```
 
@@ -43,7 +43,7 @@ bun run build
 
 Significant, hard-to-reverse decisions are recorded as [ADRs](./docs/adr/). Web-platform architecture and rationale live in [`docs/architecture/web-platform.md`](./docs/architecture/web-platform.md).
 
-Publishable `@outfitter/*` packages release in lockstep via Changesets, gated by the reusable [`outfitter-dev/release-action`](https://github.com/outfitter-dev/release-action) — see [ADR-0001](./docs/adr/0001-reusable-release-action.md).
+This repo runs build and quality checks in GitHub Actions but has no release workflow. [ADR-0001](./docs/adr/0001-reusable-release-action.md) records the release proposal and distinguishes it from what's wired today.
 
 ## Status
 
