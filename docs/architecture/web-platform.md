@@ -186,10 +186,10 @@ One schema flows the whole way: **contract → projected content → rendered co
 
 Prose in Markdown, components injected as needed. Fumadocs MDX is the content source for docs; the same MDX component set (`@outfitter/mdx`) renders marketing/blog content so everything looks coherent.
 
-### Two changelog streams (keep them distinct)
+### Two planned changelog streams
 
-- **Package changelog** — driven by **Changesets** in the monorepo (versions packages; generates changelog data the sites render).
-- **Product changelog** — Trails/Skillset releases. Rendered with `@pierre/diffs` for code-level before/after. (Candidate upgrade: derive "what changed in the contract" from diffing committed Trails topo artifacts across releases — the contract can't then lie about itself. Tied to the open seam above.)
+- **Package changelog** — the sites would render changelog data from Changesets in the monorepo.
+- **Product changelog** — the sites would show Trails and Skillset releases, using `@pierre/diffs` for code-level before-and-after views. Comparing committed Trails topo artifacts across releases could show what changed in the contract, but the Trails content source is still undecided.
 
 > **Note on Skillset:** the projection elegance is a _contract-first_ property of Trails. Whether Skillset shares that shape is unconfirmed; do not assume a symmetric pipeline until established.
 
