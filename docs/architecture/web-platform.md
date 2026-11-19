@@ -10,8 +10,9 @@ The shared frontend architecture for Outfitter project sites (Trails, Skillset),
 
 What the current scaffold proves, so this doc reads as ground truth rather than aspiration:
 
-- **Wired:** Bun workspaces + Turborepo + Changesets; `@outfitter/tsconfig`, `@outfitter/tokens`, `@outfitter/config` (Tier 0); `@outfitter/ui` (Tier 1); `apps/trails-web` (Fumadocs on Next 16). The Tier 0 → Tier 1 → app chain is exercised live: a `@outfitter/ui` component renders both in a React page and inside Fumadocs MDX, design tokens flow into the Tailwind v4 theme, and `next/link` is injected through the framework-primitive seam. `bun install`, repo-wide `typecheck`, and `turbo build` (static generation) are green.
-- **Deferred (not yet built):** `@outfitter/mdx`, `@pierre/diffs` integration, `apps/outfitter-web`, `skillset-web`, the personal site, the shadcn registry, the Trails projection/web adapter, lint/format tooling, and the full injection-provider plumbing (only the minimal `<a>`-default seam exists today).
+- **Wired:** Bun workspaces + Turborepo + Changesets; `@outfitter/tsconfig`, `@outfitter/tokens`, `@outfitter/config` (Tier 0); `@outfitter/ui` (Tier 1); `apps/trails-web` (Fumadocs on Next 16). The Tier 0 → Tier 1 → app chain is exercised live: a `@outfitter/ui` component renders both in a React page and inside Fumadocs MDX, design tokens flow into the Tailwind v4 theme, and `next/link` is injected through the framework-primitive seam.
+- **Wired checks:** The [root scripts](../../package.json) run Ultracite for lint and format (oxlint and oxfmt), markdownlint-cli2 for Markdown, and Turborepo for type checks. Run all three with `bun run check`. On commit, [Lefthook](../../lefthook.yml) formats supported staged files and auto-fixes Markdown lint issues in staged `.md` files. Before push, it runs `bun run format:check`, `bun run lint:md`, and `bun run typecheck`. The repo's [GitHub Actions workflow](../../.github/workflows/ci.yml) runs those three commands plus `bun run build` on pull requests and pushes to `main`.
+- **Deferred (not yet built):** `@outfitter/mdx`, `@pierre/diffs` integration, `apps/outfitter-web`, `skillset-web`, the personal site, the shadcn registry, the Trails projection/web adapter, and the full injection-provider plumbing (only the minimal `<a>`-default seam exists today).
 - **Open seam:** how Trails content reaches `trails-web` (§7). Decision pending; today the docs site holds placeholder shell content. "Pull from existing Trails docs" is an acceptable interim stance.
 
 Two intentional deviations from the original draft, both forced by reality during scaffolding:
@@ -232,9 +233,9 @@ While everything is in the monorepo, shared design = a `packages/ui` workspace p
 
 ## 9. Versioning & Changelog
 
-**Changesets** from day one: versions the `@outfitter/*` packages, and generates structured changelog data the sites render. During in-monorepo dev, workspace links mean "always latest"; Changesets formalizes the version story when packages get published.
+**Changesets** provides local version and changelog commands. During development, the apps use workspace links. No release workflow calls Changesets or publishes packages from this repo; see [ADR-0001](../adr/0001-reusable-release-action.md) for the release proposal and ownership.
 
-The **changelog is a first-class surface** — `/changelog` is a designed page (RSS/Atom feed, per-entry permalinks, entries rendered through `@pierre/diffs` in the logbook register, fed by Changesets and the product projection, built once as a reusable surface every site inherits).
+The planned `/changelog` page has an RSS/Atom feed, per-entry permalinks, and entries rendered through `@pierre/diffs`, fed by Changesets and the product projection.
 
 ---
 
@@ -281,7 +282,7 @@ At extraction: packages **stay** in the monorepo and get **published** (`@outfit
 5. Two Vercel projects, preview deploys on.
 6. Wire `@pierre/diffs` into `@outfitter/mdx` for the Trails demos.
 
-**Deferred:** the registry, `skillset-web`, personal site, the Trails projection package, repo extraction, the full injection-provider plumbing, and lint/format tooling. Build order respects rule-of-three: ship against one real consumer plus a deliberately different second shape, then harvest shared packages from real duplication.
+**Deferred:** the registry, `skillset-web`, personal site, the Trails projection package, repo extraction, and the full injection-provider plumbing. Build order respects rule-of-three: ship against one real consumer plus a deliberately different second shape, then harvest shared packages from real duplication.
 
 ---
 

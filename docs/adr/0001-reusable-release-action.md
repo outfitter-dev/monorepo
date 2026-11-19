@@ -4,9 +4,15 @@
 - **Date:** 2026-06-15
 - **Deciders:** Matt Galligan (with Clark)
 
+## Current status and ownership
+
+This repo runs [its own checks](../architecture/web-platform.md#0-implementation-status-as-built) locally and in GitHub Actions. It does not call a shared release workflow, and the candidate `outfitter-dev/release-action` is not qualified for this repo.
+
+[Forge](https://github.com/outfitter-dev/forge) owns shared engineering operations, with public GitHub Actions repositories planned as thin adapters. Product repositories retain ownership of their task graphs, package and artifact contracts, signing, and release policy. Existing consumers stay on their current wiring until a replacement qualifies.
+
 ## Context
 
-Multiple Outfitter repositories publish packages to npm: this monorepo (the shared `@outfitter/*` design-system and tooling packages), Trails (`@ontrails/*`), and Skillset (`skillset`). Each has grown its own release machinery.
+Trails (`@ontrails/*`) and Skillset (`skillset`) have their own release machinery. This monorepo has shared `@outfitter/*` packages but no automated release workflow.
 
 Skillset built a deliberate, well-tested release pipeline worth learning from: a `changesets/action` "Version Packages" PR-bot feeds a label-gated policy engine that **independently verifies** branch, bot identity, the exact generated-diff shape, CI status, changelog heading, version delta, and registry state before any automatic publish, then splits an OIDC `npm-auto` environment from a manual-approval `npm` environment and creates a tag-authoritative GitHub release. The strength is the posture: a human label states _intent_, but the script _verifies reality_ before trusting it.
 
@@ -14,9 +20,9 @@ Its weakness, for reuse, is that it is single-package and hardcoded throughout �
 
 Maintaining divergent release logic in every repo is duplicated effort and a drift surface. We want one mechanism, maintained once, that every Outfitter project consumes.
 
-## Decision
+## Original decision (June 2026)
 
-Build a single reusable release Action in a dedicated repository, `outfitter-dev/release-action`, that all Outfitter projects consume. Port Skillset's verify-don't-trust policy and generalize it to a multi-package workspace using the Trails discovery model. Specifics:
+The original design proposed a single reusable release Action in `outfitter-dev/release-action`. It would port Skillset's verify-don't-trust policy and generalize it to a multi-package workspace using the Trails discovery model. The details below describe that proposal, not the current workflow:
 
 1. **Packaging: a JS/TS GitHub Action plus a reusable workflow.** The valuable, hard-to-reproduce logic is TypeScript (registry reasoning + the policy engine), so it ships as a bundled JS action — a composite action would only centralize YAML while leaving the logic copied per repo. But the job graph (version → plan → policy → auto/manual → release), the two deployment environments, and OIDC permissions live at the _workflow_ level and cannot be expressed by an action alone. So the action is paired with a reusable workflow (`outfitter-dev/release-action/.github/workflows/release.yml@v1`) that wires the jobs and calls the action at each stage.
 
