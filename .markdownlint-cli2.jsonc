@@ -4,7 +4,7 @@
   // linting of .mdx is ever wanted, add standalone remark-lint (no ESLint).
   "gitignore": true,
   "globs": ["**/*.md"],
-  "ignores": ["**/CHANGELOG.md"],
+  "ignores": ["**/CHANGELOG.md", "archive/**"],
   "config": {
     "default": true,
     "MD013": false,
